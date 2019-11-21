@@ -1,44 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './App.module.scss';
+import {
+  IEvent,
+  createTitle,
+  createDescription,
+  createLocation
+} from './types';
+import { createDate, getYearMonthDay } from './utils/date';
+import { TextInput } from './Common/TextInput/TextInput';
+import { TextArea } from './Common/TextArea/TextArea';
+import { DateInput } from './Common/DateInput/DateInput';
 
 const App = () => {
+  const [event, setEvent] = useState<IEvent>({
+    title: createTitle(''),
+    description: createDescription(''),
+    location: createLocation(''),
+    startDate: createDate(getYearMonthDay()),
+    startTime: { hour: 12, minute: 20 },
+    endDate: createDate(getYearMonthDay()),
+    endTime: { hour: 12, minute: 20 },
+    openForRegistrationDate: createDate(getYearMonthDay()),
+    openForRegistrationTime: { hour: 12, minute: 20 }
+  });
+
   return (
     <div className={style.App}>
       <h1>Create an event</h1>
       <section className={style.createEvent}>
-        <label htmlFor={'title'}>title</label>
-        <input id={'title'} type='text'></input>
-        <label htmlFor={'description'}>description</label>
-        <textarea id={'description'} rows={5} cols={33}></textarea>
-        <label htmlFor={'location'}>location</label>
-        <input id={'location'}></input>
-        <label htmlFor={'startDate'}>start date</label>
-        <input
-          type='date'
-          id='startDate'
-          value='2018-07-22'
-          min='2018-01-01'
-          max='2018-12-31'
+        <TextInput
+          label={'title'}
+          placeholder='My event'
+          value={event.title}
+          onChange={(v: string) =>
+            setEvent({ ...event, title: createTitle(v) })
+          }
+        />
+        <TextArea
+          label={'description'}
+          placeholder={'description of my event'}
+          value={event.description}
+          onChange={(v: string) =>
+            setEvent({ ...event, description: createDescription(v) })
+          }
+        />
+        <TextInput
+          label={'location'}
+          placeholder='Stavanger, Norway'
+          value={event.location}
+          onChange={(v: string) =>
+            setEvent({ ...event, title: createLocation(v) })
+          }
+        />
+        <DateInput
+          label={'Start date'}
+          value={event.startDate}
+          onChange={(v: string) =>
+            setEvent({ ...event, startDate: createDate(v) })
+          }
         />
         <label htmlFor='startTime'>Start time</label>
         <input type='time' id='startTime' required></input>
-        <label htmlFor={'endDate'}>end date</label>
-        <input
-          type='date'
-          id='endDate'
-          value='2018-07-22'
-          min='2018-01-01'
-          max='2018-12-31'
+        <DateInput
+          label={'End date'}
+          value={event.endDate}
+          onChange={(v: string) =>
+            setEvent({ ...event, endDate: createDate(v) })
+          }
         />
         <label htmlFor='endTime'>end time</label>
         <input type='time' id='endTime' required></input>
-        <label htmlFor={'endDate'}>Open for registration date</label>
-        <input
-          type='date'
-          id='endDate'
-          value='2018-07-22'
-          min='2018-01-01'
-          max='2018-12-31'
+        <DateInput
+          label={'Registration date'}
+          value={event.openForRegistrationDate}
+          onChange={(v: string) =>
+            setEvent({ ...event, openForRegistrationDate: createDate(v) })
+          }
         />
         <label htmlFor='endTime'>Open for registration time</label>
         <input type='time' id='endTime' required></input>
