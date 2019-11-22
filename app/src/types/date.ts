@@ -19,20 +19,27 @@ export interface IDate {
 }
 
 export const createDate = (date: string): Validation<string, IDate> => {
-  //const tryDate = new Date(date); //test denne
+  const dateISO8601 = /^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/;
+  const dates = date.match(dateISO8601) || [];
 
-  const dates = date.split('-');
-  // const year = dates[0]; //vil år alltid være først?
-  // const month = dates[1];
-  //check if valid date
+  const year = Number(dates[1]);
+  const month = Number(dates[2]);
+  const day = Number(dates[3]);
+
   const validator = validate<string, IDate>(date, {
-    'Need year, month and date in YYYY-MM-DD format': dates.length < 3,
+    'Need year, month and date in YYYY-MM-DD format': dates.length <= 3,
+    'Year needs to be a number': isNaN(year),
+    'Year needs to be an integer': !Number.isInteger(year),
+    'Month needs to be a number': isNaN(month),
+    'Month needs to be an integer': !Number.isInteger(month),
+    'Day needs to be a number': isNaN(day),
+    'Day needs to be an integer': !Number.isInteger(day),
   });
 
   return validator.resolve({
-    year: 0,
-    month: 0,
-    day: 0,
+    year,
+    month,
+    day,
   });
 };
 
