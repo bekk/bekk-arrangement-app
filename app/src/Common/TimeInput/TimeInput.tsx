@@ -37,7 +37,7 @@ export const TimeInput = ({ label, value, onChange }: IProps): JSX.Element => {
   };
 
   return (
-    <SectionWithValidation validationResult={value.validationResult}>
+    <>
       <label htmlFor={label}>{label}</label>
       <input
         type="number"
@@ -51,6 +51,6 @@ export const TimeInput = ({ label, value, onChange }: IProps): JSX.Element => {
         onChange={v => updateMinute(v.target.value)}
         value={minute}
       />
-    </SectionWithValidation>
+    </>
   );
 };

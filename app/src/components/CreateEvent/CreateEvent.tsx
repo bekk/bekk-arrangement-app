@@ -14,6 +14,7 @@ import { createDate } from 'src/types/date';
 import { IEvent, createInitalEvent, IEditEvent } from 'src/types/event';
 import style from './CreateEvent.module.scss';
 import { Menu } from 'src/Common/Menu/Menu';
+import { SectionWithValidation } from 'src/Common/SectionWithValidation/SectionWithValidation';
 
 export const CreateEvent = () => {
   const [event, setEvent] = useState<IEditEvent>(createInitalEvent());
@@ -22,7 +23,7 @@ export const CreateEvent = () => {
     <article className={style.container}>
       <Menu tab={'create'} />
       <h1>Create an event</h1>
-      <section className={style.createEvent}>
+      <section className={style.column}>
         <TextInput
           label={'title'}
           placeholder="My event"
@@ -47,20 +48,29 @@ export const CreateEvent = () => {
             setEvent({ ...event, location: createLocation(v) })
           }
         />
-        <DateInput
-          label={'Start date'}
-          value={event.startDate}
-          onChange={(v: string) =>
-            setEvent({ ...event, startDate: createDate(v) })
-          }
-        />
-        <TimeInput
-          label={'start time'}
-          value={event.startTime}
-          onChange={(v: [string, string]) =>
-            setEvent({ ...event, startTime: createTime(v) })
-          }
-        />
+        <SectionWithValidation
+          validationResult={[
+            ...(event.startDate.validationResult || []),
+            ...(event.startTime.validationResult || []),
+          ]}
+        >
+          <section className={style.row}>
+            <DateInput
+              label={'Start date'}
+              value={event.startDate}
+              onChange={(v: string) =>
+                setEvent({ ...event, startDate: createDate(v) })
+              }
+            />
+            <TimeInput
+              label={'start time'}
+              value={event.startTime}
+              onChange={(v: [string, string]) =>
+                setEvent({ ...event, startTime: createTime(v) })
+              }
+            />
+          </section>
+        </SectionWithValidation>
         <DateInput
           label={'End date'}
           value={event.endDate}
