@@ -50,7 +50,7 @@ export const toWriteModel = (event: IEvent): IWriteModel => ({
   location: event.location,
   fromDate: stringifyDate(event.startDate),
   toDate: stringifyDate(event.endDate),
-  responsibleEmployee: 0,
+  responsibleEmployee: 1296,
 });
 
 export const fromViewModel = (event: IViewModel): Optional<WithId<IEvent>> => {

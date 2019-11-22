@@ -6,14 +6,32 @@ import { TextArea } from 'src/Common/TextArea/TextArea';
 import { createDescription, createLocation } from 'src/types';
 import { DateInput } from 'src/Common/DateInput/DateInput';
 import { createDate } from 'src/types/date';
-import { createInitalEvent, IEditEvent } from 'src/types/event';
+import {
+  createInitalEvent,
+  IEditEvent,
+  IWriteModel,
+  toWriteModel,
+} from 'src/types/event';
 import style from './CreateEvent.module.scss';
 import { Menu } from 'src/Common/Menu/Menu';
 import { createTitle, createTime } from 'src/types/time';
 import { SectionWithValidation } from 'src/Common/SectionWithValidation/SectionWithValidation';
+import { fromEditModel } from 'src/types/validation';
 
-export const CreateEvent = () => {
+interface Props {
+  create: (write: IWriteModel) => void;
+}
+
+export const CreateEvent = ({ create }: Props) => {
   const [event, setEvent] = useState<IEditEvent>(createInitalEvent());
+
+  const createEvent = async () => {
+    const eventModel = fromEditModel(event);
+    if (eventModel) {
+      await create(toWriteModel(eventModel));
+      setEvent(createInitalEvent());
+    }
+  };
 
   return (
     <article className={style.container}>
@@ -95,7 +113,7 @@ export const CreateEvent = () => {
             setEvent({ ...event, openForRegistrationTime: createTime(v) })
           }
         />
-        <button>Create</button>
+        <button onClick={createEvent}>Create</button>
       </section>
     </article>
   );

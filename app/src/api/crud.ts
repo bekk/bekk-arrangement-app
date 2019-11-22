@@ -27,9 +27,9 @@ const options = (method: string, token: string, body?: string) => ({
     Accept: 'application/json',
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
-    From: 'auth-svc'
+    From: 'arrangement-app',
   },
-  body
+  body,
 });
 
 async function fetchAndValidate(
@@ -38,7 +38,7 @@ async function fetchAndValidate(
   path: string,
   body?: any
 ) {
-  const token = '';
+  const token = 'asdfasdfasfasdfasdfasdfasdf';
   const url = `${host}${path}`;
   const response = await fetch(
     url,
@@ -53,7 +53,7 @@ async function fetchAndValidate(
     userMessage = `Noe har feilet i et kall til ${method} ${url} med statuskode ${
       response.status
     }${body && ` og body ${body}`}`,
-    message
+    message,
   } = await response.json().catch(() => ({}));
 
   return Promise.reject({
@@ -62,6 +62,6 @@ async function fetchAndValidate(
       response.status < 500
         ? `${response.status} Et nettverkskall har feilet`
         : `${response.status} Det er noe galt med backenden`,
-    message: `${userMessage}\n${message}`
+    message: `${userMessage}\n${message}`,
   });
 }

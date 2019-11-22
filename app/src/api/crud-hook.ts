@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { get } from './crud';
+import { useState, useEffect, useCallback } from 'react';
+import { get, post } from './crud';
 import { Optional } from 'src/types';
 
 // TEMP
@@ -13,9 +13,9 @@ interface ICrud<Key, DomainModel, WriteModel, ViewModel> {
 
 interface IReturn<Key, DomainModel, WriteModel> {
   collection: DomainModel[];
-  create: (model: WriteModel) => void;
-  update: (id: Key) => (model: WriteModel) => void;
-  del: (id: Key) => void;
+  create: (model: WriteModel) => Promise<void>;
+  update: (id: Key) => (model: WriteModel) => Promise<void>;
+  del: (id: Key) => Promise<void>;
 }
 
 export const useCrud = <K, D, W, V>({
@@ -25,15 +25,16 @@ export const useCrud = <K, D, W, V>({
 }: ICrud<K, D, W, V>): IReturn<K, D, W> => {
   const [collection, setCollection] = useState<D[]>([]);
   const path = endpoint();
-  useEffect(() => {
+  const getAll = useCallback(() => {
     get({ host, path })
       .then(xs => xs.mapIf(fromViewModel))
       .then(setCollection);
   }, [path]);
+  useEffect(getAll, [getAll]);
   return {
     collection,
-    create: () => undefined,
-    update: () => () => undefined,
-    del: () => undefined,
+    create: write => post({ host, path, body: write }).then(getAll),
+    update: () => () => Promise.resolve(),
+    del: () => Promise.resolve(),
   };
 };
