@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
-import style from './App.module.scss';
+import { useState } from 'react';
+import React from 'react';
+import { TimeInput } from 'src/Common/TimeInput/TimeInput';
+import { TextInput } from 'src/Common/TextInput/TextInput';
+import { TextArea } from 'src/Common/TextArea/TextArea';
 import {
-  createTitle,
   createDescription,
+  createTitle,
   createLocation,
-  ITime,
-  createTime
-} from './types';
-import { IEvent, createInitalEvent } from './types/event';
-import { createDate, getYearMonthDay } from './types/date';
-import { TextInput } from './Common/TextInput/TextInput';
-import { TextArea } from './Common/TextArea/TextArea';
-import { DateInput } from './Common/DateInput/DateInput';
-import { TimeInput } from './Common/TimeInput/TimeInput';
+  createTime,
+} from 'src/types';
+import { DateInput } from 'src/Common/DateInput/DateInput';
+import { createDate } from 'src/types/date';
+import { IEvent, createInitalEvent, IEditEvent } from 'src/types/event';
+import style from './CreateEvent.module.scss';
+import { Menu } from 'src/Common/Menu/Menu';
 
-const App = () => {
-  const [event, setEvent] = useState<IEvent>(createInitalEvent());
+export const CreateEvent = () => {
+  const [event, setEvent] = useState<IEditEvent>(createInitalEvent());
 
   return (
-    <div className={style.App}>
+    <article className={style.container}>
+      <Menu tab={'create'} />
       <h1>Create an event</h1>
       <section className={style.createEvent}>
         <TextInput
           label={'title'}
-          placeholder='My event'
+          placeholder="My event"
           value={event.title}
           onChange={(v: string) =>
             setEvent({ ...event, title: createTitle(v) })
@@ -39,10 +41,10 @@ const App = () => {
         />
         <TextInput
           label={'location'}
-          placeholder='Stavanger, Norway'
+          placeholder="Stavanger, Norway"
           value={event.location}
           onChange={(v: string) =>
-            setEvent({ ...event, title: createLocation(v) })
+            setEvent({ ...event, location: createLocation(v) })
           }
         />
         <DateInput
@@ -55,12 +57,10 @@ const App = () => {
         <TimeInput
           label={'start time'}
           value={event.startTime}
-          onChange={(v: string) =>
+          onChange={(v: [string, string]) =>
             setEvent({ ...event, startTime: createTime(v) })
           }
         />
-        <label htmlFor='startTime'>Start time</label>
-        <input type='time' id='startTime' required></input>
         <DateInput
           label={'End date'}
           value={event.endDate}
@@ -68,8 +68,13 @@ const App = () => {
             setEvent({ ...event, endDate: createDate(v) })
           }
         />
-        <label htmlFor='endTime'>end time</label>
-        <input type='time' id='endTime' required></input>
+        <TimeInput
+          label={'end time'}
+          value={event.endTime}
+          onChange={(v: [string, string]) =>
+            setEvent({ ...event, endTime: createTime(v) })
+          }
+        />
         <DateInput
           label={'Registration date'}
           value={event.openForRegistrationDate}
@@ -77,12 +82,15 @@ const App = () => {
             setEvent({ ...event, openForRegistrationDate: createDate(v) })
           }
         />
-        <label htmlFor='endTime'>Open for registration time</label>
-        <input type='time' id='endTime' required></input>
+        <TimeInput
+          label={'Open for registration time'}
+          value={event.endTime}
+          onChange={(v: [string, string]) =>
+            setEvent({ ...event, openForRegistrationTime: createTime(v) })
+          }
+        />
         <button>Create</button>
       </section>
-    </div>
+    </article>
   );
 };
-
-export default App;

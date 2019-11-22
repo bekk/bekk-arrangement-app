@@ -5,7 +5,7 @@ import { SectionWithValidation } from '../SectionWithValidation/SectionWithValid
 
 interface IProps {
   label: string;
-  value: Validation<string>;
+  value: Validation<string, string>;
   onChange: (value: string) => void;
   placeholder: string;
 }
@@ -14,14 +14,14 @@ export const TextInput = ({
   label,
   value,
   onChange,
-  placeholder
+  placeholder,
 }: IProps): JSX.Element => {
   return (
     <SectionWithValidation validationResult={value.validationResult}>
       <label htmlFor={label}>{label}</label>
       <input
         id={label}
-        type='text'
+        type="text"
         placeholder={placeholder}
         value={value.value}
         onChange={v => onChange(v.target.value)}

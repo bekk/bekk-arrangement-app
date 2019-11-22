@@ -6,7 +6,7 @@ import { IDate } from '../../types/date';
 
 interface IProps {
   label: string;
-  value: Validation<IDate>;
+  value: Validation<string, IDate>;
   onChange: (value: string) => void;
 }
 
@@ -15,7 +15,7 @@ export const DateInput = ({ label, value, onChange }: IProps): JSX.Element => {
     <SectionWithValidation validationResult={value.validationResult}>
       <label htmlFor={label}>{label}</label>
       <input
-        type='date'
+        type="date"
         id={label}
         onChange={v => onChange(v.target.value)}
         value={value.value}

@@ -3,8 +3,8 @@ import { Validation } from './validation';
 import { ITime } from '.';
 
 export interface IDateTime {
-  date: Validation<IDate>;
-  time: Validation<ITime>;
+  date: IDate;
+  time: ITime;
 }
 
 // export createDateTime = ()

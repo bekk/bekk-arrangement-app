@@ -10,7 +10,7 @@ interface IProps {
 
 export const SectionWithValidation = ({
   validationResult,
-  children
+  children,
 }: IProps) => {
   return (
     <article className={style.textInput}>

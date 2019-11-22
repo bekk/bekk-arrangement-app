@@ -5,7 +5,7 @@ import { SectionWithValidation } from '../SectionWithValidation/SectionWithValid
 
 interface IProps {
   label: string;
-  value: Validation<string>;
+  value: Validation<string, string>;
   onChange: (value: string) => void;
   placeholder: string;
 }
@@ -14,7 +14,7 @@ export const TextArea = ({
   label,
   value,
   onChange,
-  placeholder
+  placeholder,
 }: IProps): JSX.Element => {
   return (
     <SectionWithValidation validationResult={value.validationResult}>

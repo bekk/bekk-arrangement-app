@@ -19,21 +19,21 @@ export interface IDate {
   year: number;
 }
 
-export const createDate = (date: string): Validation<IDate> => {
+export const createDate = (date: string): Validation<string, IDate> => {
   //const tryDate = new Date(date); //test denne
 
   const dates = date.split('-');
   // const year = dates[0]; //vil år alltid være først?
   // const month = dates[1];
   //check if valid date
-  const validator = validate<IDate>(date, {
-    'Need year, month and date in YYYY-MM-DD format': dates.length < 3
+  const validator = validate<string, IDate>(date, {
+    'Need year, month and date in YYYY-MM-DD format': dates.length < 3,
   });
 
   return validator.resolve({
     year: 0,
     month: 0,
-    day: 0
+    day: 0,
   });
 };
 
@@ -42,3 +42,6 @@ export const getYearMonthDay = () => {
   const today = new Date();
   return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 };
+
+export const stringifyDate = ({ year, month, day }: IDate) =>
+  `${year}-${month}-${day}`;
