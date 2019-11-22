@@ -1,8 +1,8 @@
-import React from "react";
-import { CreateEvent } from "./components/CreateEvent/CreateEvent";
-import { EventOverview } from "./components/EventOverview/EventOverview";
-import { Switch, Route } from "react-router";
-import { rootRoute, overviewRoute } from "./routing";
+import React from 'react';
+import { CreateEvent } from './components/CreateEvent/CreateEvent';
+import { EventOverview } from './components/EventOverview/EventOverview';
+import { Switch, Route } from 'react-router';
+import { rootRoute, overviewRoute } from './routing';
 
 const App = () => {
   return (
