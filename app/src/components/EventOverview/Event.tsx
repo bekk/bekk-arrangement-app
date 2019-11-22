@@ -1,7 +1,8 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { WithId, stringifyTime } from 'src/types';
+import { WithId } from 'src/types';
 import { stringifyDate } from 'src/types/date';
+import { stringifyTime } from 'src/types/time';
 
 export const Event = ({
   title,

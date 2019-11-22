@@ -1,5 +1,4 @@
 import { Validation, validate, error } from './validation';
-import { ITime } from '.';
 
 export class Date2 {
   constructor(day: number, month: number, year: number) {
