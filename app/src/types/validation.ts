@@ -86,3 +86,15 @@ export const fromEditModel = <T>(model: Edit<T>): Optional<T> => {
     ) as T;
   }
 };
+
+export const toEditModel = <T>(model: T): Edit<T> => {
+  const entries = Object.entries(model) as [string, any][];
+  const validatedModel: [string, any][] = entries.map(([key, value]) => [
+    key,
+    { value, data: value },
+  ]);
+  return validatedModel.reduce(
+    (acc, [key, value]) => ({ ...acc, [key]: value }),
+    {}
+  ) as Edit<T>;
+};
