@@ -75,7 +75,7 @@ export const validate = <From, To>(
 export const fromEditModel = <T>(model: Edit<T>): Optional<T> => {
   const entries = Object.entries(model) as [string, any][];
   const validatedModel = entries.mapIf(([key, value]) => {
-    if (value.data) {
+    if (value.data !== undefined) {
       return [key, value.data];
     }
   });

@@ -7,13 +7,7 @@ import { rootRoute, overviewRoute } from './routing';
 import { CreateEvent } from './components/CreateEvent/CreateEvent';
 import { EventOverview } from './components/EventOverview/EventOverview';
 import { useCrud } from './api/crud-hook';
-import {
-  IEvent,
-  IWriteModel,
-  IViewModel,
-  fromViewModel,
-  toWriteModel,
-} from './types/event';
+import { fromViewModel, toWriteModel } from './types/event';
 import 'src/extension-methods/array';
 
 export const history = createBrowserHistory();
@@ -27,7 +21,9 @@ const App = () => {
   return (
     <Router history={history}>
       <Switch>
-        <Route exact path={rootRoute} component={CreateEvent} />
+        <Route exact path={rootRoute}>
+          <CreateEvent create={create} />
+        </Route>
         <Route path={overviewRoute}>
           <EventOverview events={events} />
         </Route>
