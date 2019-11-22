@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Validation } from '../../types/validation';
 import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
-import { IDate } from '../../utils/date';
+import { IDate } from '../../types/date';
 
 interface IProps {
   label: string;

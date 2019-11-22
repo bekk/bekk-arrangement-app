@@ -1,4 +1,5 @@
-import { Validation, validate, error } from '../types/validation';
+import { Validation, validate, error } from './validation';
+import { ITime } from '.';
 
 export class Date2 {
   constructor(day: number, month: number, year: number) {
@@ -19,14 +20,15 @@ export interface IDate {
 }
 
 export const createDate = (date: string): Validation<IDate> => {
-  const validator = validate<IDate>(date);
+  //const tryDate = new Date(date); //test denne
 
   const dates = date.split('-');
-
-  if (dates.length < 3) {
-    validator.add(error('Du må ha med både år, måned og dato'));
-    return validator.reject();
-  }
+  // const year = dates[0]; //vil år alltid være først?
+  // const month = dates[1];
+  //check if valid date
+  const validator = validate<IDate>(date, {
+    'Need year, month and date in YYYY-MM-DD format': dates.length < 3
+  });
 
   return validator.resolve({
     year: 0,

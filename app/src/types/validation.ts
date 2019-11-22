@@ -1,4 +1,4 @@
-type ValidationType = 'ERROR' | 'WARNING';
+type ValidationType = 'Error' | 'Warning';
 
 export interface IValidation {
   message: string;
@@ -6,12 +6,12 @@ export interface IValidation {
 }
 
 export const error = (message: string): IValidation => ({
-  type: 'ERROR',
+  type: 'Error',
   message
 });
 
 export const warning = (message: string): IValidation => ({
-  type: 'WARNING',
+  type: 'Warning',
   message
 });
 
@@ -25,30 +25,29 @@ export type Validation<T> = { value: string } & (
 
 export const validationTypeAsIcon = (type: ValidationType) => {
   switch (type) {
-    case 'ERROR': {
+    case 'Error': {
       return '⛔';
     }
-    case 'WARNING': {
+    case 'Warning': {
       return '⚠️';
-    }
-    default: {
-      return '✅';
     }
   }
 };
 
-export const validate = <T>(value: string) => {
-  let errors: IValidation[] = [];
+export const validate = <T>(
+  value: string,
+  validations: Record<string, boolean> = {}
+) => {
+  const errorMessages = Object.entries(validations)
+    .filter(([errorMessage, isError]) => isError)
+    .map(([errorMessage]) => errorMessage);
   return {
-    add: (error: IValidation) => {
-      errors = [...errors, error];
-    },
     resolve: (data: T): Validation<T> => {
-      if (errors) {
+      if (errorMessages.length > 0) {
         return {
           value,
           data: undefined,
-          validationResult: errors
+          validationResult: errorMessages.map(error)
         };
       }
       return {
@@ -57,11 +56,11 @@ export const validate = <T>(value: string) => {
         validationResult: undefined
       };
     },
-    reject: (): Validation<T> => {
+    reject: (errorMessage: string): Validation<T> => {
       return {
         value,
         data: undefined,
-        validationResult: errors
+        validationResult: [error(errorMessage)]
       };
     }
   };

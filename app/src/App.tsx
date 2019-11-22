@@ -1,28 +1,21 @@
 import React, { useState } from 'react';
 import style from './App.module.scss';
 import {
-  IEvent,
   createTitle,
   createDescription,
-  createLocation
+  createLocation,
+  ITime,
+  createTime
 } from './types';
-import { createDate, getYearMonthDay } from './utils/date';
+import { IEvent, createInitalEvent } from './types/event';
+import { createDate, getYearMonthDay } from './types/date';
 import { TextInput } from './Common/TextInput/TextInput';
 import { TextArea } from './Common/TextArea/TextArea';
 import { DateInput } from './Common/DateInput/DateInput';
+import { TimeInput } from './Common/TimeInput/TimeInput';
 
 const App = () => {
-  const [event, setEvent] = useState<IEvent>({
-    title: createTitle(''),
-    description: createDescription(''),
-    location: createLocation(''),
-    startDate: createDate(getYearMonthDay()),
-    startTime: { hour: 12, minute: 20 },
-    endDate: createDate(getYearMonthDay()),
-    endTime: { hour: 12, minute: 20 },
-    openForRegistrationDate: createDate(getYearMonthDay()),
-    openForRegistrationTime: { hour: 12, minute: 20 }
-  });
+  const [event, setEvent] = useState<IEvent>(createInitalEvent());
 
   return (
     <div className={style.App}>
@@ -57,6 +50,13 @@ const App = () => {
           value={event.startDate}
           onChange={(v: string) =>
             setEvent({ ...event, startDate: createDate(v) })
+          }
+        />
+        <TimeInput
+          label={'start time'}
+          value={event.startTime}
+          onChange={(v: string) =>
+            setEvent({ ...event, startTime: createTime(v) })
           }
         />
         <label htmlFor='startTime'>Start time</label>

@@ -1,17 +1,4 @@
-import { IDate } from '../utils/date';
 import { Validation, validate, warning, error } from './validation';
-
-export interface IEvent {
-  title: Validation<string>;
-  description: Validation<string>;
-  location: Validation<string>;
-  startDate: Validation<IDate>;
-  startTime: ITime;
-  endDate: Validation<IDate>;
-  endTime: ITime;
-  openForRegistrationDate: Validation<IDate>;
-  openForRegistrationTime: ITime;
-}
 
 export const createLocation = (value: string): Validation<string> => {
   return {
@@ -21,22 +8,43 @@ export const createLocation = (value: string): Validation<string> => {
 };
 
 export const createDescription = (value: string): Validation<string> => {
-  const validator = validate<string>(value);
+  const validator = validate<string>(value, {
+    'Description must be more than 3 characters': value.length <= 3
+  });
 
-  if (value.length < 4) {
-    validator.add(warning('Should be more than 3 characters'));
-    return validator.reject();
-  }
   return validator.resolve(value);
 };
 
-export const createTitle = (value: string): Validation<string> => {
-  const validator = validate<string>(value);
-
-  if (value.length < 4) {
-    validator.add(error('Must be more than 3 characters'));
-    validator.reject();
+export const createTime = (value: string): Validation<ITime> => {
+  const time = value.split(':');
+  if (time.length < 2) {
+    return validate<ITime>(value).reject(
+      'Time must be specified in hh:mm format'
+    );
   }
+
+  const hour = Number(time[0]);
+  const minute = Number(time[1]);
+
+  const validator = validate<ITime>(value, {
+    "Can't have more than 60 minutes in an hour": minute > 59,
+    "Can't have negative number of minutes": minute < 0,
+    'There are not more than 23 hours in a day': hour > 23,
+    "Can't have a negative amount of hours in a day": hour < 0,
+    'Hours needs to be a number': isNaN(hour),
+    'Minutes needs to be a number': isNaN(minute),
+    'Number of hours needs to be an integer': !Number.isInteger(hour),
+    'Number of minutes needs to be an integer': !Number.isInteger(minute)
+  });
+
+  return validator.resolve({ hour, minute });
+};
+
+export const createTitle = (value: string): Validation<string> => {
+  const validator = validate<string>(value, {
+    'Title must be more than 3 characters': value.length <= 3
+  });
+
   return validator.resolve(value);
 };
 
