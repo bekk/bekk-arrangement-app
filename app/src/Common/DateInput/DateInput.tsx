@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Validation } from '../../types/validation';
-import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
 import { IDate } from '../../types/date';
 
 interface IProps {
@@ -12,14 +11,16 @@ interface IProps {
 
 export const DateInput = ({ label, value, onChange }: IProps): JSX.Element => {
   return (
-    <SectionWithValidation validationResult={value.validationResult}>
+    <section>
       <label htmlFor={label}>{label}</label>
-      <input
-        type="date"
-        id={label}
-        onChange={v => onChange(v.target.value)}
-        value={value.value}
-      />
-    </SectionWithValidation>
+      <div>
+        <input
+          type="date"
+          id={label}
+          onChange={v => onChange(v.target.value)}
+          value={value.value}
+        />
+      </div>
+    </section>
   );
 };

@@ -18,8 +18,8 @@ export const CreateEvent = () => {
   return (
     <article className={style.container}>
       <Menu tab={'create'} />
-      <h1>Create an event</h1>
-      <section className={style.column}>
+      <section className={style.form}>
+        <h1>Create an event</h1>
         <TextInput
           label={'title'}
           placeholder="My event"
@@ -50,7 +50,7 @@ export const CreateEvent = () => {
             ...(event.startTime.validationResult || []),
           ]}
         >
-          <section className={style.row}>
+          <section className={style.dateTime}>
             <DateInput
               label={'Start date'}
               value={event.startDate}
@@ -59,7 +59,7 @@ export const CreateEvent = () => {
               }
             />
             <TimeInput
-              label={'start time'}
+              label={'Start time'}
               value={event.startTime}
               onChange={(v: [string, string]) =>
                 setEvent({ ...event, startTime: createTime(v) })
@@ -67,34 +67,53 @@ export const CreateEvent = () => {
             />
           </section>
         </SectionWithValidation>
-        <DateInput
-          label={'End date'}
-          value={event.endDate}
-          onChange={(v: string) =>
-            setEvent({ ...event, endDate: createDate(v) })
-          }
-        />
-        <TimeInput
-          label={'end time'}
-          value={event.endTime}
-          onChange={(v: [string, string]) =>
-            setEvent({ ...event, endTime: createTime(v) })
-          }
-        />
-        <DateInput
-          label={'Registration date'}
-          value={event.openForRegistrationDate}
-          onChange={(v: string) =>
-            setEvent({ ...event, openForRegistrationDate: createDate(v) })
-          }
-        />
-        <TimeInput
-          label={'Open for registration time'}
-          value={event.endTime}
-          onChange={(v: [string, string]) =>
-            setEvent({ ...event, openForRegistrationTime: createTime(v) })
-          }
-        />
+        <SectionWithValidation
+          validationResult={[
+            ...(event.endTime.validationResult || []),
+            ...(event.endTime.validationResult || []),
+          ]}
+        >
+          <section className={style.dateTime}>
+            <DateInput
+              label={'End date'}
+              value={event.endDate}
+              onChange={(v: string) =>
+                setEvent({ ...event, endDate: createDate(v) })
+              }
+            />
+            <TimeInput
+              label={'end time'}
+              value={event.endTime}
+              onChange={(v: [string, string]) =>
+                setEvent({ ...event, endTime: createTime(v) })
+              }
+            />
+          </section>
+        </SectionWithValidation>
+        <SectionWithValidation
+          validationResult={[
+            ...(event.openForRegistrationDate.validationResult || []),
+            ...(event.openForRegistrationTime.validationResult || []),
+          ]}
+        >
+          <section className={style.dateTime}>
+            <DateInput
+              label={'Registration date'}
+              value={event.openForRegistrationDate}
+              onChange={(v: string) =>
+                setEvent({ ...event, openForRegistrationDate: createDate(v) })
+              }
+            />
+            <TimeInput
+              label={'Open for registration time'}
+              value={event.endTime}
+              onChange={(v: [string, string]) =>
+                setEvent({ ...event, openForRegistrationTime: createTime(v) })
+              }
+            />
+          </section>
+        </SectionWithValidation>
+
         <button>Create</button>
       </section>
     </article>
