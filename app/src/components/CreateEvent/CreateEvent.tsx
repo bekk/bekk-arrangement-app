@@ -3,17 +3,13 @@ import React from 'react';
 import { TimeInput } from 'src/Common/TimeInput/TimeInput';
 import { TextInput } from 'src/Common/TextInput/TextInput';
 import { TextArea } from 'src/Common/TextArea/TextArea';
-import {
-  createDescription,
-  createTitle,
-  createLocation,
-  createTime,
-} from 'src/types';
+import { createDescription, createLocation } from 'src/types';
 import { DateInput } from 'src/Common/DateInput/DateInput';
 import { createDate } from 'src/types/date';
-import { IEvent, createInitalEvent, IEditEvent } from 'src/types/event';
+import { createInitalEvent, IEditEvent } from 'src/types/event';
 import style from './CreateEvent.module.scss';
 import { Menu } from 'src/Common/Menu/Menu';
+import { createTitle, createTime } from 'src/types/time';
 import { SectionWithValidation } from 'src/Common/SectionWithValidation/SectionWithValidation';
 
 export const CreateEvent = () => {

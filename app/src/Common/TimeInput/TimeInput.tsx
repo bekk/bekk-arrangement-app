@@ -1,8 +1,6 @@
 import React from 'react';
-import { useKeyDown } from '../../hooks/eventListener';
 import { Validation } from '../../types/validation';
-import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
-import { ITime } from '../../types';
+import { ITime } from 'src/types/time';
 
 interface IProps {
   label: string;

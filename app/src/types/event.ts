@@ -1,15 +1,8 @@
-import { IDate, createDate, getYearMonthDay, stringifyDate } from './date';
-import { Validation, Edit } from './validation';
 import { format, addHours, getHours, getMinutes } from 'date-fns';
-import {
-  ITime,
-  createTitle,
-  createDescription,
-  createLocation,
-  createTime,
-  WithId,
-  Optional,
-} from './index';
+import { IDate, createDate, stringifyDate } from './date';
+import { ITime, createTitle, createTime } from './time';
+import { Edit } from './validation';
+import { createDescription, Optional, WithId, createLocation } from '.';
 
 export interface IEvent {
   title: string;
@@ -25,7 +18,7 @@ export interface IEvent {
 
 export type IEditEvent = Edit<IEvent>;
 
-export const createInitalEvent = () => {
+export const createInitalEvent = (): IEditEvent => {
   const date = new Date();
 
   const todaysDate = format(date, 'y-MM-dd');
