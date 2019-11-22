@@ -51,7 +51,7 @@ export const CreateEvent = () => {
           placeholder="Stavanger, Norway"
           value={event.location}
           onChange={(v: string) =>
-            setEvent({ ...event, title: createLocation(v) })
+            setEvent({ ...event, location: createLocation(v) })
           }
         />
         <DateInput
