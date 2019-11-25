@@ -1,7 +1,7 @@
 import { Validation, validate } from './validation';
 
 export type Optional<T> = T | undefined;
-export type WithId<T> = T & { id: number };
+export type WithId<T> = T & { id: number | string };
 
 export const createLocation = (value: string): Validation<string, string> => {
   return {

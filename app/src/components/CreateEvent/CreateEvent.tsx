@@ -6,30 +6,26 @@ import { TextArea } from 'src/Common/TextArea/TextArea';
 import { createDescription, createLocation } from 'src/types';
 import { DateInput } from 'src/Common/DateInput/DateInput';
 import { createDate } from 'src/types/date';
-import {
-  createInitalEvent,
-  IEditEvent,
-  IWriteModel,
-  toWriteModel,
-} from 'src/types/event';
+import { createInitalEvent, IEditEvent, IEvent } from 'src/types/event';
 import style from './CreateEvent.module.scss';
 import { Menu } from 'src/Common/Menu/Menu';
 import { createTitle, createTime } from 'src/types/time';
 import { SectionWithValidation } from 'src/Common/SectionWithValidation/SectionWithValidation';
-import { fromEditModel } from 'src/types/validation';
+import { fromEditModel, toEditModel } from 'src/types/validation';
 
 interface Props {
-  create: (write: IWriteModel) => void;
+  createOrUpdate: (write: IEvent) => void;
+  event: IEvent;
 }
 
-export const CreateEvent = ({ create }: Props) => {
-  const [event, setEvent] = useState<IEditEvent>(createInitalEvent());
+export const CreateEvent = ({ createOrUpdate, event: editEvent }: Props) => {
+  const [event, setEvent] = useState<IEditEvent>(toEditModel(editEvent));
 
   const createEvent = async () => {
     const eventModel = fromEditModel(event);
     if (eventModel) {
-      await create(toWriteModel(eventModel));
-      setEvent(createInitalEvent());
+      await createOrUpdate(eventModel);
+      setEvent(toEditModel(createInitalEvent()));
     }
   };
 

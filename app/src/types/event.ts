@@ -18,29 +18,28 @@ export interface IEvent {
 
 export type IEditEvent = Edit<IEvent>;
 
-export const createInitalEvent = (): IEditEvent => {
+export const createInitalEvent = (): IEvent => {
   const date = new Date();
 
-  const todaysDate = format(date, 'y-MM-dd');
+  const startYear = date.getFullYear();
+  const startMonth = date.getMonth() + 1;
+  const startDay = date.getDate();
   const startHours = getHours(date);
   const startMinutes = getMinutes(date);
 
+  const startDate = { year: startYear, month: startMonth, day: startDay };
+  const startTime = { hour: startHours, minute: startMinutes };
+
   return {
-    title: createTitle(''),
-    description: createDescription(''),
-    location: createLocation(''),
-    startDate: createDate(todaysDate),
-    startTime: createTime([startHours.toString(), startMinutes.toString()]),
-    endDate: createDate(todaysDate),
-    endTime: createTime([
-      getHours(addHours(date, 1)).toString(),
-      startMinutes.toString(),
-    ]),
-    openForRegistrationDate: createDate(todaysDate),
-    openForRegistrationTime: createTime([
-      getHours(addHours(date, -1)).toString(),
-      startMinutes.toString(),
-    ]),
+    title: '',
+    description: '',
+    location: '',
+    startDate,
+    startTime,
+    endDate: startDate,
+    endTime: startTime,
+    openForRegistrationDate: startDate,
+    openForRegistrationTime: startTime,
   };
 };
 
