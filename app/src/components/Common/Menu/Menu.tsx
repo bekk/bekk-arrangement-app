@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { rootRoute, overviewRoute } from '../../routing';
+import { rootRoute, overviewRoute } from '../../../routing';
 import style from './Menu.module.scss';
 import classNames from 'classnames';
 
-type SelectedTab = 'create' | 'overview';
+type SelectedTab = 'create' | 'edit' | 'overview';
 
 interface IProps {
   tab: SelectedTab;
@@ -21,6 +21,9 @@ export const Menu = ({ tab }: IProps) => {
     <div className={style.container}>
       <Link to={rootRoute} className={menuStyle('create')}>
         Create event
+      </Link>
+      <Link to={overviewRoute} className={menuStyle('edit')}>
+        Edit event
       </Link>
       <Link to={overviewRoute} className={menuStyle('overview')}>
         Event Overview

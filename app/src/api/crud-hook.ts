@@ -3,7 +3,7 @@ import { get, post, put, del } from './crud';
 import { Optional, WithId } from 'src/types';
 
 // TEMP
-const host = 'https://api.dev.bekk.no/arrangement-svc';
+const host = 'http://localhost:5000';
 
 interface ICrud<Key, DomainModel, WriteModel, ViewModel> {
   endpoint: (id?: Key) => string;

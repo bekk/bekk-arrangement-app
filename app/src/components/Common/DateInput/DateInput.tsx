@@ -1,30 +1,24 @@
 import React from 'react';
 
-import { Validation } from '../../types/validation';
+import { Validation } from '../../../types/validation';
 import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
+import { IDate } from '../../../types/date';
 
 interface IProps {
   label: string;
-  value: Validation<string, string>;
+  value: Validation<string, IDate>;
   onChange: (value: string) => void;
-  placeholder: string;
 }
 
-export const TextInput = ({
-  label,
-  value,
-  onChange,
-  placeholder,
-}: IProps): JSX.Element => {
+export const DateInput = ({ label, value, onChange }: IProps): JSX.Element => {
   return (
     <SectionWithValidation validationResult={value.validationResult}>
       <label htmlFor={label}>{label}</label>
       <input
+        type="date"
         id={label}
-        type="text"
-        placeholder={placeholder}
-        value={value.value}
         onChange={v => onChange(v.target.value)}
+        value={value.value}
       />
     </SectionWithValidation>
   );

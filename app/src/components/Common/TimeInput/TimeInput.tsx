@@ -1,5 +1,5 @@
 import React from 'react';
-import { Validation } from '../../types/validation';
+import { Validation } from '../../../types/validation';
 import { ITime } from 'src/types/time';
 
 interface IProps {

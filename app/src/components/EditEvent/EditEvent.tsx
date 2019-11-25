@@ -1,38 +1,35 @@
 import { useState } from 'react';
 import React from 'react';
-import { TimeInput } from 'src/Common/TimeInput/TimeInput';
-import { TextInput } from 'src/Common/TextInput/TextInput';
-import { TextArea } from 'src/Common/TextArea/TextArea';
+import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
+import { TextInput } from 'src/components/Common/TextInput/TextInput';
+import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { createDescription, createLocation } from 'src/types';
-import { DateInput } from 'src/Common/DateInput/DateInput';
+import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { createDate } from 'src/types/date';
 import { createInitalEvent, IEditEvent, IEvent } from 'src/types/event';
-import style from './CreateEvent.module.scss';
-import { Menu } from 'src/Common/Menu/Menu';
+import style from './EditEvent.module.scss';
 import { createTitle, createTime } from 'src/types/time';
-import { SectionWithValidation } from 'src/Common/SectionWithValidation/SectionWithValidation';
+import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
 import { fromEditModel, toEditModel } from 'src/types/validation';
 
 interface Props {
-  createOrUpdate: (write: IEvent) => void;
   event: IEvent;
+  onChange: (write: IEvent) => Promise<void>;
 }
 
-export const CreateEvent = ({ createOrUpdate, event: editEvent }: Props) => {
+export const EditEvent = ({ event: editEvent, onChange }: Props) => {
   const [event, setEvent] = useState<IEditEvent>(toEditModel(editEvent));
 
-  const createEvent = async () => {
+  const saveEvent = async () => {
     const eventModel = fromEditModel(event);
     if (eventModel) {
-      await createOrUpdate(eventModel);
+      await onChange(eventModel);
       setEvent(toEditModel(createInitalEvent()));
     }
   };
 
   return (
     <article className={style.container}>
-      <Menu tab={'create'} />
-      <h1>Create an event</h1>
       <section className={style.column}>
         <TextInput
           label={'title'}
@@ -109,7 +106,7 @@ export const CreateEvent = ({ createOrUpdate, event: editEvent }: Props) => {
             setEvent({ ...event, openForRegistrationTime: createTime(v) })
           }
         />
-        <button onClick={createEvent}>Create</button>
+        <button onClick={saveEvent}>Create</button>
       </section>
     </article>
   );

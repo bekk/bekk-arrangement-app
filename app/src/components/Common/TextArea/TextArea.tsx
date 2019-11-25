@@ -1,25 +1,31 @@
-import React from 'react';
+import React, { Children } from 'react';
 
-import { Validation } from '../../types/validation';
+import { Validation } from '../../../types/validation';
 import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
-import { IDate } from '../../types/date';
 
 interface IProps {
   label: string;
-  value: Validation<string, IDate>;
+  value: Validation<string, string>;
   onChange: (value: string) => void;
+  placeholder: string;
 }
 
-export const DateInput = ({ label, value, onChange }: IProps): JSX.Element => {
+export const TextArea = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+}: IProps): JSX.Element => {
   return (
     <SectionWithValidation validationResult={value.validationResult}>
       <label htmlFor={label}>{label}</label>
-      <input
-        type="date"
+      <textarea
         id={label}
+        rows={5}
+        cols={33}
+        placeholder={placeholder}
         onChange={v => onChange(v.target.value)}
-        value={value.value}
-      />
+      ></textarea>
     </SectionWithValidation>
   );
 };

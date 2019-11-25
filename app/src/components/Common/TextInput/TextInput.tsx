@@ -1,6 +1,6 @@
-import React, { Children } from 'react';
+import React from 'react';
 
-import { Validation } from '../../types/validation';
+import { Validation } from '../../../types/validation';
 import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
 
 interface IProps {
@@ -10,7 +10,7 @@ interface IProps {
   placeholder: string;
 }
 
-export const TextArea = ({
+export const TextInput = ({
   label,
   value,
   onChange,
@@ -19,13 +19,13 @@ export const TextArea = ({
   return (
     <SectionWithValidation validationResult={value.validationResult}>
       <label htmlFor={label}>{label}</label>
-      <textarea
+      <input
         id={label}
-        rows={5}
-        cols={33}
+        type="text"
         placeholder={placeholder}
+        value={value.value}
         onChange={v => onChange(v.target.value)}
-      ></textarea>
+      />
     </SectionWithValidation>
   );
 };
