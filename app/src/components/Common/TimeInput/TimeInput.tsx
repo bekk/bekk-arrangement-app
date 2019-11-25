@@ -1,10 +1,10 @@
 import React from 'react';
-import { Validation } from '../../../types/validation';
+import { Validate } from '../../../types/validation';
 import { ITime } from 'src/types/time';
 
 interface IProps {
   label: string;
-  value: Validation<[string, string], ITime>;
+  value: Validate<[string, string], ITime>;
   onChange: (value: [string, string]) => void;
 }
 

@@ -10,21 +10,21 @@ import { createInitalEvent, IEditEvent, IEvent } from 'src/types/event';
 import style from './EditEvent.module.scss';
 import { createTitle, createTime } from 'src/types/time';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
-import { fromEditModel, toEditModel } from 'src/types/validation';
+import { fromEditModel, toEditModel, Edit } from 'src/types/validation';
 
 interface Props {
-  event: IEvent;
+  event: Edit<IEvent>;
   onChange: (write: IEvent) => Promise<void>;
 }
 
 export const EditEvent = ({ event: editEvent, onChange }: Props) => {
-  const [event, setEvent] = useState<IEditEvent>(toEditModel(editEvent));
+  const [event, setEvent] = useState<Edit<IEvent>>(editEvent);
 
   const saveEvent = async () => {
     const eventModel = fromEditModel(event);
     if (eventModel) {
       await onChange(eventModel);
-      setEvent(toEditModel(createInitalEvent()));
+      setEvent(createInitalEvent());
     }
   };
 
@@ -57,8 +57,8 @@ export const EditEvent = ({ event: editEvent, onChange }: Props) => {
         />
         <SectionWithValidation
           validationResult={[
-            ...(event.startDate.validationResult || []),
-            ...(event.startTime.validationResult || []),
+            ...(event.startDate.errors || []),
+            ...(event.startTime.errors || []),
           ]}
         >
           <section className={style.row}>
@@ -72,9 +72,7 @@ export const EditEvent = ({ event: editEvent, onChange }: Props) => {
             <TimeInput
               label={'start time'}
               value={event.startTime}
-              onChange={(v: [string, string]) =>
-                setEvent({ ...event, startTime: createTime(v) })
-              }
+              onChange={v => setEvent({ ...event, startTime: createTime(v) })}
             />
           </section>
         </SectionWithValidation>
@@ -88,9 +86,7 @@ export const EditEvent = ({ event: editEvent, onChange }: Props) => {
         <TimeInput
           label={'end time'}
           value={event.endTime}
-          onChange={(v: [string, string]) =>
-            setEvent({ ...event, endTime: createTime(v) })
-          }
+          onChange={v => setEvent({ ...event, endTime: createTime(v) })}
         />
         <DateInput
           label={'Registration date'}
@@ -102,7 +98,7 @@ export const EditEvent = ({ event: editEvent, onChange }: Props) => {
         <TimeInput
           label={'Open for registration time'}
           value={event.endTime}
-          onChange={(v: [string, string]) =>
+          onChange={v =>
             setEvent({ ...event, openForRegistrationTime: createTime(v) })
           }
         />

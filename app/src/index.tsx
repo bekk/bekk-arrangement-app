@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Switch, Route, useParams } from 'react-router-dom';
-import './index.css';
 import { createBrowserHistory } from 'history';
 import { rootRoute, overviewRoute, editRoute } from './routing';
 import { EventOverview } from './components/EventOverview/EventOverview';
 import { useCrud } from './api/crud-hook';
 import { fromViewModel, toWriteModel, createInitalEvent } from './types/event';
-import 'src/extension-methods/array';
 import { Menu } from './components/Common/Menu/Menu';
 import { EditEvent } from './components/EditEvent/EditEvent';
+import 'src/extension-methods/array';
+import './index.css';
 
 export const history = createBrowserHistory();
 
@@ -22,11 +22,13 @@ const App = () => {
 
   const Edit = () => {
     const { id } = useParams();
-    const event = events.find(x => x.id === Number(id));
+    const event = events.get(Number(id));
     return (
       <>
         <Menu tab={'edit'} />
-        {event ? <EditEvent onChange={update(event.id)} event={event} /> : null}
+        {event ? (
+          <EditEvent onChange={update(Number(id))} event={event} />
+        ) : null}
       </>
     );
   };

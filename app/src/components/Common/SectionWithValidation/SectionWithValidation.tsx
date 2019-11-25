@@ -1,10 +1,10 @@
 import React from 'react';
 import style from './SectionWithValidation.module.scss';
 
-import { validationTypeAsIcon, IValidation } from '../../../types/validation';
+import { validationTypeAsIcon, IError } from '../../../types/validation';
 
 interface IProps {
-  validationResult?: IValidation[];
+  validationResult?: IError[];
   children: JSX.Element | JSX.Element[];
 }
 

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Validation } from '../../../types/validation';
+import { Validate } from '../../../types/validation';
 import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
 
 interface IProps {
   label: string;
-  value: Validation<string, string>;
+  value: Validate<string, string>;
   onChange: (value: string) => void;
   placeholder: string;
 }
@@ -17,7 +17,7 @@ export const TextInput = ({
   placeholder,
 }: IProps): JSX.Element => {
   return (
-    <SectionWithValidation validationResult={value.validationResult}>
+    <SectionWithValidation validationResult={value.errors}>
       <label htmlFor={label}>{label}</label>
       <input
         id={label}

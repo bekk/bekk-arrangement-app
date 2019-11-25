@@ -1,8 +1,13 @@
-import { Validation, validate } from './validation';
+import { Validate, validate } from './validation';
+
+export interface ITime {
+  hour: number;
+  minute: number;
+}
 
 export const createTime = (
   value: [string, string]
-): Validation<[string, string], ITime> => {
+): Validate<[string, string], ITime> => {
   const hour = Number(value[0]);
   const minute = Number(value[1]);
 
@@ -20,17 +25,12 @@ export const createTime = (
   return validator.resolve({ hour, minute });
 };
 
-export const createTitle = (value: string): Validation<string, string> => {
+export const createTitle = (value: string): Validate<string, string> => {
   const validator = validate<string, string>(value, {
     'Title must be more than 3 characters': value.length <= 3,
   });
 
   return validator.resolve(value);
 };
-
-export interface ITime {
-  hour: number;
-  minute: number;
-}
 
 export const stringifyTime = ({ hour, minute }: ITime) => `${hour}:${minute}`;

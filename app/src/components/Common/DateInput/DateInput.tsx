@@ -1,18 +1,19 @@
 import React from 'react';
 
-import { Validation } from '../../../types/validation';
+import { Validate } from '../../../types/validation';
 import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
 import { IDate } from '../../../types/date';
 
 interface IProps {
   label: string;
-  value: Validation<string, IDate>;
+  value: Validate<string, IDate>;
   onChange: (value: string) => void;
 }
 
 export const DateInput = ({ label, value, onChange }: IProps): JSX.Element => {
+  console.log(value.value);
   return (
-    <SectionWithValidation validationResult={value.validationResult}>
+    <SectionWithValidation validationResult={value.errors}>
       <label htmlFor={label}>{label}</label>
       <input
         type="date"

@@ -1,35 +1,40 @@
 import { Optional } from '.';
 
-type ValidationType = 'Error' | 'Warning';
+type ErrorType = 'Error' | 'Warning';
 
 export type Edit<T> = {
-  [K in keyof T]: Validation<any, T[K]>;
+  [K in keyof T]: Validate<any, T[K]>;
 };
 
-export interface IValidation {
+export interface IError {
   message: string;
-  type: ValidationType;
+  type: ErrorType;
 }
 
-export const error = (message: string): IValidation => ({
+export const error = (message: string): IError => ({
   type: 'Error',
   message,
 });
 
-export const warning = (message: string): IValidation => ({
+export const warning = (message: string): IError => ({
   type: 'Warning',
   message,
 });
 
-export type Validation<From, To> = { value: From } & (
-  | { data: To; validationResult?: undefined }
+export const valid = <T>(valid: T): Validate<T, T> => ({
+  value: valid,
+  data: valid,
+});
+
+export type Validate<From, To> = { value: From } & (
+  | { data: To; errors?: undefined }
   | {
       data?: undefined;
-      validationResult: IValidation[];
+      errors: IError[];
     }
 );
 
-export const validationTypeAsIcon = (type: ValidationType) => {
+export const validationTypeAsIcon = (type: ErrorType) => {
   switch (type) {
     case 'Error': {
       return '⛔';
@@ -48,25 +53,25 @@ export const validate = <From, To>(
     .filter(([errorMessage, isError]) => isError)
     .map(([errorMessage]) => errorMessage);
   return {
-    resolve: (data: To): Validation<From, To> => {
+    resolve: (data: To): Validate<From, To> => {
       if (errorMessages.length > 0) {
         return {
           value,
           data: undefined,
-          validationResult: errorMessages.map(error),
+          errors: errorMessages.map(error),
         };
       }
       return {
         value,
         data,
-        validationResult: undefined,
+        errors: undefined,
       };
     },
-    reject: (errorMessage: string): Validation<From, To> => {
+    reject: (errorMessage: string): Validate<From, To> => {
       return {
         value,
         data: undefined,
-        validationResult: [error(errorMessage)],
+        errors: [error(errorMessage)],
       };
     },
   };

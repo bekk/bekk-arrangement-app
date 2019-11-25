@@ -1,6 +1,5 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { WithId } from 'src/types';
 import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 
@@ -14,7 +13,7 @@ export const Event = ({
   startTime,
   endDate,
   endTime,
-}: WithId<IEvent>) => {
+}: IEvent) => {
   return (
     <div>
       <p>{title}</p>

@@ -11,7 +11,7 @@ declare global {
     /**
      * Beholder alle elementer hvor map-funksjonen `f` ikke returnerer `undefined`
      */
-    mapIf: <E>(f: (x: T) => Optional<E>) => T[];
+    mapIf: <E>(f: (x: T) => Optional<E>) => E[];
     /**
      * @param key - Sorteringsnøkkelen, ex. `x => x.name`
      *
