@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.content {
+  min-width: 320px;
+  max-width: 780px;
+}
+
+.smallMarginLeft {
+  margin-left: 8px;
+}

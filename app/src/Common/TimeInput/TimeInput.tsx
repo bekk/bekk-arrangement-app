@@ -2,6 +2,7 @@ import React from 'react';
 import { Validation } from '../../types/validation';
 import { ITime } from 'src/types/time';
 import style from './TimeInput.module.scss';
+import commonStyle from 'src/global/Common.module.scss';
 
 interface IProps {
   label: string;
@@ -36,7 +37,7 @@ export const TimeInput = ({ label, value, onChange }: IProps): JSX.Element => {
   };
 
   return (
-    <section>
+    <section className={commonStyle.smallMarginLeft}>
       <label htmlFor={label}>{label}</label>
       <div className={style.row}>
         <input
