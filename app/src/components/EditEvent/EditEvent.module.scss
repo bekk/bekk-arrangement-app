@@ -1,15 +1,9 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.column {
+.form {
   display: flex;
   flex-direction: column;
 }
 
-.row {
+.dateTime {
   display: flex;
   flex-direction: row;
 }

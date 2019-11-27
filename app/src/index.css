@@ -1,4 +1,5 @@
 body {
+  width: 100%;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -13,13 +14,24 @@ code {
 }
 
 label {
-  font-size: 0.9em;
+  font-size: 0.7em;
   color: rgba(1, 1, 1, 0.3);
 }
 
 input[type='text'],
-[type='date'] {
+[type='date'],
+[type='number'] {
+  height: 20px;
   border: none;
   border-bottom: solid 1px black;
-  font-size: 1.2em;
+  font-size: 1em;
+  padding: 0;
+  display: block;
+  padding: 0.3rem;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
