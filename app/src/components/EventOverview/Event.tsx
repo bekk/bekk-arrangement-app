@@ -1,30 +1,23 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { stringifyDate } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
+import { stringifyDateTime } from 'src/types/date-time';
 
 export const Event = ({
   title,
   description,
   location,
-  openForRegistrationTime,
-  openForRegistrationDate,
-  startDate,
-  startTime,
-  endDate,
-  endTime,
+  start,
+  end,
+  openForRegistration,
 }: IEvent) => {
   return (
     <div>
       <p>{title}</p>
       <p>{description}</p>
       <p>{location}</p>
-      <p>
-        {stringifyDate(startDate)} - {stringifyTime(startTime)}
-      </p>
-      <p>
-        {stringifyDate(endDate)} - {stringifyTime(endTime)}
-      </p>
+      <p>{stringifyDateTime(start)}</p>
+      <p>{stringifyDateTime(end)}</p>
+      <p>{stringifyDateTime(openForRegistration)}</p>
     </div>
   );
 };

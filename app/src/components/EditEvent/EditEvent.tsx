@@ -5,28 +5,32 @@ import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { createDescription, createLocation } from 'src/types';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
-import { createDate } from 'src/types/date';
-import { createInitalEvent, IEditEvent, IEvent } from 'src/types/event';
-import style from './EditEvent.module.scss';
-import { createTitle, createTime } from 'src/types/time';
+import { parseDate } from 'src/types/date';
+import { validateTime } from 'src/types/time';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
-import { fromEditModel, toEditModel, Edit } from 'src/types/validation';
+import { fromEditModel, Edit } from 'src/types/validation';
+import {
+  IEvent,
+  IEditEvent,
+  validateEvent,
+  serializeEvent,
+  parseEvent,
+} from 'src/types/event';
+import style from './EditEvent.module.scss';
+import { validateDateTime } from 'src/types/date-time';
+import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
 
 interface Props {
-  event: Edit<IEvent>;
+  event: IEvent;
   onChange: (write: IEvent) => Promise<void>;
 }
 
 export const EditEvent = ({ event: editEvent, onChange }: Props) => {
-  const [event, setEvent] = useState<Edit<IEvent>>(editEvent);
+  const [event, setEvent] = useState<IEditEvent>(
+    parseEvent({ id: 0, ...serializeEvent(editEvent) })[1]
+  );
 
-  const saveEvent = async () => {
-    const eventModel = fromEditModel(event);
-    if (eventModel) {
-      await onChange(eventModel);
-      setEvent(createInitalEvent());
-    }
-  };
+  const eventModel = validateEvent(event);
 
   return (
     <article className={style.container}>
@@ -35,74 +39,58 @@ export const EditEvent = ({ event: editEvent, onChange }: Props) => {
           label={'title'}
           placeholder="My event"
           value={event.title}
-          onChange={(v: string) =>
-            setEvent({ ...event, title: createTitle(v) })
-          }
+          onChange={title => setEvent({ ...event, title })}
         />
         <TextArea
           label={'description'}
           placeholder={'description of my event'}
           value={event.description}
-          onChange={(v: string) =>
-            setEvent({ ...event, description: createDescription(v) })
-          }
+          onChange={description => setEvent({ ...event, description })}
         />
         <TextInput
           label={'location'}
           placeholder="Stavanger, Norway"
           value={event.location}
-          onChange={(v: string) =>
-            setEvent({ ...event, location: createLocation(v) })
-          }
+          onChange={location => setEvent({ ...event, location })}
         />
         <SectionWithValidation
-          validationResult={[
-            ...(event.startDate.errors || []),
-            ...(event.startTime.errors || []),
-          ]}
+          validationResult={validateDateTime(event.start).errors}
         >
           <section className={style.row}>
-            <DateInput
+            <DateTimeInput
               label={'Start date'}
-              value={event.startDate}
-              onChange={(v: string) =>
-                setEvent({ ...event, startDate: createDate(v) })
-              }
-            />
-            <TimeInput
-              label={'start time'}
-              value={event.startTime}
-              onChange={v => setEvent({ ...event, startTime: createTime(v) })}
+              value={event.start}
+              onChange={start => setEvent({ ...event, start })}
             />
           </section>
         </SectionWithValidation>
-        <DateInput
-          label={'End date'}
-          value={event.endDate}
-          onChange={(v: string) =>
-            setEvent({ ...event, endDate: createDate(v) })
-          }
-        />
-        <TimeInput
-          label={'end time'}
-          value={event.endTime}
-          onChange={v => setEvent({ ...event, endTime: createTime(v) })}
-        />
-        <DateInput
-          label={'Registration date'}
-          value={event.openForRegistrationDate}
-          onChange={(v: string) =>
-            setEvent({ ...event, openForRegistrationDate: createDate(v) })
-          }
-        />
-        <TimeInput
-          label={'Open for registration time'}
-          value={event.endTime}
-          onChange={v =>
-            setEvent({ ...event, openForRegistrationTime: createTime(v) })
-          }
-        />
-        <button onClick={saveEvent}>Create</button>
+        <SectionWithValidation
+          validationResult={validateDateTime(event.end).errors}
+        >
+          <section className={style.row}>
+            <DateTimeInput
+              label={'End date'}
+              value={event.end}
+              onChange={end => setEvent({ ...event, end })}
+            />
+          </section>
+        </SectionWithValidation>
+        <SectionWithValidation
+          validationResult={validateDateTime(event.openForRegistration).errors}
+        >
+          <section className={style.row}>
+            <DateTimeInput
+              label={'Open for registration date'}
+              value={event.openForRegistration}
+              onChange={openForRegistration =>
+                setEvent({ ...event, openForRegistration })
+              }
+            />
+          </section>
+        </SectionWithValidation>
+        {eventModel.data && (
+          <button onClick={() => onChange(eventModel.data)}>Create</button>
+        )}
       </section>
     </article>
   );

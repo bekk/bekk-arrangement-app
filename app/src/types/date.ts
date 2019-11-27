@@ -1,4 +1,5 @@
 import { Validate, validate } from './validation';
+import { compose } from 'src/utils';
 
 export interface IDate {
   day: number;
@@ -6,7 +7,11 @@ export interface IDate {
   year: number;
 }
 
-export const createDate = (date: string): Validate<string, IDate> => {
+export type EditDate = string;
+
+export const parseDate = (date: string) => date.substring(0, 10);
+
+export const validateDate = (date: EditDate): Validate<EditDate, IDate> => {
   const dateISO8601 = /^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/;
   const dates = date.match(dateISO8601) || [];
 
@@ -31,11 +36,9 @@ export const createDate = (date: string): Validate<string, IDate> => {
   });
 };
 
-//Bør nok flyttes ut i en date utils
-export const getNow = () => {
-  const today = new Date();
-  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-};
+export const createDate = compose(parseDate)(validateDate);
 
 export const stringifyDate = ({ year, month, day }: IDate) =>
   `${year}-${month}-${day}`;
+
+export const toEditDate = compose(stringifyDate)(parseDate);

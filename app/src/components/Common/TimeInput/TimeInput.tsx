@@ -1,37 +1,22 @@
 import React from 'react';
-import { Validate } from '../../../types/validation';
-import { ITime } from 'src/types/time';
+import { EditTime } from 'src/types/time';
 
 interface IProps {
   label: string;
-  value: Validate<[string, string], ITime>;
-  onChange: (value: [string, string]) => void;
+  value: EditTime;
+  onChange: (value: EditTime) => void;
 }
 
 export const TimeInput = ({ label, value, onChange }: IProps): JSX.Element => {
-  const hour = value.value[0];
-  const minute = value.value[1];
+  const hour = value[0];
+  const minute = value[1];
 
   const updateHour = (value: string) => {
-    const valueAsNumber = Number(value);
-    if (valueAsNumber > 23) {
-      onChange(['0', minute]);
-    } else if (valueAsNumber < 0) {
-      onChange(['23', minute]);
-    } else {
-      onChange([value, minute]);
-    }
+    onChange([value, minute]);
   };
 
   const updateMinute = (value: string) => {
-    const valueAsNumber = Number(value);
-    if (valueAsNumber > 59) {
-      onChange([hour, '0']);
-    } else if (valueAsNumber < 0) {
-      onChange([hour, '59']);
-    } else {
-      onChange([hour, value]);
-    }
+    onChange([hour, value]);
   };
 
   return (

@@ -1,18 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { get, post, put, del } from './crud';
-import { Edit } from 'src/types/validation';
+import { Optional } from 'src/types';
 
 // TEMP
 const host = 'http://localhost:5000';
 
 interface ICrud<Key, DomainModel, WriteModel, ViewModel> {
   endpoint: (id?: Key) => string;
-  fromViewModel: (viewModel: ViewModel) => [Key, Edit<DomainModel>];
+  fromViewModel: (viewModel: ViewModel) => [Key, Optional<DomainModel>];
   toWriteModel: (model: DomainModel) => WriteModel;
 }
 
 interface IReturn<Key, DomainModel> {
-  collection: Map<Key, Edit<DomainModel>>;
+  collection: Map<Key, DomainModel>;
   create: (model: DomainModel) => Promise<void>;
   update: (id: Key) => (model: DomainModel) => Promise<void>;
   del: (id: Key) => Promise<void>;
@@ -23,12 +23,12 @@ export const useCrud = <K, D, W, V>({
   fromViewModel,
   toWriteModel,
 }: ICrud<K, D, W, V>): IReturn<K, D> => {
-  const [collection, setCollection] = useState<Map<K, Edit<D>>>(new Map());
+  const [collection, setCollection] = useState<Map<K, D>>(new Map());
   const path = endpoint();
   const getAll = useCallback(() => {
     get({ host, path })
       .then((xs: V[]) => xs.map(fromViewModel))
-      .then(xs => new Map(xs))
+      .then(xs => new Map(xs).mapIf(x => x))
       .then(setCollection);
   }, [path, fromViewModel]);
   useEffect(getAll, [getAll]);

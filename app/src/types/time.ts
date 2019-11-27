@@ -1,17 +1,27 @@
 import { Validate, validate } from './validation';
+import { compose } from 'src/utils';
 
 export interface ITime {
   hour: number;
   minute: number;
 }
 
-export const createTime = (
-  value: [string, string]
-): Validate<[string, string], ITime> => {
-  const hour = Number(value[0]);
-  const minute = Number(value[1]);
+export type EditTime = [string, string];
 
-  const validator = validate<[string, string], ITime>(value, {
+export const parseTime = (time: string): EditTime => {
+  const timeISO8601 = /([0-9]{1,2}):([0-9]{1,2})/;
+  const [_, hour = '', minutes = ''] = time.match(timeISO8601) || [];
+  return [hour, minutes];
+};
+
+export const validateTime = ([_hour, _minutes]: EditTime): Validate<
+  EditTime,
+  ITime
+> => {
+  const hour = Number(_hour);
+  const minute = Number(_minutes);
+
+  const validator = validate<EditTime, ITime>([_hour, _minutes], {
     "Can't have more than 60 minutes in an hour": minute > 59,
     "Can't have negative number of minutes": minute < 0,
     'There are not more than 23 hours in a day': hour > 23,
@@ -25,12 +35,9 @@ export const createTime = (
   return validator.resolve({ hour, minute });
 };
 
-export const createTitle = (value: string): Validate<string, string> => {
-  const validator = validate<string, string>(value, {
-    'Title must be more than 3 characters': value.length <= 3,
-  });
+export const createTime = compose(parseTime)(validateTime);
 
-  return validator.resolve(value);
-};
+export const stringifyTime = ({ hour, minute }: ITime): string =>
+  `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
-export const stringifyTime = ({ hour, minute }: ITime) => `${hour}:${minute}`;
+export const toEditTime = compose(stringifyTime)(parseTime);

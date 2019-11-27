@@ -7,6 +7,17 @@ type Comparable = string | number; // Orderable & Equatable
 
 /* eslint-disable */
 declare global {
+  interface Map<K, V> {
+    /**
+     * Map over alle verdiene i en Map, og behold nøklene som de er
+     */
+    map: <E>(f: (x: V, i: K) => E) => Map<K, E>;
+    /**
+     * Beholder alle elementer hvor map-funksjonen `f` ikke returnerer `undefined`
+     * Keyen hvis verdi blir undefined forsvinner
+     */
+    mapIf: <E>(f: (x: V, i: K) => Optional<E>) => Map<K, E>;
+  }
   interface Array<T> {
     /**
      * Beholder alle elementer hvor map-funksjonen `f` ikke returnerer `undefined`
@@ -50,6 +61,28 @@ declare global {
     replaceBy: (newThings: T[], key: (x: T) => Equatable) => T[];
   }
 }
+
+Map.prototype.map = function<K, V, E>(
+  this: Map<K, V>,
+  f: (x: V, i: K) => E
+): Map<K, E> {
+  const tupledList: [K, E][] = Array.from(this).map(([key, value]) => [
+    key,
+    f(value, key),
+  ]);
+  return new Map(tupledList);
+};
+
+Map.prototype.mapIf = function<K, V, E>(
+  this: Map<K, V>,
+  f: (x: V, i: K) => Optional<E>
+): Map<K, E> {
+  const tupledList: [K, E][] = Array.from(this).mapIf(([key, value]) => {
+    const element = f(value, key);
+    return element && [key, element];
+  });
+  return new Map(tupledList);
+};
 
 Array.prototype.mapIf = function<T, E>(
   this: T[],
