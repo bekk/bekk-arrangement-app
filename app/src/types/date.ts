@@ -39,6 +39,8 @@ export const validateDate = (date: EditDate): Validate<EditDate, IDate> => {
 export const createDate = compose(parseDate)(validateDate);
 
 export const stringifyDate = ({ year, month, day }: IDate) =>
-  `${year}-${month}-${day}`;
+  `${year}-${month.toString().padStart(2, '0')}-${day
+    .toString()
+    .padStart(2, '0')}`;
 
 export const toEditDate = compose(stringifyDate)(parseDate);
