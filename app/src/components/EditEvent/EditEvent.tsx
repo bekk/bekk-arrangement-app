@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import React from 'react';
-import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
-import { createDescription, createLocation } from 'src/types';
-import { DateInput } from 'src/components/Common/DateInput/DateInput';
-import { parseDate } from 'src/types/date';
-import { validateTime } from 'src/types/time';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
-import { fromEditModel, Edit } from 'src/types/validation';
 import {
   IEvent,
   IEditEvent,
@@ -17,8 +11,8 @@ import {
   parseEvent,
 } from 'src/types/event';
 import style from './EditEvent.module.scss';
-import { validateDateTime } from 'src/types/date-time';
 import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
+import { validateDateTime } from 'src/types/date-time';
 
 interface Props {
   event: IEvent;

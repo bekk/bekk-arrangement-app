@@ -1,3 +1,3 @@
 export const rootRoute = '/';
-export const editRoute = '/:id';
+export const editRoute = (id: string | number) => `/${id}`;
 export const overviewRoute = '/overview';

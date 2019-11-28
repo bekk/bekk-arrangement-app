@@ -9,9 +9,6 @@ import {
   serializeEvent,
   parseEvent,
   validateEvent,
-  IWriteModel,
-  IViewModel,
-  IEditEvent,
   IEvent,
   initialEvent,
 } from './types/event';
@@ -20,12 +17,13 @@ import 'src/extension-methods/array';
 import './index.css';
 import { compose } from './utils';
 import { EditEvent } from './components/EditEvent/EditEvent';
+import { Optional } from 'src/types';
 
 export const history = createBrowserHistory();
 
 const f = compose(parseEvent)(([id, e]) => {
   const ve = validateEvent(e);
-  return [id, ve.data] as [number, IEvent | undefined];
+  return [id, ve.data] as [number, Optional<IEvent>];
 });
 
 const App = () => {
@@ -56,9 +54,9 @@ const App = () => {
           <EditEvent onChange={create} event={initialEvent} />
         </Route>
         <Route path={overviewRoute}>
-          <EventOverview events={events} />
+          <EventOverview events={events} delEvent={del} />
         </Route>
-        <Route exact path={editRoute}>
+        <Route exact path={editRoute(':id')}>
           <Edit />
         </Route>
       </Switch>
