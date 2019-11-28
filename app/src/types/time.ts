@@ -10,7 +10,7 @@ export type EditTime = [string, string];
 
 export const parseTime = (time: string): EditTime => {
   const timeISO8601 = /([0-9]{1,2}):([0-9]{1,2})/;
-  const [_, hour = '', minutes = ''] = time.match(timeISO8601) || [];
+  const [, hour = '', minutes = ''] = time.match(timeISO8601) || [];
   return [hour, minutes];
 };
 

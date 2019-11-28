@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { Validate } from '../../../types/validation';
-import { SectionWithValidation } from '../SectionWithValidation/SectionWithValidation';
-
 interface IProps {
   label: string;
   value: string;
