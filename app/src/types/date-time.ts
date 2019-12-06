@@ -4,6 +4,7 @@ import {
   stringifyDate,
   EditDate,
   validateDate,
+  toEditDate,
 } from './date';
 import {
   ITime,
@@ -11,6 +12,7 @@ import {
   stringifyTime,
   parseTime,
   EditTime,
+  toEditTime,
 } from './time';
 import { Validate } from './validation';
 
@@ -49,6 +51,12 @@ export const validateDateTime = (
 
 export const stringifyDateTime = ({ date, time }: IDateTime) =>
   `${stringifyDate(date)}T${stringifyTime(time)}`;
+
+export const toEditDateTime = ({ date, time }: IDateTime): EditDateTime => {
+  const editDate = toEditDate(date);
+  const editTime = toEditTime(time);
+  return { date: editDate, time: editTime };
+};
 
 //Bør nok flyttes ut i en date utils
 export const getNow = () => {

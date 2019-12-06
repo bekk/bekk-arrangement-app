@@ -2,10 +2,9 @@ import { Validate } from './validation';
 import { WithId } from '.';
 import {
   IDateTime,
-  stringifyDateTime,
   EditDateTime,
-  parseDateTime,
   validateDateTime,
+  toEditDateTime,
 } from './date-time';
 import { IEventContract } from './contract-types';
 
@@ -18,6 +17,8 @@ export interface IEvent {
   start: IDateTime;
   end: IDateTime;
   openForRegistration: IDateTime;
+  organizer: string;
+  participants: string;
 }
 
 export interface IEditEvent {
@@ -27,12 +28,14 @@ export interface IEditEvent {
   start: EditDateTime;
   end: EditDateTime;
   openForRegistration: EditDateTime;
+  organizer: string;
+  participants: string;
 }
 
 export const parseEvent = (event: IViewModel): [Key, IEditEvent] => {
-  const start = parseDateTime(event.fromDate);
-  const end = parseDateTime(event.toDate);
-  const openForRegistration = parseDateTime(event.fromDate);
+  const start = toEditDateTime(event.startDate);
+  const end = toEditDateTime(event.endDate);
+  const openForRegistration = toEditDateTime(event.openForRegistrationDate);
 
   return [
     event.id,
@@ -40,9 +43,11 @@ export const parseEvent = (event: IViewModel): [Key, IEditEvent] => {
       title: event.title,
       description: event.description,
       location: event.location,
+      organizer: event.organizerEmail,
       start,
       end,
       openForRegistration,
+      participants: event.participants,
     },
   ];
 };
@@ -72,9 +77,11 @@ export const validateEvent = (
       title: event.title,
       description: event.description,
       location: event.location,
+      organizer: event.organizer,
       start,
       end,
       openForRegistration,
+      participants: event.participants,
     },
   };
 };
@@ -86,15 +93,18 @@ export const serializeEvent = (event: IEvent): IWriteModel => ({
   title: event.title,
   description: event.description,
   location: event.location,
-  fromDate: stringifyDateTime(event.start),
-  toDate: stringifyDateTime(event.end),
-  responsibleEmployee: 1296,
+  startDate: event.start,
+  endDate: event.end,
+  openForRegistrationDate: event.openForRegistration,
+  organizerEmail: event.organizer,
+  participants: event.participants,
 });
 
 export const initialEvent: IEvent = {
   title: '',
   description: '',
   location: '',
+  organizer: '',
   start: {
     date: { year: 2019, month: 12, day: 1 },
     time: { hour: 0, minute: 0 },
@@ -107,4 +117,5 @@ export const initialEvent: IEvent = {
     date: { year: 2019, month: 11, day: 15 },
     time: { hour: 0, minute: 0 },
   },
+  participants: '',
 };

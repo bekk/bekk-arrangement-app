@@ -82,6 +82,20 @@ export const EditEvent = ({ event: editEvent, onChange }: Props) => {
             />
           </section>
         </SectionWithValidation>
+        <TextInput
+          label={'organizer'}
+          placeholder="email@bekk.no"
+          value={event.organizer}
+          onChange={organizer => setEvent({ ...event, organizer })}
+        />
+        <TextArea
+          label={'participants'}
+          placeholder={
+            'Separate by comma: eksempel@bekk.no, eksempel@gmail.com, email@bekk.no'
+          }
+          value={event.participants}
+          onChange={participants => setEvent({ ...event, participants })}
+        />
         {eventModel.data && (
           <button onClick={() => onChange(eventModel.data)}>Create</button>
         )}

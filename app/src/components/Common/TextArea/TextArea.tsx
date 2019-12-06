@@ -16,6 +16,7 @@ export const TextArea = ({
   return (
     <>
       <label htmlFor={label}>{label}</label>
+      <br />
       <textarea
         id={label}
         rows={5}
@@ -24,6 +25,7 @@ export const TextArea = ({
         value={value}
         onChange={v => onChange(v.target.value)}
       ></textarea>
+      <br />
     </>
   );
 };
