@@ -10,3 +10,7 @@ export interface IEventContract {
   organizerEmail: string;
   participants: string;
 }
+
+export interface IRegistrationContract {
+  participantEmail: string;
+}

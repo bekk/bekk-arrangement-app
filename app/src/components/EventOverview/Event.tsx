@@ -14,8 +14,8 @@ export const Event = ({
   delEvent,
 }: Props) => {
   return (
-    <>
-      <a href={editRoute}>
+    <div>
+      <a href={editRoute} style={{ display: 'flex' }}>
         <p>{title}</p>
         <p>{description}</p>
         <p>{location}</p>
@@ -24,6 +24,6 @@ export const Event = ({
         <p>{stringifyDateTime(openForRegistration)}</p>
       </a>
       <div onClick={delEvent}>SLETT MEG</div>
-    </>
+    </div>
   );
 };
