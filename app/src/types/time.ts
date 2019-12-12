@@ -40,4 +40,7 @@ export const createTime = compose(parseTime)(validateTime);
 export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
-export const toEditTime = compose(stringifyTime)(parseTime);
+export const toEditTime = (time: ITime): EditTime => [
+  time.hour.toString(),
+  time.minute.toString(),
+];

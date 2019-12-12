@@ -1,7 +1,7 @@
 import { Validate, validate, IError } from './validation';
 
 export type Optional<T> = T | undefined;
-export type WithId<T> = T & { id: number };
+export type WithId<T> = T & { id: string };
 export type Result<Ok> = Ok | { errors: IError[] };
 
 export const createLocation = (value: string): Validate<string, string> => {

@@ -2,27 +2,24 @@ import React from 'react';
 import { Menu } from '../Common/Menu/Menu';
 import style from './EventOverview.module.scss';
 import commonStyle from 'src/global/Common.module.scss';
-import { Event } from './Event';
-import { IEvent } from 'src/types/event';
+import { EventListElement } from './EventListElement';
 import { editRoute } from 'src/routing';
+import { useStore } from 'src/store';
 
-interface Props {
-  events: Map<number, IEvent>;
-  delEvent: (id: number) => void;
-}
+export const EventOverview = () => {
+  const { state, dispatch } = useStore();
 
-export const EventOverview = ({ events, delEvent }: Props) => {
   return (
     <div className={style.container}>
       <div className={commonStyle.content}>
         <Menu tab={'overview'} />
         <div className={style.overview}>
-          {events.map((event, id) => (
-            <Event
+          {state.events.map((event, id) => (
+            <EventListElement
               key={id}
               event={event}
               editRoute={editRoute(id)}
-              delEvent={() => delEvent(id)}
+              delEvent={() => dispatch({ id: event.id, type: 'DELETE_EVENT' })}
             />
           ))}
         </div>

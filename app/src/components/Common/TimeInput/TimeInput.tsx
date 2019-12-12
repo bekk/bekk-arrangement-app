@@ -1,5 +1,6 @@
 import React from 'react';
 import { EditTime } from 'src/types/time';
+import style from './TimeInput.module.scss';
 
 interface IProps {
   label: string;
@@ -21,14 +22,15 @@ export const TimeInput = ({ label, value, onChange }: IProps): JSX.Element => {
 
   return (
     <>
-      <label htmlFor={label}>{label}</label>
       <input
+        className={style.timeInput}
         type="number"
         id={label}
         onChange={v => updateHour(v.target.value)}
         value={hour}
       />
       <input
+        className={style.timeInput}
         type="number"
         id={label}
         onChange={v => updateMinute(v.target.value)}

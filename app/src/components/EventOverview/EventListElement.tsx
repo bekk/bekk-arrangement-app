@@ -2,17 +2,17 @@ import React from 'react';
 import { IEvent } from 'src/types/event';
 import { stringifyDateTime } from 'src/types/date-time';
 
-interface Props {
+interface IProps {
   event: IEvent;
   editRoute: string;
   delEvent: () => void;
 }
 
-export const Event = ({
+export const EventListElement = ({
   event: { title, description, location, start, end, openForRegistration },
   editRoute,
   delEvent,
-}: Props) => {
+}: IProps) => {
   return (
     <>
       <a href={editRoute}>

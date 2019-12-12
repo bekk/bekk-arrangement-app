@@ -1,5 +1,6 @@
 import { Validate, validate } from './validation';
 import { compose } from 'src/utils';
+import { format } from 'date-fns';
 
 export interface IDate {
   day: number;
@@ -36,11 +37,21 @@ export const validateDate = (date: EditDate): Validate<EditDate, IDate> => {
   });
 };
 
-export const createDate = compose(parseDate)(validateDate);
+export const dateAsText = (date: IDate) => {
+  return format(new Date(date.year, date.month, date.day), 'cccc, i MMMM yyyy');
+};
+
+export const isSameDate = (date: IDate, otherDate: IDate) => {
+  return (
+    date.year === otherDate.year &&
+    date.month === otherDate.month &&
+    date.day === otherDate.day
+  );
+};
 
 export const stringifyDate = ({ year, month, day }: IDate) =>
   `${year}-${month.toString().padStart(2, '0')}-${day
     .toString()
     .padStart(2, '0')}`;
 
-export const toEditDate = compose(stringifyDate)(parseDate);
+export const toEditDate = (date: IDate) => stringifyDate(date);
