@@ -3,7 +3,7 @@ import { useStore } from 'src/store';
 import { useParams } from 'react-router';
 import commonStyle from 'src/global/Common.module.scss';
 import { IDateTime } from 'src/types/date-time';
-import { getEvent } from 'src/api/arrangementSvc';
+import { getEvent, postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString, calculateTimeLeft, ITimeLeft } from 'src/ùtils/timeleft';
@@ -50,6 +50,20 @@ const useTimeLeft = (event: IEvent | undefined) => {
 export const ViewEvent = () => {
   const event = useEvent();
   const timeLeft = useTimeLeft(event);
+  const [email, setEmail] = useState('');
+
+  const addParticipant = async () => {
+    //epost validering
+    if (event && email) {
+      const addedParticipant = await postParticipant({
+        eventId: event.id,
+        email: email,
+      });
+      alert(
+        `You are attending. Check your email, ${addedParticipant.email}, for confirmation`
+      );
+    }
+  };
 
   if (!event) {
     return <div>Loading</div>;
@@ -59,26 +73,13 @@ export const ViewEvent = () => {
       <section className={commonStyle.content}>
         <h1>{event.title}</h1>
         <section>
-          <ReadableDate startDate={event.start} endDate={event.end} />
+          <DateSection startDate={event.start} endDate={event.end} />
         </section>
         <section>Location: {event.location}</section>
         <section className={commonStyle.subsection}>
           {event.description}
         </section>
       </section>
-      <Registration timeleft={timeLeft} />
-    </article>
-  );
-};
-
-interface IRegistrationProps {
-  timeleft: ITimeLeft;
-}
-
-const Registration = ({ timeleft }: IRegistrationProps) => {
-  const [email, setEmail] = useState('');
-  return (
-    <section className={commonStyle.column}>
       <section className={commonStyle.column}>
         <TextInput
           label={'Email'}
@@ -86,25 +87,25 @@ const Registration = ({ timeleft }: IRegistrationProps) => {
           placeholder={'email'}
           onChange={setEmail}
         />
+        {timeLeft.difference > 0 ? (
+          <section className={commonStyle.row}>
+            <button>Closed</button>
+            <p>Opens in {asString(timeLeft)}</p>
+          </section>
+        ) : (
+          <button onClick={() => addParticipant()}>I am going</button>
+        )}
       </section>
-      {timeleft.difference > 0 ? (
-        <section className={commonStyle.row}>
-          <button>Closed</button>
-          <p>Opens in {asString(timeleft)}</p>
-        </section>
-      ) : (
-        <button>Attend</button>
-      )}
-    </section>
+    </article>
   );
 };
 
-interface IReadableDateProps {
+interface IDateProps {
   startDate: IDateTime;
   endDate: IDateTime;
 }
 
-const ReadableDate = ({ startDate, endDate }: IReadableDateProps) => {
+const DateSection = ({ startDate, endDate }: IDateProps) => {
   if (isSameDate(startDate.date, endDate.date)) {
     return (
       <p>

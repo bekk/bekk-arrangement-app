@@ -20,7 +20,6 @@ export const CreateEvent = () => {
     const validatedEvent = validateEvent(event);
     if (validatedEvent.data) {
       const createdEvent = await postEvent(validatedEvent.data);
-      console.log(createdEvent, 'created');
       dispatch({ event: createdEvent, type: 'ADD_EVENT' });
     } else {
       throw Error('feil');
