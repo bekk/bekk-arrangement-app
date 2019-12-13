@@ -2,21 +2,14 @@ import React, { createContext, useContext, useReducer } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import {
-  rootRoute,
-  overviewRoute,
-  editRoute,
-  createRoute,
-  eventsRoute,
-  viewEventRoute,
-} from './routing';
-import { EventOverview } from './components/EventOverview/EventOverview';
+import { createRoute, eventsRoute, viewEventRoute, editRoute } from './routing';
+import { ViewEventsContainer } from './components/ViewEvents/ViewEventsContainer';
 import 'src/extension-methods/array';
 import './index.css';
-import { EditEvent } from './components/EditEvent/EditEvent';
+import { EditEventContainer } from './components/EditEvent/EditEventContainer';
 import { StoreProvider } from './store';
-import { CreateEvent } from './components/CreateEvent/CreateEvent';
-import { ViewEvent } from './components/ViewEvent/ViewEvent';
+import { CreateEvent } from './components/CreateEvent/CreateEventContainer';
+import { ViewEventContainer } from './components/ViewEvent/ViewEventContainer';
 
 export const history = createBrowserHistory();
 
@@ -25,14 +18,17 @@ const App = () => {
     <StoreProvider>
       <Router history={history}>
         <Switch>
-          {/* <Route exact path={rootRoute}>
-            <EditEvent />
-          </Route> */}
+          <Route path={viewEventRoute} exact={true}>
+            <ViewEventContainer />
+          </Route>
+          <Route path={eventsRoute} exact={true}>
+            <ViewEventsContainer />
+          </Route>
           <Route path={createRoute}>
             <CreateEvent />
           </Route>
-          <Route path={viewEventRoute} exact={true}>
-            <ViewEvent />
+          <Route exact path={editRoute}>
+            <EditEventContainer />
           </Route>
           {/* <Route exact path={editRoute(':id')}>
             <Edit />

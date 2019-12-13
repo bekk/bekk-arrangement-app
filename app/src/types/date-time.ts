@@ -56,23 +56,6 @@ export const isAfterNow = ({ date, time }: IDateTime) => {
 export const asDate = ({ date, time }: IDateTime) =>
   new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
 
-// export const calculateTimeLeft = (date: IDateTime) => {
-//   // const difference = +new Date(asDate(date)) - +new Date();
-//   const differenceInDate = new Date(
-//     new Date().getTime() - asDate(date).getTime()
-//   );
-
-// let timeLeft = {};
-
-// if (difference > 0) {
-//   timeLeft = {
-//     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-//     hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-//     minutes: Math.floor((difference / 1000 / 60) % 60),
-//     seconds: Math.floor((difference / 1000) % 60),
-//   };
-// }
-
 export const stringifyDateTime = ({ date, time }: IDateTime) =>
   `${stringifyDate(date)}T${stringifyTime(time)}`;
 

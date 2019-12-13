@@ -6,7 +6,11 @@ interface IState {
   events: WithId<IEvent>[];
 }
 
-type Actions = AddEventAction | EditEventAction | DeleteEventAction;
+export type Actions =
+  | AddEventAction
+  | EditEventAction
+  | DeleteEventAction
+  | SetEventsAction;
 
 type AddEventAction = {
   type: 'ADD_EVENT';
@@ -23,6 +27,11 @@ type DeleteEventAction = {
   id: string;
 };
 
+type SetEventsAction = {
+  type: 'SET_EVENTS';
+  events: WithId<IEvent>[];
+};
+
 const initialState: IState = {
   events: [],
 };
@@ -32,6 +41,10 @@ const reducer = (state: IState, action: Actions): IState => {
     case 'ADD_EVENT':
       return {
         events: [...state.events, action.event],
+      };
+    case 'SET_EVENTS':
+      return {
+        events: action.events,
       };
     case 'EDIT_EVENT':
       return {

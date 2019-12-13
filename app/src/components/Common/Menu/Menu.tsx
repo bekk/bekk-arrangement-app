@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { rootRoute, overviewRoute } from '../../../routing';
+import { rootRoute } from '../../../routing';
 import style from './Menu.module.scss';
 import classNames from 'classnames';
 
@@ -19,15 +19,15 @@ export const Menu = ({ tab }: IProps) => {
 
   return (
     <div className={style.container}>
-      <Link to={rootRoute} className={menuStyle('create')}>
+      {/* <Link to={rootRoute} className={menuStyle('create')}>
         Create event
       </Link>
-      <Link to={overviewRoute} className={menuStyle('edit')}>
+      <Link to={eventListRoute} className={menuStyle('edit')}>
         Edit event
       </Link>
-      <Link to={overviewRoute} className={menuStyle('overview')}>
+      <Link to={eventListRoute} className={menuStyle('overview')}>
         Event Overview
-      </Link>
+      </Link> */}
     </div>
   );
 };

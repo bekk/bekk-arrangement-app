@@ -6,7 +6,7 @@ import { IDateTime } from 'src/types/date-time';
 import { getEvent, postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
-import { asString, calculateTimeLeft, ITimeLeft } from 'src/ùtils/timeleft';
+import { asString, calculateTimeLeft, ITimeLeft } from 'src/utils/timeleft';
 import { IEvent } from 'src/types/event';
 import { TextInput } from '../Common/TextInput/TextInput';
 
@@ -47,7 +47,7 @@ const useTimeLeft = (event: IEvent | undefined) => {
   return timeLeft;
 };
 
-export const ViewEvent = () => {
+export const ViewEventContainer = () => {
   const event = useEvent();
   const timeLeft = useTimeLeft(event);
   const [email, setEmail] = useState('');
@@ -88,10 +88,10 @@ export const ViewEvent = () => {
           onChange={setEmail}
         />
         {timeLeft.difference > 0 ? (
-          <section className={commonStyle.row}>
+          <>
             <button>Closed</button>
             <p>Opens in {asString(timeLeft)}</p>
-          </section>
+          </>
         ) : (
           <button onClick={() => addParticipant()}>I am going</button>
         )}

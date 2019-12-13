@@ -5,7 +5,7 @@ import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
 import { IEditEvent, initialEditEvent, validateEvent } from 'src/types/event';
 import commonStyle from 'src/global/Common.module.scss';
-import style from './CreateEvent.module.scss';
+import style from './CreateEventContainer.module.scss';
 import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
 import { validateDateTime } from 'src/types/date-time';
 import classNames from 'classnames';

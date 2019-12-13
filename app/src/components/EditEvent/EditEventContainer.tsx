@@ -12,18 +12,13 @@ import {
   initialEvent,
   toEditEvent,
 } from 'src/types/event';
-import style from './EditEvent.module.scss';
+import style from './EditEventContainer.module.scss';
 import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
 import { validateDateTime } from 'src/types/date-time';
 import { useStore } from 'src/store';
 import { useParams } from 'react-router';
 
-interface IProps {
-  event: IEvent;
-  onChange: (write: IEvent) => Promise<void>;
-}
-
-export const EditEvent = () => {
+export const EditEventContainer = () => {
   const { state, dispatch } = useStore();
   const { id } = useParams();
 

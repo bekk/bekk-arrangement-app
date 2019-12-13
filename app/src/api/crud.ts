@@ -16,7 +16,7 @@ export const patch = ({ host, path, body }: IRequest) =>
 export const put = ({ host, path, body }: IRequest) =>
   fetchAndValidate('PUT', host, path, body).then(res => res.json());
 
-export const del = ({ host, path, body }: IRequest) =>
+export const delete = ({ host, path, body }: IRequest) =>
   fetchAndValidate('DELETE', host, path, body);
 
 // Utils
@@ -38,7 +38,7 @@ async function fetchAndValidate(
   path: string,
   body?: any
 ) {
-  const token = 'asdfasdfasfasdfasdfasdfasdf';
+  const token = 'no token yet';
   const url = `${host}${path}`;
   const response = await fetch(
     url,
