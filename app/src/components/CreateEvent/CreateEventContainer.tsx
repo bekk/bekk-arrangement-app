@@ -14,7 +14,7 @@ import { postEvent } from 'src/api/arrangementSvc';
 
 export const CreateEvent = () => {
   const [event, setEvent] = useState<IEditEvent>(initialEditEvent);
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
 
   const addEvent = async () => {
     const validatedEvent = validateEvent(event);
@@ -93,10 +93,6 @@ export const CreateEvent = () => {
         <section className={commonStyle.subsection} onClick={addEvent}>
           <button>Create</button>
         </section>
-
-        {/* {eventModel.data && (
-          <button onClick={() => onChange(eventModel.data)}>Create</button>
-        )} */}
       </section>
     </article>
   );

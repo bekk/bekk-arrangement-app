@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { createRoute, eventsRoute, viewEventRoute, editRoute } from './routing';
 import { ViewEventsContainer } from './components/ViewEvents/ViewEventsContainer';
@@ -30,9 +30,7 @@ const App = () => {
           <Route exact path={editRoute}>
             <EditEventContainer />
           </Route>
-          {/* <Route exact path={editRoute(':id')}>
-            <Edit />
-          </Route> */}
+          <Redirect exact={true} from={'/'} to={eventsRoute} />
         </Switch>
       </Router>
     </StoreProvider>

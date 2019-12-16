@@ -3,32 +3,16 @@ import React from 'react';
 import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
-import {
-  IEvent,
-  IEditEvent,
-  validateEvent,
-  serializeEvent,
-  parseEvent,
-  initialEvent,
-  toEditEvent,
-} from 'src/types/event';
+import { initialEvent, toEditEvent } from 'src/types/event';
 import style from './EditEventContainer.module.scss';
 import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
 import { validateDateTime } from 'src/types/date-time';
-import { useStore } from 'src/store';
-import { useParams } from 'react-router';
+import { useEvent } from 'src/hooks/eventHooks';
 
 export const EditEventContainer = () => {
-  const { state, dispatch } = useStore();
-  const { id } = useParams();
-
-  const eventFromState = state.events.find(x => x.id === id) as IEvent;
-
-  const [event, setEvent] = useState(toEditEvent(eventFromState));
-
-  // const [editEvent, setEditEvent] = useState<EditEvent>(currentEvent);
-
-  const eventModel = validateEvent(event);
+  const eventFromState = useEvent();
+  const editEvent = eventFromState ? eventFromState : initialEvent;
+  const [event, setEvent] = useState(toEditEvent(editEvent));
 
   return (
     <article className={style.container}>

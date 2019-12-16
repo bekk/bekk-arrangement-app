@@ -1,32 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useStore } from 'src/store';
-import { useParams } from 'react-router';
 import commonStyle from 'src/global/Common.module.scss';
 import { IDateTime } from 'src/types/date-time';
-import { getEvent, postParticipant } from 'src/api/arrangementSvc';
+import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString, calculateTimeLeft, ITimeLeft } from 'src/utils/timeleft';
 import { IEvent } from 'src/types/event';
 import { TextInput } from '../Common/TextInput/TextInput';
-
-const useEvent = () => {
-  const { state, dispatch } = useStore();
-  const { id } = useParams();
-  const eventInState = state.events.find(e => e.id === id);
-
-  useEffect(() => {
-    if (!eventInState && id) {
-      const get = async () => {
-        const event = await getEvent(id);
-        dispatch({ type: 'ADD_EVENT', event });
-      };
-      get();
-    }
-  }, [id, eventInState]);
-
-  return eventInState;
-};
+import { useEvent } from 'src/hooks/eventHooks';
 
 const useTimeLeft = (event: IEvent | undefined) => {
   const [timeLeft, setTimeLeft] = useState({
@@ -53,7 +34,6 @@ export const ViewEventContainer = () => {
   const [email, setEmail] = useState('');
 
   const addParticipant = async () => {
-    //epost validering
     if (event && email) {
       const addedParticipant = await postParticipant({
         eventId: event.id,

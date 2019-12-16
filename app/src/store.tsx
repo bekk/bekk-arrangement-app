@@ -46,10 +46,17 @@ const reducer = (state: IState, action: Actions): IState => {
       return {
         events: action.events,
       };
-    case 'EDIT_EVENT':
+    case 'EDIT_EVENT': {
+      const updatedEvents = state.events.filter(e => {
+        if (e.id !== action.event.id) {
+          return e;
+        }
+        return action.event;
+      });
       return {
-        events: [...state.events, action.event],
+        events: updatedEvents,
       };
+    }
     case 'DELETE_EVENT':
       return {
         events: state.events.filter(x => x.id !== action.id),

@@ -16,7 +16,7 @@ export const patch = ({ host, path, body }: IRequest) =>
 export const put = ({ host, path, body }: IRequest) =>
   fetchAndValidate('PUT', host, path, body).then(res => res.json());
 
-export const delete = ({ host, path, body }: IRequest) =>
+export const del = ({ host, path, body }: IRequest) =>
   fetchAndValidate('DELETE', host, path, body);
 
 // Utils
