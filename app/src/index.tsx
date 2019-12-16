@@ -18,14 +18,14 @@ const App = () => {
     <StoreProvider>
       <Router history={history}>
         <Switch>
+          <Route path={createRoute}>
+            <CreateEvent />
+          </Route>
           <Route path={viewEventRoute} exact={true}>
             <ViewEventContainer />
           </Route>
           <Route path={eventsRoute} exact={true}>
             <ViewEventsContainer />
-          </Route>
-          <Route path={createRoute}>
-            <CreateEvent />
           </Route>
           <Route exact path={editRoute}>
             <EditEventContainer />

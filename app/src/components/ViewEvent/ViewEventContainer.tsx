@@ -29,7 +29,7 @@ const useTimeLeft = (event: IEvent | undefined) => {
 };
 
 export const ViewEventContainer = () => {
-  const event = useEvent();
+  const [event] = useEvent();
   const timeLeft = useTimeLeft(event);
   const [email, setEmail] = useState('');
 

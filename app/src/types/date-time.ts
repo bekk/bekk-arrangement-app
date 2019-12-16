@@ -13,7 +13,7 @@ import {
   EditTime,
 } from './time';
 import { Validate } from './validation';
-import { isBefore, isAfter } from 'date-fns';
+import { isAfter } from 'date-fns';
 
 export interface IDateTime {
   date: IDate;
@@ -50,10 +50,10 @@ export const validateDateTime = (
 
 export const isAfterNow = ({ date, time }: IDateTime) => {
   const now = new Date(Date.now());
-  return isAfter(asDate({ date, time }), now);
+  return isAfter(toDate({ date, time }), now);
 };
 
-export const asDate = ({ date, time }: IDateTime) =>
+export const toDate = ({ date, time }: IDateTime) =>
   new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
 
 export const stringifyDateTime = ({ date, time }: IDateTime) =>

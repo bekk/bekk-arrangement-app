@@ -1,5 +1,5 @@
-import { IEvent, serializeEvent, parseEvent, IEventApi } from 'src/types/event';
-import { post, get, del } from './crud';
+import { IEvent, serializeEvent, toEvent, IEventApi } from 'src/types/event';
+import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
 import {
   IParticipant,
@@ -15,7 +15,16 @@ export const postEvent = async (event: IEvent) => {
     path: 'events',
     body: serializeEvent(event),
   })) as WithId<IEventApi>;
-  return parseEvent(createdEvent);
+  return toEvent(createdEvent);
+};
+
+export const putEvent = async (eventId: string, event: IEvent) => {
+  const createdEvent = (await put({
+    host,
+    path: `events/${eventId}`,
+    body: serializeEvent(event),
+  })) as WithId<IEventApi>;
+  return toEvent(createdEvent);
 };
 
 export const getEvent = async (eventId: string) => {
@@ -23,7 +32,7 @@ export const getEvent = async (eventId: string) => {
     host,
     path: `events/${eventId}`,
   })) as WithId<IEventApi>;
-  return parseEvent(event);
+  return toEvent(event);
 };
 
 export const getEvents = async () => {
@@ -31,7 +40,7 @@ export const getEvents = async () => {
     host,
     path: `events`,
   })) as WithId<IEventApi>[];
-  return events.map(parseEvent);
+  return events.map(toEvent);
 };
 
 export const deleteEvent = async (eventId: string) => {

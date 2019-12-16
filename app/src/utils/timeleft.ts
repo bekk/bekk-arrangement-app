@@ -1,4 +1,4 @@
-import { asDate, IDateTime } from 'src/types/date-time';
+import { toDate, IDateTime } from 'src/types/date-time';
 
 export interface ITimeLeft {
   days: number;
@@ -24,7 +24,7 @@ export const asString = ({ days, hours, minutes, seconds }: ITimeLeft) => {
 };
 
 export const calculateTimeLeft = (date: IDateTime): ITimeLeft => {
-  const difference = +new Date(asDate(date)) - +new Date();
+  const difference = +new Date(toDate(date)) - +new Date();
 
   if (difference > 0) {
     return {

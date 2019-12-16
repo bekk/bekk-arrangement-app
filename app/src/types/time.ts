@@ -1,5 +1,4 @@
 import { Validate, validate } from './validation';
-import { compose } from 'src/utils';
 
 export interface ITime {
   hour: number;
@@ -7,12 +6,6 @@ export interface ITime {
 }
 
 export type EditTime = [string, string];
-
-export const parseTime = (time: string): EditTime => {
-  const timeISO8601 = /([0-9]{1,2}):([0-9]{1,2})/;
-  const [, hour = '', minutes = ''] = time.match(timeISO8601) || [];
-  return [hour, minutes];
-};
 
 export const validateTime = ([_hour, _minutes]: EditTime): Validate<
   EditTime,
@@ -35,7 +28,11 @@ export const validateTime = ([_hour, _minutes]: EditTime): Validate<
   return validator.resolve({ hour, minute });
 };
 
-export const createTime = compose(parseTime)(validateTime);
+export const parseTime = (time: string): EditTime => {
+  const timeISO8601 = /([0-9]{1,2}):([0-9]{1,2})/;
+  const [, hour = '', minutes = ''] = time.match(timeISO8601) || [];
+  return [hour, minutes];
+};
 
 export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;

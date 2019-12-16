@@ -74,7 +74,7 @@ export const serializeEvent = (event: IEvent): IEventApi => ({
   organizerEmail: '1296',
 });
 
-export const parseEvent = (event: WithId<IEventApi>): WithId<IEvent> => {
+export const toEvent = (event: WithId<IEventApi>): WithId<IEvent> => {
   return {
     ...event,
     start: event.startDate,

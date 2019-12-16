@@ -1,22 +1,27 @@
-import { useStore } from 'src/store';
+import { useStore, Actions } from 'src/store';
 import { useParams } from 'react-router';
 import { useEffect } from 'react';
 import { getEvent } from 'src/api/arrangementSvc';
+import { IEvent } from 'src/types/event';
+import { WithId } from 'src/types';
 
-export const useEvent = () => {
+export const useEvent = (): [
+  WithId<IEvent> | undefined,
+  (action: Actions) => void
+] => {
   const { state, dispatch } = useStore();
   const { id } = useParams();
-  const eventInState = state.events.find(e => e.id === id);
+  const event = state.events.find(e => e.id === id);
 
   useEffect(() => {
-    if (!eventInState && id) {
+    if (!event && id) {
       const get = async () => {
-        const event = await getEvent(id);
-        dispatch({ type: 'ADD_EVENT', event });
+        const retrievedEvent = await getEvent(id);
+        dispatch({ type: 'ADD_EVENT', event: retrievedEvent });
       };
       get();
     }
-  }, [id, eventInState]);
+  }, [id, event]);
 
-  return eventInState;
+  return [event, dispatch];
 };

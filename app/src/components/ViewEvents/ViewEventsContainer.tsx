@@ -4,7 +4,7 @@ import commonStyle from 'src/global/Common.module.scss';
 import { EventListElement } from './EventListElement';
 import { getViewEventRoute } from 'src/routing';
 import { useStore, Actions } from 'src/store';
-import { getEvents } from 'src/api/arrangementSvc';
+import { getEvents, deleteEvent } from 'src/api/arrangementSvc';
 import { WithId } from 'src/types';
 import { IEvent } from 'src/types/event';
 
@@ -25,7 +25,11 @@ const useEvents = (): [WithId<IEvent>[], (action: Actions) => void] => {
 
 export const ViewEventsContainer = () => {
   const [eventsInState, dispatch] = useEvents();
-  console.log(eventsInState);
+  const onDeleteEvent = async (eventId: string) => {
+    await deleteEvent(eventId);
+    dispatch({ id: eventId, type: 'DELETE_EVENT' });
+  };
+
   return (
     <div className={commonStyle.container}>
       <div className={commonStyle.content}>
@@ -37,7 +41,7 @@ export const ViewEventsContainer = () => {
               key={event.id}
               event={event}
               onClickRoute={getViewEventRoute(event.id)}
-              delEvent={() => dispatch({ id: event.id, type: 'DELETE_EVENT' })}
+              delEvent={() => onDeleteEvent(event.id)}
             />
           ))}
         </div>

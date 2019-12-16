@@ -1,5 +1,4 @@
 import { Validate, validate } from './validation';
-import { compose } from 'src/utils';
 import { format } from 'date-fns';
 
 export interface IDate {
