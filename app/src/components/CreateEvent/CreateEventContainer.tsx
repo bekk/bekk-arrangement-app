@@ -22,7 +22,7 @@ export const CreateEvent = () => {
       const createdEvent = await postEvent(validatedEvent.data);
       dispatch({ event: createdEvent, type: 'ADD_EVENT' });
     } else {
-      throw Error('feil');
+      throw Error('her kommer feil');
     }
   };
 

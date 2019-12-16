@@ -9,6 +9,7 @@ import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
 import { validateDateTime } from 'src/types/date-time';
 import { useEvent } from 'src/hooks/eventHooks';
 import { putEvent } from 'src/api/arrangementSvc';
+import commonStyle from 'src/global/Common.module.scss';
 
 export const EditEventContainer = () => {
   const [eventFromState, dispatch] = useEvent();
@@ -88,6 +89,9 @@ export const EditEventContainer = () => {
             />
           </section>
         </SectionWithValidation>
+        <section className={commonStyle.subsection} onClick={editEventFunction}>
+          <button>Lagre</button>
+        </section>
       </section>
     </article>
   );
