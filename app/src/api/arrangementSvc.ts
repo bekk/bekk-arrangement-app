@@ -10,37 +10,41 @@ import {
 const host = 'https://api.dev.bekk.no/arrangement-svc/';
 
 export const postEvent = async (event: IEvent) => {
-  const createdEvent = (await post({
+  return await post({
     host,
     path: 'events',
     body: serializeEvent(event),
-  })) as WithId<IEventApi>;
-  return toEvent(createdEvent);
+  })
+    .then(response => response as WithId<IEventApi>)
+    .then(event => toEvent(event));
 };
 
 export const putEvent = async (eventId: string, event: IEvent) => {
-  const createdEvent = (await put({
+  return await put({
     host,
     path: `events/${eventId}`,
     body: serializeEvent(event),
-  })) as WithId<IEventApi>;
-  return toEvent(createdEvent);
+  })
+    .then(response => response as WithId<IEventApi>)
+    .then(event => toEvent(event));
 };
 
 export const getEvent = async (eventId: string) => {
-  const event = (await get({
+  return await get({
     host,
     path: `events/${eventId}`,
-  })) as WithId<IEventApi>;
-  return toEvent(event);
+  })
+    .then(response => response as WithId<IEventApi>)
+    .then(event => toEvent(event));
 };
 
 export const getEvents = async () => {
-  const events = (await get({
+  return await get({
     host,
     path: `events`,
-  })) as WithId<IEventApi>[];
-  return events.map(toEvent);
+  })
+    .then(response => response as WithId<IEventApi>[])
+    .then(events => events.map(toEvent));
 };
 
 export const deleteEvent = async (eventId: string) => {
@@ -52,10 +56,11 @@ export const deleteEvent = async (eventId: string) => {
 };
 
 export const postParticipant = async (participant: IParticipant) => {
-  const createdParticipant = (await post({
+  return await post({
     host,
     path: `participant/${participant.email}/events/${participant.eventId}`,
     body: {},
-  })) as IParticipantApi;
-  return parseParticipant(createdParticipant);
+  })
+    .then(response => response as IParticipantApi)
+    .then(participant => parseParticipant(participant));
 };
