@@ -8,8 +8,9 @@ import { asString, calculateTimeLeft, ITimeLeft } from 'src/utils/timeleft';
 import { IEvent } from 'src/types/event';
 import { TextInput } from '../Common/TextInput/TextInput';
 import { useEvent } from 'src/hooks/eventHooks';
+import { WithId } from 'src/types';
 
-const useTimeLeft = (event: IEvent | undefined) => {
+const useTimeLeft = (event: WithId<IEvent> | undefined) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 365,
     hours: 0,
@@ -19,12 +20,13 @@ const useTimeLeft = (event: IEvent | undefined) => {
   });
 
   useEffect(() => {
-    setTimeout(() => {
+    const interval = setInterval(() => {
       if (event) {
         setTimeLeft(calculateTimeLeft(event.openForRegistration));
       }
     }, 1000);
-  });
+    return () => clearInterval(interval);
+  }, [event]);
   return timeLeft;
 };
 
@@ -34,6 +36,7 @@ export const ViewEventContainer = () => {
   const [email, setEmail] = useState('');
 
   const addParticipant = async () => {
+    //her må det valideres skikkelig ja
     if (event && email) {
       const addedParticipant = await postParticipant({
         eventId: event.id,

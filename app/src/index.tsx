@@ -21,16 +21,16 @@ const App = () => {
           <Route path={createRoute}>
             <CreateEvent />
           </Route>
-          <Route path={viewEventRoute} exact={true}>
+          <Route path={viewEventRoute} exact>
             <ViewEventContainer />
           </Route>
-          <Route path={eventsRoute} exact={true}>
+          <Route path={eventsRoute} exact>
             <ViewEventsContainer />
           </Route>
           <Route exact path={editRoute}>
             <EditEventContainer />
           </Route>
-          <Redirect exact={true} from={'/'} to={eventsRoute} />
+          <Redirect exact from={'/'} to={eventsRoute} />
         </Switch>
       </Router>
     </StoreProvider>
