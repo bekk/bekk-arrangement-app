@@ -12,8 +12,9 @@ import {
   parseTime,
   EditTime,
 } from './time';
-import { Validate } from './validation';
+import { isOk, isBad, Result } from './validation';
 import { isAfter } from 'date-fns';
+import { concatLists } from '.';
 
 export interface IDateTime {
   date: IDate;
@@ -34,18 +35,28 @@ export const parseDateTime = (datetime: string) => {
 
 export const validateDateTime = (
   datetime: EditDateTime
-): Validate<EditDateTime, IDateTime> => {
-  const { data: date, errors: dataErrors = [] } = validateDate(datetime.date);
-  const { data: time, errors: timeErrors = [] } = validateTime(datetime.time);
+): Result<EditDateTime, IDateTime> => {
+  const validationResultDate = validateDate(datetime.date);
+  const validationResultTime = validateTime(datetime.time);
 
-  if (!date || !time) {
+  if (isOk(validationResultDate) && isOk(validationResultTime)) {
     return {
-      value: datetime,
-      errors: [...dataErrors, ...timeErrors],
+      errors: undefined,
+      from: datetime,
+      validated: {
+        date: validationResultDate.validated,
+        time: validationResultTime.validated,
+      },
     };
   }
-
-  return { value: datetime, data: { date, time } };
+  const errors = concatLists(
+    validationResultTime.errors,
+    validationResultDate.errors
+  );
+  return {
+    from: datetime,
+    errors,
+  };
 };
 
 export const isAfterNow = ({ date, time }: IDateTime) => {

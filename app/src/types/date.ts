@@ -1,4 +1,4 @@
-import { Validate, validate } from './validation';
+import { validate, Result } from './validation';
 import { format } from 'date-fns';
 
 export interface IDate {
@@ -11,7 +11,7 @@ export type EditDate = string;
 
 export const parseDate = (date: string) => date.substring(0, 10);
 
-export const validateDate = (date: EditDate): Validate<EditDate, IDate> => {
+export const validateDate = (date: EditDate): Result<EditDate, IDate> => {
   const dateISO8601 = /^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/;
   const dates = date.match(dateISO8601) || [];
 

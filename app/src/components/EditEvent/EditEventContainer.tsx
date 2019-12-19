@@ -1,33 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
 import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
-import { initialEvent, toEditEvent, validateEvent } from 'src/types/event';
+import { parseEvent, IEditEvent, deserializeEvent } from 'src/types/event';
 import style from './EditEventContainer.module.scss';
 import { DateTimeInput } from '../Common/DateTimeInput/DateTimeInput';
 import { validateDateTime } from 'src/types/date-time';
-import { useEvent } from 'src/hooks/eventHooks';
-import { putEvent } from 'src/api/arrangementSvc';
+import { putEvent, getEvent } from 'src/api/arrangementSvc';
 import commonStyle from 'src/global/Common.module.scss';
+import { useParams } from 'react-router';
+import { isOk } from 'src/types/validation';
 
 export const EditEventContainer = () => {
-  const [eventFromState, dispatch] = useEvent();
-  const editEvent = eventFromState ? eventFromState : initialEvent;
-  const [event, setEvent] = useState(toEditEvent(editEvent));
+  const { id } = useParams();
 
-  if (!eventFromState) {
+  const [event, setEvent] = useState<IEditEvent>();
+
+  useEffect(() => {
+    if (id) {
+      const get = async () => {
+        const retrievedEvent = await getEvent(id);
+        setEvent(deserializeEvent(retrievedEvent));
+      };
+      get();
+    }
+  }, [id]);
+
+  if (!event || !id) {
     return <div>Loading</div>;
   }
 
   const editEventFunction = async () => {
-    const validatedEvent = validateEvent(event);
-    if (validatedEvent.data) {
-      const createdEvent = await putEvent(
-        eventFromState.id,
-        validatedEvent.data
-      );
-      dispatch({ event: createdEvent, type: 'EDIT_EVENT' });
+    const parsedEvent = parseEvent(event);
+    if (isOk(parsedEvent)) {
+      const updatedEvent = await putEvent(id, parsedEvent.validated);
+      setEvent(deserializeEvent(updatedEvent));
     } else {
       throw Error('feil');
     }

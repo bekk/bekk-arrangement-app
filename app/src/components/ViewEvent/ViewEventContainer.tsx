@@ -8,9 +8,11 @@ import { asString, calculateTimeLeft, ITimeLeft } from 'src/utils/timeleft';
 import { IEvent } from 'src/types/event';
 import { TextInput } from '../Common/TextInput/TextInput';
 import { useEvent } from 'src/hooks/eventHooks';
-import { WithId } from 'src/types';
+import { useParams } from 'react-router';
+import { SectionWithValidation } from '../Common/SectionWithValidation/SectionWithValidation';
+import { validateEmail } from 'src/types/email';
 
-const useTimeLeft = (event: WithId<IEvent> | undefined) => {
+const useTimeLeft = (event: IEvent | undefined) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 365,
     hours: 0,
@@ -31,15 +33,15 @@ const useTimeLeft = (event: WithId<IEvent> | undefined) => {
 };
 
 export const ViewEventContainer = () => {
-  const [event] = useEvent();
+  const { id } = useParams();
+  const [event] = useEvent(id);
   const timeLeft = useTimeLeft(event);
   const [email, setEmail] = useState('');
 
   const addParticipant = async () => {
-    //her må det valideres skikkelig ja
-    if (event && email) {
+    if (event && email && id) {
       const addedParticipant = await postParticipant({
-        eventId: event.id,
+        eventId: id,
         email: email,
       });
       alert(
@@ -64,12 +66,14 @@ export const ViewEventContainer = () => {
         </section>
       </section>
       <section className={commonStyle.column}>
-        <TextInput
-          label={'Email'}
-          value={email}
-          placeholder={'email'}
-          onChange={setEmail}
-        />
+        <SectionWithValidation validationResult={validateEmail(email).errors}>
+          <TextInput
+            label={'Email'}
+            value={email}
+            placeholder={'email'}
+            onChange={setEmail}
+          />
+        </SectionWithValidation>
         {timeLeft.difference > 0 ? (
           <>
             <button>Closed</button>

@@ -1,4 +1,4 @@
-import { Validate, validate } from './validation';
+import { validate, Result } from './validation';
 
 export interface ITime {
   hour: number;
@@ -7,7 +7,7 @@ export interface ITime {
 
 export type EditTime = [string, string];
 
-export const validateTime = ([_hour, _minutes]: EditTime): Validate<
+export const validateTime = ([_hour, _minutes]: EditTime): Result<
   EditTime,
   ITime
 > => {

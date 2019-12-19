@@ -1,27 +1,33 @@
-import { useStore, Actions } from 'src/store';
-import { useParams } from 'react-router';
-import { useEffect } from 'react';
+import { useEffect, useState, Dispatch } from 'react';
 import { getEvent } from 'src/api/arrangementSvc';
-import { IEvent } from 'src/types/event';
-import { WithId } from 'src/types';
+import {
+  IEvent,
+  initialEvent,
+  deserializeEvent,
+  parseEvent,
+} from 'src/types/event';
+import { isOk } from 'src/types/validation';
 
-export const useEvent = (): [
-  WithId<IEvent> | undefined,
-  (action: Actions) => void
-] => {
-  const { state, dispatch } = useStore();
-  const { id } = useParams();
-  const event = state.events.find(e => e.id === id);
+export const useEvent = (id: string | undefined): [IEvent] => {
+  const [event, setEvent] = useState(initialEvent);
 
   useEffect(() => {
-    if (!event && id) {
+    if (id) {
       const get = async () => {
         const retrievedEvent = await getEvent(id);
-        dispatch({ type: 'ADD_EVENT', event: retrievedEvent });
+        const deserializedEvent = deserializeEvent(retrievedEvent);
+        const domainEvent = parseEvent(deserializedEvent);
+        if (isOk(domainEvent)) {
+          setEvent(domainEvent.validated);
+        } else {
+          throw Error(
+            `${domainEvent.errors[0].type}: ${domainEvent.errors[0].message}`
+          );
+        }
       };
       get();
     }
-  }, [id, event]);
+  }, [id]);
 
-  return [event, dispatch];
+  return [event];
 };
