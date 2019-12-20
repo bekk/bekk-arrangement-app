@@ -11,19 +11,19 @@ export type Bad<EditType> = {
   errors: IError[];
 };
 
-export type Result<FromType, ValidType> =
-  | Ok<FromType, ValidType>
-  | Bad<FromType>;
+export type Result<EditType, ValidType> =
+  | Ok<EditType, ValidType>
+  | Bad<EditType>;
 
-export function isOk<FromType, ValidType>(
-  result: Ok<FromType, ValidType> | Bad<FromType>
-): result is Ok<FromType, ValidType> {
+export function isOk<EditType, ValidType>(
+  result: Ok<EditType, ValidType> | Bad<EditType>
+): result is Ok<EditType, ValidType> {
   return result.errors === undefined;
 }
 
-export function isBad<FromType, ValidType>(
-  result: Ok<FromType, ValidType> | Bad<FromType>
-): result is Bad<FromType> {
+export function isBad<EditType, ValidType>(
+  result: Ok<EditType, ValidType> | Bad<EditType>
+): result is Bad<EditType> {
   return !isOk(result);
 }
 
