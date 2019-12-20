@@ -12,7 +12,7 @@ import {
   parseEvent,
   IEditEvent,
 } from 'src/types/event';
-import { isOk, isBad, Ok, Result } from 'src/types/validation';
+import { isOk, Result } from 'src/types/validation';
 
 const toParsedEventsMap = (
   events: WithId<IEventContract>[]
@@ -62,9 +62,10 @@ export const ViewEventsContainer = () => {
           {eventsKeys.map(x => {
             const eventFromMap = events.get(x);
             if (eventFromMap !== undefined && isOk(eventFromMap)) {
+              console.log(eventFromMap);
               return (
                 <EventListElement
-                  event={eventFromMap.validated}
+                  event={eventFromMap.validValue}
                   onClickRoute={getViewEventRoute(x)}
                   delEvent={() => onDeleteEvent(x)}
                 />

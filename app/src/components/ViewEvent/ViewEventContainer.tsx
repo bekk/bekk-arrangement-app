@@ -10,7 +10,13 @@ import { TextInput } from '../Common/TextInput/TextInput';
 import { useEvent } from 'src/hooks/eventHooks';
 import { useParams } from 'react-router';
 import { SectionWithValidation } from '../Common/SectionWithValidation/SectionWithValidation';
-import { validateEmail } from 'src/types/email';
+import {
+  IParticipant,
+  IEditParticipant,
+  parseParticipant,
+  initalParticipant,
+} from 'src/types/participant';
+import { Result, isOk } from 'src/types/validation';
 
 const useTimeLeft = (event: IEvent | undefined) => {
   const [timeLeft, setTimeLeft] = useState({
@@ -36,14 +42,13 @@ export const ViewEventContainer = () => {
   const { id } = useParams();
   const [event] = useEvent(id);
   const timeLeft = useTimeLeft(event);
-  const [email, setEmail] = useState('');
+  const [participant, setParticipant] = useState<
+    Result<IEditParticipant, IParticipant>
+  >(parseParticipant(initalParticipant));
 
   const addParticipant = async () => {
-    if (event && email && id) {
-      const addedParticipant = await postParticipant({
-        eventId: id,
-        email: email,
-      });
+    if (isOk(participant)) {
+      const addedParticipant = await postParticipant(participant.validValue);
       alert(
         `You are attending. Check your email, ${addedParticipant.email}, for confirmation`
       );
@@ -66,12 +71,16 @@ export const ViewEventContainer = () => {
         </section>
       </section>
       <section className={commonStyle.column}>
-        <SectionWithValidation validationResult={validateEmail(email).errors}>
+        <SectionWithValidation validationResult={participant.errors}>
           <TextInput
             label={'Email'}
-            value={email}
+            value={participant.editValue.email}
             placeholder={'email'}
-            onChange={setEmail}
+            onChange={(email: string) =>
+              setParticipant(
+                parseParticipant({ ...participant.editValue, email })
+              )
+            }
           />
         </SectionWithValidation>
         {timeLeft.difference > 0 ? (

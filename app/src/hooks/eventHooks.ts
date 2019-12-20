@@ -18,7 +18,7 @@ export const useEvent = (id: string | undefined): [IEvent] => {
         const deserializedEvent = deserializeEvent(retrievedEvent);
         const domainEvent = parseEvent(deserializedEvent);
         if (isOk(domainEvent)) {
-          setEvent(domainEvent.validated);
+          setEvent(domainEvent.validValue);
         } else {
           throw Error(
             `${domainEvent.errors[0].type}: ${domainEvent.errors[0].message}`

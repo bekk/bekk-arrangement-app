@@ -7,11 +7,11 @@ export interface IDate {
   year: number;
 }
 
-export type EditDate = string;
+// export type EditDate = string;
 
 export const parseDate = (date: string) => date.substring(0, 10);
 
-export const validateDate = (date: EditDate): Result<EditDate, IDate> => {
+export const validateDate = (date: string): Result<string, IDate> => {
   const dateISO8601 = /^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/;
   const dates = date.match(dateISO8601) || [];
 
@@ -48,9 +48,7 @@ export const isSameDate = (date: IDate, otherDate: IDate) => {
   );
 };
 
-export const stringifyDate = ({ year, month, day }: IDate) =>
+export const deserializeDate = ({ year, month, day }: IDate) =>
   `${year}-${month.toString().padStart(2, '0')}-${day
     .toString()
     .padStart(2, '0')}`;
-
-export const toEditDate = (date: IDate) => stringifyDate(date);

@@ -37,7 +37,7 @@ export const parseTime = (time: string): EditTime => {
 export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
-export const toEditTime = (time: ITime): EditTime => [
+export const deserializeTime = (time: ITime): EditTime => [
   time.hour.toString(),
   time.minute.toString(),
 ];

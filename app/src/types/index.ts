@@ -12,13 +12,13 @@ export const materialize = <T>(list: Optional<T[]>): T[] => {
 
 export const createLocation = (value: string): Result<string, string> => {
   return {
-    validated: value,
-    from: value,
+    validValue: value,
+    editValue: value,
     errors: undefined,
   };
 };
 
-export const createDescription = (value: string): Result<string, string> => {
+export const validateDescription = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Description must be more than 3 characters': value.length <= 3,
   });
@@ -26,7 +26,7 @@ export const createDescription = (value: string): Result<string, string> => {
   return validator.resolve(value);
 };
 
-export const createTitle = (value: string): Result<string, string> => {
+export const validateTitle = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Title must be more than 3 characters': value.length <= 3,
   });

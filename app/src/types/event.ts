@@ -1,8 +1,9 @@
-import { Result, isOk } from './validation';
-import { concatLists, WithId } from '.';
+import { Result, isOk, IError, Ok, Bad } from './validation';
+import { concatLists, WithId, validateTitle, validateDescription } from '.';
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
-import { toEditTime } from './time';
-import { toEditDate } from './date';
+import { deserializeTime, validateTime } from './time';
+import { deserializeDate, validateDate } from './date';
+import { ok } from 'assert';
 
 export type EventId = string;
 
@@ -28,12 +29,12 @@ export interface IEvent {
 }
 
 export interface IEditEvent {
-  title: string;
-  description: string;
+  title: Result<string, string>;
+  description: Result<string, string>;
   location: string;
-  start: EditDateTime;
-  end: EditDateTime;
-  openForRegistration: EditDateTime;
+  start: Result<EditDateTime, IDateTime>;
+  end: Result<EditDateTime, IDateTime>;
+  openForRegistration: Result<EditDateTime, IDateTime>;
 }
 
 export const serializeEvent = (event: IEvent): IEventContract => ({
@@ -47,53 +48,60 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
 });
 
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
+  const title = validateTitle(event.title);
+  const description = validateDescription(event.description);
+  const start = validateDateTime({
+    date: deserializeDate(event.startDate.date),
+    time: deserializeTime(event.startDate.time),
+  });
+  const end = validateDateTime({
+    date: deserializeDate(event.endDate.date),
+    time: deserializeTime(event.endDate.time),
+  });
+  const openForRegistration = validateDateTime({
+    date: deserializeDate(event.openForRegistrationDate.date),
+    time: deserializeTime(event.openForRegistrationDate.time),
+  });
   return {
     ...event,
-    start: {
-      date: toEditDate(event.startDate.date),
-      time: toEditTime(event.startDate.time),
-    },
-    end: {
-      date: toEditDate(event.endDate.date),
-      time: toEditTime(event.endDate.time),
-    },
-    openForRegistration: {
-      date: toEditDate(event.openForRegistrationDate.date),
-      time: toEditTime(event.openForRegistrationDate.time),
-    },
+    title,
+    description,
+    start,
+    end,
+    openForRegistration,
   };
 };
 
 export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
-  const startTimeValidationResult = validateDateTime(event.start);
-  const endTimeValidationResult = validateDateTime(event.end);
-  const openForRegistrationResult = validateDateTime(event.openForRegistration);
-
   if (
-    isOk(startTimeValidationResult) &&
-    isOk(endTimeValidationResult) &&
-    isOk(openForRegistrationResult)
+    isOk(event.start) &&
+    isOk(event.end) &&
+    isOk(event.openForRegistration) &&
+    isOk(event.title) &&
+    isOk(event.description)
   ) {
     return {
-      from: event,
+      editValue: event,
       errors: undefined,
-      validated: {
+      validValue: {
         ...event,
-        start: startTimeValidationResult.validated,
-        end: endTimeValidationResult.validated,
-        openForRegistration: openForRegistrationResult.validated,
+        title: event.title.validValue,
+        description: event.description.validValue,
+        start: event.start.validValue,
+        end: event.end.validValue,
+        openForRegistration: event.openForRegistration.validValue,
       },
     };
   }
 
   const errors = concatLists(
-    startTimeValidationResult.errors,
-    endTimeValidationResult.errors,
-    openForRegistrationResult.errors
+    event.start.errors,
+    event.end.errors,
+    event.openForRegistration.errors
   );
 
   return {
-    from: event,
+    editValue: event,
     errors,
   };
 };
@@ -117,19 +125,19 @@ export const initialEvent: IEvent = {
 };
 
 export const initialEditEvent: IEditEvent = {
-  title: '',
-  description: '',
+  title: validateTitle(''),
+  description: validateDescription(''),
   location: '',
-  start: {
+  start: validateDateTime({
     date: '2019-12-02',
     time: ['23', '22'],
-  },
-  end: {
+  }),
+  end: validateDateTime({
     date: '2019-12-02',
     time: ['23', '22'],
-  },
-  openForRegistration: {
+  }),
+  openForRegistration: validateDateTime({
     date: '2019-12-02',
     time: ['23', '22'],
-  },
+  }),
 };

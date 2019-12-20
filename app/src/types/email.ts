@@ -1,5 +1,8 @@
-import { Email } from './participant';
 import { Result, validate } from './validation';
+
+export interface Email {
+  email: string;
+}
 
 export const serializeEmail = ({ email }: Email) => email;
 

@@ -1,17 +1,13 @@
 type ErrorType = 'Error' | 'Warning';
 
-// export type Edit<T> = {
-//   [K in keyof T]: Validate<any, T[K]>;
-// };
-
-export type Ok<FromType, ValidatedType> = {
-  from: FromType;
-  validated: ValidatedType;
+export type Ok<EditType, ValidatedType> = {
+  editValue: EditType;
+  validValue: ValidatedType;
   errors: undefined;
 };
 
-export type Bad<FromType> = {
-  from: FromType;
+export type Bad<EditType> = {
+  editValue: EditType;
   errors: IError[];
 };
 
@@ -48,19 +44,6 @@ export const warning = (message: string): IError => ({
   message,
 });
 
-// export const valid = <T>(valid: T): Validate<T, T> => ({
-//   value: valid,
-//   data: valid,
-// });
-
-// export type Validate<From, To> = { value: From } & (
-//   | { data: To; errors?: undefined }
-//   | {
-//       data?: undefined;
-//       errors: IError[];
-//     }
-// );
-
 export const validationTypeAsIcon = (type: ErrorType) => {
   switch (type) {
     case 'Error': {
@@ -83,19 +66,19 @@ export const validate = <From, To>(
     resolve: (validatedValue: To): Result<From, To> => {
       if (errorMessages.length > 0) {
         return {
-          from: fromValue,
+          editValue: fromValue,
           errors: errorMessages.map(error),
         };
       }
       return {
-        from: fromValue,
-        validated: validatedValue,
+        editValue: fromValue,
+        validValue: validatedValue,
         errors: undefined,
       };
     },
     reject: (errorMessage: string): Result<From, To> => {
       return {
-        from: fromValue,
+        editValue: fromValue,
         errors: [error(errorMessage)],
       };
     },

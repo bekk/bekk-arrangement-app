@@ -34,7 +34,7 @@ export const EditEventContainer = () => {
 
   const editEventFunction = async () => {
     if (isOk(event)) {
-      const updatedEvent = await putEvent(id, event.validated);
+      const updatedEvent = await putEvent(id, event.validValue);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
     } else {
       throw Error('feil');
@@ -46,7 +46,7 @@ export const EditEventContainer = () => {
 
   return (
     <article className={style.container}>
-      <EditEvent eventResult={event} updateEvent={updateEvent} />
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <section className={commonStyle.subsection} onClick={editEventFunction}>
         <button>Lagre</button>
       </section>

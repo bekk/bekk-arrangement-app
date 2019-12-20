@@ -21,7 +21,7 @@ export const CreateEvent = () => {
 
   const addEvent = async () => {
     if (isOk(event)) {
-      const createdEvent = await postEvent(event.validated);
+      const createdEvent = await postEvent(event.validValue);
       history.push(getViewEventRoute(createdEvent.id));
     } else {
       throw Error('her kommer feil');
@@ -33,7 +33,7 @@ export const CreateEvent = () => {
 
   return (
     <article className={commonStyle.container}>
-      <EditEvent eventResult={event} updateEvent={updateEvent} />
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <section className={commonStyle.subsection} onClick={addEvent}>
         <button>Create</button>
       </section>

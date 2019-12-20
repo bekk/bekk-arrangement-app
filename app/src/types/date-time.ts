@@ -1,10 +1,4 @@
-import {
-  IDate,
-  parseDate,
-  stringifyDate,
-  EditDate,
-  validateDate,
-} from './date';
+import { IDate, parseDate, deserializeDate, validateDate } from './date';
 import {
   ITime,
   validateTime,
@@ -22,8 +16,8 @@ export interface IDateTime {
 }
 
 export type EditDateTime = {
-  date: EditDate;
-  time: EditTime;
+  date: string;
+  time: [string, string];
 };
 
 export const parseDateTime = (datetime: string) => {
@@ -42,10 +36,10 @@ export const validateDateTime = (
   if (isOk(validationResultDate) && isOk(validationResultTime)) {
     return {
       errors: undefined,
-      from: datetime,
-      validated: {
-        date: validationResultDate.validated,
-        time: validationResultTime.validated,
+      editValue: datetime,
+      validValue: {
+        date: validationResultDate.validValue,
+        time: validationResultTime.validValue,
       },
     };
   }
@@ -54,7 +48,7 @@ export const validateDateTime = (
     validationResultDate.errors
   );
   return {
-    from: datetime,
+    editValue: datetime,
     errors,
   };
 };
@@ -68,7 +62,7 @@ export const toDate = ({ date, time }: IDateTime) =>
   new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
 
 export const stringifyDateTime = ({ date, time }: IDateTime) =>
-  `${stringifyDate(date)}T${stringifyTime(time)}`;
+  `${deserializeDate(date)}T${stringifyTime(time)}`;
 
 //Bør nok flyttes ut i en date utils
 export const getNow = () => {

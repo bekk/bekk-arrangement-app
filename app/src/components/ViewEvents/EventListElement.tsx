@@ -9,15 +9,11 @@ interface IProps {
   delEvent: () => void;
 }
 
-export const EventListElement = ({
-  event: { title },
-  onClickRoute,
-  delEvent,
-}: IProps) => {
+export const EventListElement = ({ event, onClickRoute, delEvent }: IProps) => {
   return (
     <section className={classNames(commonStyle.row, commonStyle.subsection)}>
       <a href={onClickRoute}>
-        <span>{title}</span>
+        <span>{event.title}</span>
       </a>
       <button onClick={delEvent}>SLETT MEG</button>
     </section>

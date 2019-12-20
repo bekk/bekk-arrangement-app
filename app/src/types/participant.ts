@@ -1,9 +1,5 @@
 import { Result, isOk } from './validation';
-import { validateEmail, serializeEmail } from './email';
-
-export interface Email {
-  email: string;
-}
+import { validateEmail, serializeEmail, Email } from './email';
 
 export interface IParticipantContract {
   email: Email;
@@ -20,7 +16,7 @@ export interface IEditParticipant {
   eventId: string;
 }
 
-export const serializeParticipan = (
+export const serializeParticipant = (
   participant: IParticipant
 ): IParticipantContract => {
   return {
@@ -43,17 +39,22 @@ export const parseParticipant = (
   const parsedParticipant = validateEmail(participant.email);
   if (isOk(parsedParticipant)) {
     return {
-      from: participant,
+      editValue: participant,
       errors: undefined,
-      validated: {
+      validValue: {
         ...participant,
-        email: parsedParticipant.validated,
+        email: parsedParticipant.validValue,
       },
     };
   }
 
   return {
-    from: participant,
+    editValue: participant,
     errors: [...parsedParticipant.errors],
   };
+};
+
+export const initalParticipant: IEditParticipant = {
+  eventId: '0',
+  email: '',
 };

@@ -1,7 +1,11 @@
 import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
-import { IEditParticipant, IParticipantContract } from 'src/types/participant';
+import {
+  IEditParticipant,
+  IParticipantContract,
+  IParticipant,
+} from 'src/types/participant';
 
 const host = 'https://api.dev.bekk.no/arrangement-svc/';
 
@@ -46,7 +50,7 @@ export const deleteEvent = async (eventId: string) => {
   });
 };
 
-export const postParticipant = async (participant: IEditParticipant) => {
+export const postParticipant = async (participant: IParticipant) => {
   return await post({
     host,
     path: `participant/${participant.email}/events/${participant.eventId}`,
