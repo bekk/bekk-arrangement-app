@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import { IDateTime } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
@@ -8,7 +8,7 @@ import { asString } from 'src/utils/timeleft';
 import { TextInput } from '../Common/TextInput/TextInput';
 import { useEvent } from 'src/hooks/eventHooks';
 import { useParams } from 'react-router';
-import { SectionWithValidation } from '../Common/SectionWithValidation/SectionWithValidation';
+import { ValidationResult } from '../Common/ValidationResult/ValidationResult';
 import {
   IParticipant,
   IEditParticipant,
@@ -51,18 +51,17 @@ export const ViewEventContainer = () => {
         </section>
       </section>
       <section className={commonStyle.column}>
-        <SectionWithValidation validationResult={participant.errors}>
-          <TextInput
-            label={'Email'}
-            value={participant.editValue.email}
-            placeholder={'email'}
-            onChange={(email: string) =>
-              setParticipant(
-                parseParticipant({ ...participant.editValue, email })
-              )
-            }
-          />
-        </SectionWithValidation>
+        <TextInput
+          label={'Email'}
+          value={participant.editValue.email}
+          placeholder={'email'}
+          onChange={(email: string) =>
+            setParticipant(
+              parseParticipant({ ...participant.editValue, email })
+            )
+          }
+        />
+        <ValidationResult validationResult={participant.errors} />
         {timeLeft.difference > 0 ? (
           <>
             <button>Closed</button>

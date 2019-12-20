@@ -1,12 +1,17 @@
-.timeInput {
+.textLabel {
+  color: var(--textColor);
+  font-size: larger;
+  padding-bottom: 5px;
+}
+
+.textArea {
   border: solid 1px;
   border-color: var(--textColor);
   color: var(--textColor);
   background-color: var(--backgroundColor);
-  font-size: 1em;
+  font-size: large;
+  padding: 10px;
   display: block;
-  width: 100%;
-  text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

@@ -6,7 +6,7 @@ import {
   parseEvent,
   IEvent,
 } from 'src/types/event';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
@@ -33,6 +33,7 @@ export const CreateEventContainer = () => {
 
   return (
     <article className={commonStyle.container}>
+      <h1>Opprett</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <section className={commonStyle.subsection} onClick={addEvent}>
         <button>Create</button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import classNames from 'classnames';
 
 interface IProps {

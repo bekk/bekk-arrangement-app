@@ -6,9 +6,8 @@ import {
   deserializeEvent,
   IEvent,
 } from 'src/types/event';
-import style from './EditEventContainer.module.scss';
 import { putEvent, getEvent } from 'src/api/arrangementSvc';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
@@ -45,7 +44,7 @@ export const EditEventContainer = () => {
     setEvent(parseEvent(editEvent));
 
   return (
-    <article className={style.container}>
+    <article className={commonStyle.container}>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <section className={commonStyle.subsection} onClick={editEventFunction}>
         <button>Lagre</button>

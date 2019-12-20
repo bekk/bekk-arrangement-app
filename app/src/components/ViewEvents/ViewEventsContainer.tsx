@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import { EventListElement } from './EventListElement';
 import { getViewEventRoute } from 'src/routing';
 import { getEvents, deleteEvent } from 'src/api/arrangementSvc';
