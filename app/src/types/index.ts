@@ -1,17 +1,24 @@
-import { Validate, validate, IError } from './validation';
+import { validate, Result } from './validation';
 
 export type Optional<T> = T | undefined;
-export type WithId<T> = T & { id: number };
-export type Result<Ok> = Ok | { errors: IError[] };
+export type WithId<T> = T & { id: string };
 
-export const createLocation = (value: string): Validate<string, string> => {
+export const concatLists = <T>(...list: Optional<T[]>[]): T[] =>
+  list.flatMap(materialize);
+
+export const materialize = <T>(list: Optional<T[]>): T[] => {
+  return list === undefined ? [] : list;
+};
+
+export const createLocation = (value: string): Result<string, string> => {
   return {
-    value: value,
-    data: value,
+    validValue: value,
+    editValue: value,
+    errors: undefined,
   };
 };
 
-export const createDescription = (value: string): Validate<string, string> => {
+export const validateDescription = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Description must be more than 3 characters': value.length <= 3,
   });
@@ -19,7 +26,7 @@ export const createDescription = (value: string): Validate<string, string> => {
   return validator.resolve(value);
 };
 
-export const createTitle = (value: string): Validate<string, string> => {
+export const validateTitle = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Title must be more than 3 characters': value.length <= 3,
   });

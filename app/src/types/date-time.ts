@@ -1,18 +1,8 @@
-import {
-  IDate,
-  parseDate,
-  stringifyDate,
-  EditDate,
-  validateDate,
-} from './date';
-import {
-  ITime,
-  validateTime,
-  stringifyTime,
-  parseTime,
-  EditTime,
-} from './time';
-import { Validate } from './validation';
+import { IDate, parseDate, deserializeDate, validateDate } from './date';
+import { ITime, validateTime, stringifyTime, parseTime } from './time';
+import { isOk, Result } from './validation';
+import { isAfter } from 'date-fns';
+import { concatLists } from '.';
 
 export interface IDateTime {
   date: IDate;
@@ -20,8 +10,8 @@ export interface IDateTime {
 }
 
 export type EditDateTime = {
-  date: EditDate;
-  time: EditTime;
+  date: string;
+  time: [string, string];
 };
 
 export const parseDateTime = (datetime: string) => {
@@ -33,22 +23,40 @@ export const parseDateTime = (datetime: string) => {
 
 export const validateDateTime = (
   datetime: EditDateTime
-): Validate<EditDateTime, IDateTime> => {
-  const { data: date, errors: dataErrors = [] } = validateDate(datetime.date);
-  const { data: time, errors: timeErrors = [] } = validateTime(datetime.time);
+): Result<EditDateTime, IDateTime> => {
+  const validationResultDate = validateDate(datetime.date);
+  const validationResultTime = validateTime(datetime.time);
 
-  if (!date || !time) {
+  if (isOk(validationResultDate) && isOk(validationResultTime)) {
     return {
-      value: datetime,
-      errors: [...dataErrors, ...timeErrors],
+      errors: undefined,
+      editValue: datetime,
+      validValue: {
+        date: validationResultDate.validValue,
+        time: validationResultTime.validValue,
+      },
     };
   }
-
-  return { value: datetime, data: { date, time } };
+  const errors = concatLists(
+    validationResultTime.errors,
+    validationResultDate.errors
+  );
+  return {
+    editValue: datetime,
+    errors,
+  };
 };
 
+export const isAfterNow = ({ date, time }: IDateTime) => {
+  const now = new Date();
+  return isAfter(toDate({ date, time }), now);
+};
+
+export const toDate = ({ date, time }: IDateTime) =>
+  new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
+
 export const stringifyDateTime = ({ date, time }: IDateTime) =>
-  `${stringifyDate(date)}T${stringifyTime(time)}`;
+  `${deserializeDate(date)}T${stringifyTime(time)}`;
 
 //Bør nok flyttes ut i en date utils
 export const getNow = () => {

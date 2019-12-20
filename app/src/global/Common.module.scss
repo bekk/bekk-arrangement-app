@@ -7,7 +7,21 @@
 
 .content {
   min-width: 320px;
-  max-width: 780px;
+  max-width: 400px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.subsection {
+  margin: 20px 0px;
 }
 
 .smallMarginLeft {

@@ -38,7 +38,7 @@ async function fetchAndValidate(
   path: string,
   body?: any
 ) {
-  const token = 'asdfasdfasfasdfasdfasdfasdf';
+  const token = 'no token yet';
   const url = `${host}${path}`;
   const response = await fetch(
     url,

@@ -1,15 +1,22 @@
-import { Validate } from './validation';
-import { WithId } from '.';
-import {
-  IDateTime,
-  stringifyDateTime,
-  EditDateTime,
-  parseDateTime,
-  validateDateTime,
-} from './date-time';
-import { IEventContract } from './contract-types';
+import { Result, isOk } from './validation';
+import { concatLists, validateTitle, validateDescription } from '.';
+import { IDateTime, EditDateTime, validateDateTime } from './date-time';
+import { deserializeTime } from './time';
+import { deserializeDate } from './date';
 
-type Key = number;
+export type EventId = string;
+
+export type IEventList = Record<EventId, IEvent>;
+
+export interface IEventContract {
+  title: string;
+  description: string;
+  location: string;
+  startDate: IDateTime;
+  endDate: IDateTime;
+  openForRegistrationDate: IDateTime;
+  organizerEmail: string;
+}
 
 export interface IEvent {
   title: string;
@@ -21,75 +28,82 @@ export interface IEvent {
 }
 
 export interface IEditEvent {
-  title: string;
-  description: string;
+  title: Result<string, string>;
+  description: Result<string, string>;
   location: string;
-  start: EditDateTime;
-  end: EditDateTime;
-  openForRegistration: EditDateTime;
+  start: Result<EditDateTime, IDateTime>;
+  end: Result<EditDateTime, IDateTime>;
+  openForRegistration: Result<EditDateTime, IDateTime>;
 }
 
-export const parseEvent = (event: IViewModel): [Key, IEditEvent] => {
-  const start = parseDateTime(event.fromDate);
-  const end = parseDateTime(event.toDate);
-  const openForRegistration = parseDateTime(event.fromDate);
-
-  return [
-    event.id,
-    {
-      title: event.title,
-      description: event.description,
-      location: event.location,
-      start,
-      end,
-      openForRegistration,
-    },
-  ];
-};
-
-export const validateEvent = (
-  event: IEditEvent
-): Validate<IEditEvent, IEvent> => {
-  const { data: start, errors: startErrors = [] } = validateDateTime(
-    event.start
-  );
-  const { data: end, errors: endErrors = [] } = validateDateTime(event.end);
-  const {
-    data: openForRegistration,
-    errors: openForRegistrationErrors = [],
-  } = validateDateTime(event.openForRegistration);
-
-  if (!start || !end || !openForRegistration) {
-    return {
-      value: event,
-      errors: [...startErrors, ...endErrors, ...openForRegistrationErrors],
-    };
-  }
-
-  return {
-    value: event,
-    data: {
-      title: event.title,
-      description: event.description,
-      location: event.location,
-      start,
-      end,
-      openForRegistration,
-    },
-  };
-};
-
-export type IWriteModel = IEventContract;
-export type IViewModel = WithId<IWriteModel>;
-
-export const serializeEvent = (event: IEvent): IWriteModel => ({
+export const serializeEvent = (event: IEvent): IEventContract => ({
   title: event.title,
   description: event.description,
   location: event.location,
-  fromDate: stringifyDateTime(event.start),
-  toDate: stringifyDateTime(event.end),
-  responsibleEmployee: 1296,
+  startDate: event.start,
+  endDate: event.end,
+  openForRegistrationDate: event.openForRegistration,
+  organizerEmail: 'test@testeepost.com',
 });
+
+export const deserializeEvent = (event: IEventContract): IEditEvent => {
+  const title = validateTitle(event.title);
+  const description = validateDescription(event.description);
+  const start = validateDateTime({
+    date: deserializeDate(event.startDate.date),
+    time: deserializeTime(event.startDate.time),
+  });
+  const end = validateDateTime({
+    date: deserializeDate(event.endDate.date),
+    time: deserializeTime(event.endDate.time),
+  });
+  const openForRegistration = validateDateTime({
+    date: deserializeDate(event.openForRegistrationDate.date),
+    time: deserializeTime(event.openForRegistrationDate.time),
+  });
+  return {
+    ...event,
+    title,
+    description,
+    start,
+    end,
+    openForRegistration,
+  };
+};
+
+export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
+  if (
+    isOk(event.start) &&
+    isOk(event.end) &&
+    isOk(event.openForRegistration) &&
+    isOk(event.title) &&
+    isOk(event.description)
+  ) {
+    return {
+      editValue: event,
+      errors: undefined,
+      validValue: {
+        ...event,
+        title: event.title.validValue,
+        description: event.description.validValue,
+        start: event.start.validValue,
+        end: event.end.validValue,
+        openForRegistration: event.openForRegistration.validValue,
+      },
+    };
+  }
+
+  const errors = concatLists(
+    event.start.errors,
+    event.end.errors,
+    event.openForRegistration.errors
+  );
+
+  return {
+    editValue: event,
+    errors,
+  };
+};
 
 export const initialEvent: IEvent = {
   title: '',
@@ -107,4 +121,22 @@ export const initialEvent: IEvent = {
     date: { year: 2019, month: 11, day: 15 },
     time: { hour: 0, minute: 0 },
   },
+};
+
+export const initialEditEvent: IEditEvent = {
+  title: validateTitle(''),
+  description: validateDescription(''),
+  location: '',
+  start: validateDateTime({
+    date: '2019-12-02',
+    time: ['23', '22'],
+  }),
+  end: validateDateTime({
+    date: '2019-12-02',
+    time: ['23', '22'],
+  }),
+  openForRegistration: validateDateTime({
+    date: '2019-12-02',
+    time: ['23', '22'],
+  }),
 };

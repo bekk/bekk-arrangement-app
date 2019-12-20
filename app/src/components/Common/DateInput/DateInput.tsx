@@ -1,22 +1,17 @@
 import React from 'react';
-import { parseDate, EditDate } from '../../../types/date';
+import { parseDate } from '../../../types/date';
 
 interface IProps {
-  label: string;
-  value: EditDate;
-  onChange: (value: EditDate) => void;
+  value: string;
+  onChange: (value: string) => void;
 }
 
-export const DateInput = ({ label, value, onChange }: IProps): JSX.Element => {
+export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
   return (
-    <>
-      <label htmlFor={label}>{label}</label>
-      <input
-        type="date"
-        id={label}
-        onChange={v => onChange(parseDate(v.target.value))}
-        value={value}
-      />
-    </>
+    <input
+      type="date"
+      onChange={v => onChange(parseDate(v.target.value))}
+      value={value}
+    />
   );
 };
