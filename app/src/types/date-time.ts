@@ -1,12 +1,6 @@
 import { IDate, parseDate, deserializeDate, validateDate } from './date';
-import {
-  ITime,
-  validateTime,
-  stringifyTime,
-  parseTime,
-  EditTime,
-} from './time';
-import { isOk, isBad, Result } from './validation';
+import { ITime, validateTime, stringifyTime, parseTime } from './time';
+import { isOk, Result } from './validation';
 import { isAfter } from 'date-fns';
 import { concatLists } from '.';
 
@@ -54,7 +48,7 @@ export const validateDateTime = (
 };
 
 export const isAfterNow = ({ date, time }: IDateTime) => {
-  const now = new Date(Date.now());
+  const now = new Date();
   return isAfter(toDate({ date, time }), now);
 };
 

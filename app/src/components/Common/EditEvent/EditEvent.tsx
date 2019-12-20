@@ -2,7 +2,7 @@ import React from 'react';
 import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { SectionWithValidation } from 'src/components/Common/SectionWithValidation/SectionWithValidation';
-import { IEditEvent, IEvent } from 'src/types/event';
+import { IEditEvent } from 'src/types/event';
 import commonStyle from 'src/global/Common.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import classNames from 'classnames';

@@ -14,20 +14,18 @@ export const DateTimeInput = ({ label, value, onChange }: IProps) => {
   return (
     <section>
       {label}
-      <section className={style.grid}>
+      <div className={style.grid}>
         <DateInput
-          label={''}
           value={value.date}
           onChange={date => {
             onChange({ date, time: value.time });
           }}
         />
         <TimeInput
-          label={''}
           value={value.time}
           onChange={time => onChange({ date: value.date, time })}
         />
-      </section>
+      </div>
     </section>
   );
 };

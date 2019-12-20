@@ -1,4 +1,4 @@
-import { validate, IError, Result } from './validation';
+import { validate, Result } from './validation';
 
 export type Optional<T> = T | undefined;
 export type WithId<T> = T & { id: string };

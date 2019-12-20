@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import commonStyle from 'src/global/Common.module.scss';
 import { IDateTime } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
-import { asString, calculateTimeLeft, ITimeLeft } from 'src/utils/timeleft';
-import { IEvent } from 'src/types/event';
+import { asString } from 'src/utils/timeleft';
 import { TextInput } from '../Common/TextInput/TextInput';
 import { useEvent } from 'src/hooks/eventHooks';
 import { useParams } from 'react-router';
@@ -17,26 +16,7 @@ import {
   initalParticipant,
 } from 'src/types/participant';
 import { Result, isOk } from 'src/types/validation';
-
-const useTimeLeft = (event: IEvent | undefined) => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 365,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    difference: 1,
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (event) {
-        setTimeLeft(calculateTimeLeft(event.openForRegistration));
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [event]);
-  return timeLeft;
-};
+import { useTimeLeft } from 'src/hooks/timeleftHooks';
 
 export const ViewEventContainer = () => {
   const { id } = useParams();

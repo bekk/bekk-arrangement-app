@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Menu } from '../Common/Menu/Menu';
 import commonStyle from 'src/global/Common.module.scss';
 import { EventListElement } from './EventListElement';
 import { getViewEventRoute } from 'src/routing';
@@ -56,7 +55,6 @@ export const ViewEventsContainer = () => {
   return (
     <div className={commonStyle.container}>
       <div className={commonStyle.content}>
-        <Menu tab={'overview'} />
         <h1>Events</h1>
         <div>
           {eventsKeys.map(x => {

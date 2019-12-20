@@ -24,7 +24,7 @@ export const asString = ({ days, hours, minutes, seconds }: ITimeLeft) => {
 };
 
 export const calculateTimeLeft = (date: IDateTime): ITimeLeft => {
-  const difference = +new Date(toDate(date)) - +new Date();
+  const difference = new Date(toDate(date)).valueOf() - new Date().valueOf();
 
   if (difference > 0) {
     return {

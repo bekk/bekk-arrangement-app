@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
@@ -7,7 +7,7 @@ import { ViewEventsContainer } from './components/ViewEvents/ViewEventsContainer
 import 'src/extension-methods/array';
 import './index.css';
 import { EditEventContainer } from './components/EditEvent/EditEventContainer';
-import { CreateEvent } from './components/CreateEvent/CreateEventContainer';
+import { CreateEventContainer } from './components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from './components/ViewEvent/ViewEventContainer';
 
 export const history = createBrowserHistory();
@@ -17,7 +17,7 @@ const App = () => {
     <Router history={history}>
       <Switch>
         <Route path={createRoute}>
-          <CreateEvent />
+          <CreateEventContainer />
         </Route>
         <Route path={viewEventRoute} exact>
           <ViewEventContainer />

@@ -13,7 +13,7 @@ import { useHistory } from 'react-router';
 import { getViewEventRoute } from 'src/routing';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
 
-export const CreateEvent = () => {
+export const CreateEventContainer = () => {
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
     parseEvent(initialEditEvent)
   );

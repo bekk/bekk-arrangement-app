@@ -1,4 +1,4 @@
-import { useEffect, useState, Dispatch } from 'react';
+import { useEffect, useState } from 'react';
 import { getEvent } from 'src/api/arrangementSvc';
 import {
   IEvent,

@@ -1,9 +1,8 @@
-import { Result, isOk, IError, Ok, Bad } from './validation';
-import { concatLists, WithId, validateTitle, validateDescription } from '.';
+import { Result, isOk } from './validation';
+import { concatLists, validateTitle, validateDescription } from '.';
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
-import { deserializeTime, validateTime } from './time';
-import { deserializeDate, validateDate } from './date';
-import { ok } from 'assert';
+import { deserializeTime } from './time';
+import { deserializeDate } from './date';
 
 export type EventId = string;
 
