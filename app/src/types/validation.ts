@@ -1,8 +1,8 @@
 type ErrorType = 'Error' | 'Warning';
 
-export type Ok<EditType, ValidatedType> = {
+export type Ok<EditType, ValidType> = {
   editValue: EditType;
-  validValue: ValidatedType;
+  validValue: ValidType;
   errors: undefined;
 };
 
@@ -11,18 +11,18 @@ export type Bad<EditType> = {
   errors: IError[];
 };
 
-export type Result<FromType, ValidatedType> =
-  | Ok<FromType, ValidatedType>
+export type Result<FromType, ValidType> =
+  | Ok<FromType, ValidType>
   | Bad<FromType>;
 
-export function isOk<FromType, ValidatedType>(
-  result: Ok<FromType, ValidatedType> | Bad<FromType>
-): result is Ok<FromType, ValidatedType> {
+export function isOk<FromType, ValidType>(
+  result: Ok<FromType, ValidType> | Bad<FromType>
+): result is Ok<FromType, ValidType> {
   return result.errors === undefined;
 }
 
-export function isBad<FromType, ValidatedType>(
-  result: Ok<FromType, ValidatedType> | Bad<FromType>
+export function isBad<FromType, ValidType>(
+  result: Ok<FromType, ValidType> | Bad<FromType>
 ): result is Bad<FromType> {
   return !isOk(result);
 }
