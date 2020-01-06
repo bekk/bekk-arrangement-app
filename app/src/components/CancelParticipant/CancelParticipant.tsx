@@ -9,13 +9,12 @@ export const CancelParticipantContainer = () => {
   const [event] = useEvent(eventId);
   const [wasDeleted, setWasDeleted] = useState(false);
 
-  console.log(participantEmail);
-
   const cancelParticipant = async () => {
     if (eventId && participantEmail) {
       const deleted = await deleteParticipant(eventId, participantEmail);
-      console.log(deleted);
-      setWasDeleted(true);
+      if (deleted.ok) {
+          setWasDeleted(true);
+      }
     }
   };
 
