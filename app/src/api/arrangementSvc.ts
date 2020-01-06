@@ -53,3 +53,14 @@ export const postParticipant = async (participant: IParticipant) => {
     body: {},
   }).then(response => response as IParticipantContract);
 };
+
+export const deleteParticipant = async (
+  eventId: string,
+  participantEmail: string
+) => {
+  return await del({
+    host,
+    path: `participant/${participantEmail}/events/${eventId}`,
+    body: {},
+  });
+};
