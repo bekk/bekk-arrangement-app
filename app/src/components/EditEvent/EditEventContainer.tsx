@@ -11,6 +11,7 @@ import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { Button } from '../Common/Button/Button';
 
 export const EditEventContainer = () => {
   const { id } = useParams();
@@ -49,6 +50,7 @@ export const EditEventContainer = () => {
       <section className={commonStyle.subsection} onClick={editEventFunction}>
         <button>Lagre</button>
       </section>
+      <Button label="iafhse" onClick={editEventFunction} />
     </article>
   );
 };

@@ -1,5 +1,5 @@
 import { Result, isOk } from './validation';
-import { concatLists, validateTitle, validateDescription } from '.';
+import { concatLists, validateTitle, validateDescription, validateHost, validateMaxAttendees } from '.';
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
 import { deserializeTime } from './time';
 import { deserializeDate } from './date';
@@ -16,6 +16,7 @@ export interface IEventContract {
   endDate: IDateTime;
   openForRegistrationDate: IDateTime;
   organizerEmail: string;
+  maxAttendees: number;
 }
 
 export interface IEvent {
@@ -25,6 +26,8 @@ export interface IEvent {
   start: IDateTime;
   end: IDateTime;
   openForRegistration: IDateTime;
+  organizerEmail: string;
+  maxAttendees: number;
 }
 
 export interface IEditEvent {
@@ -34,6 +37,8 @@ export interface IEditEvent {
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
   openForRegistration: Result<EditDateTime, IDateTime>;
+  organizerEmail: Result<string, string>;
+  maxAttendees: Result<string, number>;
 }
 
 export const serializeEvent = (event: IEvent): IEventContract => ({
@@ -44,10 +49,12 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   endDate: event.end,
   openForRegistrationDate: event.openForRegistration,
   organizerEmail: 'test@testeepost.com',
+  maxAttendees: event.maxAttendees,
 });
 
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
   const title = validateTitle(event.title);
+  const organizerEmail = validateHost(event.organizerEmail)
   const description = validateDescription(event.description);
   const start = validateDateTime({
     date: deserializeDate(event.startDate.date),
@@ -61,6 +68,7 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     date: deserializeDate(event.openForRegistrationDate.date),
     time: deserializeTime(event.openForRegistrationDate.time),
   });
+  const maxAttendees = validateMaxAttendees(event.maxAttendees.toString())
   return {
     ...event,
     title,
@@ -68,6 +76,8 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     start,
     end,
     openForRegistration,
+    organizerEmail,
+    maxAttendees,
   };
 };
 
@@ -77,7 +87,9 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
     isOk(event.end) &&
     isOk(event.openForRegistration) &&
     isOk(event.title) &&
-    isOk(event.description)
+    isOk(event.description) &&
+    isOk(event.organizerEmail) &&
+    isOk(event.maxAttendees)
   ) {
     return {
       editValue: event,
@@ -89,6 +101,8 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
         start: event.start.validValue,
         end: event.end.validValue,
         openForRegistration: event.openForRegistration.validValue,
+        organizerEmail: event.organizerEmail.validValue,
+        maxAttendees: event.maxAttendees.validValue,
       },
     };
   }
@@ -121,6 +135,8 @@ export const initialEvent: IEvent = {
     date: { year: 2019, month: 11, day: 15 },
     time: { hour: 0, minute: 0 },
   },
+  organizerEmail: '',
+  maxAttendees: 1,
 };
 
 export const initialEditEvent: IEditEvent = {
@@ -139,4 +155,6 @@ export const initialEditEvent: IEditEvent = {
     date: '2019-12-02',
     time: ['23', '22'],
   }),
+  organizerEmail: validateHost(''),
+  maxAttendees: validateMaxAttendees("1"),
 };

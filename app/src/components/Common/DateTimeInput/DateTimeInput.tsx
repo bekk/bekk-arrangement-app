@@ -13,7 +13,7 @@ interface IProps {
 export const DateTimeInput = ({ label, value, onChange }: IProps) => {
   return (
     <section className={style.grid}>
-      {label}
+        <label className={style.label}>{label}</label>
       <DateInput
         value={value.date}
         onChange={date => {

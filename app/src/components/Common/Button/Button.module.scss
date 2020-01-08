@@ -1,0 +1,17 @@
+@import 'src/style/colors';
+
+.button {
+    margin: 20px 0px;
+    width: 31em;
+    height: 6em;
+    background-color: var(--overskyet);
+    .buttonLabel {
+        font-size: 21px;
+    }
+    &:hover{
+        background-color: var(--overskyetKontrast);
+    }
+    &:focus {
+        outline: 0;
+    }
+}

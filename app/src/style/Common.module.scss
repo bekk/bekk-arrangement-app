@@ -1,4 +1,5 @@
 @import 'src/style/colors';
+@import 'src/style/fonts.scss';
 
 .container {
   display: flex;
@@ -7,6 +8,7 @@
   width: 100%;
   height: 100%;
   background-color: var(--backgroundColor);
+  font-family: $fontRegular;
   color: var(--textColor);
 }
 

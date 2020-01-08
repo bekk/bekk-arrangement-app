@@ -12,6 +12,7 @@ import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { getViewEventRoute } from 'src/routing';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { Button } from '../Common/Button/Button';
 
 export const CreateEventContainer = () => {
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
@@ -33,11 +34,9 @@ export const CreateEventContainer = () => {
 
   return (
     <article className={commonStyle.container}>
-      <h1>Opprett</h1>
+      <h1>Opprett event</h1> 
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <section className={commonStyle.subsection} onClick={addEvent}>
-        <button>Create</button>
-      </section>
+      <Button label="iafhse" onClick={addEvent} />
     </article>
   );
 };

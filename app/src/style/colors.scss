@@ -40,13 +40,13 @@
   }
 
   /* USer has to specifically choose light to get the light theme */
-  @media (prefers-color-scheme: light) {
-    --backgroundColor: var(--hvit);
-    --textColor: var(--svart);
-    --linkColor: var(--morgendis);
-    --linkColorHover: var(--svart);
-    --fadedColor: var(--morgendis);
-    --coolColor: var(--skyfritt);
-    --coolColorContrast: var(--svart);
-  }
+  // @media (prefers-color-scheme: light) {
+  //   --backgroundColor: var(--hvit);
+  //   --textColor: var(--svart);
+  //   --linkColor: var(--morgendis);
+  //   --linkColorHover: var(--svart);
+  //   --fadedColor: var(--morgendis);
+  //   --coolColor: var(--skyfritt);
+  //   --coolColorContrast: var(--svart);
+  // }
 }

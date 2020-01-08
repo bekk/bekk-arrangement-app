@@ -7,7 +7,7 @@ import commonStyle from 'src/style/Common.module.scss';
 import style from './EditEvent.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import classNames from 'classnames';
-import { validateTitle, validateDescription } from 'src/types';
+import { validateTitle, validateDescription, validateHost, validateMaxAttendees } from 'src/types';
 import { validateDateTime } from 'src/types/date-time';
 
 interface IProps {
@@ -22,6 +22,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       <section className={style.editSection}>
         <TextInput
           label={'Tittel'}
+          placeholder=""
           value={event.title.editValue}
           onChange={title =>
             updateEvent({
@@ -33,17 +34,18 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         <ValidationResult validationResult={event.title.errors} />
       </section>
       <section className={style.editSection}>
-        <TextArea
-          label={'Beskrivelse'}
-          value={event.description.editValue}
-          onChange={description =>
-            updateEvent({
-              ...event,
-              description: validateDescription(description),
+          <TextInput
+            label="Arrangør"
+            placeholder=""
+            value={event.organizerEmail.editValue}
+            onChange={organizerEmail => 
+              updateEvent({
+                ...event,
+                organizerEmail: validateHost(organizerEmail),
             })
-          }
-        />
-        <ValidationResult validationResult={event.description.errors} />
+            }
+      />
+      <ValidationResult validationResult={event.organizerEmail.errors} />
       </section>
       <section className={style.editSection}>
         <TextInput
@@ -59,6 +61,19 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         />
       </section>
       <section className={style.editSection}>
+        <TextArea
+          label={'Beskrivelse'}
+          value={event.description.editValue}
+          onChange={description =>
+            updateEvent({
+              ...event,
+              description: validateDescription(description),
+            })
+          }
+        />
+        <ValidationResult validationResult={event.description.errors} />
+      </section>
+      <section className={style.editSection}>
         <DateTimeInput
           label={'Starter'}
           value={event.start.editValue}
@@ -70,46 +85,21 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
           }
         />
       </section>
-      {/* 
-      <section className={commonStyle.subsection}>
-        <TextInput
-          label={'location'}
-          placeholder="Stavanger, Norway"
-          value={event.location}
-          onChange={location => updateEvent({ ...event, location })}
+      <section className={style.editSection}>
+        <DateTimeInput
+          label={'Slutter'}
+          value={event.end.editValue}
+          onChange={end =>
+            updateEvent({
+              ...event,
+              end: validateDateTime(end),
+            })
+          }
         />
       </section>
-      <SectionWithValidation validationResult={eventResult.start.errors}>
-        <section className={commonStyle.row}>
+      <section className={style.editSection}>
           <DateTimeInput
-            label={'Start date'}
-            value={event.start.editValue}
-            onChange={start =>
-              updateEvent({
-                ...event,
-                start: validateDateTime(start),
-              })
-            }
-          />
-        </section>
-      </SectionWithValidation>
-      <SectionWithValidation validationResult={eventResult.end.errors}>
-        <section className={commonStyle.row}>
-          <DateTimeInput
-            label={'End date'}
-            value={event.end.editValue}
-            onChange={end =>
-              updateEvent({ ...event, end: validateDateTime(end) })
-            }
-          />
-        </section>
-      </SectionWithValidation>
-      <SectionWithValidation
-        validationResult={eventResult.openForRegistration.errors}
-      >
-        <section className={commonStyle.row}>
-          <DateTimeInput
-            label={'Open for registration date'}
+            label={'Påmelding åpner'}
             value={event.openForRegistration.editValue}
             onChange={openForRegistration =>
               updateEvent({
@@ -118,9 +108,21 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
               })
             }
           />
-        </section>
-      </SectionWithValidation>{' '}
-      */}
+      </section>
+      <section className={classNames(style.editSection, style.numberEdit)}>
+        <TextInput
+          label={'Maks antall'}
+          placeholder=""
+          value={event.maxAttendees.editValue}
+          onChange={maxAttendees =>
+            updateEvent({
+              ...event,
+              maxAttendees: validateMaxAttendees(maxAttendees),
+            })
+          }
+        />
+        <ValidationResult validationResult={event.maxAttendees.errors} />
+      </section>
     </div>
   );
 };

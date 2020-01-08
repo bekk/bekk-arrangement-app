@@ -3,3 +3,8 @@
   flex-direction: column;
   margin-bottom: 20px;
 }
+
+.numberEdit {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
