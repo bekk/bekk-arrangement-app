@@ -5,3 +5,4 @@ export const viewEventRoute = '/events/:id';
 export const getEditEventRoute = (id: string | number) => `/events/${id}/edit`;
 export const editRoute = '/events/:id/edit';
 export const createRoute = '/events/create';
+export const cancelParticipantRoute = '/:eventId/cancel/:participantEmail';
