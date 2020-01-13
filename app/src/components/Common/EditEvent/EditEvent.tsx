@@ -113,15 +113,15 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         <TextInput
           label={'Maks antall'}
           placeholder=""
-          value={event.maxAttendees.editValue}
-          onChange={maxAttendees =>
+          value={event.maxParticipants.editValue}
+          onChange={maxParticipants =>
             updateEvent({
               ...event,
-              maxAttendees: validateMaxAttendees(maxAttendees),
+              maxParticipants: validateMaxAttendees(maxParticipants),
             })
           }
         />
-        <ValidationResult validationResult={event.maxAttendees.errors} />
+        <ValidationResult validationResult={event.maxParticipants.errors} />
       </section>
     </div>
   );

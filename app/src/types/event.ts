@@ -1,5 +1,11 @@
 import { Result, isOk } from './validation';
-import { concatLists, validateTitle, validateDescription, validateHost, validateMaxAttendees } from '.';
+import {
+  concatLists,
+  validateTitle,
+  validateDescription,
+  validateHost,
+  validateMaxAttendees,
+} from '.';
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
 import { deserializeTime } from './time';
 import { deserializeDate } from './date';
@@ -15,8 +21,9 @@ export interface IEventContract {
   startDate: IDateTime;
   endDate: IDateTime;
   openForRegistrationDate: IDateTime;
+  organizerName: string;
   organizerEmail: string;
-  maxAttendees: number;
+  maxParticipants: number;
 }
 
 export interface IEvent {
@@ -26,8 +33,9 @@ export interface IEvent {
   start: IDateTime;
   end: IDateTime;
   openForRegistration: IDateTime;
+  organizerName: string;
   organizerEmail: string;
-  maxAttendees: number;
+  maxParticipants: number;
 }
 
 export interface IEditEvent {
@@ -37,8 +45,9 @@ export interface IEditEvent {
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
   openForRegistration: Result<EditDateTime, IDateTime>;
+  organizerName: Result<string, string>;
   organizerEmail: Result<string, string>;
-  maxAttendees: Result<string, number>;
+  maxParticipants: Result<string, number>;
 }
 
 export const serializeEvent = (event: IEvent): IEventContract => ({
@@ -48,13 +57,15 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   startDate: event.start,
   endDate: event.end,
   openForRegistrationDate: event.openForRegistration,
+  organizerName: event.organizerName,
   organizerEmail: 'test@testeepost.com',
-  maxAttendees: event.maxAttendees,
+  maxParticipants: event.maxParticipants,
 });
 
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
   const title = validateTitle(event.title);
-  const organizerEmail = validateHost(event.organizerEmail)
+  const organizerName = validateTitle(event.organizerName);
+  const organizerEmail = validateHost(event.organizerEmail);
   const description = validateDescription(event.description);
   const start = validateDateTime({
     date: deserializeDate(event.startDate.date),
@@ -68,7 +79,8 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     date: deserializeDate(event.openForRegistrationDate.date),
     time: deserializeTime(event.openForRegistrationDate.time),
   });
-  const maxAttendees = validateMaxAttendees(event.maxAttendees.toString())
+  const maxParticipants = validateMaxAttendees(event.maxParticipants.toString()
+  );
   return {
     ...event,
     title,
@@ -76,8 +88,9 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     start,
     end,
     openForRegistration,
+    organizerName,
     organizerEmail,
-    maxAttendees,
+    maxParticipants,
   };
 };
 
@@ -88,8 +101,9 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
     isOk(event.openForRegistration) &&
     isOk(event.title) &&
     isOk(event.description) &&
+    isOk(event.organizerName) &&
     isOk(event.organizerEmail) &&
-    isOk(event.maxAttendees)
+    isOk(event.maxParticipants)
   ) {
     return {
       editValue: event,
@@ -101,8 +115,9 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
         start: event.start.validValue,
         end: event.end.validValue,
         openForRegistration: event.openForRegistration.validValue,
+        organizerName: event.organizerName.validValue,
         organizerEmail: event.organizerEmail.validValue,
-        maxAttendees: event.maxAttendees.validValue,
+        maxParticipants: event.maxParticipants.validValue,
       },
     };
   }
@@ -110,7 +125,12 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
   const errors = concatLists(
     event.start.errors,
     event.end.errors,
-    event.openForRegistration.errors
+    event.openForRegistration.errors,
+    event.title.errors,
+    event.description.errors,
+    event.organizerName.errors,
+    event.organizerEmail.errors,
+    event.maxParticipants.errors
   );
 
   return {
@@ -135,26 +155,30 @@ export const initialEvent: IEvent = {
     date: { year: 2019, month: 11, day: 15 },
     time: { hour: 0, minute: 0 },
   },
+  organizerName: '',
   organizerEmail: '',
-  maxAttendees: 1,
+  maxParticipants: 1,
 };
 
 export const initialEditEvent: IEditEvent = {
-  title: validateTitle(''),
-  description: validateDescription(''),
-  location: '',
+  title: validateTitle('Pølsespisekonkurranse 2019'),
+  description: validateDescription(
+    'Dette er informasjon om et event som du har laget med vår fantastiske app. Du er kjempeflunk, men vi er flinkere'
+  ),
+  location: 'Strøm Larsens Pølsekompani',
   start: validateDateTime({
-    date: '2019-12-02',
+    date: '2020-03-10',
     time: ['23', '22'],
   }),
   end: validateDateTime({
-    date: '2019-12-02',
+    date: '2020-03-11',
     time: ['23', '22'],
   }),
   openForRegistration: validateDateTime({
-    date: '2019-12-02',
+    date: '2020-02-15',
     time: ['23', '22'],
   }),
-  organizerEmail: validateHost(''),
-  maxAttendees: validateMaxAttendees("1"),
+  organizerName: validateTitle('Pølsekongen'),
+  organizerEmail: validateHost('Matkomiteen'),
+  maxParticipants: validateMaxAttendees('20'),
 };

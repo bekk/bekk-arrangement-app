@@ -50,7 +50,7 @@ export const EditEventContainer = () => {
       <section className={commonStyle.subsection} onClick={editEventFunction}>
         <button>Lagre</button>
       </section>
-      <Button label="iafhse" onClick={editEventFunction} />
+      <Button label="iafhse" onClick={editEventFunction} disabled={!isOk(event)} />
     </article>
   );
 };

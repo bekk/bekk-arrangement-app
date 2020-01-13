@@ -17,11 +17,12 @@
   --regnKontrast: #7e9cb9;
   --gul: #fff2ad;
   --gulKontrast: #fff02b;
+  --grey: #b3b3b3;
   --morgendis: #707070;
 
   /* Define default color scheme for users without support for 'prefers-color-scheme' */
   --backgroundColor: var(--svart);
-  --textColor: var(--hvit);
+  --textColor: var(--grey);
   --linkColor: var(--morgendis);
   --linkColorHover: var(--hvit);
   --fadedColor: var(--morgendis);
@@ -31,7 +32,7 @@
   /* no-preference and perfers dark should use dark mode version */
   @media (prefers-color-scheme: no-preference), (prefers-color-scheme: dark) {
     --backgroundColor: var(--svart);
-    --textColor: var(--hvit);
+    --textColor: var(--grey);
     --linkColor: var(--morgendis);
     --linkColorHover: var(--hvit);
     --fadedColor: var(--morgendis);

@@ -1,17 +1,24 @@
 @import 'src/style/colors';
 
+.buttonContainer {
+  width: 60%;
+}
+
 .button {
-    margin: 20px 0px;
-    width: 31em;
-    height: 6em;
-    background-color: var(--overskyet);
-    .buttonLabel {
-        font-size: 21px;
-    }
-    &:hover{
-        background-color: var(--overskyetKontrast);
-    }
-    &:focus {
-        outline: 0;
-    }
+  margin: 20px 0px;
+  width: 31em;
+  height: 6em;
+  background-color: var(--overskyet);
+  .buttonLabel {
+    font-size: 21px;
+  }
+  &:hover {
+    background-color: var(--overskyetKontrast);
+  }
+  &:focus {
+    outline: 0;
+  }
+  &:disabled {
+    background-color: var(--backgroundColor);
+  }
 }

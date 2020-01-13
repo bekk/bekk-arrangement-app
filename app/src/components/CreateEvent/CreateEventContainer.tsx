@@ -13,11 +13,13 @@ import { useHistory } from 'react-router';
 import { getViewEventRoute } from 'src/routing';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
+import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
 
 export const CreateEventContainer = () => {
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
     parseEvent(initialEditEvent)
   );
+  const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
 
   const addEvent = async () => {
@@ -29,14 +31,41 @@ export const CreateEventContainer = () => {
     }
   };
 
+  const previewEvent = () => {
+    setPreviewState(true);
+  };
+
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
+  console.log('Event', event);
+
+  const renderPreviewEvent = () => {
+    if (isOk(event)) {
+      return (
+        <>
+          <PreviewEvent event={event.validValue} onClick={addEvent} />
+          <Button label="Opprett event" onClick={addEvent} disabled={false} />
+        </>
+      );
+    }
+  };
+
   return (
     <article className={commonStyle.container}>
-      <h1>Opprett event</h1> 
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <Button label="iafhse" onClick={addEvent} />
+      {!previewState ? (
+        <>
+          <h1>Opprett event</h1>
+          <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+          <Button
+            label="iafhse"
+            onClick={previewEvent}
+            disabled={!isOk(event)}
+          />
+        </>
+      ) : (
+        renderPreviewEvent()
+      )}
     </article>
   );
 };

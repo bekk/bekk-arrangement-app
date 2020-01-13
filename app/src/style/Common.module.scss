@@ -9,11 +9,15 @@
   height: 100%;
   background-color: var(--backgroundColor);
   font-family: $fontRegular;
+  font-size: 22px;
   color: var(--textColor);
 }
 
 .content {
-  max-width: 90%;
+  max-width: 50%;
+    @media (max-width:1200px) {
+      max-width: 90%;
+    }
 }
 
 .column {
@@ -32,4 +36,14 @@
 
 .smallMarginLeft {
   margin-left: 8px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: $serifFontRegular;
+  font-size: 45px;
+  color: var(--hvit);
 }
