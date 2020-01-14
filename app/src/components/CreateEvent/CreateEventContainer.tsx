@@ -14,8 +14,11 @@ import { getViewEventRoute } from 'src/routing';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
+import { useAuthentication } from 'src/auth';
 
 export const CreateEventContainer = () => {
+  useAuthentication();
+
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
     parseEvent(initialEditEvent)
   );
@@ -37,8 +40,6 @@ export const CreateEventContainer = () => {
 
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
-
-  console.log('Event', event);
 
   const renderPreviewEvent = () => {
     if (isOk(event)) {

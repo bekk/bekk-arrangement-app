@@ -1,9 +1,7 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
 import style from './PreviewEvent.module.scss';
-import { IDate } from 'src/types/date';
 import { IDateTime } from 'src/types/date-time';
-import { stringify } from 'querystring';
 
 interface IProps {
   event: IEvent;

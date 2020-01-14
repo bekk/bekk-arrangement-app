@@ -12,8 +12,10 @@ import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
+import { useAuthentication } from 'src/auth';
 
 export const EditEventContainer = () => {
+  useAuthentication();
   const { id } = useParams();
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
@@ -50,7 +52,11 @@ export const EditEventContainer = () => {
       <section className={commonStyle.subsection} onClick={editEventFunction}>
         <button>Lagre</button>
       </section>
-      <Button label="iafhse" onClick={editEventFunction} disabled={!isOk(event)} />
+      <Button
+        label="iafhse"
+        onClick={editEventFunction}
+        disabled={!isOk(event)}
+      />
     </article>
   );
 };

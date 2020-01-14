@@ -9,10 +9,13 @@ import './index.css';
 import { EditEventContainer } from './components/EditEvent/EditEventContainer';
 import { CreateEventContainer } from './components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from './components/ViewEvent/ViewEventContainer';
+import { getConfig, setConfig } from './config';
+import { useAuth0Redirect } from './auth';
 
 export const history = createBrowserHistory();
 
 const App = () => {
+  useAuth0Redirect();
   return (
     <Router history={history}>
       <Switch>
@@ -34,4 +37,10 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const init = async () => {
+  const config = await getConfig();
+  setConfig(config);
+  ReactDOM.render(<App />, document.getElementById('root'));
+};
+
+init();

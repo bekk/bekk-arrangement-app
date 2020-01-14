@@ -17,7 +17,7 @@ app.use(
       } else if (hashRegExp.test(path)) {
         res.setHeader('Cache-Control', 'max-age=432000');
       }
-    }
+    },
   })
 );
 
@@ -26,6 +26,15 @@ app.use('/fonts', express.static('fonts', { maxAge: '5d' }));
 app.get('/health', (request, response) => {
   response.send('healthy');
 });
+
+app.get('/config', (request, response) =>
+  response.send({
+    bekkApiUrl: process.env.BEKK_API_URL || 'https://api.dev.bekk.no',
+    audience: process.env.AUTH0_AUDIENCE || 'QHQy75S7tmnhDdBGYSnszzlhMPul0fAE',
+    issuerDomain: process.env.AUTH0_ISSUER_DOMAIN || 'bekk-dev.eu.auth0.com',
+    scopes: process.env.SCOPES || 'openid name groups',
+  })
+);
 
 app.get('*', (request, response) => {
   response.sendFile(path.join(__dirname, 'build/index.html'));
