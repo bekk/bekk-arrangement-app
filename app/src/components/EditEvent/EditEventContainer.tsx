@@ -13,8 +13,10 @@ import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
+import { useAuthentication } from 'src/auth';
 
 export const EditEventContainer = () => {
+  useAuthentication();
   const { id } = useParams();
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
