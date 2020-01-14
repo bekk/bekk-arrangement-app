@@ -53,7 +53,7 @@ export const ViewEventsContainer = () => {
   const eventsKeys = Array.from(events.keys());
 
   return (
-    <div className={commonStyle.container}>
+    <div>
       <div className={commonStyle.content}>
         <h1>Events</h1>
         <div>

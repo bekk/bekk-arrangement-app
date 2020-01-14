@@ -31,10 +31,6 @@ export const CreateEventContainer = () => {
     }
   };
 
-  const previewEvent = () => {
-    setPreviewState(true);
-  };
-
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
@@ -44,25 +40,30 @@ export const CreateEventContainer = () => {
     if (isOk(event)) {
       return (
         <>
-          <PreviewEvent event={event.validValue} onClick={addEvent} />
+          <PreviewEvent event={event.validValue} />
           <Button label="Opprett event" onClick={addEvent} disabled={false} />
+          <Button
+            label="Tilbake"
+            onClick={() => setPreviewState(false)}
+            disabled={false}
+          />
         </>
       );
     }
   };
 
   return (
-    <article className={commonStyle.container}>
+    <article>
       {!previewState ? (
-        <>
+        <div className={commonStyle.content}>
           <h1>Opprett event</h1>
           <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
           <Button
-            label="iafhse"
-            onClick={previewEvent}
+            label="Forhåndsvisning"
+            onClick={() => setPreviewState(true)}
             disabled={!isOk(event)}
           />
-        </>
+        </div>
       ) : (
         renderPreviewEvent()
       )}

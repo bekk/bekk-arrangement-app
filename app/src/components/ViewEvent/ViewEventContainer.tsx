@@ -39,7 +39,7 @@ export const ViewEventContainer = () => {
     return <div>Loading</div>;
   }
   return (
-    <article className={commonStyle.container}>
+    <article>
       <section className={commonStyle.content}>
         <h1>{event.title}</h1>
         <section>

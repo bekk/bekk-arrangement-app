@@ -18,7 +18,7 @@ interface IProps {
 export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
   const event = eventResult;
   return (
-    <div className={commonStyle.content}>
+    <>
       <section className={style.editSection}>
         <TextInput
           label={'Tittel'}
@@ -123,6 +123,6 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         />
         <ValidationResult validationResult={event.maxParticipants.errors} />
       </section>
-    </div>
+    </>
   );
 };

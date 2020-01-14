@@ -7,10 +7,9 @@ import { stringify } from 'querystring';
 
 interface IProps {
   event: IEvent;
-  onClick: () => void;
 }
 
-export const PreviewEvent = ({ event, onClick }: IProps) => {
+export const PreviewEvent = ({ event }: IProps) => {
   const dateElement = (date: IDateTime, label: string) => {
     const { day, month, year } = date.date;
     const { hour, minute } = date.time;

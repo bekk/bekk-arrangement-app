@@ -9,27 +9,32 @@ import './index.css';
 import { EditEventContainer } from './components/EditEvent/EditEventContainer';
 import { CreateEventContainer } from './components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from './components/ViewEvent/ViewEventContainer';
+import { Header } from './components/Common/Header/Header';
+import commonStyle from 'src/style/Common.module.scss';
 
 export const history = createBrowserHistory();
 
 const App = () => {
   return (
     <Router history={history}>
-      <Switch>
-        <Route path={createRoute}>
-          <CreateEventContainer />
-        </Route>
-        <Route path={viewEventRoute} exact>
-          <ViewEventContainer />
-        </Route>
-        <Route path={eventsRoute} exact>
-          <ViewEventsContainer />
-        </Route>
-        <Route exact path={editRoute}>
-          <EditEventContainer />
-        </Route>
-        <Redirect exact from={'/'} to={eventsRoute} />
-      </Switch>
+      <div className={commonStyle.container}>
+        <Header />
+        <Switch>
+          <Route path={createRoute}>
+            <CreateEventContainer />
+          </Route>
+          <Route path={viewEventRoute} exact>
+            <ViewEventContainer />
+          </Route>
+          <Route path={eventsRoute} exact>
+            <ViewEventsContainer />
+          </Route>
+          <Route exact path={editRoute}>
+            <EditEventContainer />
+          </Route>
+          <Redirect exact from={'/'} to={eventsRoute} />
+        </Switch>
+      </div>
     </Router>
   );
 };
