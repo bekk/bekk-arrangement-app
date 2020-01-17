@@ -70,19 +70,24 @@ export const EditEventContainer = () => {
 
   return (
     <>
-      {!previewState ? (
-        <div className={commonStyle.content}>
-          <h1>Endre event</h1>
-          <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-          <Button
-            label="Forhåndsvisning"
-            onClick={() => setPreviewState(true)}
-            disabled={!isOk(event)}
-          />
-        </div>
-      ) : (
-        renderPreviewEvent()
-      )}
+      <div className={commonStyle.content}>
+        {!previewState ? (
+          <>
+            <h1>Endre event</h1>
+            <EditEvent
+              eventResult={event.editValue}
+              updateEvent={updateEvent}
+            />
+            <Button
+              label="Forhåndsvisning"
+              onClick={() => setPreviewState(true)}
+              disabled={!isOk(event)}
+            />
+          </>
+        ) : (
+          renderPreviewEvent()
+        )}
+      </div>
     </>
   );
 };

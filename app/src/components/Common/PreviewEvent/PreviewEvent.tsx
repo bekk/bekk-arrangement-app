@@ -34,16 +34,18 @@ export const PreviewEvent = ({ event }: IProps) => {
   };
 
   return (
-    <div className={style.previewContainer}>
+    <>
       <h1>Forhåndsvisning av event</h1>
       <p>{event.title}</p>
-      <p>{event.organizerEmail}</p>
+      <p>
+        {event.organizerName} - {event.organizerEmail}
+      </p>
       <p>{event.location}</p>
       <p>{event.description}</p>
       <div>{dateElement(event.start, 'Starter')}</div>
       <div>{dateElement(event.end, 'Slutter')}</div>
       <div>{dateElement(event.openForRegistration, 'Påmeldingen åpner')}</div>
       <p>{dataEntry(event.maxParticipants, 'Maks antall')}</p>
-    </div>
+    </>
   );
 };

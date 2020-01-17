@@ -3,11 +3,16 @@ import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import { IEditEvent } from 'src/types/event';
-import commonStyle from 'src/style/Common.module.scss';
 import style from './EditEvent.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import classNames from 'classnames';
-import { validateTitle, validateDescription, validateHost, validateMaxAttendees } from 'src/types';
+import commonStyle from 'src/style/Common.module.scss';
+import {
+  validateTitle,
+  validateDescription,
+  validateHost,
+  validateMaxAttendees,
+} from 'src/types';
 import { validateDateTime } from 'src/types/date-time';
 
 interface IProps {
@@ -33,20 +38,40 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         />
         <ValidationResult validationResult={event.title.errors} />
       </section>
-      <section className={style.editSection}>
-          <TextInput
-            label="Arrangør"
-            placeholder=""
-            value={event.organizerEmail.editValue}
-            onChange={organizerEmail => 
-              updateEvent({
-                ...event,
-                organizerEmail: validateHost(organizerEmail),
-            })
-            }
-      />
-      <ValidationResult validationResult={event.organizerEmail.errors} />
-      </section>
+      <div className={commonStyle.row}>
+        <div className={style.colHalf}>
+          <section className={style.editSection}>
+            <TextInput
+              label="Arrangør"
+              placeholder=""
+              value={event.organizerName.editValue}
+              onChange={organizerName =>
+                updateEvent({
+                  ...event,
+                  organizerEmail: validateHost(organizerName),
+                })
+              }
+            />
+            <ValidationResult validationResult={event.organizerName.errors} />
+          </section>
+        </div>
+        <div className={style.colHalf}>
+          <section className={style.editSection}>
+            <TextInput
+              label="Epost"
+              placeholder=""
+              value={event.organizerEmail.editValue}
+              onChange={organizerEmail =>
+                updateEvent({
+                  ...event,
+                  organizerEmail: validateHost(organizerEmail),
+                })
+              }
+            />
+            <ValidationResult validationResult={event.organizerEmail.errors} />
+          </section>
+        </div>
+      </div>
       <section className={style.editSection}>
         <TextInput
           label={'Lokasjon'}
@@ -98,16 +123,16 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         />
       </section>
       <section className={style.editSection}>
-          <DateTimeInput
-            label={'Påmelding åpner'}
-            value={event.openForRegistration.editValue}
-            onChange={openForRegistration =>
-              updateEvent({
-                ...event,
-                openForRegistration: validateDateTime(openForRegistration),
-              })
-            }
-          />
+        <DateTimeInput
+          label={'Påmelding åpner'}
+          value={event.openForRegistration.editValue}
+          onChange={openForRegistration =>
+            updateEvent({
+              ...event,
+              openForRegistration: validateDateTime(openForRegistration),
+            })
+          }
+        />
       </section>
       <section className={classNames(style.editSection, style.numberEdit)}>
         <TextInput

@@ -54,9 +54,9 @@ export const CreateEventContainer = () => {
   };
 
   return (
-    <article>
+    <div className={commonStyle.content}>
       {!previewState ? (
-        <div className={commonStyle.content}>
+        <>
           <h1>Opprett event</h1>
           <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
           <Button
@@ -64,10 +64,10 @@ export const CreateEventContainer = () => {
             onClick={() => setPreviewState(true)}
             disabled={!isOk(event)}
           />
-        </div>
+        </>
       ) : (
         renderPreviewEvent()
       )}
-    </article>
+    </div>
   );
 };
