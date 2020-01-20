@@ -48,7 +48,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
               onChange={organizerName =>
                 updateEvent({
                   ...event,
-                  organizerEmail: validateHost(organizerName),
+                  organizerName: validateHost(organizerName),
                 })
               }
             />

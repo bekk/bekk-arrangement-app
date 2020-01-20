@@ -61,7 +61,6 @@ export const ViewEventsContainer = () => {
         {eventsKeys.map(x => {
           const eventFromMap = events.get(x);
           if (eventFromMap !== undefined && isOk(eventFromMap)) {
-            console.log(eventFromMap);
             return (
               <EventListElement
                 event={eventFromMap.validValue}

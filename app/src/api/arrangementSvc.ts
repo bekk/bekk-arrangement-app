@@ -4,6 +4,7 @@ import { WithId } from 'src/types';
 import { IParticipantContract, IParticipant } from 'src/types/participant';
 
 const host = 'https://api.dev.bekk.no/arrangement-svc/';
+// const host = 'http://localhost:5000/';
 
 export const postEvent = async (event: IEvent) => {
   return await post({
