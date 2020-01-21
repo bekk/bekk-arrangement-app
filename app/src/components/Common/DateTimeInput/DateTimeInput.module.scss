@@ -1,3 +1,5 @@
+@import 'src/style/constants';
+
 .grid {
   display: grid;
   grid-template-columns: 2fr 3fr 1fr;
@@ -7,5 +9,8 @@
   padding-right: 24px;
   white-space: nowrap;
   color: var(--textColor);
-  font-size: larger;
+  font-size: $subheaderDesktop;
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $subheaderMobile;
+  }
 }

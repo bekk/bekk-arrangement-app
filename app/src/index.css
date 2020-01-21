@@ -3,6 +3,7 @@ body {
   width: 100%;
   height: 100%;
   margin: 0;
+  background: var(--backgroundColor);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -16,23 +17,8 @@ code {
 }
 
 label {
-  font-size: 0.7em;
   color: rgba(1, 1, 1, 0.3);
 }
-
-/* input[type='text'],
-[type='date'],
-[type='number'] {
-  height: 20px;
-  border: none;
-  border-bottom: solid 1px black;
-  font-size: 1em;
-  padding: 0;
-  display: block;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-} */
 
 textarea {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

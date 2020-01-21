@@ -1,5 +1,6 @@
 @import 'src/style/colors';
-@import 'src/style/fonts.scss';
+@import 'src/style/fonts';
+@import 'src/style/constants';
 
 .container {
   display: flex;
@@ -9,8 +10,11 @@
   height: 100%;
   background-color: var(--backgroundColor);
   font-family: $fontRegular;
-  font-size: 22px;
+  font-size: $textDesktop;
   color: var(--textColor);
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $textMobile;
+  }
 }
 
 .content {
@@ -65,6 +69,9 @@ h3,
 h4,
 h5 {
   font-family: $serifFontRegular;
-  font-size: 45px;
+  font-size: $headerDesktop;
   color: var(--hvit);
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $headerMobile;
+  }
 }

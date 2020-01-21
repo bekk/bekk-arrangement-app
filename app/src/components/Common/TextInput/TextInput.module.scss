@@ -1,7 +1,12 @@
+@import 'src/style/constants';
+
 .textLabel {
   color: var(--textColor);
-  font-size: larger;
+  font-size: $subheaderDesktop;
   padding-bottom: 5px;
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $subheaderMobile;
+  }
 }
 
 .textInput {
@@ -9,10 +14,13 @@
   border-color: var(--textColor);
   color: var(--textColor);
   background-color: var(--backgroundColor);
-  font-size: 1em;
+  font-size: $textDesktop;
   padding: 10px;
   display: block;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $textMobile;
+  }
 }
