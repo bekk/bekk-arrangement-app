@@ -6,7 +6,6 @@ import { IEditEvent } from 'src/types/event';
 import style from './EditEvent.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import classNames from 'classnames';
-import commonStyle from 'src/style/Common.module.scss';
 import {
   validateTitle,
   validateDescription,
@@ -22,6 +21,7 @@ interface IProps {
 
 export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
   const event = eventResult;
+  console.log(event);
   return (
     <>
       <section className={style.editSection}>
@@ -36,42 +36,38 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
             })
           }
         />
-        <ValidationResult validationResult={event.title.errors} />
       </section>
-      <div className={commonStyle.row}>
-        <div className={style.colHalf}>
-          <section className={style.editSection}>
-            <TextInput
-              label="Arrangør"
-              placeholder=""
-              value={event.organizerName.editValue}
-              onChange={organizerName =>
-                updateEvent({
-                  ...event,
-                  organizerName: validateHost(organizerName),
-                })
-              }
-            />
-            <ValidationResult validationResult={event.organizerName.errors} />
-          </section>
-        </div>
-        <div className={style.colHalf}>
-          <section className={style.editSection}>
-            <TextInput
-              label="Epost"
-              placeholder=""
-              value={event.organizerEmail.editValue}
-              onChange={organizerEmail =>
-                updateEvent({
-                  ...event,
-                  organizerEmail: validateHost(organizerEmail),
-                })
-              }
-            />
-            <ValidationResult validationResult={event.organizerEmail.errors} />
-          </section>
-        </div>
+      <ValidationResult validationResult={event.title.errors} />
+      <div className={style.organizerContainer}>
+        <section className={style.editSection}>
+          <TextInput
+            label="Navn på arrangør"
+            placeholder=""
+            value={event.organizerName.editValue}
+            onChange={organizerName =>
+              updateEvent({
+                ...event,
+                organizerName: validateHost(organizerName),
+              })
+            }
+          />
+        </section>
+        <section className={style.editSection}>
+          <TextInput
+            label="Epost arrangør"
+            placeholder=""
+            value={event.organizerEmail.editValue}
+            onChange={organizerEmail =>
+              updateEvent({
+                ...event,
+                organizerEmail: validateHost(organizerEmail),
+              })
+            }
+          />
+        </section>
       </div>
+      <ValidationResult validationResult={event.organizerName.errors} />
+      <ValidationResult validationResult={event.organizerEmail.errors} />
       <section className={style.editSection}>
         <TextInput
           label={'Lokasjon'}
@@ -96,8 +92,8 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
             })
           }
         />
-        <ValidationResult validationResult={event.description.errors} />
       </section>
+      <ValidationResult validationResult={event.description.errors} />
       <section className={style.editSection}>
         <DateTimeInput
           label={'Starter'}
@@ -146,8 +142,8 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
             })
           }
         />
-        <ValidationResult validationResult={event.maxParticipants.errors} />
       </section>
+      <ValidationResult validationResult={event.maxParticipants.errors} />
     </>
   );
 };

@@ -1,14 +1,15 @@
+@import 'src/style/constants';
+
 .editSection {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
 }
 
-.numberEdit {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-}
-
-.colHalf {
-  width: 49%;
+.organizerContainer {
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-width: $mobileMaxWidth) {
+    flex-direction: column;
+  }
 }

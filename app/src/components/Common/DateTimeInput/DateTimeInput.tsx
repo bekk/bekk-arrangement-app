@@ -13,17 +13,19 @@ interface IProps {
 export const DateTimeInput = ({ label, value, onChange }: IProps) => {
   return (
     <section className={style.grid}>
-        <label className={style.label}>{label}</label>
-      <DateInput
-        value={value.date}
-        onChange={date => {
-          onChange({ date, time: value.time });
-        }}
-      />
-      <TimeInput
-        value={value.time}
-        onChange={time => onChange({ date: value.date, time })}
-      />
+      <label className={style.label}>{label}</label>
+      <div className={style.container}>
+        <DateInput
+          value={value.date}
+          onChange={date => {
+            onChange({ date, time: value.time });
+          }}
+        />
+        <TimeInput
+          value={value.time}
+          onChange={time => onChange({ date: value.date, time })}
+        />
+      </div>
     </section>
   );
 };
