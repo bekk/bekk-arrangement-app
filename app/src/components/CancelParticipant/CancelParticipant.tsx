@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
@@ -13,7 +13,7 @@ export const CancelParticipantContainer = () => {
     if (eventId && participantEmail) {
       const deleted = await deleteParticipant(eventId, participantEmail);
       if (deleted.ok) {
-          setWasDeleted(true);
+        setWasDeleted(true);
       }
     }
   };

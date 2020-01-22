@@ -37,7 +37,10 @@ export const validateDate = (date: string): Result<string, IDate> => {
 };
 
 export const dateAsText = (date: IDate) => {
-  return format(new Date(date.year, date.month, date.day), 'cccc, i MMMM yyyy');
+  return format(
+    new Date(Date.UTC(date.year, date.month - 1, date.day)),
+    'cccc, dd MMMM yyyy'
+  );
 };
 
 export const isSameDate = (date: IDate, otherDate: IDate) => {

@@ -1,5 +1,16 @@
+@import 'src/style/constants';
+
 .grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-column-gap: 40px;
+  grid-template-columns: 2fr 3fr 1fr;
+}
+
+.label {
+  padding-right: 24px;
+  white-space: nowrap;
+  color: var(--textColor);
+  font-size: $subheaderDesktop;
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $subheaderMobile;
+  }
 }

@@ -21,6 +21,7 @@
     "react-scripts": "3.2.0",
     "typescript": "3.7.2"
   },
+  "proxy": "http://localhost:4567",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

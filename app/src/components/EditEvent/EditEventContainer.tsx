@@ -6,17 +6,21 @@ import {
   deserializeEvent,
   IEvent,
 } from 'src/types/event';
-import style from './EditEventContainer.module.scss';
 import { putEvent, getEvent } from 'src/api/arrangementSvc';
-import commonStyle from 'src/global/Common.module.scss';
+import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { Button } from '../Common/Button/Button';
+import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
+import { useAuthentication } from 'src/auth';
 
 export const EditEventContainer = () => {
+  useAuthentication();
   const { id } = useParams();
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
+  const [previewState, setPreviewState] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -41,15 +45,49 @@ export const EditEventContainer = () => {
     }
   };
 
+  const renderPreviewEvent = () => {
+    if (isOk(event)) {
+      return (
+        <>
+          <PreviewEvent event={event.validValue} />
+          <Button
+            label="Oppdater event"
+            onClick={editEventFunction}
+            disabled={false}
+          />
+          <Button
+            label="Tilbake"
+            onClick={() => setPreviewState(false)}
+            disabled={false}
+          />
+        </>
+      );
+    }
+  };
+
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
   return (
-    <article className={style.container}>
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <section className={commonStyle.subsection} onClick={editEventFunction}>
-        <button>Lagre</button>
-      </section>
-    </article>
+    <>
+      <div className={commonStyle.content}>
+        {!previewState ? (
+          <>
+            <h1>Endre event</h1>
+            <EditEvent
+              eventResult={event.editValue}
+              updateEvent={updateEvent}
+            />
+            <Button
+              label="Forhåndsvisning"
+              onClick={() => setPreviewState(true)}
+              disabled={!isOk(event)}
+            />
+          </>
+        ) : (
+          renderPreviewEvent()
+        )}
+      </div>
+    </>
   );
 };

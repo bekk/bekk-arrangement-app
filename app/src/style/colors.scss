@@ -1,0 +1,53 @@
+:root {
+  --svart: #0e0e0e;
+  --hvit: #ffffff;
+  --overskyet: #e7e7e7;
+  --overskyetKontrast: #cecece;
+  --soloppgang: #ffb88d;
+  --soloppgangKontrast: #ff8034;
+  --skyfritt: #b1e8ff;
+  --skyfrittKontrast: #43cbff;
+  --solnedgang: #ff9999;
+  --solnedgangKontrast: #ff5b5b;
+  --kveld: #e5b1ff;
+  --kveldKontrast: #8e24c9;
+  --natt: #6d7abb;
+  --nattKontrast: #162365;
+  --regn: #bccedd;
+  --regnKontrast: #7e9cb9;
+  --gul: #fff2ad;
+  --gulKontrast: #fff02b;
+  --grey: #b3b3b3;
+  --morgendis: #707070;
+
+  /* Define default color scheme for users without support for 'prefers-color-scheme' */
+  --backgroundColor: var(--svart);
+  --textColor: var(--grey);
+  --linkColor: var(--morgendis);
+  --linkColorHover: var(--hvit);
+  --fadedColor: var(--morgendis);
+  --coolColor: var(--nattKontrast);
+  --coolColorContrast: var(--hvit);
+
+  /* no-preference and perfers dark should use dark mode version */
+  @media (prefers-color-scheme: no-preference), (prefers-color-scheme: dark) {
+    --backgroundColor: var(--svart);
+    --textColor: var(--grey);
+    --linkColor: var(--morgendis);
+    --linkColorHover: var(--hvit);
+    --fadedColor: var(--morgendis);
+    --coolColor: var(--nattKontrast);
+    --coolColorContrast: var(--hvit);
+  }
+
+  /* USer has to specifically choose light to get the light theme */
+  // @media (prefers-color-scheme: light) {
+  //   --backgroundColor: var(--hvit);
+  //   --textColor: var(--svart);
+  //   --linkColor: var(--morgendis);
+  //   --linkColorHover: var(--svart);
+  //   --fadedColor: var(--morgendis);
+  //   --coolColor: var(--skyfritt);
+  //   --coolColorContrast: var(--svart);
+  // }
+}

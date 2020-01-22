@@ -1,3 +1,5 @@
+import { getIdToken } from 'src/auth';
+
 interface IRequest {
   host: string;
   path: string;
@@ -38,7 +40,7 @@ async function fetchAndValidate(
   path: string,
   body?: any
 ) {
-  const token = 'no token yet';
+  const token = getIdToken();
   const url = `${host}${path}`;
   const response = await fetch(
     url,
