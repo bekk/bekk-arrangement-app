@@ -45,7 +45,7 @@ export const PreviewEvent = ({ event }: IProps) => {
       <div>{dateElement(event.start, 'Starter')}</div>
       <div>{dateElement(event.end, 'Slutter')}</div>
       <div>{dateElement(event.openForRegistration, 'Påmeldingen åpner')}</div>
-      <p>{dataEntry(event.maxParticipants, 'Maks antall')}</p>
+      <div>{dataEntry(event.maxParticipants, 'Maks antall')}</div>
     </>
   );
 };
