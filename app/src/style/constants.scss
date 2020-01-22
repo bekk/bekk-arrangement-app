@@ -12,3 +12,5 @@ $subheaderDesktop: 30px;
 $subheaderMobile: 16px;
 $textDesktop: 22px;
 $textMobile: 12px;
+
+$desktop: 'only screen and (min-width: #{$mobileMaxWidth})';

@@ -10,10 +10,10 @@
   white-space: nowrap;
   color: var(--textColor);
   align-self: center;
-  font-size: $textDesktop;
+  font-size: $textMobile;
   font-family: $fontLight;
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $textMobile;
+  @media #{$desktop} {
+    font-size: $textDesktop;
   }
 }
 

@@ -12,8 +12,8 @@
   color: var(--overskyet);
   align-self: center;
   font-family: $fontLight;
-  font-size: $textDesktop;
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $textMobile;
+  font-size: $textMobile;
+  @media #{$desktop} {
+    font-size: $textDesktop;
   }
 }

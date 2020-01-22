@@ -9,7 +9,8 @@
 .organizerContainer {
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: $mobileMaxWidth) {
-    flex-direction: column;
+  flex-direction: column;
+  @media #{$desktop} {
+    flex-direction: row;
   }
 }

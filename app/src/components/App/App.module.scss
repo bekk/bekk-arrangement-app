@@ -10,9 +10,9 @@
   height: 100%;
   background-color: var(--backgroundColor);
   font-family: $fontRegular;
-  font-size: $textDesktop;
+  font-size: $textMobile;
   color: var(--textColor);
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $textMobile;
+  @media #{$desktop} {
+    font-size: $textDesktop;
   }
 }

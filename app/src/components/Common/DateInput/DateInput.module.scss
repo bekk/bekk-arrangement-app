@@ -6,13 +6,13 @@
   border-color: var(--textColor);
   color: var(--textColor);
   background-color: var(--backgroundColor);
-  font-size: $textDesktop;
   padding: 10px;
   display: block;
-  width: 170px;
+  width: 100px;
   font-family: $fontLight;
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $textMobile;
-    width: 100px;
+  font-size: $textMobile;
+  @media #{$desktop} {
+    font-size: $textDesktop;
+    width: 170px;
   }
 }

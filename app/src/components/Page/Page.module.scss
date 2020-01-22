@@ -1,6 +1,8 @@
+@import 'src/style/constants';
+
 .content {
-  width: 50%;
-  @media (max-width: 1200px) {
-    width: 90%;
+  width: 90%;
+  @media #{$desktop} {
+    width: 50%;
   }
 }
