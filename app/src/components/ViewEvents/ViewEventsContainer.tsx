@@ -57,7 +57,7 @@ export const ViewEventsContainer = () => {
   return (
     <Page>
       <div className={style.header}>
-        <h1>Events</h1>
+        <h1 className={style.headerText}>Events</h1>
         <AddEventButton />
       </div>
       <div>

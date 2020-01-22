@@ -42,7 +42,7 @@ export const ViewEventContainer = () => {
   }
   return (
     <Page>
-      <h1>{event.title}</h1>
+      <h1 className={style.header}>{event.title}</h1>
       <DateSection startDate={event.start} endDate={event.end} />
       <div>Location: {event.location}</div>
       <div className={style.subsection}>{event.description}</div>

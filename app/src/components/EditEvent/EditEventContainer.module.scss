@@ -1,15 +1,6 @@
 @import 'src/style/constants';
 @import 'src/style/fonts';
 
-.subsection {
-  margin: 20px 0px;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-}
-
 .header {
   font-size: $headerMobile;
   font-family: $serifFontRegular;

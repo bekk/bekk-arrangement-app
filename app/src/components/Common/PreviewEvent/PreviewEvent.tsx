@@ -31,7 +31,7 @@ export const PreviewEvent = ({ event }: IProps) => {
 
   return (
     <>
-      <h1>Forhåndsvisning av event</h1>
+      <h1 className={style.header}>Forhåndsvisning av event</h1>
       <p>{event.title}</p>
       <p>
         {event.organizerName} - {event.organizerEmail}

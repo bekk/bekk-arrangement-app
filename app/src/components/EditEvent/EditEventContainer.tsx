@@ -14,6 +14,7 @@ import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
+import style from './EditEventContainer.module.scss';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -70,7 +71,7 @@ export const EditEventContainer = () => {
 
   return !previewState ? (
     <Page>
-      <h1>Endre event</h1>
+      <h1 className={style.header}>Endre event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <Button
         label="Forhåndsvisning"
