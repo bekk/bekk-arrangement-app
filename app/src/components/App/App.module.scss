@@ -1,0 +1,18 @@
+@import 'src/style/colors';
+@import 'src/style/fonts';
+@import 'src/style/constants';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--backgroundColor);
+  font-family: $fontRegular;
+  font-size: $textDesktop;
+  color: var(--textColor);
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $textMobile;
+  }
+}

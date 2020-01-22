@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
+import { Page } from '../Page/Page';
+import { Button } from '../Common/Button/Button';
 
 export const CancelParticipantContainer = () => {
   const { eventId, participantEmail } = useParams();
@@ -19,13 +20,13 @@ export const CancelParticipantContainer = () => {
   };
 
   return (
-    <article className={commonStyle.container}>
+    <Page>
       <section>
-        <button onClick={cancelParticipant}>Meld av</button>
+        <Button onClick={cancelParticipant}>Meld av</Button>
         {wasDeleted && (
           <div>{`Du er nå avmeldt arrangementet ${event.title}.`}</div>
         )}
       </section>
-    </article>
+    </Page>
   );
 };

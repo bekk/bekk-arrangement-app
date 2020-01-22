@@ -7,13 +7,13 @@ import {
   IEvent,
 } from 'src/types/event';
 import { putEvent, getEvent } from 'src/api/arrangementSvc';
-import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
-import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { EditEvent } from './EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
+import { Page } from '../Page/Page';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -48,7 +48,7 @@ export const EditEventContainer = () => {
   const renderPreviewEvent = () => {
     if (isOk(event)) {
       return (
-        <>
+        <Page>
           <PreviewEvent event={event.validValue} />
           <Button
             label="Oppdater event"
@@ -60,7 +60,7 @@ export const EditEventContainer = () => {
             onClick={() => setPreviewState(false)}
             disabled={false}
           />
-        </>
+        </Page>
       );
     }
   };
@@ -68,26 +68,17 @@ export const EditEventContainer = () => {
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  return (
-    <>
-      <div className={commonStyle.content}>
-        {!previewState ? (
-          <>
-            <h1>Endre event</h1>
-            <EditEvent
-              eventResult={event.editValue}
-              updateEvent={updateEvent}
-            />
-            <Button
-              label="Forhåndsvisning"
-              onClick={() => setPreviewState(true)}
-              disabled={!isOk(event)}
-            />
-          </>
-        ) : (
-          renderPreviewEvent()
-        )}
-      </div>
-    </>
+  return !previewState ? (
+    <Page>
+      <h1>Endre event</h1>
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <Button
+        label="Forhåndsvisning"
+        onClick={() => setPreviewState(true)}
+        disabled={!isOk(event)}
+      />
+    </Page>
+  ) : (
+    renderPreviewEvent() || null
   );
 };

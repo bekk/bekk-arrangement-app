@@ -1,0 +1,23 @@
+@import 'src/style/colors';
+
+.plus {
+  align-self: center;
+  width: 37px;
+  height: 37px;
+  border: solid 1px;
+  border-color: var(--textColor);
+  transition: fill 0.1s ease;
+  rect {
+    transition: transform 0.5s;
+    transform: translateY(100%);
+    fill: var(--natt);
+  }
+  &:hover rect {
+    transform: translateY(0%);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}

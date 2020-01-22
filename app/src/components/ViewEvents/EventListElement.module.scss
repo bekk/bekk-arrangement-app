@@ -1,0 +1,19 @@
+@import 'src/style/colors';
+@import 'src/style/constants';
+@import 'src/style/fonts';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--overskyet);
+  align-self: center;
+  font-family: $fontLight;
+  font-size: $textDesktop;
+  @media screen and (max-width: $mobileMaxWidth) {
+    font-size: $textMobile;
+  }
+}

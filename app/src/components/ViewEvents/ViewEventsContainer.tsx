@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import commonStyle from 'src/style/Common.module.scss';
+import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
 import { getViewEventRoute, createRoute } from 'src/routing';
 import { getEvents, deleteEvent } from 'src/api/arrangementSvc';
@@ -13,6 +13,7 @@ import {
 } from 'src/types/event';
 import { isOk, Result } from 'src/types/validation';
 import { Link } from 'react-router-dom';
+import { Page } from '../Page/Page';
 
 const toParsedEventsMap = (
   events: WithId<IEventContract>[]
@@ -54,9 +55,11 @@ export const ViewEventsContainer = () => {
   const eventsKeys = Array.from(events.keys());
 
   return (
-    <div className={commonStyle.content}>
-      <h1>Events</h1>
-      <AddEventButton />
+    <Page>
+      <div className={style.header}>
+        <h1>Events</h1>
+        <AddEventButton />
+      </div>
       <div>
         {eventsKeys.map(x => {
           const eventFromMap = events.get(x);
@@ -72,13 +75,13 @@ export const ViewEventsContainer = () => {
           return <div>Event with id {x} is no gooooood </div>;
         })}
       </div>
-    </div>
+    </Page>
   );
 };
 
 const AddEventButton = () => {
   return (
-    <div className={commonStyle.plus}>
+    <div className={style.plus}>
       <Link to={createRoute}>
         {/* <img src={plusIcon} alt={'plus'} /> */}
         <PlusIconComponent />

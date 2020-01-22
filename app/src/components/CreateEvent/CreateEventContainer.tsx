@@ -6,15 +6,15 @@ import {
   parseEvent,
   IEvent,
 } from 'src/types/event';
-import commonStyle from 'src/style/Common.module.scss';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { getViewEventRoute } from 'src/routing';
-import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
+import { Page } from '../Page/Page';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -40,7 +40,7 @@ export const CreateEventContainer = () => {
   const renderPreviewEvent = () => {
     if (isOk(event)) {
       return (
-        <>
+        <Page>
           <PreviewEvent event={event.validValue} />
           <Button label="Opprett event" onClick={addEvent} disabled={false} />
           <Button
@@ -48,26 +48,22 @@ export const CreateEventContainer = () => {
             onClick={() => setPreviewState(false)}
             disabled={false}
           />
-        </>
+        </Page>
       );
     }
   };
 
-  return (
-    <div className={commonStyle.content}>
-      {!previewState ? (
-        <>
-          <h1>Opprett event</h1>
-          <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-          <Button
-            label="Forhåndsvisning"
-            onClick={() => setPreviewState(true)}
-            disabled={!isOk(event)}
-          />
-        </>
-      ) : (
-        renderPreviewEvent()
-      )}
-    </div>
+  return !previewState ? (
+    <Page>
+      <h1>Opprett event</h1>
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <Button
+        label="Forhåndsvisning"
+        onClick={() => setPreviewState(true)}
+        disabled={!isOk(event)}
+      />
+    </Page>
+  ) : (
+    renderPreviewEvent() || null
   );
 };
