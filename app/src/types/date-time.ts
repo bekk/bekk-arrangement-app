@@ -1,4 +1,4 @@
-import { IDate, parseDate, deserializeDate, validateDate } from './date';
+import { IDate, parseDate, validateDate, deserializeDate } from './date';
 import { ITime, validateTime, stringifyTime, parseTime } from './time';
 import { isOk, Result } from './validation';
 import { isAfter } from 'date-fns';

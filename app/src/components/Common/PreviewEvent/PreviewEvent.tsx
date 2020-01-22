@@ -2,6 +2,8 @@ import React from 'react';
 import { IEvent } from 'src/types/event';
 import style from './PreviewEvent.module.scss';
 import { IDateTime } from 'src/types/date-time';
+import { stringifyTime } from 'src/types/time';
+import { stringifyDate } from 'src/types/date';
 
 interface IProps {
   event: IEvent;
@@ -9,17 +11,11 @@ interface IProps {
 
 export const PreviewEvent = ({ event }: IProps) => {
   const dateElement = (date: IDateTime, label: string) => {
-    const { day, month, year } = date.date;
-    const { hour, minute } = date.time;
     return (
       <dl className={style.dataEntry}>
         <dt>{label}</dt>
-        <dd>
-          {day}.{month}.{year}
-        </dd>
-        <dd>
-          {hour}:{minute}
-        </dd>
+        <dd>{stringifyDate(date.date)}</dd>
+        <dd>{stringifyTime(date.time)}</dd>
       </dl>
     );
   };
