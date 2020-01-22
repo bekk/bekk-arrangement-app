@@ -8,7 +8,7 @@
   background-color: var(--backgroundColor);
   padding: 10px;
   display: block;
-  width: 100px;
+  width: 100%;
   font-family: $fontLight;
   font-size: $textMobile;
   @media #{$desktop} {

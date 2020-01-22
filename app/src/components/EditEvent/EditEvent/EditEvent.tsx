@@ -24,22 +24,20 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
   console.log(event);
   return (
     <>
-      <section className={style.editSection}>
-        <TextInput
-          label={'Tittel'}
-          placeholder=""
-          value={event.title.editValue}
-          onChange={title =>
-            updateEvent({
-              ...event,
-              title: validateTitle(title),
-            })
-          }
-        />
-      </section>
+      <TextInput
+        label={'Tittel'}
+        placeholder=""
+        value={event.title.editValue}
+        onChange={title =>
+          updateEvent({
+            ...event,
+            title: validateTitle(title),
+          })
+        }
+      />
       <ValidationResult validationResult={event.title.errors} />
       <div className={style.organizerContainer}>
-        <section className={style.editSection}>
+        <div>
           <TextInput
             label="Navn på arrangør"
             placeholder=""
@@ -51,8 +49,9 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
               })
             }
           />
-        </section>
-        <section className={style.editSection}>
+          <ValidationResult validationResult={event.organizerName.errors} />
+        </div>
+        <div>
           <TextInput
             label="Epost arrangør"
             placeholder=""
@@ -64,85 +63,72 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
               })
             }
           />
-        </section>
+          <ValidationResult validationResult={event.organizerEmail.errors} />
+        </div>
       </div>
-      <ValidationResult validationResult={event.organizerName.errors} />
-      <ValidationResult validationResult={event.organizerEmail.errors} />
-      <section className={style.editSection}>
-        <TextInput
-          label={'Lokasjon'}
-          placeholder=""
-          value={event.location}
-          onChange={location =>
-            updateEvent({
-              ...event,
-              location: location,
-            })
-          }
-        />
-      </section>
-      <section className={style.editSection}>
-        <TextArea
-          label={'Beskrivelse'}
-          value={event.description.editValue}
-          onChange={description =>
-            updateEvent({
-              ...event,
-              description: validateDescription(description),
-            })
-          }
-        />
-      </section>
+      <TextInput
+        label={'Lokasjon'}
+        placeholder=""
+        value={event.location}
+        onChange={location =>
+          updateEvent({
+            ...event,
+            location: location,
+          })
+        }
+      />
+      <TextArea
+        label={'Beskrivelse'}
+        value={event.description.editValue}
+        onChange={description =>
+          updateEvent({
+            ...event,
+            description: validateDescription(description),
+          })
+        }
+      />
       <ValidationResult validationResult={event.description.errors} />
-      <section className={style.editSection}>
-        <DateTimeInput
-          label={'Starter'}
-          value={event.start.editValue}
-          onChange={start =>
-            updateEvent({
-              ...event,
-              start: validateDateTime(start),
-            })
-          }
-        />
-      </section>
-      <section className={style.editSection}>
-        <DateTimeInput
-          label={'Slutter'}
-          value={event.end.editValue}
-          onChange={end =>
-            updateEvent({
-              ...event,
-              end: validateDateTime(end),
-            })
-          }
-        />
-      </section>
-      <section className={style.editSection}>
-        <DateTimeInput
-          label={'Påmelding åpner'}
-          value={event.openForRegistration.editValue}
-          onChange={openForRegistration =>
-            updateEvent({
-              ...event,
-              openForRegistration: validateDateTime(openForRegistration),
-            })
-          }
-        />
-      </section>
-      <section className={classNames(style.editSection, style.numberEdit)}>
-        <TextInput
-          label={'Maks antall'}
-          placeholder=""
-          value={event.maxParticipants.editValue}
-          onChange={maxParticipants =>
-            updateEvent({
-              ...event,
-              maxParticipants: validateMaxAttendees(maxParticipants),
-            })
-          }
-        />
-      </section>
+      <DateTimeInput
+        label={'Starter'}
+        value={event.start.editValue}
+        onChange={start =>
+          updateEvent({
+            ...event,
+            start: validateDateTime(start),
+          })
+        }
+      />
+      <DateTimeInput
+        label={'Slutter'}
+        value={event.end.editValue}
+        onChange={end =>
+          updateEvent({
+            ...event,
+            end: validateDateTime(end),
+          })
+        }
+      />
+      <DateTimeInput
+        label={'Påmelding åpner'}
+        value={event.openForRegistration.editValue}
+        onChange={openForRegistration =>
+          updateEvent({
+            ...event,
+            openForRegistration: validateDateTime(openForRegistration),
+          })
+        }
+      />
+      <TextInput
+        label={'Maks antall'}
+        placeholder=""
+        value={event.maxParticipants.editValue}
+        onChange={maxParticipants =>
+          updateEvent({
+            ...event,
+            maxParticipants: validateMaxAttendees(maxParticipants),
+          })
+        }
+      />
       <ValidationResult validationResult={event.maxParticipants.errors} />
     </>
   );

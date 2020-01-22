@@ -2,6 +2,8 @@
 @import 'src/style/fonts';
 
 .textLabel {
+  display: block;
+  margin-top: 20px;
   color: var(--textColor);
   padding-bottom: 5px;
   font-family: $fontLight;
@@ -12,6 +14,7 @@
 }
 
 .textInput {
+  width: 100%;
   border: solid 1px;
   border-color: var(--textColor);
   color: var(--textColor);
