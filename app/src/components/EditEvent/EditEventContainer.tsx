@@ -51,16 +51,12 @@ export const EditEventContainer = () => {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
-          <Button
-            label="Oppdater event"
-            onClick={editEventFunction}
-            disabled={false}
-          />
-          <Button
-            label="Tilbake"
-            onClick={() => setPreviewState(false)}
-            disabled={false}
-          />
+          <Button onClick={editEventFunction} disabled={false}>
+            Oppdater event
+          </Button>
+          <Button onClick={() => setPreviewState(false)} disabled={false}>
+            Tilbake
+          </Button>
         </Page>
       );
     }
@@ -73,11 +69,9 @@ export const EditEventContainer = () => {
     <Page>
       <h1 className={style.header}>Endre event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <Button
-        label="Forhåndsvisning"
-        onClick={() => setPreviewState(true)}
-        disabled={!isOk(event)}
-      />
+      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        Forhåndsvisning
+      </Button>
     </Page>
   ) : (
     renderPreviewEvent() || null

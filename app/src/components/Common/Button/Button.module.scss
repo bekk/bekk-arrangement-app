@@ -5,12 +5,11 @@
   margin: 20px 0px;
   height: 60px;
   background-color: var(--overskyet);
-  .buttonLabel {
-    @include regularText;
-    color: var(--svart);
-  }
+  @include regularText;
+  color: var(--svart);
   &:hover {
-    background-color: var(--overskyetKontrast);
+    background-color: var(--svart);
+    color: var(--overskyet);
     cursor: pointer;
   }
   &:focus {

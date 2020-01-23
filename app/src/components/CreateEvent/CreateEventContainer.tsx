@@ -42,12 +42,12 @@ export const CreateEventContainer = () => {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
-          <Button label="Opprett event" onClick={addEvent} disabled={false} />
-          <Button
-            label="Tilbake"
-            onClick={() => setPreviewState(false)}
-            disabled={false}
-          />
+          <Button onClick={addEvent} disabled={false}>
+            Opprett event
+          </Button>
+          <Button onClick={() => setPreviewState(false)} disabled={false}>
+            Tilbake
+          </Button>
         </Page>
       );
     }
@@ -57,11 +57,9 @@ export const CreateEventContainer = () => {
     <Page>
       <h1>Opprett event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <Button
-        label="Forhåndsvisning"
-        onClick={() => setPreviewState(true)}
-        disabled={!isOk(event)}
-      />
+      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        Forhåndsvisning
+      </Button>
     </Page>
   ) : (
     renderPreviewEvent() || null
