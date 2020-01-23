@@ -9,7 +9,7 @@ import {
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
-import { getViewEventRoute } from 'src/routing';
+import { getViewEventRoute, eventsRoute } from 'src/routing';
 import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
@@ -35,32 +35,41 @@ export const CreateEventContainer = () => {
     }
   };
 
+  const goToOverview = () => history.push(eventsRoute);
+
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const renderPreviewEvent = () => {
-    if (isOk(event)) {
-      return (
-        <Page>
-          <PreviewEvent event={event.validValue} />
-          <div className={style.buttonContainer}>
-            <Button onClick={addEvent}>Opprett event</Button>
-            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
-          </div>
-        </Page>
-      );
-    }
-  };
+  const PreviewView = ({ validEvent }: { validEvent: IEvent }) => (
+    <>
+      <PreviewEvent event={validEvent} />
+      <div className={style.buttonContainer}>
+        <Button onClick={addEvent}>Opprett event</Button>
+        <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+      </div>
+    </>
+  );
 
-  return !previewState ? (
-    <Page>
+  const CreateView = ({ isInvalid }: { isInvalid: boolean }) => (
+    <>
       <h1 className={style.header}>Opprett event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
-        Forhåndsvisning
-      </Button>
+      <div className={style.buttonContainer}>
+        <Button onClick={() => setPreviewState(true)} disabled={isInvalid}>
+          Forhåndsvisning
+        </Button>
+        <Button onClick={goToOverview}>Avbryt</Button>
+      </div>
+    </>
+  );
+
+  return (
+    <Page>
+      {previewState && isOk(event) ? (
+        <PreviewView validEvent={event.validValue} />
+      ) : (
+        <CreateView isInvalid={!isOk(event)} />
+      )}
     </Page>
-  ) : (
-    renderPreviewEvent() || null
   );
 };

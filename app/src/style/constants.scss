@@ -29,7 +29,7 @@ $desktop: 'only screen and (min-width: #{$mobileMaxWidth})';
 }
 
 @mixin headerText {
-  color: var(--textColor);
+  color: var(--headerColor);
   font-size: $headerMobile;
   font-family: $serifFontRegular;
   @media #{$desktop} {

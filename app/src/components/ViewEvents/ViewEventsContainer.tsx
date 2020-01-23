@@ -83,7 +83,6 @@ const AddEventButton = () => {
   return (
     <div className={style.plus}>
       <Link to={createRoute}>
-        {/* <img src={plusIcon} alt={'plus'} /> */}
         <PlusIconComponent />
       </Link>
     </div>
