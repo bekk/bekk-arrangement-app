@@ -51,12 +51,10 @@ export const EditEventContainer = () => {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
-          <Button onClick={editEventFunction} disabled={false}>
-            Oppdater event
-          </Button>
-          <Button onClick={() => setPreviewState(false)} disabled={false}>
-            Tilbake
-          </Button>
+          <div className={style.buttonContainer}>
+            <Button onClick={editEventFunction}>Oppdater event</Button>
+            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+          </div>
         </Page>
       );
     }

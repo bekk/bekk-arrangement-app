@@ -5,7 +5,6 @@ import { ValidationResult } from 'src/components/Common/ValidationResult/Validat
 import { IEditEvent } from 'src/types/event';
 import style from './EditEvent.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
-import classNames from 'classnames';
 import {
   validateTitle,
   validateDescription,

@@ -15,6 +15,7 @@ import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
+import style from './CreateEventContainer.module.scss';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -42,12 +43,10 @@ export const CreateEventContainer = () => {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
-          <Button onClick={addEvent} disabled={false}>
-            Opprett event
-          </Button>
-          <Button onClick={() => setPreviewState(false)} disabled={false}>
-            Tilbake
-          </Button>
+          <div className={style.buttonContainer}>
+            <Button onClick={addEvent}>Opprett event</Button>
+            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+          </div>
         </Page>
       );
     }
@@ -55,7 +54,7 @@ export const CreateEventContainer = () => {
 
   return !previewState ? (
     <Page>
-      <h1>Opprett event</h1>
+      <h1 className={style.header}>Opprett event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
         Forhåndsvisning
