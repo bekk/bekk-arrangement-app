@@ -1,5 +1,4 @@
 @import 'src/style/constants';
-@import 'src/style/fonts';
 
 .previewContainer {
   width: 60%;
@@ -15,9 +14,5 @@
 }
 
 .header {
-  font-size: $headerMobile;
-  font-family: $serifFontRegular;
-  @media #{$desktop} {
-    font-size: $headerDesktop;
-  }
+  @include headerText;
 }

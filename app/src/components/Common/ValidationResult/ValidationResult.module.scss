@@ -1,12 +1,7 @@
 @import 'src/style/constants';
-@import 'src/style/fonts';
 
 .validation {
   margin-top: 10px;
   line-height: 1.2;
-  font-size: $smallMobile;
-  font-family: $fontLight;
-  @media #{$desktop} {
-    font-size: $smallDesktop;
-  }
+  @include smallText;
 }

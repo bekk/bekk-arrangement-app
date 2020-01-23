@@ -6,11 +6,8 @@
   height: 60px;
   background-color: var(--overskyet);
   .buttonLabel {
+    @include regularText;
     color: var(--svart);
-    font-size: $textMobile;
-    @media #{$desktop} {
-      font-size: $textDesktop;
-    }
   }
   &:hover {
     background-color: var(--overskyetKontrast);

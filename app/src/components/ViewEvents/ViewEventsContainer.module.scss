@@ -1,6 +1,4 @@
-@import 'src/style/colors';
 @import 'src/style/constants';
-@import 'src/style/fonts';
 
 .plus {
   align-self: center;
@@ -25,9 +23,5 @@
 }
 
 .headerText {
-  font-size: $headerMobile;
-  font-family: $serifFontRegular;
-  @media #{$desktop} {
-    font-size: $headerDesktop;
-  }
+  @include headerText;
 }

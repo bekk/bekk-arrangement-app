@@ -4,15 +4,12 @@
 .dateInput {
   border: solid 1px;
   border-color: var(--textColor);
-  color: var(--textColor);
   background-color: var(--backgroundColor);
   padding: 10px;
   display: block;
   width: 100%;
-  font-family: $fontLight;
-  font-size: $textMobile;
+  @include regularText;
   @media #{$desktop} {
-    font-size: $textDesktop;
     width: 170px;
   }
 }

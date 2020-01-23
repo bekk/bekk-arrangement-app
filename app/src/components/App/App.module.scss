@@ -1,5 +1,3 @@
-@import 'src/style/colors';
-@import 'src/style/fonts';
 @import 'src/style/constants';
 
 .container {
@@ -9,10 +7,6 @@
   width: 100%;
   height: 100%;
   background-color: var(--backgroundColor);
+  @include regularText;
   font-family: $fontRegular;
-  font-size: $textMobile;
-  color: var(--textColor);
-  @media #{$desktop} {
-    font-size: $textDesktop;
-  }
 }

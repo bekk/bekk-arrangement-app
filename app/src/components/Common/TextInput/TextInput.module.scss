@@ -1,29 +1,18 @@
 @import 'src/style/constants';
-@import 'src/style/fonts';
 
 .textLabel {
   display: block;
   margin-top: 20px;
-  color: var(--textColor);
   padding-bottom: 5px;
-  font-family: $fontLight;
-  font-size: $textMobile;
-  @media #{$desktop} {
-    font-size: $textDesktop;
-  }
+  @include regularText;
 }
 
 .textInput {
   width: 100%;
   border: solid 1px;
   border-color: var(--textColor);
-  color: var(--textColor);
   background-color: var(--backgroundColor);
   padding: 10px;
   display: block;
-  font-family: $fontLight;
-  font-size: $textMobile;
-  @media #{$desktop} {
-    font-size: $textDesktop;
-  }
+  @include regularText;
 }

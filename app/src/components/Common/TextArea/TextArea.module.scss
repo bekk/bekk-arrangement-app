@@ -4,26 +4,16 @@
 .textLabel {
   display: block;
   margin-top: 20px;
-  color: var(--textColor);
-  font-family: $fontLight;
   padding-bottom: 5px;
-  font-size: $textMobile;
-  @media #{$desktop} {
-    font-size: $textDesktop;
-  }
+  @include regularText;
 }
 
 .textArea {
   width: 100%;
   border: solid 1px;
   border-color: var(--textColor);
-  color: var(--textColor);
   background-color: var(--backgroundColor);
-  font-size: $textMobile;
   padding: 10px;
   display: block;
-  font-family: $fontLight;
-  @media #{$desktop} {
-    font-size: $textDesktop;
-  }
+  @include regularText;
 }

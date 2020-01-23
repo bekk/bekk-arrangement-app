@@ -9,11 +9,7 @@
 
 .link {
   text-decoration: none;
-  color: var(--overskyet);
   align-self: center;
-  font-family: $fontLight;
-  font-size: $textMobile;
-  @media #{$desktop} {
-    font-size: $textDesktop;
-  }
+  @include regularText;
+  color: var(--overskyet);
 }

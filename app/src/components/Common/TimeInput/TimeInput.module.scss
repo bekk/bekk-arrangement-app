@@ -1,18 +1,13 @@
 @import 'src/style/constants';
-@import 'src/style/fonts';
 
 .timeInput {
   border: none;
   outline: 0;
-  color: var(--textColor);
   background-color: var(--backgroundColor);
   text-align: center;
-  font-family: $fontLight;
   width: 30px;
-  font-size: $textDesktop;
-  font-size: $textMobile;
+  @include regularText;
   @media #{$desktop} {
-    font-size: $textDesktop;
     width: 70px;
   }
 }
