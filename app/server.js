@@ -30,6 +30,9 @@ app.get('/health', (request, response) => {
 app.get('/config', (request, response) =>
   response.send({
     bekkApiUrl: process.env.BEKK_API_URL || 'https://api.dev.bekk.no',
+    arrangementSvcUrl:
+      process.env.ARRANGEMENT_SVC_URL ||
+      'https://api.dev.bekk.no/arrangement-svc',
     audience: process.env.AUTH0_AUDIENCE || 'QHQy75S7tmnhDdBGYSnszzlhMPul0fAE',
     issuerDomain: process.env.AUTH0_ISSUER_DOMAIN || 'bekk-dev.eu.auth0.com',
     scopes: process.env.SCOPES || 'openid name groups',

@@ -1,1 +1,6 @@
-[]
+[
+  {
+    "name": "ARRANGEMENT_SVC_URL",
+    "value": "https://api.dev.bekk.no/arrangement-svc"
+  }
+]
