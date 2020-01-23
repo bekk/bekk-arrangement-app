@@ -11,7 +11,7 @@ import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
+import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
