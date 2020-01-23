@@ -55,3 +55,8 @@ export const deserializeDate = ({ year, month, day }: IDate) =>
   `${year}-${month.toString().padStart(2, '0')}-${day
     .toString()
     .padStart(2, '0')}`;
+
+export const stringifyDate = ({ year, month, day }: IDate) =>
+  `${day.toString().padStart(2, '0')}.${month
+    .toString()
+    .padStart(2, '0')}.${year}`;

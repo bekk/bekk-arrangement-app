@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import commonStyle from 'src/style/Common.module.scss';
+import style from './ViewEventContainer.module.scss';
 import { IDateTime } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
@@ -17,6 +17,8 @@ import {
 } from 'src/types/participant';
 import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
+import { Page } from '../Page/Page';
+import { Button } from '../Common/Button/Button';
 
 export const ViewEventContainer = () => {
   const { id } = useParams();
@@ -39,39 +41,29 @@ export const ViewEventContainer = () => {
     return <div>Loading</div>;
   }
   return (
-    <article>
-      <section className={commonStyle.content}>
-        <h1>{event.title}</h1>
-        <section>
-          <DateSection startDate={event.start} endDate={event.end} />
-        </section>
-        <section>Location: {event.location}</section>
-        <section className={commonStyle.subsection}>
-          {event.description}
-        </section>
-      </section>
-      <section className={commonStyle.column}>
-        <TextInput
-          label={'Email'}
-          value={participant.editValue.email}
-          placeholder={'email'}
-          onChange={(email: string) =>
-            setParticipant(
-              parseParticipant({ ...participant.editValue, email })
-            )
-          }
-        />
-        <ValidationResult validationResult={participant.errors} />
-        {timeLeft.difference > 0 ? (
-          <>
-            <button>Closed</button>
-            <p>Opens in {asString(timeLeft)}</p>
-          </>
-        ) : (
-          <button onClick={() => addParticipant()}>I am going</button>
-        )}
-      </section>
-    </article>
+    <Page>
+      <h1 className={style.header}>{event.title}</h1>
+      <DateSection startDate={event.start} endDate={event.end} />
+      <div>Location: {event.location}</div>
+      <div className={style.subsection}>{event.description}</div>
+      <TextInput
+        label={'Email'}
+        value={participant.editValue.email}
+        placeholder={'email'}
+        onChange={(email: string) =>
+          setParticipant(parseParticipant({ ...participant.editValue, email }))
+        }
+      />
+      <ValidationResult validationResult={participant.errors} />
+      {timeLeft.difference > 0 ? (
+        <>
+          <div>Closed</div>
+          <p>Opens in {asString(timeLeft)}</p>
+        </>
+      ) : (
+        <Button onClick={() => addParticipant()}>I am going</Button>
+      )}
+    </Page>
   );
 };
 

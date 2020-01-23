@@ -1,0 +1,10 @@
+@import 'src/style/constants';
+
+.organizerContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  @media #{$desktop} {
+    flex-direction: row;
+  }
+}

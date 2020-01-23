@@ -2,15 +2,16 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 2fr 3fr 1fr;
+  grid-template-columns: 2fr 3fr;
 }
 
 .label {
-  padding-right: 24px;
   white-space: nowrap;
-  color: var(--textColor);
-  font-size: $subheaderDesktop;
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $subheaderMobile;
-  }
+  align-self: center;
+  @include regularText;
+}
+
+.container {
+  display: flex;
+  justify-content: flex-end;
 }

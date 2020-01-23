@@ -1,26 +1,19 @@
 @import 'src/style/constants';
+@import 'src/style/fonts';
 
 .textLabel {
-  color: var(--textColor);
-  font-size: $subheaderDesktop;
+  display: block;
+  margin-top: 20px;
   padding-bottom: 5px;
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $subheaderMobile;
-  }
+  @include regularText;
 }
 
 .textArea {
+  width: 100%;
   border: solid 1px;
   border-color: var(--textColor);
-  color: var(--textColor);
   background-color: var(--backgroundColor);
-  font-size: $textDesktop;
   padding: 10px;
   display: block;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  @media screen and (max-width: $mobileMaxWidth) {
-    font-size: $textMobile;
-  }
+  @include regularText;
 }

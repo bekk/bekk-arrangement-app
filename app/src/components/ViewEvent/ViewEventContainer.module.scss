@@ -1,0 +1,14 @@
+@import 'src/style/constants';
+
+.subsection {
+  margin: 20px 0px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  @include headerText;
+}

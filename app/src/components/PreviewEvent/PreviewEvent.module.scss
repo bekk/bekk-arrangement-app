@@ -1,14 +1,18 @@
+@import 'src/style/constants';
+
 .previewContainer {
   width: 60%;
 }
 
 .dataEntry {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  width: 440px;
   margin: 20px 0;
   :nth-child(1) {
     width: 50%;
   }
+}
+
+.header {
+  @include headerText;
 }

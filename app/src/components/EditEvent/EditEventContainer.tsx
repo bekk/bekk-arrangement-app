@@ -7,13 +7,14 @@ import {
   IEvent,
 } from 'src/types/event';
 import { putEvent, getEvent } from 'src/api/arrangementSvc';
-import commonStyle from 'src/style/Common.module.scss';
 import { useParams } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
-import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { EditEvent } from './EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
+import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
+import { Page } from '../Page/Page';
+import style from './EditEventContainer.module.scss';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -48,19 +49,13 @@ export const EditEventContainer = () => {
   const renderPreviewEvent = () => {
     if (isOk(event)) {
       return (
-        <>
+        <Page>
           <PreviewEvent event={event.validValue} />
-          <Button
-            label="Oppdater event"
-            onClick={editEventFunction}
-            disabled={false}
-          />
-          <Button
-            label="Tilbake"
-            onClick={() => setPreviewState(false)}
-            disabled={false}
-          />
-        </>
+          <div className={style.buttonContainer}>
+            <Button onClick={editEventFunction}>Oppdater event</Button>
+            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+          </div>
+        </Page>
       );
     }
   };
@@ -68,26 +63,15 @@ export const EditEventContainer = () => {
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  return (
-    <>
-      <div className={commonStyle.content}>
-        {!previewState ? (
-          <>
-            <h1>Endre event</h1>
-            <EditEvent
-              eventResult={event.editValue}
-              updateEvent={updateEvent}
-            />
-            <Button
-              label="Forhåndsvisning"
-              onClick={() => setPreviewState(true)}
-              disabled={!isOk(event)}
-            />
-          </>
-        ) : (
-          renderPreviewEvent()
-        )}
-      </div>
-    </>
+  return !previewState ? (
+    <Page>
+      <h1 className={style.header}>Endre event</h1>
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        Forhåndsvisning
+      </Button>
+    </Page>
+  ) : (
+    renderPreviewEvent() || null
   );
 };

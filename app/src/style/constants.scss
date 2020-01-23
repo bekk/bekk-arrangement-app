@@ -1,3 +1,5 @@
+@import 'src/style/fonts';
+
 $mobileMaxWidth: 540px;
 $mobileMinWidth: 321px;
 $smallMobileWidth: 375px;
@@ -12,3 +14,34 @@ $subheaderDesktop: 30px;
 $subheaderMobile: 16px;
 $textDesktop: 22px;
 $textMobile: 12px;
+$smallMobile: 8px;
+$smallDesktop: 16px;
+
+$desktop: 'only screen and (min-width: #{$mobileMaxWidth})';
+
+@mixin regularText {
+  color: var(--textColor);
+  font-size: $textMobile;
+  font-family: $fontLight;
+  @media #{$desktop} {
+    font-size: $textDesktop;
+  }
+}
+
+@mixin headerText {
+  color: var(--textColor);
+  font-size: $headerMobile;
+  font-family: $serifFontRegular;
+  @media #{$desktop} {
+    font-size: $headerDesktop;
+  }
+}
+
+@mixin smallText {
+  color: var(--textColor);
+  font-size: $smallMobile;
+  font-family: $fontLight;
+  @media #{$desktop} {
+    font-size: $smallDesktop;
+  }
+}

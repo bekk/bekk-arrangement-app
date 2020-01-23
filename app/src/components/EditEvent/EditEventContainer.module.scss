@@ -1,0 +1,11 @@
+@import 'src/style/constants';
+
+.header {
+  @include headerText;
+}
+
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+}

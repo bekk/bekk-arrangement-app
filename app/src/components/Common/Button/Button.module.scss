@@ -1,22 +1,16 @@
 @import 'src/style/colors';
 @import 'src/style/constants';
-.buttonContainer {
-  width: 60%;
-}
 
 .button {
   margin: 20px 0px;
-  width: 31em;
-  height: 6em;
+  height: 60px;
   background-color: var(--overskyet);
-  .buttonLabel {
-    font-size: $textDesktop;
-    @media screen and (max-width: $mobileMaxWidth) {
-      font-size: $textMobile;
-    }
-  }
+  @include regularText;
+  color: var(--svart);
   &:hover {
-    background-color: var(--overskyetKontrast);
+    background-color: var(--svart);
+    color: var(--overskyet);
+    cursor: pointer;
   }
   &:focus {
     outline: 0;

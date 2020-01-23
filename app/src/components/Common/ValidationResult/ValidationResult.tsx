@@ -11,10 +11,10 @@ export const ValidationResult = ({ validationResult }: IProps) => {
   return (
     <div className={style.validation}>
       {validationResult &&
-        validationResult.map((v, index) => (
-          <small key={index}>
+        validationResult.map(v => (
+          <div key={v.message}>
             {validationTypeAsIcon(v.type)} {v.message}
-          </small>
+          </div>
         ))}
     </div>
   );

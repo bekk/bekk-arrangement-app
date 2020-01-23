@@ -79,7 +79,8 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     date: deserializeDate(event.openForRegistrationDate.date),
     time: deserializeTime(event.openForRegistrationDate.time),
   });
-  const maxParticipants = validateMaxAttendees(event.maxParticipants.toString()
+  const maxParticipants = validateMaxAttendees(
+    event.maxParticipants.toString()
   );
   return {
     ...event,
@@ -163,7 +164,7 @@ export const initialEvent: IEvent = {
 export const initialEditEvent: IEditEvent = {
   title: validateTitle('Pølsespisekonkurranse 2019'),
   description: validateDescription(
-    'Dette er informasjon om et event som du har laget med vår fantastiske app. Du er kjempeflunk, men vi er flinkere'
+    'Dette er informasjon om et event som du har laget med vår fantastiske app. Du er kjempeflink, men vi er flinkere'
   ),
   location: 'Strøm Larsens Pølsekompani',
   start: validateDateTime({

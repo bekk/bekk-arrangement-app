@@ -6,15 +6,16 @@ import {
   parseEvent,
   IEvent,
 } from 'src/types/event';
-import commonStyle from 'src/style/Common.module.scss';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { getViewEventRoute } from 'src/routing';
-import { EditEvent } from '../Common/EditEvent/EditEvent';
+import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../Common/PreviewEvent/PreviewEvent';
+import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
+import { Page } from '../Page/Page';
+import style from './CreateEventContainer.module.scss';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -40,34 +41,26 @@ export const CreateEventContainer = () => {
   const renderPreviewEvent = () => {
     if (isOk(event)) {
       return (
-        <>
+        <Page>
           <PreviewEvent event={event.validValue} />
-          <Button label="Opprett event" onClick={addEvent} disabled={false} />
-          <Button
-            label="Tilbake"
-            onClick={() => setPreviewState(false)}
-            disabled={false}
-          />
-        </>
+          <div className={style.buttonContainer}>
+            <Button onClick={addEvent}>Opprett event</Button>
+            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+          </div>
+        </Page>
       );
     }
   };
 
-  return (
-    <div className={commonStyle.content}>
-      {!previewState ? (
-        <>
-          <h1>Opprett event</h1>
-          <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-          <Button
-            label="Forhåndsvisning"
-            onClick={() => setPreviewState(true)}
-            disabled={!isOk(event)}
-          />
-        </>
-      ) : (
-        renderPreviewEvent()
-      )}
-    </div>
+  return !previewState ? (
+    <Page>
+      <h1 className={style.header}>Opprett event</h1>
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        Forhåndsvisning
+      </Button>
+    </Page>
+  ) : (
+    renderPreviewEvent() || null
   );
 };

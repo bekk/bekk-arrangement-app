@@ -2,16 +2,14 @@ import React from 'react';
 import style from './Button.module.scss';
 
 interface IProps {
-  label: string;
   onClick: () => void;
-  disabled: boolean;
+  disabled?: boolean;
+  children?: string;
 }
-export const Button = ({ label, onClick, disabled }: IProps) => {
+export const Button = ({ onClick, disabled = false, children }: IProps) => {
   return (
-    <div className={style.buttonContainer}>
-      <button className={style.button} onClick={onClick} disabled={disabled}>
-        <p className={style.buttonLabel}>{label}</p>
-      </button>
-    </div>
+    <button className={style.button} onClick={onClick} disabled={disabled}>
+      {children}
+    </button>
   );
 };

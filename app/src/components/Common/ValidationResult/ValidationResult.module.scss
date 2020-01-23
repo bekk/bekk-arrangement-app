@@ -1,5 +1,7 @@
-.textInput {
-  display: flex;
-  flex-direction: column;
-  margin: 5px 0px;
+@import 'src/style/constants';
+
+.validation {
+  margin-top: 10px;
+  line-height: 1.2;
+  @include smallText;
 }

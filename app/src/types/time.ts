@@ -38,6 +38,6 @@ export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
 export const deserializeTime = (time: ITime): EditTime => [
-  time.hour.toString(),
-  time.minute.toString(),
+  time.hour.toString().padStart(2, '0'),
+  time.minute.toString().padStart(2, '0'),
 ];
