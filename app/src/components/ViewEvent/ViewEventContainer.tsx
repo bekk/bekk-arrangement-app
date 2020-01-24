@@ -7,7 +7,7 @@ import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
 import { TextInput } from '../Common/TextInput/TextInput';
 import { useEvent } from 'src/hooks/eventHooks';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { ValidationResult } from '../Common/ValidationResult/ValidationResult';
 import {
   IParticipant,
@@ -19,6 +19,7 @@ import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
+import { getCancelParticipantRoute } from 'src/routing';
 
 export const ViewEventContainer = () => {
   const { id } = useParams();
@@ -28,13 +29,12 @@ export const ViewEventContainer = () => {
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>
   >(parseParticipant({ ...initalParticipant, eventId }));
+  const history = useHistory();
 
   const addParticipant = async () => {
     if (isOk(participant)) {
-      const addedParticipant = await postParticipant(participant.validValue);
-      alert(
-        `You are attending. Check your email, ${addedParticipant.email}, for confirmation`
-      );
+      await postParticipant(participant.validValue);
+      history.push(getCancelParticipantRoute(participant.validValue));
     }
   };
 
@@ -62,7 +62,7 @@ export const ViewEventContainer = () => {
           <p>Opens in {asString(timeLeft)}</p>
         </>
       ) : (
-        <Button onClick={() => addParticipant()}>I am going</Button>
+        <Button onClick={() => addParticipant()}>Meld meg på</Button>
       )}
     </Page>
   );

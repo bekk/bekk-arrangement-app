@@ -13,7 +13,7 @@ import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventCont
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
 import { ViewEventsContainer } from 'src/components/ViewEvents/ViewEventsContainer';
 import { EditEventContainer } from 'src/components/EditEvent/EditEventContainer';
-import { CancelParticipantContainer } from 'src/components/CancelParticipant/CancelParticipant';
+import { CancelParticipant } from 'src/components/CancelParticipant/CancelParticipant';
 import { createBrowserHistory } from 'history';
 import style from './App.module.scss';
 
@@ -39,7 +39,7 @@ export const App = () => {
             <EditEventContainer />
           </Route>
           <Route exact path={cancelParticipantRoute}>
-            <CancelParticipantContainer />
+            <CancelParticipant />
           </Route>
           <Redirect exact from={'/'} to={eventsRoute} />
         </Switch>
