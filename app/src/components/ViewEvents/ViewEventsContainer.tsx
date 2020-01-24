@@ -26,7 +26,10 @@ const toParsedEventsMap = (
   );
 };
 
-const useEvents = () => {
+const useEvents = (): [
+  Map<string, Result<IEditEvent, IEvent>>,
+  (events: Map<string, Result<IEditEvent, IEvent>>) => void
+] => {
   const [events, setEvents] = useState<
     Map<string, Result<IEditEvent, IEvent>>
   >();
@@ -40,13 +43,19 @@ const useEvents = () => {
     get();
   }, []);
 
-  return events;
+  if (events) {
+    return [events, setEvents];
+  }
+  return [new Map(), setEvents];
 };
 
 export const ViewEventsContainer = () => {
-  const events = useEvents();
+  const [events, setEvents] = useEvents();
+
   const onDeleteEvent = async (eventId: string) => {
     await deleteEvent(eventId);
+    const updatedEvents = await getEvents();
+    setEvents(toParsedEventsMap(updatedEvents));
   };
 
   if (!events) {
@@ -73,7 +82,7 @@ export const ViewEventsContainer = () => {
               />
             );
           }
-          return <div>Event with id {x} is no gooooood </div>;
+          return <div>Event with id {x} is no good </div>;
         })}
       </div>
     </Page>
