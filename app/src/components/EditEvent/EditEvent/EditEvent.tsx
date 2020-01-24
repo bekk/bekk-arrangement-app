@@ -20,7 +20,6 @@ interface IProps {
 
 export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
   const event = eventResult;
-  console.log(event);
   return (
     <>
       <TextInput

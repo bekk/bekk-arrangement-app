@@ -66,6 +66,7 @@ export const ViewEventsContainer = () => {
           if (eventFromMap !== undefined && isOk(eventFromMap)) {
             return (
               <EventListElement
+                key={x}
                 event={eventFromMap.validValue}
                 onClickRoute={getViewEventRoute(x)}
                 delEvent={() => onDeleteEvent(x)}

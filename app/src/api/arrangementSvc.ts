@@ -47,7 +47,7 @@ export const deleteEvent = async (eventId: string) => {
 export const postParticipant = async (participant: IParticipant) => {
   return await post({
     host: getArrangementSvcUrl(),
-    path: `/participant/${participant.email}/events/${participant.eventId}`,
+    path: `/participant/${participant.email.email}/events/${participant.eventId}`,
     body: {},
   }).then(response => response as IParticipantContract);
 };

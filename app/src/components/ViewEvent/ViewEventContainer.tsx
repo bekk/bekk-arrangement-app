@@ -24,9 +24,10 @@ export const ViewEventContainer = () => {
   const { id } = useParams();
   const [event] = useEvent(id);
   const timeLeft = useTimeLeft(event);
+  const eventId = id ? id : '0';
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>
-  >(parseParticipant(initalParticipant));
+  >(parseParticipant({ ...initalParticipant, eventId }));
 
   const addParticipant = async () => {
     if (isOk(participant)) {
