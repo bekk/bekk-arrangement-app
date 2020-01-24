@@ -10,16 +10,16 @@ export interface ITimeLeft {
 
 export const asString = ({ days, hours, minutes, seconds }: ITimeLeft) => {
   if (days > 0) {
-    return `${days} days, ${hours} hours and ${minutes} minutes`;
+    return `${days} dager, ${hours} timer og ${minutes} minutter`;
   }
   if (hours > 0) {
-    return `${hours} hours, ${minutes} minutes and ${seconds} seconds`;
+    return `${hours} timer, ${minutes} minutter ${seconds} sekunder`;
   }
   if (minutes > 0) {
-    return `${minutes} minutes and ${seconds} seconds`;
+    return `${minutes} minutter og ${seconds} sekunder`;
   }
   if (seconds > 0) {
-    return ` ${seconds} seconds`;
+    return ` ${seconds} sekunder`;
   }
 };
 

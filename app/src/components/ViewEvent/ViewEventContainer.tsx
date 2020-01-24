@@ -19,7 +19,7 @@ import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
-import { getCancelParticipantRoute } from 'src/routing';
+import { getCancelParticipantRoute, getViewEventRoute } from 'src/routing';
 
 export const ViewEventContainer = () => {
   const { id } = useParams();
@@ -29,6 +29,7 @@ export const ViewEventContainer = () => {
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>
   >(parseParticipant({ ...initalParticipant, eventId }));
+  const [wasCopied, setWasCopied] = useState(false);
   const history = useHistory();
 
   const addParticipant = async () => {
@@ -38,31 +39,47 @@ export const ViewEventContainer = () => {
     }
   };
 
+  const copyLink = async () => {
+    const url = document.location.host + getViewEventRoute(eventId);
+    await navigator.clipboard.writeText(url);
+    setWasCopied(true);
+  };
+
   if (!event) {
     return <div>Loading</div>;
   }
+
   return (
     <Page>
       <h1 className={style.header}>{event.title}</h1>
       <DateSection startDate={event.start} endDate={event.end} />
       <div>Location: {event.location}</div>
       <div className={style.subsection}>{event.description}</div>
-      <TextInput
-        label={'Email'}
-        value={participant.editValue.email}
-        placeholder={'email'}
-        onChange={(email: string) =>
-          setParticipant(parseParticipant({ ...participant.editValue, email }))
-        }
-      />
-      <ValidationResult validationResult={participant.errors} />
+      <div className={style.copy}>
+        <Button onClick={copyLink}>Del</Button>
+        <p className={style.text}>{wasCopied && 'URL kopiert!'}</p>
+      </div>
+      <h1 className={style.header}>Påmelding</h1>
       {timeLeft.difference > 0 ? (
         <>
-          <div>Closed</div>
-          <p>Opens in {asString(timeLeft)}</p>
+          <div>Stengt</div>
+          <p>Åpner om {asString(timeLeft)}</p>
         </>
       ) : (
-        <Button onClick={() => addParticipant()}>Meld meg på</Button>
+        <>
+          <TextInput
+            label={'Email'}
+            value={participant.editValue.email}
+            placeholder={'email'}
+            onChange={(email: string) =>
+              setParticipant(
+                parseParticipant({ ...participant.editValue, email })
+              )
+            }
+          />
+          <ValidationResult validationResult={participant.errors} />
+          <Button onClick={() => addParticipant()}>Meld meg på</Button>
+        </>
       )}
     </Page>
   );
