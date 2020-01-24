@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
-import { getViewEventRoute, createRoute } from 'src/routing';
+import { createRoute, getEditEventRoute } from 'src/routing';
 import { getEvents, deleteEvent } from 'src/api/arrangementSvc';
 import { WithId } from 'src/types';
 import {
@@ -68,7 +68,7 @@ export const ViewEventsContainer = () => {
               <EventListElement
                 key={x}
                 event={eventFromMap.validValue}
-                onClickRoute={getViewEventRoute(x)}
+                onClickRoute={getEditEventRoute(x)}
                 delEvent={() => onDeleteEvent(x)}
               />
             );

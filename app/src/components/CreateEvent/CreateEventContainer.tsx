@@ -40,18 +40,22 @@ export const CreateEventContainer = () => {
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const PreviewView = ({ validEvent }: { validEvent: IEvent }) => (
-    <>
-      <PreviewEvent event={validEvent} />
-      <div className={style.buttonContainer}>
-        <Button onClick={addEvent}>Opprett event</Button>
-        <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
-      </div>
-    </>
-  );
+  const renderPreviewEvent = () => {
+    if (isOk(event)) {
+      return (
+        <Page>
+          <PreviewEvent event={event.validValue} />
+          <div className={style.buttonContainer}>
+            <Button onClick={addEvent}>Opprett event</Button>
+            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+          </div>
+        </Page>
+      );
+    }
+  };
 
-  const CreateView = ({ isInvalid }: { isInvalid: boolean }) => (
-    <>
+  const renderCreateView = ({ isInvalid }: { isInvalid: boolean }) => (
+    <Page>
       <h1 className={style.header}>Opprett event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
@@ -60,16 +64,10 @@ export const CreateEventContainer = () => {
         </Button>
         <Button onClick={goToOverview}>Avbryt</Button>
       </div>
-    </>
-  );
-
-  return (
-    <Page>
-      {previewState && isOk(event) ? (
-        <PreviewView validEvent={event.validValue} />
-      ) : (
-        <CreateView isInvalid={!isOk(event)} />
-      )}
     </Page>
   );
+
+  return !previewState
+    ? renderCreateView({ isInvalid: !isOk(event) })
+    : renderPreviewEvent() || null;
 };
