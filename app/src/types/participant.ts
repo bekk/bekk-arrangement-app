@@ -2,7 +2,7 @@ import { Result, isOk } from './validation';
 import { validateEmail, serializeEmail, Email } from './email';
 
 export interface IParticipantContract {
-  email: Email;
+  email: string;
   eventId: string;
 }
 
@@ -21,6 +21,7 @@ export const serializeParticipant = (
 ): IParticipantContract => {
   return {
     ...participant,
+    email: serializeEmail(participant.email),
   };
 };
 
@@ -29,7 +30,7 @@ export const deserializeParticpant = (
 ): IEditParticipant => {
   return {
     ...participant,
-    email: serializeEmail(participant.email),
+    email: participant.email,
   };
 };
 

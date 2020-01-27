@@ -3,6 +3,7 @@ import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
 import { IParticipantContract, IParticipant } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
+import { serializeEmail } from 'src/types/email';
 
 export const postEvent = (event: IEvent) =>
   post({

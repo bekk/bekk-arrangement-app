@@ -12,7 +12,7 @@ interface IProps {
 export const PreviewEvent = ({ event }: IProps) => {
   const TimeInfo = ({ date, label }: { date: IDateTime; label: string }) => (
     <div className={style.dataEntry}>
-      <div>{label}</div>
+      <div className={style.labelText}>{label}</div>
       <div>{stringifyDate(date.date)}</div>
       <div>{stringifyTime(date.time)}</div>
     </div>
@@ -20,8 +20,8 @@ export const PreviewEvent = ({ event }: IProps) => {
 
   const Info = ({ text, label }: { text: string; label: string }) => (
     <div className={style.dataEntry}>
-      <div>{label}</div>
-      <div>{text}</div>
+      <div className={style.labelText}>{label}</div>
+      <div className={style.infoText}>{text}</div>
     </div>
   );
 

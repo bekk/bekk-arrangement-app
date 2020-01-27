@@ -7,7 +7,7 @@ import {
   IEvent,
 } from 'src/types/event';
 import { putEvent, getEvent } from 'src/api/arrangementSvc';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
@@ -15,6 +15,7 @@ import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
+import { eventsRoute, getViewEventRoute } from 'src/routing';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -22,6 +23,7 @@ export const EditEventContainer = () => {
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
   const [previewState, setPreviewState] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (id) {
@@ -41,10 +43,28 @@ export const EditEventContainer = () => {
     if (isOk(event)) {
       const updatedEvent = await putEvent(id, event.validValue);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
+      history.push(getViewEventRoute(id));
     } else {
       throw Error('feil');
     }
   };
+
+  const goToOverview = () => history.push(eventsRoute);
+  const updateEvent = (editEvent: IEditEvent) =>
+    setEvent(parseEvent(editEvent));
+
+  const renderEditView = () => (
+    <Page>
+      <h1 className={style.header}>Endre event</h1>
+      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <div className={style.buttonContainer}>
+        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+          Forhåndsvisning
+        </Button>
+        <Button onClick={goToOverview}>Avbryt</Button>
+      </div>
+    </Page>
+  );
 
   const renderPreviewEvent = () => {
     if (isOk(event)) {
@@ -60,18 +80,5 @@ export const EditEventContainer = () => {
     }
   };
 
-  const updateEvent = (editEvent: IEditEvent) =>
-    setEvent(parseEvent(editEvent));
-
-  return !previewState ? (
-    <Page>
-      <h1 className={style.header}>Endre event</h1>
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
-        Forhåndsvisning
-      </Button>
-    </Page>
-  ) : (
-    renderPreviewEvent() || null
-  );
+  return !previewState ? renderEditView() : renderPreviewEvent() || null;
 };

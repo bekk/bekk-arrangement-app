@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
-import { getViewEventRoute, createRoute } from 'src/routing';
+import { createRoute, getEditEventRoute } from 'src/routing';
 import { getEvents, deleteEvent } from 'src/api/arrangementSvc';
 import { WithId } from 'src/types';
 import {
@@ -26,7 +26,10 @@ const toParsedEventsMap = (
   );
 };
 
-const useEvents = () => {
+const useEvents = (): [
+  Map<string, Result<IEditEvent, IEvent>>,
+  (events: Map<string, Result<IEditEvent, IEvent>>) => void
+] => {
   const [events, setEvents] = useState<
     Map<string, Result<IEditEvent, IEvent>>
   >();
@@ -40,13 +43,19 @@ const useEvents = () => {
     get();
   }, []);
 
-  return events;
+  if (events) {
+    return [events, setEvents];
+  }
+  return [new Map(), setEvents];
 };
 
 export const ViewEventsContainer = () => {
-  const events = useEvents();
+  const [events, setEvents] = useEvents();
+
   const onDeleteEvent = async (eventId: string) => {
     await deleteEvent(eventId);
+    const updatedEvents = await getEvents();
+    setEvents(toParsedEventsMap(updatedEvents));
   };
 
   if (!events) {
@@ -66,13 +75,14 @@ export const ViewEventsContainer = () => {
           if (eventFromMap !== undefined && isOk(eventFromMap)) {
             return (
               <EventListElement
+                key={x}
                 event={eventFromMap.validValue}
-                onClickRoute={getViewEventRoute(x)}
+                onClickRoute={getEditEventRoute(x)}
                 delEvent={() => onDeleteEvent(x)}
               />
             );
           }
-          return <div>Event with id {x} is no gooooood </div>;
+          return <div>Event with id {x} is no good </div>;
         })}
       </div>
     </Page>
@@ -83,7 +93,6 @@ const AddEventButton = () => {
   return (
     <div className={style.plus}>
       <Link to={createRoute}>
-        {/* <img src={plusIcon} alt={'plus'} /> */}
         <PlusIconComponent />
       </Link>
     </div>

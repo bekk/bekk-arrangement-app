@@ -20,7 +20,6 @@ export const TextInput = ({
         {label}
       </label>
       <input
-        id={label}
         type="text"
         className={style.textInput}
         placeholder={placeholder}
