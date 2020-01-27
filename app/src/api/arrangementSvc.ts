@@ -43,7 +43,9 @@ export const deleteEvent = (eventId: string) =>
 export const postParticipant = (participant: IParticipant) =>
   post({
     host: getArrangementSvcUrl(),
-    path: `/events/${participant.eventId}/participants/${participant.email}`,
+    path: `/events/${participant.eventId}/participants/${serializeEmail(
+      participant.email
+    )}`,
     body: {},
   }).then(response => response as IParticipantContract);
 
