@@ -94,15 +94,18 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
   if (isSameDate(startDate.date, endDate.date)) {
     return (
       <p>
-        {dateAsText(startDate.date)} <br />
-        from {stringifyTime(startDate.time)} to {stringifyTime(endDate.time)}
+        {capitalize(dateAsText(startDate.date))} <br />
+        fra {stringifyTime(startDate.time)} til {stringifyTime(endDate.time)}
       </p>
     );
   }
   return (
     <p>
-      From {dateAsText(startDate.date)} {stringifyTime(startDate.time)} <br />
-      To {dateAsText(endDate.date)} {stringifyTime(endDate.time)}
+      Fra {dateAsText(startDate.date)} {stringifyTime(startDate.time)} <br />
+      Til {dateAsText(endDate.date)} {stringifyTime(endDate.time)}
     </p>
   );
 };
+
+const capitalize = (text: string) =>
+  text.charAt(0).toUpperCase() + text.substring(1);
