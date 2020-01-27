@@ -53,7 +53,7 @@ export const ViewEventContainer = () => {
     <Page>
       <h1 className={style.header}>{event.title}</h1>
       <DateSection startDate={event.start} endDate={event.end} />
-      <div>Location: {event.location}</div>
+      <div>Lokasjon: {event.location}</div>
       <div className={style.subsection}>{event.description}</div>
       <div className={style.copy}>
         <Button onClick={copyLink}>Del</Button>
@@ -68,9 +68,9 @@ export const ViewEventContainer = () => {
       ) : (
         <>
           <TextInput
-            label={'Email'}
+            label={'E-post'}
             value={participant.editValue.email}
-            placeholder={'email'}
+            placeholder={'ola.nordmann@bekk.no'}
             onChange={(email: string) =>
               setParticipant(
                 parseParticipant({ ...participant.editValue, email })

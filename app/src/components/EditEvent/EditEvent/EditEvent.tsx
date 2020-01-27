@@ -51,7 +51,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         </div>
         <div>
           <TextInput
-            label="Epost arrangør"
+            label="E-post arrangør"
             placeholder="ola.nordmann@bekk.no"
             value={event.organizerEmail.editValue}
             onChange={organizerEmail =>
@@ -119,7 +119,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       />
       <TextInput
         label={'Maks antall'}
-        placeholder="30"
+        placeholder="0 (ingen grense)"
         value={event.maxParticipants.editValue}
         onChange={maxParticipants =>
           updateEvent({
