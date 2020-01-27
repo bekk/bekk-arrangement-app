@@ -12,3 +12,12 @@
 .header {
   @include headerText;
 }
+
+.copy {
+  display: flex;
+  justify-content: left;
+}
+
+.text {
+  padding-left: 10px;
+}

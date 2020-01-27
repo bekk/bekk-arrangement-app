@@ -3,6 +3,7 @@ import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
 import { IParticipantContract, IParticipant } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
+import { serializeEmail } from 'src/types/email';
 
 export const postEvent = async (event: IEvent) => {
   return await post({
@@ -47,7 +48,9 @@ export const deleteEvent = async (eventId: string) => {
 export const postParticipant = async (participant: IParticipant) => {
   return await post({
     host: getArrangementSvcUrl(),
-    path: `/participant/${participant.email}/events/${participant.eventId}`,
+    path: `/participant/${serializeEmail(participant.email)}/events/${
+      participant.eventId
+    }`,
     body: {},
   }).then(response => response as IParticipantContract);
 };
