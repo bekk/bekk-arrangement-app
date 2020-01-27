@@ -23,6 +23,6 @@
   }
   &:disabled {
     background-color: var(--backgroundColor);
-    color: var(--grey);
+    color: var(--disabled);
   }
 }

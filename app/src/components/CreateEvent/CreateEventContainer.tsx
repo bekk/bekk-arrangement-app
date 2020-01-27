@@ -54,12 +54,12 @@ export const CreateEventContainer = () => {
     }
   };
 
-  const renderCreateView = ({ isInvalid }: { isInvalid: boolean }) => (
+  const renderCreateView = () => (
     <Page>
       <h1 className={style.header}>Opprett event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={() => setPreviewState(true)} disabled={isInvalid}>
+        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
           Forhåndsvisning
         </Button>
         <Button onClick={goToOverview}>Avbryt</Button>
@@ -67,7 +67,5 @@ export const CreateEventContainer = () => {
     </Page>
   );
 
-  return !previewState
-    ? renderCreateView({ isInvalid: !isOk(event) })
-    : renderPreviewEvent() || null;
+  return !previewState ? renderCreateView() : renderPreviewEvent() || null;
 };

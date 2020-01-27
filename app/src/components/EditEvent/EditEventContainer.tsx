@@ -53,12 +53,12 @@ export const EditEventContainer = () => {
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const renderEditView = ({ isInvalid }: { isInvalid: boolean }) => (
+  const renderEditView = () => (
     <Page>
       <h1 className={style.header}>Endre event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={() => setPreviewState(true)} disabled={isInvalid}>
+        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
           Forhåndsvisning
         </Button>
         <Button onClick={goToOverview}>Avbryt</Button>
@@ -80,7 +80,5 @@ export const EditEventContainer = () => {
     }
   };
 
-  return !previewState
-    ? renderEditView({ isInvalid: !isOk(event) })
-    : renderPreviewEvent() || null;
+  return !previewState ? renderEditView() : renderPreviewEvent() || null;
 };
