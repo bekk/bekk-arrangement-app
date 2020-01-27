@@ -9,13 +9,12 @@ $minDesktopWidth: 950px;
 $desktopMaxWidth: 1025px;
 
 $headerDesktop: 50px;
-$headerMobile: 22px;
-$subheaderDesktop: 30px;
-$subheaderMobile: 16px;
-$textDesktop: 22px;
-$textMobile: 12px;
-$smallMobile: 8px;
-$smallDesktop: 16px;
+$headerMobile: 30px;
+$textDesktop: 20px;
+$textMobile: 16px;
+$smallDesktop: 22px;
+$smallMobile: 12px;
+$buttonMobile: 16px;
 
 $desktop: 'only screen and (min-width: #{$mobileMaxWidth})';
 
@@ -44,4 +43,12 @@ $desktop: 'only screen and (min-width: #{$mobileMaxWidth})';
   @media #{$desktop} {
     font-size: $smallDesktop;
   }
+}
+
+@mixin buttonText {
+  color: var(--backgroundColor);
+  font-family: $fontLight;
+  font-size: $buttonMobile;
+  text-align: center;
+  overflow-wrap: break-word;
 }

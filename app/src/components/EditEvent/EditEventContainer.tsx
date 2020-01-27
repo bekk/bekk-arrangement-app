@@ -6,7 +6,7 @@ import {
   deserializeEvent,
   IEvent,
 } from 'src/types/event';
-import { putEvent, getEvent } from 'src/api/arrangementSvc';
+import { putEvent, getEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
@@ -53,15 +53,21 @@ export const EditEventContainer = () => {
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
+  const onDeleteEvent = (eventId: string) => {
+    deleteEvent(eventId);
+    goToOverview();
+  };
+
   const renderEditView = () => (
     <Page>
       <h1 className={style.header}>Endre event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        Forhåndsvisning
+      </Button>
       <div className={style.buttonContainer}>
-        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
-          Forhåndsvisning
-        </Button>
         <Button onClick={goToOverview}>Avbryt</Button>
+        <Button onClick={() => onDeleteEvent(id)}>Slett</Button>
       </div>
     </Page>
   );

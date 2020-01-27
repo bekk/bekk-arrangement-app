@@ -18,6 +18,11 @@
   justify-content: left;
 }
 
-.text {
+.textCopy {
   padding-left: 10px;
+}
+
+.text {
+  @include regularText;
+  line-height: 1.2;
 }

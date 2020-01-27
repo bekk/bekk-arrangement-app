@@ -2,21 +2,20 @@ import React from 'react';
 import { IEvent } from 'src/types/event';
 import { Link } from 'react-router-dom';
 import style from './EventListElement.module.scss';
-import { Button } from '../Common/Button/Button';
+import { stringifyDate } from 'src/types/date';
 
 interface IProps {
   event: IEvent;
   onClickRoute: string;
-  delEvent: () => void;
 }
 
-export const EventListElement = ({ event, onClickRoute, delEvent }: IProps) => {
+export const EventListElement = ({ event, onClickRoute }: IProps) => {
   return (
     <div className={style.container}>
       <Link to={onClickRoute} className={style.link}>
-        {event.title}
+        <div>{event.title}</div>
+        <div className={style.date}>{stringifyDate(event.start.date)}</div>
       </Link>
-      <Button onClick={delEvent}>Slett</Button>
     </div>
   );
 };

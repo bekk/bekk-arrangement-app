@@ -8,8 +8,16 @@
 }
 
 .link {
+  width: 100%;
   text-decoration: none;
   align-self: center;
   @include regularText;
   color: var(--overskyet);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 10px 0;
+}
+
+.date {
+  text-align: right;
 }

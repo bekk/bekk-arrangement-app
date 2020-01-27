@@ -52,35 +52,37 @@ export const ViewEventContainer = () => {
   return (
     <Page>
       <h1 className={style.header}>{event.title}</h1>
-      <DateSection startDate={event.start} endDate={event.end} />
-      <div>Lokasjon: {event.location}</div>
-      <div className={style.subsection}>{event.description}</div>
-      <div className={style.copy}>
-        <Button onClick={copyLink}>Del</Button>
-        <p className={style.text}>{wasCopied && 'URL kopiert!'}</p>
+      <div className={style.text}>
+        <DateSection startDate={event.start} endDate={event.end} />
+        <div>Lokasjon: {event.location}</div>
+        <div className={style.subsection}>{event.description}</div>
+        <div className={style.copy}>
+          <Button onClick={copyLink}>Del</Button>
+          <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
+        </div>
+        <h1 className={style.header}>Påmelding</h1>
+        {timeLeft.difference > 0 ? (
+          <>
+            <div>Stengt</div>
+            <p>Åpner om {asString(timeLeft)}</p>
+          </>
+        ) : (
+          <>
+            <TextInput
+              label={'E-post'}
+              value={participant.editValue.email}
+              placeholder={'ola.nordmann@bekk.no'}
+              onChange={(email: string) =>
+                setParticipant(
+                  parseParticipant({ ...participant.editValue, email })
+                )
+              }
+            />
+            <ValidationResult validationResult={participant.errors} />
+            <Button onClick={() => addParticipant()}>Meld meg på</Button>
+          </>
+        )}
       </div>
-      <h1 className={style.header}>Påmelding</h1>
-      {timeLeft.difference > 0 ? (
-        <>
-          <div>Stengt</div>
-          <p>Åpner om {asString(timeLeft)}</p>
-        </>
-      ) : (
-        <>
-          <TextInput
-            label={'E-post'}
-            value={participant.editValue.email}
-            placeholder={'ola.nordmann@bekk.no'}
-            onChange={(email: string) =>
-              setParticipant(
-                parseParticipant({ ...participant.editValue, email })
-              )
-            }
-          />
-          <ValidationResult validationResult={participant.errors} />
-          <Button onClick={() => addParticipant()}>Meld meg på</Button>
-        </>
-      )}
     </Page>
   );
 };
@@ -107,5 +109,5 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
   );
 };
 
-const capitalize = (text: string) =>
+export const capitalize = (text: string) =>
   text.charAt(0).toUpperCase() + text.substring(1);
