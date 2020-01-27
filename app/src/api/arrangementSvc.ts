@@ -1,9 +1,10 @@
 import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
-import { IParticipantContract, IParticipant } from 'src/types/participant';
+import { IParticipant, IParticipantViewModel } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
+import queryString from 'query-string';
 
 export const postEvent = (event: IEvent) =>
   post({
@@ -47,10 +48,20 @@ export const postParticipant = (participant: IParticipant) =>
       participant.email
     )}`,
     body: {},
-  }).then(response => response as IParticipantContract);
+  }).then(response => response as IParticipantViewModel);
 
-export const deleteParticipant = (eventId: string, participantEmail: string) =>
+export const deleteParticipant = ({
+  eventId,
+  participantEmail,
+  cancellationToken,
+}: {
+  eventId: string;
+  participantEmail: string;
+  cancellationToken?: string;
+}) =>
   del({
     host: getArrangementSvcUrl(),
-    path: `/events/${eventId}/participants/${participantEmail}`,
+    path: `/events/${eventId}/participants/${participantEmail}?${queryString.stringify(
+      { cancellationToken }
+    )}`,
   });

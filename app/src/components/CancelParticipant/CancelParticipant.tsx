@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
 import { Page } from '../Page/Page';
@@ -7,15 +7,34 @@ import { Button } from '../Common/Button/Button';
 import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
+import queryString from 'query-string';
+
+const useQuery = (key: string) => {
+  const {
+    location: { search },
+  } = useHistory();
+  const params = queryString.parse(search);
+  if (key in params) {
+    const value = params[key];
+    if (typeof value === 'string') {
+      return value;
+    }
+  }
+};
 
 export const CancelParticipant = () => {
-  const { eventId, participantEmail } = useParams();
+  const { eventId, email: participantEmail } = useParams();
   const [event] = useEvent(eventId);
+  const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
 
   const cancelParticipant = async () => {
     if (eventId && participantEmail) {
-      const deleted = await deleteParticipant(eventId, participantEmail);
+      const deleted = await deleteParticipant({
+        eventId,
+        participantEmail,
+        cancellationToken,
+      });
       if (deleted.ok) {
         setWasDeleted(true);
       }

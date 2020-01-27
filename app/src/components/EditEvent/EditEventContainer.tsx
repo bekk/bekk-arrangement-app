@@ -15,7 +15,7 @@ import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
-import { eventsRoute, getViewEventRoute } from 'src/routing';
+import { eventsRoute, viewEventRoute } from 'src/routing';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -43,7 +43,7 @@ export const EditEventContainer = () => {
     if (isOk(event)) {
       const updatedEvent = await putEvent(id, event.validValue);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
-      history.push(getViewEventRoute(id));
+      history.push(viewEventRoute(id));
     } else {
       throw Error('feil');
     }

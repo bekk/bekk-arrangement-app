@@ -19,13 +19,13 @@ import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
-import { getCancelParticipantRoute, getViewEventRoute } from 'src/routing';
+import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
+import { serializeEmail } from 'src/types/email';
 
 export const ViewEventContainer = () => {
-  const { id } = useParams();
-  const [event] = useEvent(id);
+  const { eventId = '0' } = useParams();
+  const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event.openForRegistration);
-  const eventId = id ? id : '0';
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>
   >(parseParticipant({ ...initalParticipant, eventId }));
@@ -34,13 +34,21 @@ export const ViewEventContainer = () => {
 
   const addParticipant = async () => {
     if (isOk(participant)) {
-      await postParticipant(participant.validValue);
-      history.push(getCancelParticipantRoute(participant.validValue));
+      const { cancellationToken } = await postParticipant(
+        participant.validValue
+      );
+      history.push(
+        cancelParticipantRoute({
+          eventId: participant.validValue.eventId,
+          email: serializeEmail(participant.validValue.email),
+          cancellationToken,
+        })
+      );
     }
   };
 
   const copyLink = async () => {
-    const url = document.location.host + getViewEventRoute(eventId);
+    const url = document.location.host + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
     setWasCopied(true);
   };
