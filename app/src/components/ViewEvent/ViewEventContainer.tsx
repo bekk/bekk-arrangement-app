@@ -24,7 +24,7 @@ import { getCancelParticipantRoute, getViewEventRoute } from 'src/routing';
 export const ViewEventContainer = () => {
   const { id } = useParams();
   const [event] = useEvent(id);
-  const timeLeft = useTimeLeft(event);
+  const timeLeft = useTimeLeft(event.openForRegistration);
   const eventId = id ? id : '0';
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>

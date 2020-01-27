@@ -64,6 +64,7 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
 
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
   const title = validateTitle(event.title);
+  const location = event.location;
   const organizerName = validateTitle(event.organizerName);
   const organizerEmail = validateHost(event.organizerEmail);
   const description = validateDescription(event.description);
@@ -83,8 +84,8 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     event.maxParticipants.toString()
   );
   return {
-    ...event,
     title,
+    location,
     description,
     start,
     end,

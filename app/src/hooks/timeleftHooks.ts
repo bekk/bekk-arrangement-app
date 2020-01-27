@@ -1,8 +1,8 @@
-import { IEvent } from 'src/types/event';
 import { useState, useEffect } from 'react';
 import { calculateTimeLeft } from 'src/utils/timeleft';
+import { IDateTime } from 'src/types/date-time';
 
-export const useTimeLeft = (event: IEvent | undefined) => {
+export const useTimeLeft = (time: IDateTime | undefined) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 365,
     hours: 0,
@@ -12,12 +12,12 @@ export const useTimeLeft = (event: IEvent | undefined) => {
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (event) {
-        setTimeLeft(calculateTimeLeft(event.openForRegistration));
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [event]);
+    if (time) {
+      const interval = setInterval(() => {
+        setTimeLeft(calculateTimeLeft(time));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [time]);
   return timeLeft;
 };
