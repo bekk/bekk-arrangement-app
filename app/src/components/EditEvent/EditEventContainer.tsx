@@ -62,9 +62,11 @@ export const EditEventContainer = () => {
     <Page>
       <h1 className={style.header}>Endre event</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
-        Forhåndsvisning
-      </Button>
+      <div className={style.buttonContainer}>
+        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+          Forhåndsvisning
+        </Button>
+      </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
         <Button onClick={() => onDeleteEvent(id)}>Slett</Button>

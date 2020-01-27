@@ -7,8 +7,7 @@
   background-color: var(--backgroundColor);
   padding: 10px;
   display: block;
-  min-width: 115px;
-  width: 100%;
+  width: 140px;
   @include regularText;
   @media #{$desktop} {
     width: 190px;
