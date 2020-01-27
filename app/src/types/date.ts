@@ -60,3 +60,12 @@ export const stringifyDate = ({ year, month, day }: IDate) =>
   `${day.toString().padStart(2, '0')}.${month
     .toString()
     .padStart(2, '0')}.${year}`;
+
+export const getTodayDeserialized = () => {
+  const today = new Date();
+  return deserializeDate({
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+    day: today.getDate(),
+  });
+};
