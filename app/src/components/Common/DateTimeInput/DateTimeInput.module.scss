@@ -6,7 +6,7 @@
 }
 
 .label {
-  white-space: nowrap;
+  white-space: pre-wrap;
   align-self: center;
   @include regularText;
 }

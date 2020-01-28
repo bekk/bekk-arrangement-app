@@ -2,11 +2,16 @@
 
 .plus {
   align-self: center;
-  width: 37px;
-  height: 37px;
+  width: 30px;
+  height: 30px;
   border: solid 1px;
   border-color: var(--textColor);
   transition: fill 0.1s ease;
+  @media #{$desktop} {
+    width: 37px;
+    height: 37px;
+  }
+
   rect {
     transition: transform 0.5s;
     transform: translateY(100%);

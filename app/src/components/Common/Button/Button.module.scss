@@ -4,8 +4,13 @@
   @include buttonText;
   background-color: var(--textColor);
   height: 44px;
-  width: 200px;
+  min-width: 100px;
+  max-width: 200px;
+  padding: 0 10px;
   border: 1px solid var(--textColor);
+  @media #{$desktop} {
+    width: 200px;
+  }
 
   &:hover {
     background-color: var(--backgroundColor);

@@ -5,10 +5,13 @@
   outline: 0;
   background-color: var(--backgroundColor);
   text-align: center;
-  width: 30px;
+  align-self: center;
+  width: 20px;
+  margin: 8px;
   @include regularText;
   @media #{$desktop} {
-    width: 70px;
+    width: 50px;
+    margin: 10px;
   }
 }
 
@@ -17,4 +20,11 @@
   border: solid 1px;
   border-color: var(--textColor);
   flex-direction: row;
+  width: fit-content;
+}
+
+.text {
+  @include regularText;
+  text-align: center;
+  align-self: center;
 }
