@@ -26,6 +26,14 @@ export const validateDescription = (value: string): Result<string, string> => {
   return validator.resolve(value);
 };
 
+export const validateLocation = (value: string): Result<string, string> => {
+  const validator = validate<string, string>(value, {
+    'Sted må ha minst fire bokstaver': value.length <= 3,
+  });
+
+  return validator.resolve(value);
+};
+
 export const validateTitle = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Tittel må ha minst tre bokstaver': value.length < 3,

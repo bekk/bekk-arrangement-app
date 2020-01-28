@@ -2,14 +2,30 @@
 @import 'src/style/constants';
 @import 'src/style/fonts';
 
-.container {
-  display: flex;
-  justify-content: space-between;
-}
-
 .link {
+  width: 100%;
   text-decoration: none;
   align-self: center;
   @include regularText;
   color: var(--overskyet);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 10px 0;
+  @media #{$desktop} {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+.date {
+  text-align: right;
+  white-space: pre-line;
+}
+
+.desktopDate {
+  visibility: hidden;
+  @media #{$desktop} {
+    visibility: visible;
+    text-align: right;
+    align-self: center;
+  }
 }

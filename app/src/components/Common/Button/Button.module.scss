@@ -1,21 +1,20 @@
 @import 'src/style/constants';
 
 .button {
-  @include regularText;
-  color: var(--svart);
-  background-color: var(--overskyet);
-  height: 35px;
-  width: max-content;
-  min-width: 50px;
+  @include buttonText;
+  background-color: var(--textColor);
+  height: 44px;
+  min-width: 100px;
   max-width: 200px;
-  overflow-wrap: break-word;
+  padding: 0 10px;
+  border: 1px solid var(--textColor);
   @media #{$desktop} {
-    height: 50px;
-    padding: 10px;
+    width: 200px;
   }
+
   &:hover {
-    background-color: var(--svart);
-    color: var(--overskyet);
+    background-color: var(--backgroundColor);
+    color: var(--textColor);
     cursor: pointer;
   }
   &:focus {

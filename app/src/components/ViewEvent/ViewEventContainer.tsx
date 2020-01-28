@@ -67,35 +67,40 @@ export const ViewEventContainer = () => {
   return (
     <Page>
       <h1 className={style.header}>{event.title}</h1>
-      <DateSection startDate={event.start} endDate={event.end} />
-      <div>Location: {event.location}</div>
-      <div className={style.subsection}>{event.description}</div>
-      <div className={style.copy}>
-        <Button onClick={copyLink}>Del</Button>
-        <p className={style.text}>{wasCopied && 'URL kopiert!'}</p>
+      <div className={style.text}>
+        <DateSection startDate={event.start} endDate={event.end} />
+        <div>Lokasjon: {event.location}</div>
+        <div className={style.subsection}>{event.description}</div>
+        <div className={style.subsection}>
+          Arrangør: {event.organizerName} - {event.organizerEmail}
+        </div>
+        <div className={style.copy}>
+          <Button onClick={copyLink}>Del</Button>
+          <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
+        </div>
+        <h1 className={style.header}>Påmelding</h1>
+        {timeLeft.difference > 0 ? (
+          <>
+            <div>Stengt</div>
+            <p>Åpner om {asString(timeLeft)}</p>
+          </>
+        ) : (
+          <>
+            <TextInput
+              label={'E-post'}
+              value={participant.editValue.email}
+              placeholder={'ola.nordmann@bekk.no'}
+              onChange={(email: string) =>
+                setParticipant(
+                  parseParticipant({ ...participant.editValue, email })
+                )
+              }
+            />
+            <ValidationResult validationResult={participant.errors} />
+            <Button onClick={() => addParticipant()}>Meld meg på</Button>
+          </>
+        )}
       </div>
-      <h1 className={style.header}>Påmelding</h1>
-      {timeLeft.difference > 0 ? (
-        <>
-          <div>Stengt</div>
-          <p>Åpner om {asString(timeLeft)}</p>
-        </>
-      ) : (
-        <>
-          <TextInput
-            label={'Email'}
-            value={participant.editValue.email}
-            placeholder={'email'}
-            onChange={(email: string) =>
-              setParticipant(
-                parseParticipant({ ...participant.editValue, email })
-              )
-            }
-          />
-          <ValidationResult validationResult={participant.errors} />
-          <Button onClick={() => addParticipant()}>Meld meg på</Button>
-        </>
-      )}
     </Page>
   );
 };
@@ -109,15 +114,18 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
   if (isSameDate(startDate.date, endDate.date)) {
     return (
       <p>
-        {dateAsText(startDate.date)} <br />
-        from {stringifyTime(startDate.time)} to {stringifyTime(endDate.time)}
+        {capitalize(dateAsText(startDate.date))} <br />
+        fra {stringifyTime(startDate.time)} til {stringifyTime(endDate.time)}
       </p>
     );
   }
   return (
     <p>
-      From {dateAsText(startDate.date)} {stringifyTime(startDate.time)} <br />
-      To {dateAsText(endDate.date)} {stringifyTime(endDate.time)}
+      Fra {dateAsText(startDate.date)} {stringifyTime(startDate.time)} <br />
+      Til {dateAsText(endDate.date)} {stringifyTime(endDate.time)}
     </p>
   );
 };
+
+export const capitalize = (text: string) =>
+  text.charAt(0).toUpperCase() + text.substring(1);
