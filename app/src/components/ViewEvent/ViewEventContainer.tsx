@@ -20,7 +20,6 @@ import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
 import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
-import { serializeEmail } from 'src/types/email';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -34,13 +33,21 @@ export const ViewEventContainer = () => {
 
   const addParticipant = async () => {
     if (isOk(participant)) {
-      const { cancellationToken } = await postParticipant(
-        participant.validValue
-      );
+      const redirectUrlTemplate =
+        document.location.origin +
+        cancelParticipantRoute({
+          eventId: '{eventId}',
+          email: '{email}',
+          cancellationToken: '{cancellationToken}',
+        });
+      const {
+        cancellationToken,
+        participant: { eventId, email },
+      } = await postParticipant(participant.validValue, redirectUrlTemplate);
       history.push(
         cancelParticipantRoute({
-          eventId: participant.validValue.eventId,
-          email: serializeEmail(participant.validValue.email),
+          eventId,
+          email,
           cancellationToken,
         })
       );

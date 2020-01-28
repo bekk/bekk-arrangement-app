@@ -1,7 +1,11 @@
 import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
-import { IParticipant, IParticipantViewModel } from 'src/types/participant';
+import {
+  IParticipant,
+  IParticipantViewModel,
+  INewParticipantViewMode,
+} from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
 import queryString from 'query-string';
@@ -41,14 +45,17 @@ export const deleteEvent = (eventId: string) =>
     path: `/events/${eventId}`,
   });
 
-export const postParticipant = (participant: IParticipant) =>
+export const postParticipant = (
+  participant: IParticipant,
+  redirectUrlTemplate: string
+) =>
   post({
     host: getArrangementSvcUrl(),
     path: `/events/${participant.eventId}/participants/${serializeEmail(
       participant.email
     )}`,
-    body: {},
-  }).then(response => response as IParticipantViewModel);
+    body: { redirectUrlTemplate },
+  }).then(response => response as INewParticipantViewMode);
 
 export const deleteParticipant = ({
   eventId,

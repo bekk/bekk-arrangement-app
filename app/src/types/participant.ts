@@ -10,7 +10,11 @@ export interface IParticipantViewModel {
   email: string;
   eventId: string;
   registrationTime: number;
-  cancellationToken: string | null;
+}
+
+export interface INewParticipantViewMode {
+  participant: IParticipantViewModel;
+  cancellationToken: string;
 }
 
 export interface IParticipant {
