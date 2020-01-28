@@ -12,7 +12,7 @@ export interface IParticipantViewModel {
   registrationTime: number;
 }
 
-export interface INewParticipantViewMode {
+export interface INewParticipantViewModel {
   participant: IParticipantViewModel;
   cancellationToken: string;
 }
@@ -38,12 +38,7 @@ export const serializeParticipant = (
 
 export const deserializeParticpant = (
   participant: IParticipantViewModel
-): IEditParticipant => {
-  return {
-    ...participant,
-    email: participant.email,
-  };
-};
+): IEditParticipant => participant;
 
 export const parseParticipant = (
   participant: IEditParticipant
