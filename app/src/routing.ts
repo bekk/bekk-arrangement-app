@@ -15,6 +15,6 @@ export const cancelParticipantRoute = ({
 }: {
   eventId: string;
   email: string;
-  cancellationToken?: string | null;
+  cancellationToken?: string;
 }) =>
   `/${eventId}/cancel/${email}?${queryString.stringify({ cancellationToken })}`;
