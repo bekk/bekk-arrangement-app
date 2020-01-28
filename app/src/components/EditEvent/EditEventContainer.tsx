@@ -19,31 +19,31 @@ import { eventsRoute, viewEventRoute } from 'src/routing';
 
 export const EditEventContainer = () => {
   useAuthentication();
-  const { id } = useParams();
+  const { eventId } = useParams();
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    if (id) {
+    if (eventId) {
       const get = async () => {
-        const retrievedEvent = await getEvent(id);
+        const retrievedEvent = await getEvent(eventId);
         setEvent(parseEvent(deserializeEvent(retrievedEvent)));
       };
       get();
     }
-  }, [id]);
+  }, [eventId]);
 
-  if (!event || !id) {
+  if (!event || !eventId) {
     return <div>Loading</div>;
   }
 
   const editEventFunction = async () => {
     if (isOk(event)) {
-      const updatedEvent = await putEvent(id, event.validValue);
+      const updatedEvent = await putEvent(eventId, event.validValue);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
-      history.push(viewEventRoute(id));
+      history.push(viewEventRoute(eventId));
     } else {
       throw Error('feil');
     }
@@ -69,7 +69,7 @@ export const EditEventContainer = () => {
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
-        <Button onClick={() => onDeleteEvent(id)}>Slett</Button>
+        <Button onClick={() => onDeleteEvent(eventId)}>Slett</Button>
       </div>
     </Page>
   );
