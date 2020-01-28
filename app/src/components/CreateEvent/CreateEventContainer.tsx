@@ -9,7 +9,7 @@ import {
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
-import { getViewEventRoute, eventsRoute } from 'src/routing';
+import { eventsRoute, viewEventRoute } from 'src/routing';
 import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
@@ -29,7 +29,7 @@ export const CreateEventContainer = () => {
   const addEvent = async () => {
     if (isOk(event)) {
       const createdEvent = await postEvent(event.validValue);
-      history.push(getViewEventRoute(createdEvent.id));
+      history.push(viewEventRoute(createdEvent.id));
     } else {
       throw Error('her kommer feil');
     }

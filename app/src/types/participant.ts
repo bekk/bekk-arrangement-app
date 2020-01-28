@@ -1,9 +1,20 @@
 import { Result, isOk } from './validation';
 import { validateEmail, serializeEmail, Email } from './email';
 
-export interface IParticipantContract {
+export interface IParticipantWriteModel {
   email: string;
   eventId: string;
+}
+
+export interface IParticipantViewModel {
+  email: string;
+  eventId: string;
+  registrationTime: number;
+}
+
+export interface INewParticipantViewModel {
+  participant: IParticipantViewModel;
+  cancellationToken: string;
 }
 
 export interface IParticipant {
@@ -18,7 +29,7 @@ export interface IEditParticipant {
 
 export const serializeParticipant = (
   participant: IParticipant
-): IParticipantContract => {
+): IParticipantWriteModel => {
   return {
     ...participant,
     email: serializeEmail(participant.email),
@@ -26,13 +37,8 @@ export const serializeParticipant = (
 };
 
 export const deserializeParticpant = (
-  participant: IParticipantContract
-): IEditParticipant => {
-  return {
-    ...participant,
-    email: participant.email,
-  };
-};
+  participant: IParticipantViewModel
+): IEditParticipant => participant;
 
 export const parseParticipant = (
   participant: IEditParticipant

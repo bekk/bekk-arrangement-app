@@ -1,66 +1,70 @@
 import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
-import { IParticipantContract, IParticipant } from 'src/types/participant';
+import { IParticipant, INewParticipantViewModel } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
+import queryString from 'query-string';
 
-export const postEvent = async (event: IEvent) => {
-  return await post({
+export const postEvent = (event: IEvent) =>
+  post({
     host: getArrangementSvcUrl(),
     path: '/events',
     body: serializeEvent(event),
   }).then(response => response as WithId<IEventContract>);
-};
 
-export const putEvent = async (
+export const putEvent = (
   eventId: string,
   event: IEvent
-): Promise<IEventContract> => {
-  return await put({
+): Promise<IEventContract> =>
+  put({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
     body: serializeEvent(event),
   }).then(response => response as IEventContract);
-};
 
-export const getEvent = async (eventId: string): Promise<IEventContract> => {
-  return await get({
+export const getEvent = (eventId: string): Promise<IEventContract> =>
+  get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
   }).then(response => response as IEventContract);
-};
 
-export const getEvents = async () => {
-  return await get({
+export const getEvents = () =>
+  get({
     host: getArrangementSvcUrl(),
     path: `/events`,
   }).then(response => response as WithId<IEventContract>[]);
-};
 
-export const deleteEvent = async (eventId: string) => {
-  await del({
+export const deleteEvent = (eventId: string) =>
+  del({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
   });
-};
 
-export const postParticipant = async (participant: IParticipant) => {
-  return await post({
+export const postParticipant = (
+  participant: IParticipant,
+  redirectUrlTemplate: string
+) =>
+  post({
     host: getArrangementSvcUrl(),
-    path: `/participant/${serializeEmail(participant.email)}/events/${
-      participant.eventId
-    }`,
-    body: {},
-  }).then(response => response as IParticipantContract);
-};
+    path: `/events/${participant.eventId}/participants/${serializeEmail(
+      participant.email
+    )}`,
+    body: { redirectUrlTemplate },
+  }).then(response => response as INewParticipantViewModel);
 
-export const deleteParticipant = async (
-  eventId: string,
-  participantEmail: string
-) => {
-  return await del({
+export const deleteParticipant = ({
+  eventId,
+  participantEmail,
+  cancellationToken,
+}: {
+  eventId: string;
+  participantEmail: string;
+  cancellationToken?: string;
+}) =>
+  del({
     host: getArrangementSvcUrl(),
-    path: `/participant/${participantEmail}/events/${eventId}`,
+    path: `/events/${eventId}/participants/${participantEmail}?${queryString.stringify(
+      { cancellationToken }
+    )}`,
   });
-};

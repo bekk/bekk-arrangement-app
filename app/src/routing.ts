@@ -1,13 +1,20 @@
-import { IParticipant } from './types/participant';
-import { serializeEmail } from './types/email';
+import queryString from 'query-string';
+
+export const eventId = ':eventId';
+export const email = ':email';
 
 export const rootRoute = '/';
 export const eventsRoute = '/events';
-export const getViewEventRoute = (id: string) => `/events/${id}`;
-export const viewEventRoute = '/events/:id';
-export const getEditEventRoute = (id: string | number) => `/events/${id}/edit`;
-export const editRoute = '/events/:id/edit';
+export const viewEventRoute = (eventId: string) => `/events/${eventId}`;
+export const editEventRoute = (eventId: string) => `/events/${eventId}/edit`;
 export const createRoute = '/events/create';
-export const cancelParticipantRoute = '/:eventId/cancel/:participantEmail';
-export const getCancelParticipantRoute = (participant: IParticipant) =>
-  `/${participant.eventId}/cancel/${serializeEmail(participant.email)}`;
+export const cancelParticipantRoute = ({
+  eventId,
+  email,
+  cancellationToken,
+}: {
+  eventId: string;
+  email: string;
+  cancellationToken?: string;
+}) =>
+  `/${eventId}/cancel/${email}?${queryString.stringify({ cancellationToken })}`;

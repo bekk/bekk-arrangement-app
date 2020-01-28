@@ -6,8 +6,10 @@ import {
   createRoute,
   viewEventRoute,
   eventsRoute,
-  editRoute,
   cancelParticipantRoute,
+  email,
+  eventId,
+  editEventRoute,
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
@@ -29,16 +31,22 @@ export const App = () => {
           <Route path={createRoute}>
             <CreateEventContainer />
           </Route>
-          <Route path={viewEventRoute} exact>
+          <Route path={viewEventRoute(eventId)} exact>
             <ViewEventContainer />
           </Route>
           <Route path={eventsRoute} exact>
             <ViewEventsContainer />
           </Route>
-          <Route exact path={editRoute}>
+          <Route exact path={editEventRoute(eventId)}>
             <EditEventContainer />
           </Route>
-          <Route exact path={cancelParticipantRoute}>
+          <Route
+            exact
+            path={cancelParticipantRoute({
+              eventId,
+              email,
+            })}
+          >
             <CancelParticipant />
           </Route>
           <Redirect exact from={'/'} to={eventsRoute} />
