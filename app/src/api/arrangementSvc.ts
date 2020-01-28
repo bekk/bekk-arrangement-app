@@ -1,11 +1,7 @@
 import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
-import {
-  IParticipant,
-  IParticipantViewModel,
-  INewParticipantViewMode,
-} from 'src/types/participant';
+import { IParticipant, INewParticipantViewMode } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
 import queryString from 'query-string';
