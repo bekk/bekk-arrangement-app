@@ -56,6 +56,9 @@ export const ViewEventContainer = () => {
         <DateSection startDate={event.start} endDate={event.end} />
         <div>Lokasjon: {event.location}</div>
         <div className={style.subsection}>{event.description}</div>
+        <div className={style.subsection}>
+          Arrangør: {event.organizerName} - {event.organizerEmail}
+        </div>
         <div className={style.copy}>
           <Button onClick={copyLink}>Del</Button>
           <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
