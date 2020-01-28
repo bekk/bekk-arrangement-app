@@ -10,6 +10,7 @@ import {
   validateDescription,
   validateHost,
   validateMaxAttendees,
+  validateLocation,
 } from 'src/types';
 import { validateDateTime } from 'src/types/date-time';
 
@@ -67,14 +68,15 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       <TextInput
         label={'Lokasjon'}
         placeholder="Vippetangen"
-        value={event.location}
+        value={event.location.editValue}
         onChange={location =>
           updateEvent({
             ...event,
-            location: location,
+            location: validateLocation(location),
           })
         }
       />
+      <ValidationResult validationResult={event.location.errors} />
       <TextArea
         label={'Beskrivelse'}
         placeholder={'Dette er en beskrivelse'}

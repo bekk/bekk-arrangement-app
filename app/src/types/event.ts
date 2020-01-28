@@ -5,6 +5,7 @@ import {
   validateDescription,
   validateHost,
   validateMaxAttendees,
+  validateLocation,
 } from '.';
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
 import { deserializeTime } from './time';
@@ -41,7 +42,7 @@ export interface IEvent {
 export interface IEditEvent {
   title: Result<string, string>;
   description: Result<string, string>;
-  location: string;
+  location: Result<string, string>;
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
   openForRegistration: Result<EditDateTime, IDateTime>;
@@ -58,13 +59,13 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   endDate: event.end,
   openForRegistrationDate: event.openForRegistration,
   organizerName: event.organizerName,
-  organizerEmail: 'test@testeepost.com',
+  organizerEmail: event.organizerEmail,
   maxParticipants: event.maxParticipants,
 });
 
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
   const title = validateTitle(event.title);
-  const location = event.location;
+  const location = validateLocation(event.location);
   const organizerName = validateHost(event.organizerName);
   const organizerEmail = validateHost(event.organizerEmail);
   const description = validateDescription(event.description);
@@ -102,6 +103,7 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
     isOk(event.end) &&
     isOk(event.openForRegistration) &&
     isOk(event.title) &&
+    isOk(event.location) &&
     isOk(event.description) &&
     isOk(event.organizerName) &&
     isOk(event.organizerEmail) &&
@@ -111,9 +113,9 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
       editValue: event,
       errors: undefined,
       validValue: {
-        ...event,
         title: event.title.validValue,
         description: event.description.validValue,
+        location: event.location.validValue,
         start: event.start.validValue,
         end: event.end.validValue,
         openForRegistration: event.openForRegistration.validValue,
@@ -165,7 +167,7 @@ export const initialEvent: IEvent = {
 export const initialEditEvent: IEditEvent = {
   title: validateTitle(''),
   description: validateDescription(''),
-  location: '',
+  location: validateLocation(''),
   start: validateDateTime({
     date: getTodayDeserialized(),
     time: ['17', '00'],
