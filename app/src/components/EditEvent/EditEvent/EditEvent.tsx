@@ -24,7 +24,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
     <>
       <TextInput
         label={'Tittel'}
-        placeholder=""
+        placeholder="Fest på Skuret"
         value={event.title.editValue}
         onChange={title =>
           updateEvent({
@@ -38,7 +38,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         <div>
           <TextInput
             label="Navn på arrangør"
-            placeholder=""
+            placeholder="Ola Nordmann"
             value={event.organizerName.editValue}
             onChange={organizerName =>
               updateEvent({
@@ -51,8 +51,8 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
         </div>
         <div>
           <TextInput
-            label="Epost arrangør"
-            placeholder=""
+            label="E-post arrangør"
+            placeholder="ola.nordmann@bekk.no"
             value={event.organizerEmail.editValue}
             onChange={organizerEmail =>
               updateEvent({
@@ -66,7 +66,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       </div>
       <TextInput
         label={'Lokasjon'}
-        placeholder=""
+        placeholder="Vippetangen"
         value={event.location}
         onChange={location =>
           updateEvent({
@@ -77,6 +77,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       />
       <TextArea
         label={'Beskrivelse'}
+        placeholder={'Dette er en beskrivelse'}
         value={event.description.editValue}
         onChange={description =>
           updateEvent({
@@ -118,7 +119,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       />
       <TextInput
         label={'Maks antall'}
-        placeholder=""
+        placeholder="0 (ingen grense)"
         value={event.maxParticipants.editValue}
         onChange={maxParticipants =>
           updateEvent({

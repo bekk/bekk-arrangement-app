@@ -5,11 +5,11 @@
   border: solid 1px;
   border-color: var(--textColor);
   background-color: var(--backgroundColor);
-  padding: 10px;
+  padding: 8px;
   display: block;
-  width: 100%;
+  width: 135px;
   @include regularText;
   @media #{$desktop} {
-    width: 170px;
+    width: 190px;
   }
 }

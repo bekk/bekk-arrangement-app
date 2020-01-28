@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
 import { createRoute, getEditEventRoute } from 'src/routing';
-import { getEvents, deleteEvent } from 'src/api/arrangementSvc';
+import { getEvents } from 'src/api/arrangementSvc';
 import { WithId } from 'src/types';
 import {
   IEvent,
@@ -26,10 +26,7 @@ const toParsedEventsMap = (
   );
 };
 
-const useEvents = (): [
-  Map<string, Result<IEditEvent, IEvent>>,
-  (events: Map<string, Result<IEditEvent, IEvent>>) => void
-] => {
+const useEvents = () => {
   const [events, setEvents] = useState<
     Map<string, Result<IEditEvent, IEvent>>
   >();
@@ -43,20 +40,11 @@ const useEvents = (): [
     get();
   }, []);
 
-  if (events) {
-    return [events, setEvents];
-  }
-  return [new Map(), setEvents];
+  return events;
 };
 
 export const ViewEventsContainer = () => {
-  const [events, setEvents] = useEvents();
-
-  const onDeleteEvent = async (eventId: string) => {
-    await deleteEvent(eventId);
-    const updatedEvents = await getEvents();
-    setEvents(toParsedEventsMap(updatedEvents));
-  };
+  const events = useEvents();
 
   if (!events) {
     return <div>Loading</div>;
@@ -78,7 +66,6 @@ export const ViewEventsContainer = () => {
                 key={x}
                 event={eventFromMap.validValue}
                 onClickRoute={getEditEventRoute(x)}
-                delEvent={() => onDeleteEvent(x)}
               />
             );
           }

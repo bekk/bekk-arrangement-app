@@ -8,7 +8,7 @@ import {
 } from '.';
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
 import { deserializeTime } from './time';
-import { deserializeDate } from './date';
+import { deserializeDate, getTodayDeserialized } from './date';
 
 export type EventId = string;
 
@@ -65,7 +65,7 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
   const title = validateTitle(event.title);
   const location = event.location;
-  const organizerName = validateTitle(event.organizerName);
+  const organizerName = validateHost(event.organizerName);
   const organizerEmail = validateHost(event.organizerEmail);
   const description = validateDescription(event.description);
   const start = validateDateTime({
@@ -163,24 +163,22 @@ export const initialEvent: IEvent = {
 };
 
 export const initialEditEvent: IEditEvent = {
-  title: validateTitle('Pølsespisekonkurranse 2019'),
-  description: validateDescription(
-    'Dette er informasjon om et event som du har laget med vår fantastiske app. Du er kjempeflink, men vi er flinkere'
-  ),
-  location: 'Strøm Larsens Pølsekompani',
+  title: validateTitle(''),
+  description: validateDescription(''),
+  location: '',
   start: validateDateTime({
-    date: '2020-03-10',
-    time: ['23', '22'],
+    date: getTodayDeserialized(),
+    time: ['17', '00'],
   }),
   end: validateDateTime({
-    date: '2020-03-11',
-    time: ['23', '22'],
+    date: getTodayDeserialized(),
+    time: ['20', '00'],
   }),
   openForRegistration: validateDateTime({
-    date: '2020-02-15',
-    time: ['23', '22'],
+    date: getTodayDeserialized(),
+    time: ['12', '00'],
   }),
-  organizerName: validateTitle('Pølsekongen'),
-  organizerEmail: validateHost('Matkomiteen'),
-  maxParticipants: validateMaxAttendees('20'),
+  organizerName: validateHost(''),
+  organizerEmail: validateHost(''),
+  maxParticipants: validateMaxAttendees(''),
 };

@@ -1,13 +1,12 @@
 import { validate, Result } from './validation';
 import { format } from 'date-fns';
+import { nb } from 'date-fns/esm/locale';
 
 export interface IDate {
   day: number;
   month: number;
   year: number;
 }
-
-// export type EditDate = string;
 
 export const parseDate = (date: string) => date.substring(0, 10);
 
@@ -20,13 +19,10 @@ export const validateDate = (date: string): Result<string, IDate> => {
   const day = Number(dates[3]);
 
   const validator = validate<string, IDate>(dates[0] || date, {
-    'Need year, month and date in YYYY-MM-DD format': dates.length <= 3,
-    'Year needs to be a number': isNaN(year),
-    'Year needs to be an integer': !Number.isInteger(year),
-    'Month needs to be a number': isNaN(month),
-    'Month needs to be an integer': !Number.isInteger(month),
-    'Day needs to be a number': isNaN(day),
-    'Day needs to be an integer': !Number.isInteger(day),
+    'Trenger år, måned og dato i YYYY-MM-DD format': dates.length <= 3,
+    'År må være et heltall': !Number.isInteger(year),
+    'Måned må være et heltall': !Number.isInteger(month),
+    'Dag må være et heltall': !Number.isInteger(day),
   });
 
   return validator.resolve({
@@ -38,8 +34,9 @@ export const validateDate = (date: string): Result<string, IDate> => {
 
 export const dateAsText = (date: IDate) => {
   return format(
-    new Date(Date.UTC(date.year, date.month - 1, date.day)),
-    'cccc, dd MMMM yyyy'
+    new Date(date.year, date.month - 1, date.day),
+    'cccc dd. MMMM yyyy',
+    { locale: nb }
   );
 };
 
@@ -60,3 +57,12 @@ export const stringifyDate = ({ year, month, day }: IDate) =>
   `${day.toString().padStart(2, '0')}.${month
     .toString()
     .padStart(2, '0')}.${year}`;
+
+export const getTodayDeserialized = () => {
+  const today = new Date();
+  return deserializeDate({
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+    day: today.getDate(),
+  });
+};

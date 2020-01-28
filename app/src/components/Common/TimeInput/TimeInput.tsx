@@ -27,7 +27,7 @@ export const TimeInput = ({ value, onChange }: IProps): JSX.Element => {
         onChange={v => updateHour(v.target.value)}
         value={hour}
       />
-      <p>:</p>
+      <div className={style.text}>:</div>
       <input
         className={style.timeInput}
         type="number"
