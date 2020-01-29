@@ -35,8 +35,19 @@ export const EditEventContainer = () => {
     }
   }, [eventId]);
 
-  if (!event || !eventId) {
+  if (!event) {
     return <div>Loading</div>;
+  }
+
+  if (!isOk(event) || !eventId) {
+    return (
+      <div className={style.text}>
+        Dette arrangementet finnes dessverre ikke!{' '}
+        <span role="img" aria-label="sad emoji">
+          😔
+        </span>
+      </div>
+    );
   }
 
   const editEventFunction = async () => {

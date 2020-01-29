@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 import { getEvent } from 'src/api/arrangementSvc';
-import {
-  IEvent,
-  initialEvent,
-  deserializeEvent,
-  parseEvent,
-} from 'src/types/event';
+import { IEvent, deserializeEvent, parseEvent } from 'src/types/event';
 import { isOk } from 'src/types/validation';
 
-export const useEvent = (id: string | undefined): [IEvent] => {
-  const [event, setEvent] = useState(initialEvent);
+export const useEvent = (id: string | undefined): [IEvent | undefined] => {
+  const [event, setEvent] = useState<IEvent | undefined>(undefined);
 
   useEffect(() => {
     if (id) {

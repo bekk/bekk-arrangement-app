@@ -41,6 +41,17 @@ export const CancelParticipant = () => {
     }
   };
 
+  if (!event) {
+    return (
+      <div>
+        Ugyldig url!{' '}
+        <span role="img" aria-label="sad emoji">
+          😔
+        </span>
+      </div>
+    );
+  }
+
   const CancelledView = () => (
     <>
       <h1 className={style.header}>Avmelding bekreftet!</h1>
