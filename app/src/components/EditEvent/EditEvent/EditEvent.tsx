@@ -17,9 +17,14 @@ import { validateDateTime } from 'src/types/date-time';
 interface IProps {
   eventResult: IEditEvent;
   updateEvent: (event: IEditEvent) => void;
+  showError: boolean;
 }
 
-export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
+export const EditEvent = ({
+  eventResult: event,
+  updateEvent,
+  showError,
+}: IProps) => {
   return (
     <>
       <TextInput
@@ -33,7 +38,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <ValidationResult validationResult={event.title.errors} />
+      {showError && <ValidationResult validationResult={event.title.errors} />}
       <div className={style.organizerContainer}>
         <div>
           <TextInput
@@ -47,7 +52,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               })
             }
           />
-          <ValidationResult validationResult={event.organizerName.errors} />
+          {showError && (
+            <ValidationResult validationResult={event.organizerName.errors} />
+          )}
         </div>
         <div>
           <TextInput
@@ -61,7 +68,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               })
             }
           />
-          <ValidationResult validationResult={event.organizerEmail.errors} />
+          {showError && (
+            <ValidationResult validationResult={event.organizerEmail.errors} />
+          )}
         </div>
       </div>
       <TextInput
@@ -75,7 +84,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <ValidationResult validationResult={event.location.errors} />
+      {showError && (
+        <ValidationResult validationResult={event.location.errors} />
+      )}
       <TextArea
         label={'Beskrivelse'}
         placeholder={'Dette er en beskrivelse'}
@@ -87,7 +98,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <ValidationResult validationResult={event.description.errors} />
+      {showError && (
+        <ValidationResult validationResult={event.description.errors} />
+      )}
       <DateTimeInput
         label={'Starter'}
         value={event.start.editValue}
@@ -132,7 +145,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <ValidationResult validationResult={event.maxParticipants.errors} />
+      {showError && (
+        <ValidationResult validationResult={event.maxParticipants.errors} />
+      )}
     </>
   );
 };

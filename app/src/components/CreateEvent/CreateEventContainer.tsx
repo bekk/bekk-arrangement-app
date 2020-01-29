@@ -24,6 +24,8 @@ export const CreateEventContainer = () => {
     parseEvent(initialEditEvent)
   );
   const [previewState, setPreviewState] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
+  const isDisabled = hasClicked ? !isOk(event) : false;
   const history = useHistory();
 
   const addEvent = async () => {
@@ -36,6 +38,13 @@ export const CreateEventContainer = () => {
   };
 
   const goToOverview = () => history.push(eventsRoute);
+
+  const validatePreview = () => {
+    setHasClicked(true);
+    if (isOk(event)) {
+      setPreviewState(true);
+    }
+  };
 
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
@@ -57,9 +66,13 @@ export const CreateEventContainer = () => {
   const renderCreateView = () => (
     <Page>
       <h1 className={style.header}>Opprett arrangement</h1>
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <EditEvent
+        eventResult={event.editValue}
+        updateEvent={updateEvent}
+        showError={!isOk(event) && hasClicked}
+      />
       <div className={style.buttonContainer}>
-        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        <Button onClick={validatePreview} disabled={isDisabled}>
           Forhåndsvisning
         </Button>
         <Button onClick={goToOverview}>Avbryt</Button>

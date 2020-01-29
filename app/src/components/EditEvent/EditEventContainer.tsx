@@ -62,7 +62,11 @@ export const EditEventContainer = () => {
   const renderEditView = () => (
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <EditEvent
+        eventResult={event.editValue}
+        updateEvent={updateEvent}
+        showError={!isOk(event)}
+      />
       <div className={style.buttonContainer}>
         <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
           Forhåndsvisning

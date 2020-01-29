@@ -4,7 +4,7 @@ import { IDateTime } from 'src/types/date-time';
 
 export const useTimeLeft = (time: IDateTime | undefined) => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 365,
+    days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
