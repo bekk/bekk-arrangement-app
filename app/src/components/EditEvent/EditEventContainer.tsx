@@ -54,8 +54,8 @@ export const EditEventContainer = () => {
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const onDeleteEvent = (eventId: string) => {
-    deleteEvent(eventId);
+  const onDeleteEvent = async (eventId: string) => {
+    await deleteEvent(eventId);
     goToOverview();
   };
 
