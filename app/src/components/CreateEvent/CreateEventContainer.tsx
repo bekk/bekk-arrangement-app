@@ -46,7 +46,7 @@ export const CreateEventContainer = () => {
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
-            <Button onClick={addEvent}>Opprett event</Button>
+            <Button onClick={addEvent}>Opprett arrangement</Button>
             <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
           </div>
         </Page>
@@ -56,7 +56,7 @@ export const CreateEventContainer = () => {
 
   const renderCreateView = () => (
     <Page>
-      <h1 className={style.header}>Opprett event</h1>
+      <h1 className={style.header}>Opprett arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
         <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
