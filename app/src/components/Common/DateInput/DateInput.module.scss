@@ -2,14 +2,13 @@
 @import 'src/style/fonts';
 
 .dateInput {
-  border: solid 1px;
-  border-color: var(--textColor);
+  border: none;
+  outline: none;
   background-color: var(--backgroundColor);
-  padding: 8px;
   display: block;
-  width: 135px;
+  width: 120px;
   @include regularText;
   @media #{$desktop} {
-    width: 190px;
+    width: 160px;
   }
 }

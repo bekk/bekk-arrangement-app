@@ -55,7 +55,7 @@ export const ViewEventContainer = () => {
   };
 
   const copyLink = async () => {
-    const url = document.location.host + viewEventRoute(eventId);
+    const url = document.location.origin + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
     setWasCopied(true);
   };

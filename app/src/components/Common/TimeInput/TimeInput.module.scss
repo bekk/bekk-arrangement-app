@@ -17,8 +17,7 @@
 
 .timeInputContainer {
   display: flex;
-  border: solid 1px;
-  border-color: var(--textColor);
+  border: none;
   flex-direction: row;
   width: fit-content;
 }

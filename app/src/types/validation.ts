@@ -1,4 +1,4 @@
-type ErrorType = 'Error' | 'Warning';
+export type ErrorType = 'Error' | 'Warning';
 
 export type Ok<EditType, ValidType> = {
   editValue: EditType;
@@ -43,17 +43,6 @@ export const warning = (message: string): IError => ({
   type: 'Warning',
   message,
 });
-
-export const validationTypeAsIcon = (type: ErrorType) => {
-  switch (type) {
-    case 'Error': {
-      return '⛔';
-    }
-    case 'Warning': {
-      return '⚠️';
-    }
-  }
-};
 
 export const validate = <From, To>(
   fromValue: From,

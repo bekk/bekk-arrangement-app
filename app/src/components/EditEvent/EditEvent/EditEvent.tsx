@@ -19,8 +19,7 @@ interface IProps {
   updateEvent: (event: IEditEvent) => void;
 }
 
-export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
-  const event = eventResult;
+export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   return (
     <>
       <TextInput
@@ -92,6 +91,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       <DateTimeInput
         label={'Starter'}
         value={event.start.editValue}
+        error={event.start.errors}
         onChange={start =>
           updateEvent({
             ...event,
@@ -102,6 +102,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       <DateTimeInput
         label={'Slutter'}
         value={event.end.editValue}
+        error={event.end.errors}
         onChange={end =>
           updateEvent({
             ...event,
@@ -112,6 +113,7 @@ export const EditEvent = ({ eventResult, updateEvent }: IProps) => {
       <DateTimeInput
         label={'Påmelding åpner'}
         value={event.openForRegistration.editValue}
+        error={event.openForRegistration.errors}
         onChange={openForRegistration =>
           updateEvent({
             ...event,

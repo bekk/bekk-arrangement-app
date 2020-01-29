@@ -19,8 +19,8 @@ export const validateTime = ([_hour, _minutes]: EditTime): Result<
     "Can't have negative number of minutes": minute < 0,
     'There are not more than 23 hours in a day': hour > 23,
     "Can't have a negative amount of hours in a day": hour < 0,
-    'Hours needs to be a number': isNaN(hour),
-    'Minutes needs to be a number': isNaN(minute),
+    'Hours needs to be a number': isNaN(hour) || _hour === '',
+    'Minutes needs to be a number': isNaN(minute) || _minutes === '',
     'Number of hours needs to be an integer': !Number.isInteger(hour),
     'Number of minutes needs to be an integer': !Number.isInteger(minute),
   });

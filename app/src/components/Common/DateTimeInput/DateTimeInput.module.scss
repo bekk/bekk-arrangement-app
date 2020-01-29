@@ -2,7 +2,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .label {
@@ -14,4 +14,10 @@
 .container {
   display: flex;
   justify-content: flex-end;
+  border-bottom: solid 1px;
+  border-color: var(--textColor);
+}
+
+.error {
+  border-color: var(--error);
 }

@@ -30,6 +30,8 @@
   --coolColor: var(--nattKontrast);
   --coolColorContrast: var(--hvit);
   --disabled: var(--grey);
+  --error: var(--solnedgangKontrast);
+  --warning: var(--soloppgang);
 
   /* no-preference and perfers dark should use dark mode version */
   @media (prefers-color-scheme: no-preference), (prefers-color-scheme: dark) {
