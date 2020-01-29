@@ -67,7 +67,7 @@ export const EditEventContainer = () => {
         <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
           Forhåndsvisning
         </Button>
-        <Button onClick={goToEvent}>Påmelding</Button>
+        <Button onClick={goToEvent}>Til påmelding</Button>
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
