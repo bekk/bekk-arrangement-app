@@ -1,4 +1,5 @@
 import React from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import style from './TextArea.module.scss';
 
 interface IProps {
@@ -19,15 +20,14 @@ export const TextArea = ({
       <label className={style.textLabel} htmlFor={label}>
         {label}
       </label>
-      <textarea
+      <TextareaAutosize
         className={style.textArea}
+        minRows={3}
         id={label}
-        rows={5}
-        cols={33}
         placeholder={placeholder}
         value={value}
         onChange={v => onChange(v.target.value)}
-      ></textarea>
+      />
     </>
   );
 };

@@ -9,7 +9,9 @@
 
 .textInput {
   width: 100%;
-  border: solid 1px;
+  outline: none;
+  border: none;
+  border-bottom: solid 1px;
   border-color: var(--textColor);
   background-color: var(--backgroundColor);
   padding: 10px;
