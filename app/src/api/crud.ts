@@ -54,8 +54,7 @@ async function fetchAndValidate(
   const {
     userMessage = `Noe har feilet i et kall til ${method} ${url} med statuskode ${
       response.status
-    }${body && ` og body ${body}`}`,
-    message,
+    }${(body && ` og body ${body}`) || ''}`,
   } = await response.json().catch(() => ({}));
 
   return Promise.reject({
@@ -64,6 +63,6 @@ async function fetchAndValidate(
       response.status < 500
         ? `${response.status} Et nettverkskall har feilet`
         : `${response.status} Det er noe galt med backenden`,
-    message: `${userMessage}\n${message}`,
+    message: userMessage,
   });
 }

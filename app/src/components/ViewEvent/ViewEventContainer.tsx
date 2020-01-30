@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import style from './ViewEventContainer.module.scss';
 import { IDateTime } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
@@ -23,31 +23,16 @@ import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
-  const [event] = useEvent(eventId);
-  const [hasLoaded, setHasLoaded] = useState(false);
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>
   >(parseParticipant({ ...initalParticipant, eventId }));
   const [wasCopied, setWasCopied] = useState(false);
-  const timeLeft = useTimeLeft(event && event.openForRegistration);
   const history = useHistory();
 
-  useEffect(() => {
-    if (!event) {
-      setHasLoaded(true);
-    }
-  }, [event]);
+  const [event] = useEvent(eventId);
+  const timeLeft = useTimeLeft(event && event.openForRegistration);
 
-  if (hasLoaded && !event) {
-    return (
-      <div className={style.subsection}>
-        Dette arrangementet finnes dessverre ikke!{' '}
-        <span role="img" aria-label="sad emoji">
-          😔
-        </span>
-      </div>
-    );
-  } else if (!hasLoaded || !event) {
+  if (!event) {
     return <div>Loading</div>;
   }
 
