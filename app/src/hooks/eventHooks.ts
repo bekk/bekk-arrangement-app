@@ -10,15 +10,14 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
 
   useEffect(() => {
     if (id) {
-      const notify = catchAndNotify(async () => {
+      catchAndNotify(async () => {
         const retrievedEvent = await getEvent(id);
         const deserializedEvent = deserializeEvent(retrievedEvent);
         const domainEvent = parseEvent(deserializedEvent);
         if (isOk(domainEvent)) {
           setEvent(domainEvent.validValue);
         }
-      });
-      notify();
+      })();
     }
   }, [id, catchAndNotify]);
 
