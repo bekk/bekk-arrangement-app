@@ -35,20 +35,9 @@ export const EditEventContainer = () => {
       })();
     }
   }, [eventId, catchAndNotify]);
-
-  if (!event) {
+  
+  if (!event || !eventId) {
     return <div>Loading</div>;
-  }
-
-  if (!isOk(event) || !eventId) {
-    return (
-      <div className={style.text}>
-        Dette arrangementet finnes dessverre ikke!{' '}
-        <span role="img" aria-label="sad emoji">
-          😔
-        </span>
-      </div>
-    );
   }
 
   const editEventFunction = () =>
