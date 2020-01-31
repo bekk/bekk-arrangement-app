@@ -16,6 +16,7 @@ import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
+import { useNotification } from '../NotificationHandler/NotificationHandler';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -24,16 +25,16 @@ export const EditEventContainer = () => {
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
+  const { catchAndNotify } = useNotification();
 
   useEffect(() => {
     if (eventId) {
-      const get = async () => {
+      catchAndNotify(async () => {
         const retrievedEvent = await getEvent(eventId);
         setEvent(parseEvent(deserializeEvent(retrievedEvent)));
-      };
-      get();
+      })();
     }
-  }, [eventId]);
+  }, [eventId, catchAndNotify]);
 
   if (!event) {
     return <div>Loading</div>;
@@ -50,25 +51,25 @@ export const EditEventContainer = () => {
     );
   }
 
-  const editEventFunction = async () => {
-    if (isOk(event)) {
-      const updatedEvent = await putEvent(eventId, event.validValue);
-      setEvent(parseEvent(deserializeEvent(updatedEvent)));
-      history.push(viewEventRoute(eventId));
-    } else {
-      throw Error('feil');
-    }
-  };
+  const editEventFunction = () =>
+    catchAndNotify(async () => {
+      if (isOk(event)) {
+        const updatedEvent = await putEvent(eventId, event.validValue);
+        setEvent(parseEvent(deserializeEvent(updatedEvent)));
+        history.push(viewEventRoute(eventId));
+      }
+    })();
 
   const goToOverview = () => history.push(eventsRoute);
   const goToEvent = () => history.push(viewEventRoute(eventId));
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const onDeleteEvent = async (eventId: string) => {
-    await deleteEvent(eventId);
-    goToOverview();
-  };
+  const onDeleteEvent = (eventId: string) =>
+    catchAndNotify(async () => {
+      await deleteEvent(eventId);
+      goToOverview();
+    })();
 
   const renderEditView = () => (
     <Page>

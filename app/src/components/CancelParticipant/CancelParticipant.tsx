@@ -8,6 +8,7 @@ import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
 import queryString from 'query-string';
+import { useNotification } from '../NotificationHandler/NotificationHandler';
 
 const useQuery = (key: string) => {
   const {
@@ -27,8 +28,9 @@ export const CancelParticipant = () => {
   const [event] = useEvent(eventId);
   const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
+  const { catchAndNotify } = useNotification();
 
-  const cancelParticipant = async () => {
+  const cancelParticipant = catchAndNotify(async () => {
     if (eventId && participantEmail) {
       const deleted = await deleteParticipant({
         eventId,
@@ -39,7 +41,7 @@ export const CancelParticipant = () => {
         setWasDeleted(true);
       }
     }
-  };
+  });
 
   if (!event) {
     return (

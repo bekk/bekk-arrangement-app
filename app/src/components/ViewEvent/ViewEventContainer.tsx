@@ -20,6 +20,7 @@ import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
 import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
+import { useNotification } from '../NotificationHandler/NotificationHandler';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -28,6 +29,7 @@ export const ViewEventContainer = () => {
   >(parseParticipant({ ...initalParticipant, eventId }));
   const [wasCopied, setWasCopied] = useState(false);
   const history = useHistory();
+  const { catchAndNotify } = useNotification();
 
   const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistration);
@@ -36,7 +38,7 @@ export const ViewEventContainer = () => {
     return <div>Loading</div>;
   }
 
-  const addParticipant = async () => {
+  const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {
       const redirectUrlTemplate =
         document.location.origin +
@@ -57,7 +59,7 @@ export const ViewEventContainer = () => {
         })
       );
     }
-  };
+  });
 
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);

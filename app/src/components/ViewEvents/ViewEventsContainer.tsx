@@ -14,6 +14,7 @@ import {
 import { isOk, Result } from 'src/types/validation';
 import { Link } from 'react-router-dom';
 import { Page } from '../Page/Page';
+import { useNotification } from '../NotificationHandler/NotificationHandler';
 
 const toParsedEventsMap = (
   events: WithId<IEventContract>[]
@@ -30,15 +31,15 @@ const useEvents = () => {
   const [events, setEvents] = useState<
     Map<string, Result<IEditEvent, IEvent>>
   >();
+  const { catchAndNotify } = useNotification();
 
   useEffect(() => {
-    const get = async () => {
+    catchAndNotify(async () => {
       const events = await getEvents();
       const eventsMap = toParsedEventsMap(events);
       setEvents(eventsMap);
-    };
-    get();
-  }, []);
+    })();
+  }, [catchAndNotify]);
 
   return events;
 };

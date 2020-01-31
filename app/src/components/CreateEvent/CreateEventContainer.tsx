@@ -16,6 +16,7 @@ import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './CreateEventContainer.module.scss';
+import { useNotification } from '../NotificationHandler/NotificationHandler';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -27,15 +28,14 @@ export const CreateEventContainer = () => {
   const [hasClicked, setHasClicked] = useState(false);
   const isDisabled = hasClicked ? !isOk(event) : false;
   const history = useHistory();
+  const { catchAndNotify } = useNotification();
 
-  const addEvent = async () => {
+  const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
       const createdEvent = await postEvent(event.validValue);
       history.push(viewEventRoute(createdEvent.id));
-    } else {
-      throw Error('her kommer feil');
     }
-  };
+  });
 
   const goToOverview = () => history.push(eventsRoute);
 
