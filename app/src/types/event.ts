@@ -10,6 +10,7 @@ import {
 import { IDateTime, EditDateTime, validateDateTime } from './date-time';
 import { deserializeTime } from './time';
 import { deserializeDate, getTodayDeserialized } from './date';
+import { validateTimeInstance } from './time-instance'
 
 export type EventId = string;
 
@@ -21,7 +22,7 @@ export interface IEventContract {
   location: string;
   startDate: IDateTime;
   endDate: IDateTime;
-  openForRegistrationDate: IDateTime;
+  openForRegistrationTime: number;
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
@@ -33,7 +34,7 @@ export interface IEvent {
   location: string;
   start: IDateTime;
   end: IDateTime;
-  openForRegistration: IDateTime;
+  openForRegistrationTime: Date;
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
@@ -45,7 +46,7 @@ export interface IEditEvent {
   location: Result<string, string>;
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
-  openForRegistration: Result<EditDateTime, IDateTime>;
+  openForRegistration: Result<string, Date>;
   organizerName: Result<string, string>;
   organizerEmail: Result<string, string>;
   maxParticipants: Result<string, number>;
@@ -57,7 +58,7 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   location: event.location,
   startDate: event.start,
   endDate: event.end,
-  openForRegistrationDate: event.openForRegistration,
+  openForRegistrationTime: event.openForRegistrationTime.getTime(),
   organizerName: event.organizerName,
   organizerEmail: event.organizerEmail,
   maxParticipants: event.maxParticipants,
@@ -77,10 +78,8 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
     date: deserializeDate(event.endDate.date),
     time: deserializeTime(event.endDate.time),
   });
-  const openForRegistration = validateDateTime({
-    date: deserializeDate(event.openForRegistrationDate.date),
-    time: deserializeTime(event.openForRegistrationDate.time),
-  });
+  const openForRegistration = validateTimeInstance(event.openForRegistrationTime);
+
   const maxParticipants = validateMaxAttendees(
     event.maxParticipants.toString()
   );
