@@ -35,7 +35,7 @@ export const EditEventContainer = () => {
       })();
     }
   }, [eventId, catchAndNotify]);
-  
+
   if (!event || !eventId) {
     return <div>Loading</div>;
   }
@@ -69,10 +69,10 @@ export const EditEventContainer = () => {
         showError={!isOk(event)}
       />
       <div className={style.buttonContainer}>
+        <Button onClick={goToEvent}>Avbryt - til påmelding</Button>
         <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
-          Forhåndsvisning
+          Forhåndsvis endringer
         </Button>
-        <Button onClick={goToEvent}>Til påmelding</Button>
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
@@ -87,8 +87,8 @@ export const EditEventContainer = () => {
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
-            <Button onClick={editEventFunction}>Oppdater arrangement</Button>
             <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+            <Button onClick={editEventFunction}>Oppdater arrangement</Button>
           </div>
         </Page>
       );

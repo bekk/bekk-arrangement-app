@@ -19,7 +19,11 @@ import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
-import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
+import {
+  cancelParticipantRoute,
+  viewEventRoute,
+  eventsRoute,
+} from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 
 export const ViewEventContainer = () => {
@@ -61,6 +65,8 @@ export const ViewEventContainer = () => {
     }
   });
 
+  const goToOverview = () => history.push(eventsRoute);
+
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
@@ -69,6 +75,7 @@ export const ViewEventContainer = () => {
 
   return (
     <Page>
+      <Button onClick={goToOverview}>Til arrangementer</Button>
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.text}>
         <DateSection startDate={event.start} endDate={event.end} />
