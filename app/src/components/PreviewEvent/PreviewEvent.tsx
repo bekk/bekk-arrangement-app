@@ -29,10 +29,8 @@ export const PreviewEvent = ({ event }: IProps) => {
     <>
       <h1 className={style.header}>Forhåndsvisning</h1>
       <Info text={event.title} label={'Tittel'} />
-      <Info
-        text={`${event.organizerName} - ${event.organizerEmail}`}
-        label={'Arrangør'}
-      />
+      <Info text={event.organizerName} label={'Arrangør'} />
+      <Info text={event.organizerEmail} label={'Epost arrangør'} />
       <Info text={event.location} label={'Lokasjon'} />
       <Info text={event.description} label={'Beskrivelse'} />
       <TimeInfo date={event.start} label={'Starter'} />

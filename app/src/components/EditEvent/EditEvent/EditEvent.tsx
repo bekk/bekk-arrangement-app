@@ -3,7 +3,6 @@ import { TextInput } from 'src/components/Common/TextInput/TextInput';
 import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import { IEditEvent } from 'src/types/event';
-import style from './EditEvent.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
   validateTitle,
@@ -39,7 +38,6 @@ export const EditEvent = ({
         }
       />
       {showError && <ValidationResult validationResult={event.title.errors} />}
-      <div className={style.organizerContainer}>
         <div>
           <TextInput
             label="Navn på arrangør"
@@ -72,7 +70,6 @@ export const EditEvent = ({
             <ValidationResult validationResult={event.organizerEmail.errors} />
           )}
         </div>
-      </div>
       <TextInput
         label={'Lokasjon'}
         placeholder="Vippetangen"
