@@ -6,7 +6,7 @@ import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
 import { TextInput } from '../Common/TextInput/TextInput';
-import { useEvent } from 'src/hooks/eventHooks';
+import { useEvent, useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import { ValidationResult } from '../Common/ValidationResult/ValidationResult';
 import {
@@ -23,8 +23,10 @@ import {
   cancelParticipantRoute,
   viewEventRoute,
   eventsRoute,
+  editEventRoute,
 } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { hasPermission, readPermission } from 'src/auth';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -37,6 +39,8 @@ export const ViewEventContainer = () => {
 
   const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistration);
+  const { createdEvent } = useRecentlyCreatedEvent();
+  const hasRecentlyCreatedThisEvent = eventId === createdEvent;
 
   if (!event) {
     return <div>Loading</div>;
@@ -66,6 +70,7 @@ export const ViewEventContainer = () => {
   });
 
   const goToOverview = () => history.push(eventsRoute);
+  const goToEditEvent = () => history.push(editEventRoute(eventId));
 
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);
@@ -75,7 +80,16 @@ export const ViewEventContainer = () => {
 
   return (
     <Page>
-      <Button onClick={goToOverview}>Til arrangementer</Button>
+      {hasPermission(readPermission) && (
+        <p className={style.link} onClick={goToOverview}>
+          ↩︎ Til arrangementer
+        </p>
+      )}
+      {hasRecentlyCreatedThisEvent && (
+        <p className={style.link} onClick={goToEditEvent}>
+          ✎ Rediger arrangement
+        </p>
+      )}
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.text}>
         <DateSection startDate={event.start} endDate={event.end} />

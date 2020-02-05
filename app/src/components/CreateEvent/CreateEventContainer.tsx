@@ -17,6 +17,7 @@ import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './CreateEventContainer.module.scss';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -29,10 +30,12 @@ export const CreateEventContainer = () => {
   const isDisabled = hasClicked ? !isOk(event) : false;
   const history = useHistory();
   const { catchAndNotify } = useNotification();
+  const { setCreatedEvent } = useRecentlyCreatedEvent();
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
       const createdEvent = await postEvent(event.validValue);
+      setCreatedEvent(createdEvent.id);
       history.push(viewEventRoute(createdEvent.id));
     }
   });

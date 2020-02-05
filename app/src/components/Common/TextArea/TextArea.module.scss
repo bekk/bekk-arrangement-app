@@ -10,12 +10,12 @@
 
 .textArea {
   width: 100%;
+  line-height: 1.5;
   outline: none;
   border: none;
   border-bottom: solid 1px;
   border-color: var(--textColor);
   background-color: var(--backgroundColor);
-  padding: 10px;
   display: block;
   @include regularText;
 }

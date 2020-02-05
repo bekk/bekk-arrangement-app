@@ -26,3 +26,9 @@
   @include regularText;
   line-height: 1.2;
 }
+
+.link {
+  @include regularText;
+  text-decoration: underline;
+  margin-top: 20px;
+}

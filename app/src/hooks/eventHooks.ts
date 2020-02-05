@@ -3,6 +3,7 @@ import { getEvent } from 'src/api/arrangementSvc';
 import { IEvent, deserializeEvent, parseEvent } from 'src/types/event';
 import { isOk } from 'src/types/validation';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { useLocalStorage } from './localStorage';
 
 export const useEvent = (id: string | undefined): [IEvent | undefined] => {
   const [event, setEvent] = useState<IEvent | undefined>(undefined);
@@ -22,4 +23,18 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
   }, [id, catchAndNotify]);
 
   return [event];
+};
+
+export const useRecentlyCreatedEvent = (): {
+  createdEvent: string;
+  setCreatedEvent: (string: string) => void;
+} => {
+  const [storage, setStorage] = useLocalStorage({
+    key: 'recentlyCreatedEvent',
+  });
+  const value = storage !== undefined ? JSON.parse(storage) : [];
+  return {
+    createdEvent: value,
+    setCreatedEvent: (value: string) => setStorage(JSON.stringify(value)),
+  };
 };
