@@ -6,5 +6,13 @@
   {
     "name": "AUTH0_ISSUER_DOMAIN",
     "value": "bekk-dev.eu.auth0.com"
+  },
+  {
+    "name": "AUTH0_AUDIENCE",
+    "value": "QHQy75S7tmnhDdBGYSnszzlhMPul0fAE"
+  },
+  {
+    "name": "BEKK_API_URL",
+    "value": "https://api.dev.bekk.no"
   }
 ]
