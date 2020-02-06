@@ -2,6 +2,7 @@
 
 .subsection {
   margin: 20px 0px;
+  white-space: pre-wrap;
 }
 
 .column {
@@ -25,4 +26,10 @@
 .text {
   @include regularText;
   line-height: 1.2;
+}
+
+.link {
+  @include regularText;
+  text-decoration: underline;
+  margin-top: 20px;
 }

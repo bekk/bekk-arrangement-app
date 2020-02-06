@@ -150,3 +150,12 @@ export function useAuth0Redirect(): void {
     catchTokenFromAuth0AndSaveIt();
   }, []);
 }
+
+export function hasPermission(permission: string): boolean {
+  const permissions: string[] = getClaimsFromToken(getIdToken())[
+    'https://api.bekk.no/claims/permission'
+  ];
+  return permissions.includes(permission);
+}
+
+export const readPermission = 'read:arrangement';
