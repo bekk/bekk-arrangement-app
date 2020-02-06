@@ -34,6 +34,6 @@ export const useRecentlyCreatedEvent = (): {
   });
   return {
     createdEventId: storage,
-    setCreatedEventId: (id: string) => setStorage(id),
+    setCreatedEventId: setStorage,
   };
 };
