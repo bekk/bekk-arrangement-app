@@ -39,8 +39,8 @@ export const ViewEventContainer = () => {
 
   const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistration);
-  const { createdEvent } = useRecentlyCreatedEvent();
-  const hasRecentlyCreatedThisEvent = eventId === createdEvent;
+  const { createdEventId } = useRecentlyCreatedEvent();
+  const hasRecentlyCreatedThisEvent = eventId === createdEventId;
 
   if (!event) {
     return <div>Loading</div>;

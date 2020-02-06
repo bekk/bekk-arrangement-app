@@ -30,12 +30,12 @@ export const CreateEventContainer = () => {
   const isDisabled = hasClicked ? !isOk(event) : false;
   const history = useHistory();
   const { catchAndNotify } = useNotification();
-  const { setCreatedEvent } = useRecentlyCreatedEvent();
+  const { setCreatedEventId } = useRecentlyCreatedEvent();
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
       const createdEvent = await postEvent(event.validValue);
-      setCreatedEvent(createdEvent.id);
+      setCreatedEventId(createdEvent.id);
       history.push(viewEventRoute(createdEvent.id));
     }
   });

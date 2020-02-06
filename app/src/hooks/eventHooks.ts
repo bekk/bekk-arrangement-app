@@ -26,15 +26,14 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
 };
 
 export const useRecentlyCreatedEvent = (): {
-  createdEvent: string;
-  setCreatedEvent: (string: string) => void;
+  createdEventId: string | undefined;
+  setCreatedEventId: (string: string) => void;
 } => {
   const [storage, setStorage] = useLocalStorage({
-    key: 'recentlyCreatedEvent',
+    key: 'recently-created-event',
   });
-  const value = storage !== undefined ? JSON.parse(storage) : [];
   return {
-    createdEvent: value,
-    setCreatedEvent: (value: string) => setStorage(JSON.stringify(value)),
+    createdEventId: storage,
+    setCreatedEventId: (id: string) => setStorage(id),
   };
 };
