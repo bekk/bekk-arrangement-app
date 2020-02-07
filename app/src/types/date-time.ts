@@ -1,53 +1,70 @@
-import { IDate, parseDate, validateDate, deserializeDate } from './date';
-import { ITime, validateTime, stringifyTime, parseTime } from './time';
+import {
+  IDate,
+  deserializeDate,
+  IDateContract,
+  parseDate,
+  EditDate,
+  stringifyDate,
+} from './date';
+import {
+  ITime,
+  parseTime,
+  stringifyTime,
+  ITimeContract,
+  EditTime,
+  deserializeTime,
+} from './time';
 import { isOk, Result } from './validation';
 import { isAfter } from 'date-fns';
 import { concatLists } from '.';
+
+export type IDateTimeContract = {
+  date: IDateContract;
+  time: ITimeContract;
+};
+
+export type EditDateTime = {
+  date: EditDate;
+  time: EditTime;
+};
 
 export interface IDateTime {
   date: IDate;
   time: ITime;
 }
 
-export type EditDateTime = {
-  date: string;
-  time: [string, string];
-};
-
-export const parseDateTime = (datetime: string) => {
-  const date = parseDate(datetime);
-  const time = parseTime(datetime);
-
-  return { date, time };
-};
-
-export const validateDateTime = (
+export const parseDateTime = (
   datetime: EditDateTime
 ): Result<EditDateTime, IDateTime> => {
-  const validationResultDate = validateDate(datetime.date);
-  const validationResultTime = validateTime(datetime.time);
+  const date = parseDate(datetime.date);
+  const time = parseTime(datetime.time);
 
-  if (isOk(validationResultDate) && isOk(validationResultTime)) {
+  if (isOk(date) && isOk(time)) {
     return {
       errors: undefined,
       editValue: datetime,
-      validValue: {
-        date: validationResultDate.validValue,
-        time: validationResultTime.validValue,
-      },
+      validValue: { date: date.validValue, time: time.validValue },
     };
   }
-  const errors = concatLists(
-    validationResultTime.errors,
-    validationResultDate.errors
-  );
+
+  const errors = concatLists(date.errors, time.errors);
   return {
-    editValue: datetime,
     errors,
+    editValue: datetime,
   };
 };
 
-export const isAfterNow = ({ date, time }: IDateTime) => {
+export const serializeDateTime = (datetime: IDateTime): IDateTimeContract =>
+  datetime;
+
+export const deserializeDateTime = (
+  datetime: IDateTimeContract
+): EditDateTime => ({
+  date: deserializeDate(datetime.date),
+  time: deserializeTime(datetime.time),
+});
+
+export const isInTheFuture = ({ date, time }: IDateTime) => {
   const now = new Date();
   return isAfter(toDate({ date, time }), now);
 };
@@ -56,7 +73,7 @@ export const toDate = ({ date, time }: IDateTime) =>
   new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
 
 export const stringifyDateTime = ({ date, time }: IDateTime) =>
-  `${deserializeDate(date)}T${stringifyTime(time)}`;
+  `${stringifyDate(date)}T${stringifyTime(time)}`;
 
 //Bør nok flyttes ut i en date utils
 export const getNow = () => {

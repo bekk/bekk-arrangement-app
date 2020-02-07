@@ -6,7 +6,7 @@ export interface Email {
 
 export const serializeEmail = ({ email }: Email) => email;
 
-export const validateEmail = (email: string): Result<string, Email> => {
+export const parseEmail = (email: string): Result<string, Email> => {
   const validator = validate<string, Email>(email, {
     'E-post må inneholde minst tre tegn': email.length < 3,
   });

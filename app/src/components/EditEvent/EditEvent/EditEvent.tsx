@@ -6,13 +6,13 @@ import { IEditEvent } from 'src/types/event';
 import style from './EditEvent.module.scss';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
-  validateTitle,
-  validateDescription,
-  validateHost,
-  validateMaxAttendees,
-  validateLocation,
+  parseTitle,
+  parseDescription,
+  parseHost,
+  parseMaxAttendees,
+  parseLocation,
 } from 'src/types';
-import { validateDateTime } from 'src/types/date-time';
+import { parseDateTime } from 'src/types/date-time';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -34,7 +34,7 @@ export const EditEvent = ({
         onChange={title =>
           updateEvent({
             ...event,
-            title: validateTitle(title),
+            title: parseTitle(title),
           })
         }
       />
@@ -48,7 +48,7 @@ export const EditEvent = ({
             onChange={organizerName =>
               updateEvent({
                 ...event,
-                organizerName: validateHost(organizerName),
+                organizerName: parseHost(organizerName),
               })
             }
           />
@@ -64,7 +64,7 @@ export const EditEvent = ({
             onChange={organizerEmail =>
               updateEvent({
                 ...event,
-                organizerEmail: validateHost(organizerEmail),
+                organizerEmail: parseHost(organizerEmail),
               })
             }
           />
@@ -80,7 +80,7 @@ export const EditEvent = ({
         onChange={location =>
           updateEvent({
             ...event,
-            location: validateLocation(location),
+            location: parseLocation(location),
           })
         }
       />
@@ -94,7 +94,7 @@ export const EditEvent = ({
         onChange={description =>
           updateEvent({
             ...event,
-            description: validateDescription(description),
+            description: parseDescription(description),
           })
         }
       />
@@ -108,7 +108,7 @@ export const EditEvent = ({
         onChange={start =>
           updateEvent({
             ...event,
-            start: validateDateTime(start),
+            start: parseDateTime(start),
           })
         }
       />
@@ -119,7 +119,7 @@ export const EditEvent = ({
         onChange={end =>
           updateEvent({
             ...event,
-            end: validateDateTime(end),
+            end: parseDateTime(end),
           })
         }
       />
@@ -130,7 +130,7 @@ export const EditEvent = ({
         onChange={openForRegistration =>
           updateEvent({
             ...event,
-            openForRegistration: validateDateTime(openForRegistration),
+            openForRegistration: parseDateTime(openForRegistration),
           })
         }
       />
@@ -141,7 +141,7 @@ export const EditEvent = ({
         onChange={maxParticipants =>
           updateEvent({
             ...event,
-            maxParticipants: validateMaxAttendees(maxParticipants),
+            maxParticipants: parseMaxAttendees(maxParticipants),
           })
         }
       />

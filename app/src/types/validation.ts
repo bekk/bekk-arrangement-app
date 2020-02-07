@@ -73,3 +73,7 @@ export const validate = <From, To>(
     },
   };
 };
+
+export function toEdit<T>(x: T) {
+  return { errors: undefined, editValue: x, validValue: x };
+}

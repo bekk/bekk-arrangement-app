@@ -1,16 +1,26 @@
-import { Result, isOk } from './validation';
+import { Result, isOk, toEdit } from './validation';
 import {
   concatLists,
-  validateTitle,
-  validateDescription,
-  validateHost,
-  validateMaxAttendees,
-  validateLocation,
+  parseTitle,
+  parseDescription,
+  parseHost,
+  parseMaxAttendees,
+  parseLocation,
 } from '.';
-import { IDateTime, EditDateTime, validateDateTime } from './date-time';
-import { deserializeTime } from './time';
-import { deserializeDate, getTodayDeserialized } from './date';
-import { validateTimeInstance } from './time-instance'
+import {
+  IDateTime,
+  EditDateTime,
+  parseDateTime,
+  deserializeDateTime,
+} from './date-time';
+import { parseEmail, Email, serializeEmail } from './email';
+import {
+  TimeInstanceContract,
+  EditTimeInstance,
+  TimeInstance,
+  deserializeTimeInstance,
+  parseTimeInstance,
+} from './time-instance';
 
 export type EventId = string;
 
@@ -22,19 +32,7 @@ export interface IEventContract {
   location: string;
   startDate: IDateTime;
   endDate: IDateTime;
-  openForRegistrationTime: number;
-  organizerName: string;
-  organizerEmail: string;
-  maxParticipants: number;
-}
-
-export interface IEvent {
-  title: string;
-  description: string;
-  location: string;
-  start: IDateTime;
-  end: IDateTime;
-  openForRegistrationTime: Date;
+  openForRegistrationTime: TimeInstanceContract;
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
@@ -46,10 +44,22 @@ export interface IEditEvent {
   location: Result<string, string>;
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
-  openForRegistration: Result<string, Date>;
+  openForRegistration: Result<EditTimeInstance, Date>;
   organizerName: Result<string, string>;
-  organizerEmail: Result<string, string>;
-  maxParticipants: Result<string, number>;
+  organizerEmail: Result<string, Email>;
+  maxParticipants: Result<number, number>;
+}
+
+export interface IEvent {
+  title: string;
+  description: string;
+  location: string;
+  start: IDateTime;
+  end: IDateTime;
+  openForRegistrationTime: TimeInstance;
+  organizerName: string;
+  organizerEmail: Email;
+  maxParticipants: number;
 }
 
 export const serializeEvent = (event: IEvent): IEventContract => ({
@@ -60,29 +70,25 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   endDate: event.end,
   openForRegistrationTime: event.openForRegistrationTime.getTime(),
   organizerName: event.organizerName,
-  organizerEmail: event.organizerEmail,
+  organizerEmail: serializeEmail(event.organizerEmail),
   maxParticipants: event.maxParticipants,
 });
 
 export const deserializeEvent = (event: IEventContract): IEditEvent => {
-  const title = validateTitle(event.title);
-  const location = validateLocation(event.location);
-  const organizerName = validateHost(event.organizerName);
-  const organizerEmail = validateHost(event.organizerEmail);
-  const description = validateDescription(event.description);
-  const start = validateDateTime({
-    date: deserializeDate(event.startDate.date),
-    time: deserializeTime(event.startDate.time),
-  });
-  const end = validateDateTime({
-    date: deserializeDate(event.endDate.date),
-    time: deserializeTime(event.endDate.time),
-  });
-  const openForRegistration = validateTimeInstance(event.openForRegistrationTime);
+  const title = parseTitle(event.title);
+  const location = parseLocation(event.location);
+  const description = parseDescription(event.description);
 
-  const maxParticipants = validateMaxAttendees(
-    event.maxParticipants.toString()
+  const start = parseDateTime(deserializeDateTime(event.startDate));
+  const end = parseDateTime(deserializeDateTime(event.endDate));
+  const openForRegistration = parseTimeInstance(
+    deserializeTimeInstance(event.openForRegistrationTime)
   );
+
+  const organizerName = parseHost(event.organizerName);
+  const organizerEmail = parseEmail(event.organizerEmail);
+  const maxParticipants = parseMaxAttendees(event.maxParticipants);
+
   return {
     title,
     location,
@@ -117,7 +123,7 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
         location: event.location.validValue,
         start: event.start.validValue,
         end: event.end.validValue,
-        openForRegistration: event.openForRegistration.validValue,
+        openForRegistrationTime: event.openForRegistration.validValue,
         organizerName: event.organizerName.validValue,
         organizerEmail: event.organizerEmail.validValue,
         maxParticipants: event.maxParticipants.validValue,
@@ -154,32 +160,10 @@ export const initialEvent: IEvent = {
     date: { year: 2019, month: 12, day: 15 },
     time: { hour: 0, minute: 0 },
   },
-  openForRegistration: {
-    date: { year: 2019, month: 11, day: 15 },
-    time: { hour: 0, minute: 0 },
-  },
+  openForRegistrationTime: new Date(),
   organizerName: '',
-  organizerEmail: '',
-  maxParticipants: 1,
+  organizerEmail: { email: '' },
+  maxParticipants: 0,
 };
 
-export const initialEditEvent: IEditEvent = {
-  title: validateTitle(''),
-  description: validateDescription(''),
-  location: validateLocation(''),
-  start: validateDateTime({
-    date: getTodayDeserialized(),
-    time: ['17', '00'],
-  }),
-  end: validateDateTime({
-    date: getTodayDeserialized(),
-    time: ['20', '00'],
-  }),
-  openForRegistration: validateDateTime({
-    date: getTodayDeserialized(),
-    time: ['12', '00'],
-  }),
-  organizerName: validateHost(''),
-  organizerEmail: validateHost(''),
-  maxParticipants: validateMaxAttendees(''),
-};
+export const initialEditEvent = deserializeEvent(serializeEvent(initialEvent));
