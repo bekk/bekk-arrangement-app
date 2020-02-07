@@ -5,6 +5,7 @@ export interface Email {
 }
 
 export const serializeEmail = ({ email }: Email) => email;
+export const stringifyEmail = ({ email }: Email) => email;
 
 export const parseEmail = (email: string): Result<string, Email> => {
   const validator = validate<string, Email>(email, {

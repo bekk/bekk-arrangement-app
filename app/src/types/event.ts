@@ -20,6 +20,7 @@ import {
   TimeInstance,
   deserializeTimeInstance,
   parseTimeInstance,
+  serializeTimeInstance,
 } from './time-instance';
 
 export type EventId = string;
@@ -68,7 +69,7 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   location: event.location,
   startDate: event.start,
   endDate: event.end,
-  openForRegistrationTime: event.openForRegistrationTime.getTime(),
+  openForRegistrationTime: serializeTimeInstance(event.openForRegistrationTime),
   organizerName: event.organizerName,
   organizerEmail: serializeEmail(event.organizerEmail),
   maxParticipants: event.maxParticipants,

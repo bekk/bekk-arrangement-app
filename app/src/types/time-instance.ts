@@ -1,12 +1,12 @@
 import { Result } from './validation';
 
-export type TimeInstanceContract = number;
-export type EditTimeInstance = string;
+export type TimeInstanceContract = string; // BigInt
+export type EditTimeInstance = string; // human readable format
 export type TimeInstance = Date;
 
 export const deserializeTimeInstance = (
   time: TimeInstanceContract
-): EditTimeInstance => new Date(time).toJSON();
+): EditTimeInstance => new Date(Number(time)).toJSON();
 
 export const parseTimeInstance = (
   time: EditTimeInstance
@@ -34,7 +34,7 @@ export const parseTimeInstance = (
 
 export const serializeTimeInstance = (
   time: TimeInstance
-): TimeInstanceContract => time.getTime();
+): TimeInstanceContract => time.getTime().toString();
 
 export const stringifyTimeInstance = (time: TimeInstance): string =>
   time.toLocaleDateString();

@@ -21,6 +21,7 @@ import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
 import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { stringifyEmail } from 'src/types/email';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -75,7 +76,8 @@ export const ViewEventContainer = () => {
         <div>Lokasjon: {event.location}</div>
         <div className={style.subsection}>{event.description}</div>
         <div className={style.subsection}>
-          Arrangør: {event.organizerName} - {event.organizerEmail}
+          Arrangør: {event.organizerName} -{' '}
+          {stringifyEmail(event.organizerEmail)}
         </div>
         <div className={style.copy}>
           <Button onClick={copyLink}>Del</Button>
