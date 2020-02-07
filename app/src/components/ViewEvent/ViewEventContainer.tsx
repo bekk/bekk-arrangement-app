@@ -6,7 +6,7 @@ import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
 import { TextInput } from '../Common/TextInput/TextInput';
-import { useEvent } from 'src/hooks/eventHooks';
+import { useEvent, useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import { ValidationResult } from '../Common/ValidationResult/ValidationResult';
 import {
@@ -19,9 +19,15 @@ import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
-import { cancelParticipantRoute, viewEventRoute } from 'src/routing';
+import {
+  cancelParticipantRoute,
+  viewEventRoute,
+  eventsRoute,
+  editEventRoute,
+} from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail } from 'src/types/email';
+import { hasPermission, readPermission } from 'src/auth';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -34,6 +40,8 @@ export const ViewEventContainer = () => {
 
   const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
+  const { createdEventId } = useRecentlyCreatedEvent();
+  const hasRecentlyCreatedThisEvent = eventId === createdEventId;
 
   if (!event) {
     return <div>Loading</div>;
@@ -62,6 +70,9 @@ export const ViewEventContainer = () => {
     }
   });
 
+  const goToOverview = () => history.push(eventsRoute);
+  const goToEditEvent = () => history.push(editEventRoute(eventId));
+
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
@@ -70,6 +81,16 @@ export const ViewEventContainer = () => {
 
   return (
     <Page>
+      {hasPermission(readPermission) && (
+        <p className={style.link} onClick={goToOverview}>
+          ↩︎ Til arrangementer
+        </p>
+      )}
+      {hasRecentlyCreatedThisEvent && (
+        <p className={style.link} onClick={goToEditEvent}>
+          ✎ Rediger arrangement
+        </p>
+      )}
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.text}>
         <DateSection startDate={event.start} endDate={event.end} />

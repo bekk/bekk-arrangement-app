@@ -16,6 +16,6 @@ tmux send-keys -t $session 'cd app' C-m
 tmux send-keys -t $session 'npm run server' C-m
 
 tmux select-pane -L -t $session
-tmux send-keys -t $session 'nvim' C-m
+tmux send-keys -t $session 'code app' C-m
 
 tmux attach -t $session

@@ -17,6 +17,7 @@ import { useAuthentication } from 'src/auth';
 import { Page } from '../Page/Page';
 import style from './CreateEventContainer.module.scss';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -29,10 +30,12 @@ export const CreateEventContainer = () => {
   const isDisabled = hasClicked ? !isOk(event) : false;
   const history = useHistory();
   const { catchAndNotify } = useNotification();
+  const { setCreatedEventId } = useRecentlyCreatedEvent();
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
       const createdEvent = await postEvent(event.validValue);
+      setCreatedEventId(createdEvent.id);
       history.push(viewEventRoute(createdEvent.id));
     }
   });
@@ -55,8 +58,8 @@ export const CreateEventContainer = () => {
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
-            <Button onClick={addEvent}>Opprett arrangement</Button>
             <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+            <Button onClick={addEvent}>Opprett arrangement</Button>
           </div>
         </Page>
       );
@@ -72,10 +75,10 @@ export const CreateEventContainer = () => {
         showError={!isOk(event) && hasClicked}
       />
       <div className={style.buttonContainer}>
+        <Button onClick={goToOverview}>Avbryt</Button>
         <Button onClick={validatePreview} disabled={isDisabled}>
           Forhåndsvisning
         </Button>
-        <Button onClick={goToOverview}>Avbryt</Button>
       </div>
     </Page>
   );

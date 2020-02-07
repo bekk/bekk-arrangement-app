@@ -31,11 +31,10 @@ export const PreviewEvent = ({ event }: IProps) => {
     <>
       <h1 className={style.header}>Forhåndsvisning</h1>
       <Info text={event.title} label={'Tittel'} />
+      <Info text={event.organizerName} label={'Arrangør'} />
       <Info
-        text={`${event.organizerName} - ${stringifyEmail(
-          event.organizerEmail
-        )}`}
-        label={'Arrangør'}
+        text={stringifyEmail(event.organizerEmail)}
+        label={'Epost arrangør'}
       />
       <Info text={event.location} label={'Lokasjon'} />
       <Info text={event.description} label={'Beskrivelse'} />
