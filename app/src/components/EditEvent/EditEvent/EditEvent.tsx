@@ -13,6 +13,8 @@ import {
   parseLocation,
 } from 'src/types';
 import { parseDateTime } from 'src/types/date-time';
+import { parseEmail } from 'src/types/email';
+import { parseTimeInstance } from 'src/types/time-instance';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -64,7 +66,7 @@ export const EditEvent = ({
             onChange={organizerEmail =>
               updateEvent({
                 ...event,
-                organizerEmail: parseHost(organizerEmail),
+                organizerEmail: parseEmail(organizerEmail),
               })
             }
           />
@@ -123,25 +125,24 @@ export const EditEvent = ({
           })
         }
       />
-      <DateTimeInput
+      <TextInput
         label={'Påmelding åpner'}
         value={event.openForRegistration.editValue}
-        error={event.openForRegistration.errors}
         onChange={openForRegistration =>
           updateEvent({
             ...event,
-            openForRegistration: parseDateTime(openForRegistration),
+            openForRegistration: parseTimeInstance(openForRegistration),
           })
         }
       />
       <TextInput
         label={'Maks antall'}
         placeholder="0 (ingen grense)"
-        value={event.maxParticipants.editValue}
+        value={event.maxParticipants.editValue.toString()}
         onChange={maxParticipants =>
           updateEvent({
             ...event,
-            maxParticipants: parseMaxAttendees(maxParticipants),
+            maxParticipants: parseMaxAttendees(Number(maxParticipants)),
           })
         }
       />

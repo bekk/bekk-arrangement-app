@@ -1,4 +1,4 @@
-import { Result, isOk, toEdit } from './validation';
+import { Result, isOk } from './validation';
 import {
   concatLists,
   parseTitle,

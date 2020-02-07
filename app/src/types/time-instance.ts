@@ -32,5 +32,9 @@ export const parseTimeInstance = (
   };
 };
 
-export const serialize = (time: TimeInstance): TimeInstanceContract =>
-  time.getTime();
+export const serializeTimeInstance = (
+  time: TimeInstance
+): TimeInstanceContract => time.getTime();
+
+export const stringifyTimeInstance = (time: TimeInstance): string =>
+  time.toLocaleDateString();

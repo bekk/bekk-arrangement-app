@@ -59,7 +59,7 @@ export const ViewEventsContainer = () => {
         <AddEventButton />
       </div>
       <div>
-        {eventsKeys.map(x => {
+        {eventsKeys.map((x, i) => {
           const eventFromMap = events.get(x);
           if (eventFromMap !== undefined && isOk(eventFromMap)) {
             return (
@@ -70,7 +70,7 @@ export const ViewEventsContainer = () => {
               />
             );
           }
-          return <div>Event with id {x} is no good </div>;
+          return <div key={i}>Event with id {x} is no good </div>;
         })}
       </div>
     </Page>

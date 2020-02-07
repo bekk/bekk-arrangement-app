@@ -32,7 +32,7 @@ export const ViewEventContainer = () => {
   const { catchAndNotify } = useNotification();
 
   const [event] = useEvent(eventId);
-  const timeLeft = useTimeLeft(event && event.openForRegistration);
+  const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
 
   if (!event) {
     return <div>Loading</div>;
