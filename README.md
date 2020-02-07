@@ -26,3 +26,12 @@ npm start
 ```
 
 Appen kjører da på http://localhost:3000
+
+
+### 🔥Hett tips🔥
+
+Skaff deg tmux, gå til rotmappa til prosjektet og kjør
+
+```
+./tmux.sh
+```
