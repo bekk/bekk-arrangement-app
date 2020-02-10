@@ -50,8 +50,6 @@ export const isSameDate = (date: IDate, otherDate: IDate) => {
   );
 };
 
-export const serializeDate = (date: IDate): IDateContract => date;
-
 export const deserializeDate = ({
   year,
   month,

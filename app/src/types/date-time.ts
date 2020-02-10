@@ -54,9 +54,6 @@ export const parseDateTime = (
   };
 };
 
-export const serializeDateTime = (datetime: IDateTime): IDateTimeContract =>
-  datetime;
-
 export const deserializeDateTime = (
   datetime: IDateTimeContract
 ): EditDateTime => ({

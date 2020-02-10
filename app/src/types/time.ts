@@ -12,7 +12,7 @@ export interface ITime {
 export const parseTime = ([_hour, _minutes]: EditTime): Result<
   EditTime,
   ITime
-> => {
+  > => {
   const hour = Number(_hour);
   const minute = Number(_minutes);
 
@@ -37,5 +37,3 @@ export const deserializeTime = (time: ITimeContract): EditTime => [
   time.hour.toString().padStart(2, '0'),
   time.minute.toString().padStart(2, '0'),
 ];
-
-export const serializeTime = (time: ITime): ITimeContract => time;
