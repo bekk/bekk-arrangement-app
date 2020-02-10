@@ -26,6 +26,7 @@ import {
   editEventRoute,
 } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { stringifyEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
 
 export const ViewEventContainer = () => {
@@ -38,7 +39,7 @@ export const ViewEventContainer = () => {
   const { catchAndNotify } = useNotification();
 
   const [event] = useEvent(eventId);
-  const timeLeft = useTimeLeft(event && event.openForRegistration);
+  const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
   const { createdEventId } = useRecentlyCreatedEvent();
   const hasRecentlyCreatedThisEvent = eventId === createdEventId;
 
@@ -96,7 +97,8 @@ export const ViewEventContainer = () => {
         <div>Lokasjon: {event.location}</div>
         <div className={style.subsection}>{event.description}</div>
         <div className={style.subsection}>
-          Arrangør: {event.organizerName} - {event.organizerEmail}
+          Arrangør: {event.organizerName} -{' '}
+          {stringifyEmail(event.organizerEmail)}
         </div>
         <div className={style.copy}>
           <Button onClick={copyLink}>Del</Button>

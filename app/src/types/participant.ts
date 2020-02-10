@@ -1,5 +1,5 @@
 import { Result, isOk } from './validation';
-import { validateEmail, serializeEmail, Email } from './email';
+import { parseEmail, serializeEmail, Email } from './email';
 
 export interface IParticipantWriteModel {
   email: string;
@@ -43,7 +43,7 @@ export const deserializeParticpant = (
 export const parseParticipant = (
   participant: IEditParticipant
 ): Result<IEditParticipant, IParticipant> => {
-  const parsedParticipant = validateEmail(participant.email);
+  const parsedParticipant = parseEmail(participant.email);
   if (isOk(parsedParticipant)) {
     return {
       editValue: participant,

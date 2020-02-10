@@ -1,16 +1,18 @@
 import { validate, Result } from './validation';
 
+export type ITimeContract = ITime;
+
+export type EditTime = [string, string];
+
 export interface ITime {
   hour: number;
   minute: number;
 }
 
-export type EditTime = [string, string];
-
-export const validateTime = ([_hour, _minutes]: EditTime): Result<
+export const parseTime = ([_hour, _minutes]: EditTime): Result<
   EditTime,
   ITime
-> => {
+  > => {
   const hour = Number(_hour);
   const minute = Number(_minutes);
 
@@ -28,16 +30,10 @@ export const validateTime = ([_hour, _minutes]: EditTime): Result<
   return validator.resolve({ hour, minute });
 };
 
-export const parseTime = (time: string): EditTime => {
-  const timeISO8601 = /([0-9]{1,2}):([0-9]{1,2})/;
-  const [, hour = '', minutes = ''] = time.match(timeISO8601) || [];
-  return [hour, minutes];
-};
-
 export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
-export const deserializeTime = (time: ITime): EditTime => [
+export const deserializeTime = (time: ITimeContract): EditTime => [
   time.hour.toString().padStart(2, '0'),
   time.minute.toString().padStart(2, '0'),
 ];

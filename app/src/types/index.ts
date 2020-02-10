@@ -18,44 +18,38 @@ export const createLocation = (value: string): Result<string, string> => {
   };
 };
 
-export const validateDescription = (value: string): Result<string, string> => {
+export const parseDescription = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Beskrivelse må ha minst tre bokstaver': value.length < 3,
   });
-
   return validator.resolve(value);
 };
 
-export const validateLocation = (value: string): Result<string, string> => {
+export const parseLocation = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Sted må ha minst fire bokstaver': value.length <= 3,
   });
-
   return validator.resolve(value);
 };
 
-export const validateTitle = (value: string): Result<string, string> => {
+export const parseTitle = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Tittel må ha minst tre bokstaver': value.length < 3,
   });
-
   return validator.resolve(value);
 };
 
-export const validateHost = (value: string): Result<string, string> => {
+export const parseHost = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Arrangør må ha minst tre bokstaver': value.length < 3,
   });
-
   return validator.resolve(value);
 };
 
-export const validateMaxAttendees = (value: string): Result<string, number> => {
-  const number = Number(value);
-  const validator = validate<string, number>(value, {
-    'Verdien må være et tall': !Number.isInteger(number),
+export const parseMaxAttendees = (value: number): Result<number, number> => {
+  const validator = validate<number, number>(value, {
+    'Verdien må være et tall': !Number.isInteger(value),
     'Må sette maks antall deltakere': !value,
   });
-
-  return validator.resolve(number);
+  return validator.resolve(value);
 };

@@ -4,6 +4,8 @@ import style from './PreviewEvent.module.scss';
 import { IDateTime } from 'src/types/date-time';
 import { stringifyTime } from 'src/types/time';
 import { stringifyDate } from 'src/types/date';
+import { stringifyTimeInstance } from 'src/types/time-instance';
+import { stringifyEmail } from 'src/types/email';
 
 interface IProps {
   event: IEvent;
@@ -30,12 +32,18 @@ export const PreviewEvent = ({ event }: IProps) => {
       <h1 className={style.header}>Forhåndsvisning</h1>
       <Info text={event.title} label={'Tittel'} />
       <Info text={event.organizerName} label={'Arrangør'} />
-      <Info text={event.organizerEmail} label={'Epost arrangør'} />
+      <Info
+        text={stringifyEmail(event.organizerEmail)}
+        label={'Epost arrangør'}
+      />
       <Info text={event.location} label={'Lokasjon'} />
       <Info text={event.description} label={'Beskrivelse'} />
       <TimeInfo date={event.start} label={'Starter'} />
       <TimeInfo date={event.end} label={'Slutter'} />
-      <TimeInfo date={event.openForRegistration} label={'Påmeldingen åpner'} />
+      <Info
+        label={'Påmeldingen åpner'}
+        text={stringifyTimeInstance(event.openForRegistrationTime)}
+      />
       <Info text={event.maxParticipants.toString()} label={'Maks antall'} />
     </>
   );

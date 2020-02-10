@@ -5,13 +5,15 @@ import { ValidationResult } from 'src/components/Common/ValidationResult/Validat
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
-  validateTitle,
-  validateDescription,
-  validateHost,
-  validateMaxAttendees,
-  validateLocation,
+  parseTitle,
+  parseDescription,
+  parseHost,
+  parseMaxAttendees,
+  parseLocation,
 } from 'src/types';
-import { validateDateTime } from 'src/types/date-time';
+import { parseDateTime } from 'src/types/date-time';
+import { parseEmail } from 'src/types/email';
+import { parseTimeInstance } from 'src/types/time-instance';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -33,7 +35,7 @@ export const EditEvent = ({
         onChange={title =>
           updateEvent({
             ...event,
-            title: validateTitle(title),
+            title: parseTitle(title),
           })
         }
       />
@@ -46,7 +48,7 @@ export const EditEvent = ({
             onChange={organizerName =>
               updateEvent({
                 ...event,
-                organizerName: validateHost(organizerName),
+                organizerName: parseHost(organizerName),
               })
             }
           />
@@ -62,7 +64,7 @@ export const EditEvent = ({
             onChange={organizerEmail =>
               updateEvent({
                 ...event,
-                organizerEmail: validateHost(organizerEmail),
+                organizerEmail: parseEmail(organizerEmail),
               })
             }
           />
@@ -77,7 +79,7 @@ export const EditEvent = ({
         onChange={location =>
           updateEvent({
             ...event,
-            location: validateLocation(location),
+            location: parseLocation(location),
           })
         }
       />
@@ -91,7 +93,7 @@ export const EditEvent = ({
         onChange={description =>
           updateEvent({
             ...event,
-            description: validateDescription(description),
+            description: parseDescription(description),
           })
         }
       />
@@ -105,7 +107,7 @@ export const EditEvent = ({
         onChange={start =>
           updateEvent({
             ...event,
-            start: validateDateTime(start),
+            start: parseDateTime(start),
           })
         }
       />
@@ -116,29 +118,28 @@ export const EditEvent = ({
         onChange={end =>
           updateEvent({
             ...event,
-            end: validateDateTime(end),
+            end: parseDateTime(end),
           })
         }
       />
-      <DateTimeInput
+      <TextInput
         label={'Påmelding åpner'}
         value={event.openForRegistration.editValue}
-        error={event.openForRegistration.errors}
         onChange={openForRegistration =>
           updateEvent({
             ...event,
-            openForRegistration: validateDateTime(openForRegistration),
+            openForRegistration: parseTimeInstance(openForRegistration),
           })
         }
       />
       <TextInput
         label={'Maks antall'}
         placeholder="0 (ingen grense)"
-        value={event.maxParticipants.editValue}
+        value={event.maxParticipants.editValue.toString()}
         onChange={maxParticipants =>
           updateEvent({
             ...event,
-            maxParticipants: validateMaxAttendees(maxParticipants),
+            maxParticipants: parseMaxAttendees(Number(maxParticipants)),
           })
         }
       />
