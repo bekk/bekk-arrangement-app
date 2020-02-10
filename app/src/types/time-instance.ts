@@ -1,4 +1,4 @@
-import { Result } from './validation';
+import { validate, Result } from './validation';
 
 export type TimeInstanceContract = string; // BigInt
 export type EditTimeInstance = string; // human readable format
@@ -11,25 +11,12 @@ export const deserializeTimeInstance = (
 export const parseTimeInstance = (
   time: EditTimeInstance
 ): Result<EditTimeInstance, TimeInstance> => {
-  const timestamp = Date.parse(time);
-
-  if (isNaN(timestamp)) {
-    return {
-      editValue: time,
-      errors: [
-        {
-          type: 'Error',
-          message: 'Feil format på streng. Prøv noe som: 2020-02-05 10:07',
-        },
-      ],
-    };
-  }
-
-  return {
-    editValue: time,
-    validValue: new Date(timestamp),
-    errors: undefined,
-  };
+  const unixTimeStamp = Date.parse(time);
+  const timestamp = new Date(unixTimeStamp);
+  const validator = validate<EditTimeInstance, TimeInstance>(time, {
+    'Feil format på streng. Prøv noe som: 2020-02-05 10:07': isNaN(unixTimeStamp)
+  })
+  return validator.resolve(timestamp);
 };
 
 export const serializeTimeInstance = (
