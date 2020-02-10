@@ -19,7 +19,7 @@ export const ValidationResult = ({ validationResult }: IProps) => {
         validationResult.map(v => (
           <div key={v.message} className={style.errorMessage}>
             <div className={circleStyle(v.type)}></div>
-            {v.message}
+            <span className={style.message}>{v.message}</span>
           </div>
         ))}
     </div>

@@ -61,7 +61,8 @@ const useHourMinuteFocus = (hour: string) => {
       const selection = window.getSelection()?.toString();
       const notSelected = selection !== hour;
 
-      if (hour.length === 2 && notSelected && e.key !== 'Tab') {
+      const hasEnteredNumber = /[0-9]/.test(e.key);
+      if (hour.length === 2 && notSelected && hasEnteredNumber) {
         focusMinute();
       }
     },

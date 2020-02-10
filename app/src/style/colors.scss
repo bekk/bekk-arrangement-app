@@ -29,6 +29,7 @@
   --fadedColor: var(--morgendis);
   --coolColor: var(--nattKontrast);
   --coolColorContrast: var(--hvit);
+  --active: var(--regnKontrast);
   --disabled: var(--grey);
   --error: var(--solnedgangKontrast);
   --warning: var(--soloppgang);
@@ -43,6 +44,7 @@
     --fadedColor: var(--morgendis);
     --coolColor: var(--nattKontrast);
     --coolColorContrast: var(--hvit);
+    --active: var(--regnKontrast);
   }
 
   /* USer has to specifically choose light to get the light theme */

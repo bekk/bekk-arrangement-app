@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './TextInput.module.scss';
+import classNames from 'classnames';
 
 interface IProps {
   label: string;
   value: string;
-  onChange: (value: string) => void;
   placeholder?: string;
+  onChange: (value: string) => void;
+  isError?: boolean;
   onBlur?: () => void;
 }
 
@@ -14,8 +16,14 @@ export const TextInput = ({
   value,
   onChange,
   placeholder = '',
+  isError = false,
   onBlur = () => undefined,
 }: IProps): JSX.Element => {
+  const [hasVisited, setVisited] = useState(false);
+  const inputStyle = classNames(style.textInput, {
+    [style.visited]: hasVisited,
+    [style.error]: hasVisited && isError,
+  });
   return (
     <>
       <label className={style.textLabel} htmlFor={label}>
@@ -23,10 +31,11 @@ export const TextInput = ({
       </label>
       <input
         type="text"
-        className={style.textInput}
+        className={inputStyle}
         placeholder={placeholder}
         value={value}
         onChange={v => onChange(v.target.value)}
+        onFocus={() => setVisited(true)}
         onBlur={onBlur}
       />
     </>

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import { TextInput } from 'src/components/Common/TextInput/TextInput';
-import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
+import React from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
@@ -12,7 +10,7 @@ import {
 } from 'src/types';
 import { parseEmail } from 'src/types/email';
 import { parseTimeInstance } from 'src/types/time-instance';
-import { Result } from 'src/types/validation';
+import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -122,35 +120,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-    </>
-  );
-};
-
-interface ValidTextInputProps {
-  label: string;
-  placeholder?: string;
-  value: Result<string, any>;
-  onChange: (value: string) => void;
-}
-
-export const ValidatedTextInput = ({
-  label,
-  placeholder,
-  value,
-  onChange,
-}: ValidTextInputProps) => {
-  const [hasLostFocus, setLostFocus] = useState(false);
-  const shouldShowErrors = hasLostFocus;
-  return (
-    <>
-      <TextInput
-        label={label}
-        placeholder={placeholder}
-        value={value.editValue}
-        onChange={onChange}
-        onBlur={() => setLostFocus(true)}
-      />
-      {shouldShowErrors && <ValidationResult validationResult={value.errors} />}
     </>
   );
 };

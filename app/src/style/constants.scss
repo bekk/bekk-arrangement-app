@@ -18,6 +18,15 @@ $buttonMobile: 16px;
 
 $desktop: 'only screen and (min-width: #{$mobileMaxWidth})';
 
+@mixin boldText {
+  color: var(--textColor);
+  font-size: $textMobile;
+  font-family: $fontRegular;
+  @media #{$desktop} {
+    font-size: $textDesktop;
+  }
+}
+
 @mixin regularText {
   color: var(--textColor);
   font-size: $textMobile;

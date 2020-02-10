@@ -9,7 +9,7 @@ import {
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
-import { eventsRoute, viewEventRoute } from 'src/routing';
+import { viewEventRoute } from 'src/routing';
 import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
@@ -39,8 +39,6 @@ export const CreateEventContainer = () => {
     }
   });
 
-  const goToOverview = () => history.push(eventsRoute);
-
   const validatePreview = () => {
     if (isOk(event)) {
       setPreviewState(true);
@@ -56,8 +54,8 @@ export const CreateEventContainer = () => {
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
-            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
             <Button onClick={addEvent}>Opprett arrangement</Button>
+            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
           </div>
         </Page>
       );
@@ -69,7 +67,6 @@ export const CreateEventContainer = () => {
       <h1 className={style.header}>Opprett arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={goToOverview}>Avbryt</Button>
         <Button onClick={validatePreview} disabled={isDisabled}>
           Forhåndsvisning
         </Button>
