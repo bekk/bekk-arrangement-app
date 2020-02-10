@@ -6,6 +6,7 @@ interface IProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  onBlur?: () => void;
 }
 
 export const TextInput = ({
@@ -13,6 +14,7 @@ export const TextInput = ({
   value,
   onChange,
   placeholder = '',
+  onBlur = () => undefined,
 }: IProps): JSX.Element => {
   return (
     <>
@@ -25,6 +27,7 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={v => onChange(v.target.value)}
+        onBlur={onBlur}
       />
     </>
   );

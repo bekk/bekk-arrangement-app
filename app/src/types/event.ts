@@ -6,6 +6,7 @@ import {
   parseHost,
   parseMaxAttendees,
   parseLocation,
+  deserializeMaxAttendees,
 } from '.';
 import {
   IDateTime,
@@ -48,7 +49,7 @@ export interface IEditEvent {
   openForRegistration: Result<EditTimeInstance, Date>;
   organizerName: Result<string, string>;
   organizerEmail: Result<string, Email>;
-  maxParticipants: Result<number, number>;
+  maxParticipants: Result<string, number>;
 }
 
 export interface IEvent {
@@ -88,7 +89,9 @@ export const deserializeEvent = (event: IEventContract): IEditEvent => {
 
   const organizerName = parseHost(event.organizerName);
   const organizerEmail = parseEmail(event.organizerEmail);
-  const maxParticipants = parseMaxAttendees(event.maxParticipants);
+  const maxParticipants = parseMaxAttendees(
+    deserializeMaxAttendees(event.maxParticipants)
+  );
 
   return {
     title,

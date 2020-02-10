@@ -23,5 +23,6 @@
   &:disabled {
     background-color: var(--backgroundColor);
     color: var(--disabled);
+    cursor: initial;
   }
 }

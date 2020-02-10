@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput } from 'src/components/Common/TextInput/TextInput';
-import { TextArea } from 'src/components/Common/TextArea/TextArea';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
@@ -14,24 +13,20 @@ import {
 import { parseDateTime } from 'src/types/date-time';
 import { parseEmail } from 'src/types/email';
 import { parseTimeInstance } from 'src/types/time-instance';
+import { Result } from 'src/types/validation';
 
 interface IProps {
   eventResult: IEditEvent;
   updateEvent: (event: IEditEvent) => void;
-  showError: boolean;
 }
 
-export const EditEvent = ({
-  eventResult: event,
-  updateEvent,
-  showError,
-}: IProps) => {
+export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   return (
     <>
-      <TextInput
+      <ValidatedTextInput
         label={'Tittel'}
         placeholder="Fest på Skuret"
-        value={event.title.editValue}
+        value={event.title}
         onChange={title =>
           updateEvent({
             ...event,
@@ -39,43 +34,36 @@ export const EditEvent = ({
           })
         }
       />
-      {showError && <ValidationResult validationResult={event.title.errors} />}
-        <div>
-          <TextInput
-            label="Navn på arrangør"
-            placeholder="Ola Nordmann"
-            value={event.organizerName.editValue}
-            onChange={organizerName =>
-              updateEvent({
-                ...event,
-                organizerName: parseHost(organizerName),
-              })
-            }
-          />
-          {showError && (
-            <ValidationResult validationResult={event.organizerName.errors} />
-          )}
-        </div>
-        <div>
-          <TextInput
-            label="E-post arrangør"
-            placeholder="ola.nordmann@bekk.no"
-            value={event.organizerEmail.editValue}
-            onChange={organizerEmail =>
-              updateEvent({
-                ...event,
-                organizerEmail: parseEmail(organizerEmail),
-              })
-            }
-          />
-          {showError && (
-            <ValidationResult validationResult={event.organizerEmail.errors} />
-          )}
-        </div>
-      <TextInput
+      <div>
+        <ValidatedTextInput
+          label="Navn på arrangør"
+          placeholder="Ola Nordmann"
+          value={event.organizerName}
+          onChange={organizerName =>
+            updateEvent({
+              ...event,
+              organizerName: parseHost(organizerName),
+            })
+          }
+        />
+      </div>
+      <div>
+        <ValidatedTextInput
+          label="E-post arrangør"
+          placeholder="ola.nordmann@bekk.no"
+          value={event.organizerEmail}
+          onChange={organizerEmail =>
+            updateEvent({
+              ...event,
+              organizerEmail: parseEmail(organizerEmail),
+            })
+          }
+        />
+      </div>
+      <ValidatedTextInput
         label={'Lokasjon'}
         placeholder="Vippetangen"
-        value={event.location.editValue}
+        value={event.location}
         onChange={location =>
           updateEvent({
             ...event,
@@ -83,13 +71,10 @@ export const EditEvent = ({
           })
         }
       />
-      {showError && (
-        <ValidationResult validationResult={event.location.errors} />
-      )}
-      <TextArea
+      <ValidatedTextInput
         label={'Beskrivelse'}
         placeholder={'Dette er en beskrivelse'}
-        value={event.description.editValue}
+        value={event.description}
         onChange={description =>
           updateEvent({
             ...event,
@@ -97,9 +82,6 @@ export const EditEvent = ({
           })
         }
       />
-      {showError && (
-        <ValidationResult validationResult={event.description.errors} />
-      )}
       <DateTimeInput
         label={'Starter'}
         value={event.start.editValue}
@@ -122,9 +104,9 @@ export const EditEvent = ({
           })
         }
       />
-      <TextInput
+      <ValidatedTextInput
         label={'Påmelding åpner'}
-        value={event.openForRegistration.editValue}
+        value={event.openForRegistration}
         onChange={openForRegistration =>
           updateEvent({
             ...event,
@@ -132,20 +114,46 @@ export const EditEvent = ({
           })
         }
       />
-      <TextInput
+      <ValidatedTextInput
         label={'Maks antall'}
         placeholder="0 (ingen grense)"
-        value={event.maxParticipants.editValue.toString()}
+        value={event.maxParticipants}
         onChange={maxParticipants =>
           updateEvent({
             ...event,
-            maxParticipants: parseMaxAttendees(Number(maxParticipants)),
+            maxParticipants: parseMaxAttendees(maxParticipants),
           })
         }
       />
-      {showError && (
-        <ValidationResult validationResult={event.maxParticipants.errors} />
-      )}
+    </>
+  );
+};
+
+interface ValidTextInputProps {
+  label: string;
+  placeholder?: string;
+  value: Result<string, any>;
+  onChange: (value: string) => void;
+}
+
+export const ValidatedTextInput = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+}: ValidTextInputProps) => {
+  const [hasLostFocus, setLostFocus] = useState(false);
+  const shouldShowErrors = hasLostFocus;
+  return (
+    <>
+      <TextInput
+        label={label}
+        placeholder={placeholder}
+        value={value.editValue}
+        onChange={onChange}
+        onBlur={() => setLostFocus(true)}
+      />
+      {shouldShowErrors && <ValidationResult validationResult={value.errors} />}
     </>
   );
 };
