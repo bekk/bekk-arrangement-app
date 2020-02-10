@@ -10,7 +10,6 @@ import {
   parseMaxAttendees,
   parseLocation,
 } from 'src/types';
-import { parseDateTime } from 'src/types/date-time';
 import { parseEmail } from 'src/types/email';
 import { parseTimeInstance } from 'src/types/time-instance';
 import { Result } from 'src/types/validation';
@@ -84,23 +83,21 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       />
       <DateTimeInput
         label={'Starter'}
-        value={event.start.editValue}
-        error={event.start.errors}
+        value={event.start}
         onChange={start =>
           updateEvent({
             ...event,
-            start: parseDateTime(start),
+            start,
           })
         }
       />
       <DateTimeInput
         label={'Slutter'}
-        value={event.end.editValue}
-        error={event.end.errors}
+        value={event.end}
         onChange={end =>
           updateEvent({
             ...event,
-            end: parseDateTime(end),
+            end,
           })
         }
       />

@@ -1,9 +1,10 @@
 import React from 'react';
 import style from './DateInput.module.scss';
+import { EditDate } from 'src/types/date';
 
 interface IProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: EditDate;
+  onChange: (value: EditDate) => void;
 }
 
 export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
