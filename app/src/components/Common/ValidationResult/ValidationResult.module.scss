@@ -2,8 +2,12 @@
 
 .validation {
   margin: 10px 0;
-  line-height: 1.2;
   @include smallText;
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
 }
 
 .circle {
@@ -13,14 +17,14 @@
   margin-right: 5px;
 }
 
-.errorMessage {
-  display: flex;
-}
-
 .error {
   background-color: var(--error);
 }
 
 .warning {
   background-color: var(--warning);
+}
+
+.text {
+  vertical-align: middle;
 }

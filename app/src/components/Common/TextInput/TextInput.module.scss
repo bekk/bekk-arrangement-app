@@ -2,9 +2,9 @@
 
 .textLabel {
   display: block;
-  margin-top: 20px;
+  margin-top: 50px;
   padding-bottom: 5px;
-  @include regularText;
+  @include boldText;
 }
 
 .textInput {
@@ -13,8 +13,18 @@
   outline: none;
   border: none;
   border-bottom: solid 1px;
-  border-color: var(--textColor);
+  border-color: grey;
   background-color: var(--backgroundColor);
   display: block;
+  padding-left: 10px;
+  padding-top: 10px;
   @include regularText;
+}
+
+.visited {
+  border-color: var(--textColor);
+}
+
+.error {
+  border-color: var(--error);
 }

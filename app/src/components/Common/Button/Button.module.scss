@@ -19,9 +19,13 @@
   }
   &:focus {
     outline: 0;
+    background-color: var(--active);
+    color: var(--backgroundColor);
+    border-color: var(--backgroundColor);
   }
   &:disabled {
     background-color: var(--backgroundColor);
     color: var(--disabled);
+    cursor: initial;
   }
 }

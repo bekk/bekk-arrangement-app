@@ -21,7 +21,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.2.0",
+    "react-scripts": "~3.3.0",
     "react-textarea-autosize": "^7.1.0"
   },
   "proxy": "http://localhost:4567",
@@ -52,6 +52,6 @@
     "singleQuote": true
   },
   "devDependencies": {
-    "typescript": "^3.7.2"
+    "typescript": "~3.7.2"
   }
 }

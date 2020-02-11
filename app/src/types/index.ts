@@ -46,10 +46,13 @@ export const parseHost = (value: string): Result<string, string> => {
   return validator.resolve(value);
 };
 
-export const parseMaxAttendees = (value: number): Result<number, number> => {
-  const validator = validate<number, number>(value, {
-    'Verdien må være et tall': !Number.isInteger(value),
-    'Må sette maks antall deltakere': !value,
+export const deserializeMaxAttendees = (value: number): string =>
+  value !== 0 ? value.toString() : '';
+
+export const parseMaxAttendees = (value: string): Result<string, number> => {
+  const number = Number(value);
+  const validator = validate<string, number>(value, {
+    'Verdien må være et tall': !Number.isInteger(number),
   });
-  return validator.resolve(value);
+  return validator.resolve(number);
 };
