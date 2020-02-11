@@ -14,8 +14,10 @@ export const parseTimeInstance = (
   const unixTimeStamp = Date.parse(time);
   const timestamp = new Date(unixTimeStamp);
   const validator = validate<EditTimeInstance, TimeInstance>(time, {
-    'Feil format på streng. Prøv noe som: 2020-02-05 10:07': isNaN(unixTimeStamp)
-  })
+    'Feil format på streng. Prøv noe som: 2020-02-05 10:07': isNaN(
+      unixTimeStamp
+    ),
+  });
   return validator.resolve(timestamp);
 };
 

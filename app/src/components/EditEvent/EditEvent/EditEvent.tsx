@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEditEvent } from 'src/types/event';
-import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
+import { ValidatedDateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
   parseTitle,
   parseDescription,
@@ -79,7 +79,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <DateTimeInput
+      <ValidatedDateTimeInput
         label={'Starter'}
         value={event.start}
         onChange={start =>
@@ -89,7 +89,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <DateTimeInput
+      <ValidatedDateTimeInput
         label={'Slutter'}
         value={event.end}
         onChange={end =>

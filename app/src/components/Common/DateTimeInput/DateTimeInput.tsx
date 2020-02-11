@@ -13,7 +13,7 @@ interface IProps {
   onChange: (datetime: Result<EditDateTime, IDateTime>) => void;
 }
 
-export const DateTimeInput = ({ label, value, onChange }: IProps) => {
+export const ValidatedDateTimeInput = ({ label, value, onChange }: IProps) => {
   const containerStyle = classNames(style.container, {
     [style.error]: Boolean(value.errors),
   });

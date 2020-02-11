@@ -42,6 +42,7 @@ export const TimeInput = ({ value, onChange }: IProps) => {
         type="number"
         value={minute}
         onChange={v => updateMinute(v.target.value)}
+        onKeyDown={focusMinuteRefWhenHourFull}
         onFocus={selectText}
       />
     </div>
