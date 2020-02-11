@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import React from 'react';
-import {
-  IEditEvent,
-  initialEditEvent,
-  parseEvent,
-  IEvent,
-} from 'src/types/event';
+import { IEditEvent, parseEvent, IEvent, initialEvent } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
@@ -23,7 +18,7 @@ export const CreateEventContainer = () => {
   useAuthentication();
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
-    parseEvent(initialEditEvent)
+    parseEvent(initialEvent)
   );
   const [previewState, setPreviewState] = useState(false);
   const isDisabled = !isOk(event);

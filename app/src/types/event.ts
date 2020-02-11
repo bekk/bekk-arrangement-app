@@ -152,22 +152,20 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
   };
 };
 
-export const initialEvent: IEvent = {
-  title: '',
-  description: '',
-  location: '',
-  start: {
-    date: { year: 2019, month: 12, day: 1 },
-    time: { hour: 0, minute: 0 },
-  },
-  end: {
-    date: { year: 2019, month: 12, day: 15 },
-    time: { hour: 0, minute: 0 },
-  },
-  openForRegistrationTime: new Date(),
-  organizerName: '',
-  organizerEmail: { email: '' },
-  maxParticipants: 0,
+export const initialEvent: IEditEvent = {
+  title: parseTitle(''),
+  description: parseDescription(''),
+  location: parseLocation(''),
+  start: parseDateTime({
+    date: '2020-01-02',
+    time: ['17', '00'],
+  }),
+  end: parseDateTime({
+    date: '2020-01-01',
+    time: ['20', '00'],
+  }),
+  openForRegistration: parseTimeInstance('2020-01-01 00:00'),
+  organizerName: parseHost(''),
+  organizerEmail: parseEmail(''),
+  maxParticipants: parseMaxAttendees(''),
 };
-
-export const initialEditEvent = deserializeEvent(serializeEvent(initialEvent));
