@@ -28,6 +28,8 @@ import {
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
+import { Link } from 'react-router-dom';
+import { BlockLink } from '../Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -70,9 +72,6 @@ export const ViewEventContainer = () => {
     }
   });
 
-  const goToOverview = () => history.push(eventsRoute);
-  const goToEditEvent = () => history.push(editEventRoute(eventId));
-
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
@@ -82,14 +81,12 @@ export const ViewEventContainer = () => {
   return (
     <Page>
       {hasPermission(readPermission) && (
-        <p className={style.link} onClick={goToOverview}>
-          ↩︎ Til arrangementer
-        </p>
+        <BlockLink to={eventsRoute}>↩︎ Til arrangementer</BlockLink>
       )}
       {hasRecentlyCreatedThisEvent && (
-        <p className={style.link} onClick={goToEditEvent}>
+        <BlockLink to={editEventRoute(eventId)}>
           ✎ Rediger arrangement
-        </p>
+        </BlockLink>
       )}
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.text}>
