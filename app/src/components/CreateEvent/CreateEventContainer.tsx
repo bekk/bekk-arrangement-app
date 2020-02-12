@@ -4,7 +4,7 @@ import { IEditEvent, parseEvent, IEvent, initialEvent } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
-import { viewEventRoute } from 'src/routing';
+import { viewEventRoute, eventsRoute } from 'src/routing';
 import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
 import { Button } from '../Common/Button/Button';
 import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
@@ -13,6 +13,7 @@ import { Page } from '../Page/Page';
 import style from './CreateEventContainer.module.scss';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
+import { BlockLink } from '../Common/BlockLink/BlockLink';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -65,6 +66,7 @@ export const CreateEventContainer = () => {
         <Button onClick={validatePreview} disabled={isDisabled}>
           Forhåndsvisning
         </Button>
+        <BlockLink to={eventsRoute}>Avbryt</BlockLink>
       </div>
     </Page>
   );
