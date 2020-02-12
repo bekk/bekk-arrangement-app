@@ -5,6 +5,8 @@ import {
   parseDate,
   EditDate,
   stringifyDate,
+  datesInOrder,
+  isSameDate,
 } from './date';
 import {
   ITime,
@@ -13,6 +15,7 @@ import {
   ITimeContract,
   EditTime,
   deserializeTime,
+  timesInOrder,
 } from './time';
 import { isOk, Result } from './validation';
 import { isAfter } from 'date-fns';
@@ -73,7 +76,16 @@ export const isInOrder = ({
   first: IDateTime;
   last: IDateTime;
 }) => {
-  return first.date.year < last.date.year;
+  if (datesInOrder({ first: first.date, last: last.date })) {
+    return true;
+  }
+  if (
+    isSameDate(first.date, last.date) &&
+    timesInOrder({ first: first.time, last: last.time })
+  ) {
+    return true;
+  }
+  return false;
 };
 
 export const toDate = ({ date, time }: IDateTime) =>
