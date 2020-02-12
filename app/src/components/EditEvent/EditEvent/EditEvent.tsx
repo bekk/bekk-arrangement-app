@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
@@ -20,30 +20,6 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
-  type Action =
-    | ['set-start', Result<EditDateTime, IDateTime>]
-    | ['set-end', Result<EditDateTime, IDateTime>];
-
-  const updateDate = ([type, date]: Action): void => {
-    if (isOk(date) && isOk(event.start) && isOk(event.end)) {
-      const first = type === 'set-start' ? date : event.start;
-      const last = type === 'set-end' ? date : event.end;
-
-      if (!isInOrder({ first: first.validValue, last: last.validValue })) {
-        return updateEvent({ ...event, start: date, end: date });
-      }
-
-      return updateEvent({ ...event, start: first, end: last });
-    } else {
-      switch (type) {
-        case 'set-start':
-          return updateEvent({ ...event, start: date });
-        case 'set-end':
-          return updateEvent({ ...event, end: date });
-      }
-    }
-  };
-
   return (
     <>
       <ValidatedTextInput
@@ -108,12 +84,22 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       <DateTimeInput
         label={'Starter'}
         value={event.start}
-        onChange={start => updateDate(['set-start', start])}
+        onChange={start =>
+          updateEvent({
+            ...event,
+            ...setStartEndDates(event, ['set-start', start]),
+          })
+        }
       />
       <DateTimeInput
         label={'Slutter'}
         value={event.end}
-        onChange={end => updateDate(['set-end', end])}
+        onChange={end =>
+          updateEvent({
+            ...event,
+            ...setStartEndDates(event, ['set-end', end]),
+          })
+        }
       />
       <ValidatedTextInput
         label={'Påmelding åpner'}
@@ -138,4 +124,36 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       />
     </>
   );
+};
+
+type Action =
+  | ['set-start', Result<EditDateTime, IDateTime>]
+  | ['set-end', Result<EditDateTime, IDateTime>];
+
+type State = {
+  start: Result<EditDateTime, IDateTime>;
+  end: Result<EditDateTime, IDateTime>;
+};
+
+const setStartEndDates = (
+  { start, end }: State,
+  [type, date]: Action
+): State => {
+  if (isOk(start) && isOk(end) && isOk(date)) {
+    const first = type === 'set-start' ? date : start;
+    const last = type === 'set-end' ? date : end;
+
+    if (!isInOrder({ first: first.validValue, last: last.validValue })) {
+      return { start: date, end: date };
+    }
+
+    return { start: first, end: last };
+  } else {
+    switch (type) {
+      case 'set-start':
+        return { end, start: date };
+      case 'set-end':
+        return { start, end: date };
+    }
+  }
 };
