@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bekk/storybook": "^2.4.7",
+    "@bekk/storybook": "2.5.0",
     "@types/classnames": "^2.2.9",
     "@types/jest": "24.0.23",
     "@types/lodash": "^4.14.149",

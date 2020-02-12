@@ -23,6 +23,8 @@ import {
   parseTimeInstance,
   serializeTimeInstance,
 } from './time-instance';
+import { addWeeks } from 'date-fns/esm/fp';
+import { dateToString } from './date';
 
 export type EventId = string;
 
@@ -152,20 +154,24 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
   };
 };
 
-export const initialEvent: IEditEvent = {
-  title: parseTitle(''),
-  description: parseDescription(''),
-  location: parseLocation(''),
-  start: parseDateTime({
-    date: '2020-01-02',
-    time: ['17', '00'],
-  }),
-  end: parseDateTime({
-    date: '2020-01-01',
-    time: ['20', '00'],
-  }),
-  openForRegistration: parseTimeInstance('2020-01-01 00:00'),
-  organizerName: parseHost(''),
-  organizerEmail: parseEmail(''),
-  maxParticipants: parseMaxAttendees(''),
+export const initialEditEvent = (): IEditEvent => {
+  const eventStartDate = addWeeks(2, new Date());
+  const openForRegistrationTime = addWeeks(-1, eventStartDate);
+  return {
+    title: parseTitle(''),
+    description: parseDescription(''),
+    location: parseLocation(''),
+    start: parseDateTime({
+      date: dateToString(eventStartDate),
+      time: ['17', '00'],
+    }),
+    end: parseDateTime({
+      date: dateToString(eventStartDate),
+      time: ['20', '00'],
+    }),
+    openForRegistration: parseTimeInstance(openForRegistrationTime.toJSON()),
+    organizerName: parseHost(''),
+    organizerEmail: parseEmail(''),
+    maxParticipants: parseMaxAttendees(''),
+  };
 };
