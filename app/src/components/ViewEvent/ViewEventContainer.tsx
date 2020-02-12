@@ -28,7 +28,6 @@ import {
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
-import { Link } from 'react-router-dom';
 import { BlockLink } from '../Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
