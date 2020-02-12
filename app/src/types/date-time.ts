@@ -66,6 +66,16 @@ export const isInTheFuture = ({ date, time }: IDateTime) => {
   return isAfter(toDate({ date, time }), now);
 };
 
+export const isInOrder = ({
+  first,
+  last,
+}: {
+  first: IDateTime;
+  last: IDateTime;
+}) => {
+  return first.date.year < last.date.year;
+};
+
 export const toDate = ({ date, time }: IDateTime) =>
   new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
 

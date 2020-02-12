@@ -11,6 +11,8 @@ import {
 import { parseEmail } from 'src/types/email';
 import { parseTimeInstance } from 'src/types/time-instance';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
+import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
+import { Result, isOk, isBad } from 'src/types/validation';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -18,6 +20,50 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
+  type Message =
+    | ['set-start', Result<EditDateTime, IDateTime>]
+    | ['set-end', Result<EditDateTime, IDateTime>];
+
+  const updateDate = ([action, date]: Message): void => {
+    if (isOk(date)) {
+      switch (action) {
+        case 'set-start': {
+          const start = date;
+          const end =
+            isBad(event.end) ||
+            (isOk(event.end) &&
+              !isInOrder({
+                first: start.validValue,
+                last: event.end.validValue,
+              }))
+              ? start
+              : event.end;
+          return updateEvent({ ...event, start, end });
+        }
+        case 'set-end': {
+          const end = date;
+          const start =
+            isBad(event.start) ||
+            (isOk(event.start) &&
+              !isInOrder({
+                first: event.start.validValue,
+                last: end.validValue,
+              }))
+              ? end
+              : event.start;
+          return updateEvent({ ...event, start, end });
+        }
+      }
+    } else {
+      switch (action) {
+        case 'set-start':
+          return updateEvent({ ...event, start: date });
+        case 'set-end':
+          return updateEvent({ ...event, end: date });
+      }
+    }
+  };
+
   return (
     <>
       <ValidatedTextInput
@@ -82,22 +128,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       <DateTimeInput
         label={'Starter'}
         value={event.start}
-        onChange={start =>
-          updateEvent({
-            ...event,
-            start,
-          })
-        }
+        onChange={start => updateDate(['set-start', start])}
       />
       <DateTimeInput
         label={'Slutter'}
         value={event.end}
-        onChange={end =>
-          updateEvent({
-            ...event,
-            end,
-          })
-        }
+        onChange={end => updateDate(['set-end', end])}
       />
       <ValidatedTextInput
         label={'Påmelding åpner'}
