@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
@@ -12,7 +12,7 @@ import { parseEmail } from 'src/types/email';
 import { parseTimeInstance } from 'src/types/time-instance';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
-import { Result, isOk, isBad } from 'src/types/validation';
+import { Result, isOk } from 'src/types/validation';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -20,42 +20,22 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
-  type Message =
+  type Action =
     | ['set-start', Result<EditDateTime, IDateTime>]
     | ['set-end', Result<EditDateTime, IDateTime>];
 
-  const updateDate = ([action, date]: Message): void => {
-    if (isOk(date)) {
-      switch (action) {
-        case 'set-start': {
-          const start = date;
-          const end =
-            isBad(event.end) ||
-            (isOk(event.end) &&
-              !isInOrder({
-                first: start.validValue,
-                last: event.end.validValue,
-              }))
-              ? start
-              : event.end;
-          return updateEvent({ ...event, start, end });
-        }
-        case 'set-end': {
-          const end = date;
-          const start =
-            isBad(event.start) ||
-            (isOk(event.start) &&
-              !isInOrder({
-                first: event.start.validValue,
-                last: end.validValue,
-              }))
-              ? end
-              : event.start;
-          return updateEvent({ ...event, start, end });
-        }
+  const updateDate = ([type, date]: Action): void => {
+    if (isOk(date) && isOk(event.start) && isOk(event.end)) {
+      const first = type === 'set-start' ? date : event.start;
+      const last = type === 'set-end' ? date : event.end;
+
+      if (!isInOrder({ first: first.validValue, last: last.validValue })) {
+        return updateEvent({ ...event, start: date, end: date });
       }
+
+      return updateEvent({ ...event, start: first, end: last });
     } else {
-      switch (action) {
+      switch (type) {
         case 'set-start':
           return updateEvent({ ...event, start: date });
         case 'set-end':
