@@ -49,8 +49,8 @@ export const useNotification = () => {
   const notify: NotifyUser = useCallback(useContext(NotificationContext), []);
   function _catchAndNotify<T>(f: () => void): () => void;
   function _catchAndNotify<T>(f: (x: T) => void): (x: T) => void;
-  function _catchAndNotify<T>(x?: T): any {
-    return async (f: (x?: T) => Promise<void>) => {
+  function _catchAndNotify<T>(f: (x?: T) => void): any {
+    return async (x?: T) => {
       try {
         if (x) {
           await f(x);
