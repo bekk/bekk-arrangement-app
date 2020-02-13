@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { isError } from 'util';
 
 export type Ok<T> = {
@@ -47,22 +47,10 @@ export function isBad<T>(data: RemoteData<T>): data is Bad {
 }
 
 export const useRemoteData = <T>(fetcher: () => Promise<T>): RemoteData<T> => {
-  const [remoteData, setRemoteData] = useState<RemoteData<T>>({
-    status: 'NOT_REQUESTED',
-  });
-
+  const [remoteData, updateRemoteData] = useUpdateRemoteData(fetcher);
   useEffect(() => {
-    setRemoteData({ status: 'LOADING' });
-    fetcher()
-      .then(data => setRemoteData({ status: 'OK', data }))
-      .catch(({ userMessage }) => {
-        return setRemoteData({
-          status: 'ERROR',
-          userMessage,
-        });
-      });
-  }, [fetcher]);
-
+    updateRemoteData(undefined);
+  }, [updateRemoteData]);
   return remoteData;
 };
 
@@ -73,22 +61,30 @@ export const useUpdateRemoteData = <T, P>(
     status: 'NOT_REQUESTED',
   });
 
-  const updateRemoteData = (param: P) => {
-    if (isOk(remoteData)) {
-      setRemoteData({ status: 'PENDING', staleData: remoteData.data });
-    }
-    if (isError(remoteData) || isNotRequested(remoteData)) {
-      setRemoteData({ status: 'LOADING' });
-    }
-    fetcher(param)
-      .then(data => setRemoteData({ status: 'OK', data }))
-      .catch(({ userMessage }) => {
-        return setRemoteData({
-          status: 'ERROR',
-          userMessage,
-        });
+  const updateRemoteData = useCallback(
+    (param: P) => {
+      setRemoteData(remoteData => {
+        if (isOk(remoteData)) {
+          return {
+            status: 'PENDING',
+            staleData: remoteData.data,
+          };
+        }
+        if (isError(remoteData) || isNotRequested(remoteData)) {
+          return { status: 'LOADING' };
+        }
       });
-  };
+      fetcher(param)
+        .then(data => setRemoteData({ status: 'OK', data }))
+        .catch(({ userMessage }) => {
+          return setRemoteData({
+            status: 'ERROR',
+            userMessage,
+          });
+        });
+    },
+    [fetcher]
+  );
 
   return [remoteData, updateRemoteData];
 };
