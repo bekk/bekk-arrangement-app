@@ -5,7 +5,7 @@ import { isOk } from 'src/types/validation';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useLocalStorage } from './localStorage';
 
-export const useEvent = (id: string | undefined): [IEvent | undefined] => {
+export const useEvent = (id: string): IEvent | undefined => {
   const [event, setEvent] = useState<IEvent | undefined>(undefined);
   const { catchAndNotify } = useNotification();
 
@@ -23,7 +23,7 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
     [id]
   );
 
-  return [event];
+  return event;
 };
 
 export const useRecentlyCreatedEvent = (): {

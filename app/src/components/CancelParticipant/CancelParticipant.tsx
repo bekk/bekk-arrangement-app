@@ -24,8 +24,8 @@ const useQuery = (key: string) => {
 };
 
 export const CancelParticipant = () => {
-  const { eventId, email: participantEmail } = useParams();
-  const [event] = useEvent(eventId);
+  const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();
+  const event = useEvent(eventId);
   const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();

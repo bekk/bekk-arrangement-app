@@ -39,7 +39,7 @@ export const ViewEventContainer = () => {
   const history = useHistory();
   const { catchAndNotify } = useNotification();
 
-  const [event] = useEvent(eventId);
+  const event = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
   const { createdEventId } = useRecentlyCreatedEvent();
   const hasRecentlyCreatedThisEvent = eventId === createdEventId;
