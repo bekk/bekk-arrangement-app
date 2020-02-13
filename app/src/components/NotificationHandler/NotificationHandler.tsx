@@ -47,10 +47,16 @@ export const NotificationHandler = ({ children }: IProps) => {
  */
 export const useNotification = () => {
   const notify: NotifyUser = useCallback(useContext(NotificationContext), []);
-  const catchAndNotify = useCallback(
-    (f: () => void) => async () => {
+  function _catchAndNotify<T>(f: () => void): () => void;
+  function _catchAndNotify<T>(f: (x: T) => void): (x: T) => void;
+  function _catchAndNotify<T>(x?: T): any {
+    return async (f: (x?: T) => Promise<void>) => {
       try {
-        await f();
+        if (x) {
+          await f(x);
+        } else {
+          await f();
+        }
       } catch (e) {
         if (isNotification(e)) {
           notify(e);
@@ -58,9 +64,9 @@ export const useNotification = () => {
           throw e;
         }
       }
-    },
-    [notify]
-  );
+    };
+  }
+  const catchAndNotify = useCallback(_catchAndNotify, [notify]);
   return { notify, catchAndNotify };
 };
 

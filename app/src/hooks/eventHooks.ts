@@ -9,18 +9,19 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
   const [event, setEvent] = useState<IEvent | undefined>(undefined);
   const { catchAndNotify } = useNotification();
 
-  useEffect(() => {
-    if (id) {
-      catchAndNotify(async () => {
+  useEffect(
+    catchAndNotify(async () => {
+      if (id) {
         const retrievedEvent = await getEvent(id);
         const deserializedEvent = deserializeEvent(retrievedEvent);
         const domainEvent = parseEvent(deserializedEvent);
         if (isOk(domainEvent)) {
           setEvent(domainEvent.validValue);
         }
-      })();
-    }
-  }, [id, catchAndNotify]);
+      }
+    }),
+    [id]
+  );
 
   return [event];
 };

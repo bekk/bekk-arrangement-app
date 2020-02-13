@@ -33,13 +33,14 @@ const useEvents = () => {
   >();
   const { catchAndNotify } = useNotification();
 
-  useEffect(() => {
+  useEffect(
     catchAndNotify(async () => {
       const events = await getEvents();
       const eventsMap = toParsedEventsMap(events);
       setEvents(eventsMap);
-    })();
-  }, [catchAndNotify]);
+    }),
+    []
+  );
 
   return events;
 };

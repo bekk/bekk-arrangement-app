@@ -27,38 +27,37 @@ export const EditEventContainer = () => {
   const history = useHistory();
   const { catchAndNotify } = useNotification();
 
-  useEffect(() => {
-    if (eventId) {
-      catchAndNotify(async () => {
+  useEffect(
+    catchAndNotify(async () => {
+      if (eventId) {
         const retrievedEvent = await getEvent(eventId);
         setEvent(parseEvent(deserializeEvent(retrievedEvent)));
-      })();
-    }
-  }, [eventId, catchAndNotify]);
+      }
+    }),
+    [eventId]
+  );
 
   if (!event || !eventId) {
     return <div>Loading</div>;
   }
 
-  const editEventFunction = () =>
-    catchAndNotify(async () => {
-      if (isOk(event)) {
-        const updatedEvent = await putEvent(eventId, event.validValue);
-        setEvent(parseEvent(deserializeEvent(updatedEvent)));
-        history.push(viewEventRoute(eventId));
-      }
-    })();
+  const editEventFunction = catchAndNotify(async () => {
+    if (isOk(event)) {
+      const updatedEvent = await putEvent(eventId, event.validValue);
+      setEvent(parseEvent(deserializeEvent(updatedEvent)));
+      history.push(viewEventRoute(eventId));
+    }
+  });
 
   const goToOverview = () => history.push(eventsRoute);
   const goToEvent = () => history.push(viewEventRoute(eventId));
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const onDeleteEvent = (eventId: string) =>
-    catchAndNotify(async () => {
-      await deleteEvent(eventId);
-      goToOverview();
-    })();
+  const onDeleteEvent = catchAndNotify(async (eventId: string) => {
+    await deleteEvent(eventId);
+    goToOverview();
+  });
 
   const renderEditView = () => (
     <Page>
