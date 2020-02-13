@@ -26,19 +26,18 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
 };
 
 export const useCreatedEvents = (): {
-  createdEvents: string[] | undefined;
+  createdEventIds: string[];
   setCreatedEventId: (string: string) => void;
 } => {
   const [storage, setStorage] = useLocalStorage({
     key: 'created-events',
   });
   const parsedStorage: string[] = storage ? JSON.parse(storage) : [];
-  const updateStorage = (string: string) => {
-    parsedStorage.push(string);
-    return JSON.stringify(parsedStorage);
-  };
+  const updateStorage = (string: string) =>
+    JSON.stringify([...parsedStorage, string]);
+
   return {
-    createdEvents: parsedStorage,
+    createdEventIds: parsedStorage,
     setCreatedEventId: (string: string) => setStorage(updateStorage(string)),
   };
 };
