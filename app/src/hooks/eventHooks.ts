@@ -1,26 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { getEvent } from 'src/api/arrangementSvc';
-import { IEvent, deserializeEvent, parseEvent } from 'src/types/event';
+import { deserializeEvent, parseEvent } from 'src/types/event';
 import { isOk } from 'src/types/validation';
-import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useLocalStorage } from './localStorage';
+import { useRemoteData } from 'src/remote-data';
 
-export const useEvent = (id: string): IEvent | undefined => {
-  const [event, setEvent] = useState<IEvent | undefined>(undefined);
-  const { catchAndNotify } = useNotification();
-
-  useEffect(
-    catchAndNotify(async () => {
-      if (id) {
-        const retrievedEvent = await getEvent(id);
-        const deserializedEvent = deserializeEvent(retrievedEvent);
-        const domainEvent = parseEvent(deserializedEvent);
-        if (isOk(domainEvent)) {
-          setEvent(domainEvent.validValue);
-        }
+export const useEvent = (id: string) => {
+  const event = useRemoteData(
+    useCallback(async () => {
+      const retrievedEvent = await getEvent(id);
+      const deserializedEvent = deserializeEvent(retrievedEvent);
+      const domainEvent = parseEvent(deserializedEvent);
+      if (isOk(domainEvent)) {
+        return domainEvent.validValue;
       }
-    }),
-    [id]
+      throw 'Arrangementobjektet kan ikke parses av følgende grunner ' +
+        domainEvent.errors.map(x => x.message).join(', ');
+    }, [id])
   );
 
   return event;

@@ -29,6 +29,7 @@ import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
 import { BlockLink } from '../Common/BlockLink/BlockLink';
+import { hasLoaded, isLoading } from 'src/remote-data';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -39,14 +40,18 @@ export const ViewEventContainer = () => {
   const history = useHistory();
   const { catchAndNotify } = useNotification();
 
-  const event = useEvent(eventId);
-  const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
+  const remoteEvent = useEvent(eventId);
+  const timeLeft = useTimeLeft(
+    hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
+  );
   const { createdEventId } = useRecentlyCreatedEvent();
   const hasRecentlyCreatedThisEvent = eventId === createdEventId;
 
-  if (!event) {
+  if (!hasLoaded(remoteEvent)) {
     return <div>Loading</div>;
   }
+
+  const event = remoteEvent.data;
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {

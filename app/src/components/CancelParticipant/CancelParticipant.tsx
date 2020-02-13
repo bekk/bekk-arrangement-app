@@ -9,6 +9,7 @@ import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
 import queryString from 'query-string';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { hasLoaded } from 'src/remote-data';
 
 const useQuery = (key: string) => {
   const {
@@ -25,7 +26,7 @@ const useQuery = (key: string) => {
 
 export const CancelParticipant = () => {
   const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();
-  const event = useEvent(eventId);
+  const remoteEvent = useEvent(eventId);
   const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
@@ -43,7 +44,7 @@ export const CancelParticipant = () => {
     }
   });
 
-  if (!event) {
+  if (!hasLoaded(remoteEvent)) {
     return (
       <div>
         Ugyldig url!{' '}
@@ -53,6 +54,8 @@ export const CancelParticipant = () => {
       </div>
     );
   }
+
+  const event = remoteEvent.data;
 
   const CancelledView = () => (
     <>

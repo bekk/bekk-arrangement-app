@@ -34,7 +34,7 @@ export function isPending<T>(data: RemoteData<T>): data is Pending<T> {
   return data.status === 'PENDING';
 }
 
-export function isOk<T>(data: RemoteData<T>): data is Ok<T> {
+export function hasLoaded<T>(data: RemoteData<T>): data is Ok<T> {
   return data.status === 'OK';
 }
 
@@ -64,7 +64,7 @@ export const useUpdateRemoteData = <T, P>(
   const updateRemoteData = useCallback(
     (param: P) => {
       setRemoteData(remoteData => {
-        if (isOk(remoteData)) {
+        if (hasLoaded(remoteData)) {
           return {
             status: 'PENDING',
             staleData: remoteData.data,
@@ -73,6 +73,7 @@ export const useUpdateRemoteData = <T, P>(
         if (isError(remoteData) || isNotRequested(remoteData)) {
           return { status: 'LOADING' };
         }
+        return remoteData;
       });
       fetcher(param)
         .then(data => setRemoteData({ status: 'OK', data }))
