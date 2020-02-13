@@ -29,7 +29,7 @@ import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
 import { BlockLink } from '../Common/BlockLink/BlockLink';
-import { hasLoaded, isLoading } from 'src/remote-data';
+import { hasLoaded } from 'src/remote-data';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();

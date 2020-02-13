@@ -11,7 +11,7 @@ import {
   parseEvent,
   IEditEvent,
 } from 'src/types/event';
-import { isOk, Result } from 'src/types/validation';
+import { isOk, Result, isBad } from 'src/types/validation';
 import { Link } from 'react-router-dom';
 import { Page } from '../Page/Page';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
@@ -71,7 +71,14 @@ export const ViewEventsContainer = () => {
               />
             );
           }
-          return <div key={i}>Event with id {x} is no good </div>;
+          return (
+            <div key={i}>
+              Event with id {x} is no good{' '}
+              {eventFromMap &&
+                isBad(eventFromMap) &&
+                eventFromMap.errors.map(x => x.message).join(', ')}
+            </div>
+          );
         })}
       </div>
     </Page>

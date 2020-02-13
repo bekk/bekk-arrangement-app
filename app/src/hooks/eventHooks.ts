@@ -1,9 +1,17 @@
 import { useCallback } from 'react';
 import { getEvent } from 'src/api/arrangementSvc';
-import { deserializeEvent, parseEvent } from 'src/types/event';
+import { deserializeEvent, parseEvent, IEvent } from 'src/types/event';
 import { isOk } from 'src/types/validation';
 import { useLocalStorage } from './localStorage';
-import { useRemoteData } from 'src/remote-data';
+import {
+  useRemoteData,
+  RemoteData,
+  isLoading,
+  hasLoaded,
+  isNotRequested,
+} from 'src/remote-data';
+
+let eventCache: Record<string, RemoteData<IEvent>> = {};
 
 export const useEvent = (id: string) => {
   const event = useRemoteData(
@@ -14,10 +22,22 @@ export const useEvent = (id: string) => {
       if (isOk(domainEvent)) {
         return domainEvent.validValue;
       }
-      throw 'Arrangementobjektet kan ikke parses av følgende grunner ' +
-        domainEvent.errors.map(x => x.message).join(', ');
+      return Promise.reject({
+        userMessage:
+          'Arrangementobjektet kan ikke parses av følgende grunner ' +
+          domainEvent.errors.map(x => x.message).join(', '),
+      });
     }, [id])
   );
+
+  const cachedEvent = eventCache[id];
+  if (cachedEvent) {
+    if ((isNotRequested(event) || isLoading(event)) && hasLoaded(cachedEvent)) {
+      return cachedEvent;
+    }
+  }
+
+  eventCache[id] = event;
 
   return event;
 };
