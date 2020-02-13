@@ -9,6 +9,7 @@ import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
 import queryString from 'query-string';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { viewEventRoute } from 'src/routing';
 
 const useQuery = (key: string) => {
   const {
@@ -29,7 +30,10 @@ export const CancelParticipant = () => {
   const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
-
+  const history = useHistory();
+  const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
+  const cameFromEmail = false; // TODO
+  
   const cancelParticipant = catchAndNotify(async () => {
     if (eventId && participantEmail) {
       const deleted = await deleteParticipant({
@@ -42,7 +46,7 @@ export const CancelParticipant = () => {
       }
     }
   });
-
+  
   if (!event) {
     return (
       <div>
@@ -53,7 +57,7 @@ export const CancelParticipant = () => {
       </div>
     );
   }
-
+  
   const CancelledView = () => (
     <>
       <h1 className={style.header}>Avmelding bekreftet!</h1>
@@ -64,16 +68,23 @@ export const CancelParticipant = () => {
     </>
   );
 
+  const Cancel = () => (
+    <>
+      <div className={style.text}>Vil du melde deg av?</div>
+      <Button onClick={cancelParticipant}>Meld av</Button>
+    </>
+  )
+
   const ConfirmView = () => (
     <>
       <h1 className={style.header}>Du er påmeldt!</h1>
       <div className={style.text}>
         Gratulerer, du er nå meldt på {event.title} den{' '}
         {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)} -{' '}
-        {stringifyTime(event.end.time)} med e-post {participantEmail}!
+        {stringifyTime(event.end.time)}! Bekreftelse er sendt på e-post til {participantEmail}.
       </div>
-      <div className={style.text}>Vil du melde deg av?</div>
-      <Button onClick={cancelParticipant}>Meld av</Button>
+      {cameFromEmail && <Cancel />}
+      <Button onClick={goToEvent}>Tilbake til arrangement</Button>
     </>
   );
 
