@@ -32,8 +32,7 @@ export const CancelParticipant = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
   const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
-  const cameFromEmail = false; // TODO
-  
+
   const cancelParticipant = catchAndNotify(async () => {
     if (eventId && participantEmail) {
       const deleted = await deleteParticipant({
@@ -46,19 +45,12 @@ export const CancelParticipant = () => {
       }
     }
   });
-  
+
   if (!event) {
-    return (
-      <div>
-        Ugyldig url!{' '}
-        <span role="img" aria-label="sad emoji">
-          😔
-        </span>
-      </div>
-    );
+    return <div>Loading...</div>;
   }
-  
-  const CancelledView = () => (
+
+  const HasCancelledView = () => (
     <>
       <h1 className={style.header}>Avmelding bekreftet!</h1>
       <div className={style.text}>
@@ -68,25 +60,16 @@ export const CancelParticipant = () => {
     </>
   );
 
-  const Cancel = () => (
+  const CancelView = () => (
     <>
-      <div className={style.text}>Vil du melde deg av?</div>
-      <Button onClick={cancelParticipant}>Meld av</Button>
-    </>
-  )
-
-  const ConfirmView = () => (
-    <>
-      <h1 className={style.header}>Du er påmeldt!</h1>
-      <div className={style.text}>
-        Gratulerer, du er nå meldt på {event.title} den{' '}
-        {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)} -{' '}
-        {stringifyTime(event.end.time)}! Bekreftelse er sendt på e-post til {participantEmail}.
+      <h1 className={style.header}>Avmelding</h1>
+      <div className={style.text}>Vil du melde deg av {event.title}?</div>
+      <div className={style.buttonContainer}>
+        <Button onClick={cancelParticipant}>Meld av</Button>
+        <Button onClick={goToEvent}>Se arrangement</Button>
       </div>
-      {cameFromEmail && <Cancel />}
-      <Button onClick={goToEvent}>Tilbake til arrangement</Button>
     </>
   );
 
-  return <Page>{wasDeleted ? <CancelledView /> : <ConfirmView />}</Page>;
+  return <Page>{wasDeleted ? <HasCancelledView /> : <CancelView />}</Page>;
 };

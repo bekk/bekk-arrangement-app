@@ -22,6 +22,7 @@ import {
   viewEventRoute,
   eventsRoute,
   editEventRoute,
+  confirmParticipantRoute,
 } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail, parseEmail } from 'src/types/email';
@@ -57,14 +58,12 @@ export const ViewEventContainer = () => {
           cancellationToken: '{cancellationToken}',
         });
       const {
-        cancellationToken,
         participant: { eventId, email },
       } = await postParticipant(participant.validValue, redirectUrlTemplate);
       history.push(
-        cancelParticipantRoute({
+        confirmParticipantRoute({
           eventId,
           email,
-          cancellationToken,
         })
       );
     }
@@ -93,7 +92,14 @@ export const ViewEventContainer = () => {
         <div className={style.subsection}>{event.description}</div>
         <div className={style.subsection}>
           Arrangør: {event.organizerName} -{' '}
-          <a className={style.text} href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${event.title}`}>{stringifyEmail(event.organizerEmail)}</a> 
+          <a
+            className={style.text}
+            href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
+              event.title
+            }`}
+          >
+            {stringifyEmail(event.organizerEmail)}
+          </a>
         </div>
         <div className={style.copy}>
           <Button onClick={copyLink}>Kopier lenke</Button>
@@ -113,9 +119,9 @@ export const ViewEventContainer = () => {
               placeholder={'ola.nordmann@bekk.no'}
               onChange={(email: string) =>
                 setParticipant(
-                  parseParticipant({ 
-                    ...participant.editValue, 
-                    email: parseEmail(email) 
+                  parseParticipant({
+                    ...participant.editValue,
+                    email: parseEmail(email),
                   })
                 )
               }

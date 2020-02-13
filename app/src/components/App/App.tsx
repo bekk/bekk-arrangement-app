@@ -10,6 +10,7 @@ import {
   email,
   eventId,
   editEventRoute,
+  confirmParticipantRoute,
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
@@ -18,6 +19,7 @@ import { EditEventContainer } from 'src/components/EditEvent/EditEventContainer'
 import { CancelParticipant } from 'src/components/CancelParticipant/CancelParticipant';
 import { createBrowserHistory } from 'history';
 import style from './App.module.scss';
+import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
 
 const history = createBrowserHistory();
 
@@ -48,6 +50,9 @@ export const App = () => {
             })}
           >
             <CancelParticipant />
+          </Route>
+          <Route exact path={confirmParticipantRoute({ eventId, email })}>
+            <ConfirmParticipant />
           </Route>
           <Redirect exact from={'/'} to={eventsRoute} />
         </Switch>
