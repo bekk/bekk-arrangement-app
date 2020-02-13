@@ -11,6 +11,8 @@ import {
 import { parseEmail } from 'src/types/email';
 import { parseTimeInstance } from 'src/types/time-instance';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
+import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
+import { Result, isOk } from 'src/types/validation';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -85,7 +87,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         onChange={start =>
           updateEvent({
             ...event,
-            start,
+            ...setStartEndDates(event, ['set-start', start]),
           })
         }
       />
@@ -95,7 +97,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         onChange={end =>
           updateEvent({
             ...event,
-            end,
+            ...setStartEndDates(event, ['set-end', end]),
           })
         }
       />
@@ -122,4 +124,36 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       />
     </>
   );
+};
+
+type Action =
+  | ['set-start', Result<EditDateTime, IDateTime>]
+  | ['set-end', Result<EditDateTime, IDateTime>];
+
+type State = {
+  start: Result<EditDateTime, IDateTime>;
+  end: Result<EditDateTime, IDateTime>;
+};
+
+const setStartEndDates = (
+  { start, end }: State,
+  [type, date]: Action
+): State => {
+  if (isOk(start) && isOk(end) && isOk(date)) {
+    const first = type === 'set-start' ? date : start;
+    const last = type === 'set-end' ? date : end;
+
+    if (!isInOrder({ first: first.validValue, last: last.validValue })) {
+      return { start: date, end: date };
+    }
+
+    return { start: first, end: last };
+  } else {
+    switch (type) {
+      case 'set-start':
+        return { end, start: date };
+      case 'set-end':
+        return { start, end: date };
+    }
+  }
 };
