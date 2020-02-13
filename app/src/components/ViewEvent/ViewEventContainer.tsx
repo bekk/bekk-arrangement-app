@@ -5,7 +5,7 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
-import { useEvent, useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
+import { useEvent, useCreatedEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import {
   IParticipant,
@@ -40,8 +40,8 @@ export const ViewEventContainer = () => {
 
   const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
-  const { createdEventId } = useRecentlyCreatedEvent();
-  const hasRecentlyCreatedThisEvent = eventId === createdEventId;
+  const { createdEvents } = useCreatedEvents();
+  const hasRecentlyCreatedThisEvent = createdEvents?.includes(eventId);
 
   if (!event) {
     return <div>Loading</div>;
