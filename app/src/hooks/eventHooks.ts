@@ -3,19 +3,14 @@ import { getEvent } from 'src/api/arrangementSvc';
 import { deserializeEvent, parseEvent, IEvent } from 'src/types/event';
 import { isOk } from 'src/types/validation';
 import { useLocalStorage } from './localStorage';
-import {
-  useRemoteData,
-  RemoteData,
-  isLoading,
-  hasLoaded,
-  isNotRequested,
-} from 'src/remote-data';
+import { cachedRemoteData } from 'src/remote-data';
 
-let eventCache: Record<string, RemoteData<IEvent>> = {};
+const useEventCache = cachedRemoteData<string, IEvent>();
 
 export const useEvent = (id: string) => {
-  const event = useRemoteData(
-    useCallback(async () => {
+  const event = useEventCache({
+    key: id,
+    fetcher: useCallback(async () => {
       const retrievedEvent = await getEvent(id);
       const deserializedEvent = deserializeEvent(retrievedEvent);
       const domainEvent = parseEvent(deserializedEvent);
@@ -27,17 +22,8 @@ export const useEvent = (id: string) => {
           'Arrangementobjektet kan ikke parses av følgende grunner ' +
           domainEvent.errors.map(x => x.message).join(', '),
       });
-    }, [id])
-  );
-
-  const cachedEvent = eventCache[id];
-  if (cachedEvent) {
-    if ((isNotRequested(event) || isLoading(event)) && hasLoaded(cachedEvent)) {
-      return cachedEvent;
-    }
-  }
-
-  eventCache[id] = event;
+    }, [id]),
+  });
 
   return event;
 };

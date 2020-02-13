@@ -46,6 +46,27 @@ export function isBad<T>(data: RemoteData<T>): data is Bad {
   return data.status === 'ERROR';
 }
 
+export const cachedRemoteData = <Key extends string, T>() => {
+  let cache: Record<string, RemoteData<T>> = {};
+  return ({ key, fetcher }: { key: Key; fetcher: () => Promise<T> }) => {
+    const value = useRemoteData(fetcher);
+
+    const cachedValue = cache[key];
+    if (cachedValue) {
+      if (
+        (isNotRequested(value) || isLoading(value)) &&
+        hasLoaded(cachedValue)
+      ) {
+        return cachedValue;
+      }
+    }
+
+    cache[key] = value;
+
+    return value;
+  };
+};
+
 export const useRemoteData = <T>(fetcher: () => Promise<T>): RemoteData<T> => {
   const [remoteData, updateRemoteData] = useUpdateRemoteData(fetcher);
   useEffect(() => {
