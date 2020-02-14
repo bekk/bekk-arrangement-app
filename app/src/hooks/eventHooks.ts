@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
-import { getEvent } from 'src/api/arrangementSvc';
+import { getEvent, getEvents } from 'src/api/arrangementSvc';
 import { deserializeEvent, parseEvent, IEvent } from 'src/types/event';
 import { isOk } from 'src/types/validation';
 import { useLocalStorage } from './localStorage';
 import { cachedRemoteData } from 'src/remote-data';
 
-const useEventCache = cachedRemoteData<string, IEvent>();
+const eventCache = cachedRemoteData<string, IEvent>();
 
 export const useEvent = (id: string) => {
-  const event = useEventCache({
+  const event = eventCache.useOne({
     key: id,
     fetcher: useCallback(async () => {
       const retrievedEvent = await getEvent(id);
@@ -26,6 +26,24 @@ export const useEvent = (id: string) => {
   });
 
   return event;
+};
+
+export const useEvents = () => {
+  const events = eventCache.useMany(
+    useCallback(async () => {
+      const eventContracts = await getEvents();
+      const events: [string, IEvent][] = eventContracts.mapIf(
+        ({ id, ...event }) => {
+          const parsedEvent = parseEvent(deserializeEvent(event));
+          if (isOk(parsedEvent)) {
+            return [id, parsedEvent.validValue];
+          }
+        }
+      );
+      return events;
+    }, [])
+  );
+  return events;
 };
 
 export const useRecentlyCreatedEvent = (): {

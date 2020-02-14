@@ -1,56 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
 import { createRoute, editEventRoute } from 'src/routing';
-import { getEvents } from 'src/api/arrangementSvc';
-import { WithId } from 'src/types';
-import {
-  IEvent,
-  IEventContract,
-  deserializeEvent,
-  parseEvent,
-  IEditEvent,
-} from 'src/types/event';
-import { isOk, Result, isBad } from 'src/types/validation';
 import { Link } from 'react-router-dom';
 import { Page } from '../Page/Page';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
-
-const toParsedEventsMap = (
-  events: WithId<IEventContract>[]
-): Map<string, Result<IEditEvent, IEvent>> => {
-  return new Map(
-    events.map<[string, Result<IEditEvent, IEvent>]>(e => {
-      const parsedEvent = parseEvent(deserializeEvent(e));
-      return [e.id, parsedEvent];
-    })
-  );
-};
-
-const useEvents = () => {
-  const [events, setEvents] = useState<
-    Map<string, Result<IEditEvent, IEvent>>
-  >();
-  const { catchAndNotify } = useNotification();
-
-  useEffect(
-    catchAndNotify(async () => {
-      const events = await getEvents();
-      const eventsMap = toParsedEventsMap(events);
-      setEvents(eventsMap);
-    }),
-    []
-  );
-
-  return events;
-};
+import { useEvents } from 'src/hooks/eventHooks';
+import { hasLoaded } from 'src/remote-data';
 
 export const ViewEventsContainer = () => {
   const events = useEvents();
 
-  if (!events) {
-    return <div>Loading</div>;
-  }
   const eventsKeys = Array.from(events.keys());
 
   return (
@@ -62,23 +21,15 @@ export const ViewEventsContainer = () => {
       <div>
         {eventsKeys.map((x, i) => {
           const eventFromMap = events.get(x);
-          if (eventFromMap !== undefined && isOk(eventFromMap)) {
+          if (eventFromMap !== undefined && hasLoaded(eventFromMap)) {
             return (
               <EventListElement
                 key={x}
-                event={eventFromMap.validValue}
+                event={eventFromMap.data}
                 onClickRoute={editEventRoute(x)}
               />
             );
           }
-          return (
-            <div key={i}>
-              Event with id {x} is no good{' '}
-              {eventFromMap &&
-                isBad(eventFromMap) &&
-                eventFromMap.errors.map(x => x.message).join(', ')}
-            </div>
-          );
         })}
       </div>
     </Page>

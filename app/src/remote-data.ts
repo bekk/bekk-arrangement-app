@@ -52,34 +52,47 @@ export function isBad<T>(data: RemoteData<T>): data is Bad {
   return data.status === 'ERROR';
 }
 
-export const cachedRemoteData = <Key extends string, T>() => {
-  let cache: Record<string, RemoteData<T>> = {};
-  return ({
-    key,
-    fetcher,
-  }: {
-    key: Key;
-    fetcher: () => Promise<T>;
-  }): RemoteData<T> => {
-    const value = useRemoteData(fetcher);
+export function cachedRemoteData<Key extends string, T>() {
+  let cache: Map<Key, RemoteData<T>> = new Map();
 
-    const cachedValue = cache[key];
-    if (cachedValue) {
-      if (
-        (isNotRequested(value) || isLoading(value)) &&
-        hasLoaded(cachedValue)
-      ) {
-        return cachedValue;
+  return {
+    useMany: (
+      fetcher: () => Promise<Array<[Key, T]>>
+    ): Map<Key, RemoteData<T>> => {
+      const values = useRemoteData(fetcher);
+      return cache;
+    },
+    useOne: ({
+      key,
+      fetcher,
+    }: {
+      key: Key;
+      fetcher: () => Promise<T>;
+    }): RemoteData<T> => {
+      const value = useRemoteData(fetcher);
+
+      const cachedValue = cache.get(key);
+      if (cachedValue) {
+        if (
+          (isNotRequested(value) || isLoading(value)) &&
+          hasLoaded(cachedValue)
+        ) {
+          return cachedValue;
+        }
       }
-    }
 
-    if (hasLoaded(value)) {
-      cache[key] = { status: 'PENDING', dataIsStale: true, data: value.data };
-    }
+      if (hasLoaded(value)) {
+        cache.set(key, {
+          status: 'PENDING',
+          dataIsStale: true,
+          data: value.data,
+        });
+      }
 
-    return value;
+      return value;
+    },
   };
-};
+}
 
 export const useRemoteData = <T>(fetcher: () => Promise<T>): RemoteData<T> => {
   const [remoteData, updateRemoteData] = useUpdateRemoteData(fetcher);
