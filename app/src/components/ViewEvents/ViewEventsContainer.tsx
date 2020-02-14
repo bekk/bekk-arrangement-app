@@ -10,8 +10,6 @@ import { hasLoaded } from 'src/remote-data';
 export const ViewEventsContainer = () => {
   const events = useEvents();
 
-  const eventsKeys = Array.from(events.keys());
-
   return (
     <Page>
       <div className={style.header}>
@@ -19,14 +17,13 @@ export const ViewEventsContainer = () => {
         <AddEventButton />
       </div>
       <div>
-        {eventsKeys.map((x, i) => {
-          const eventFromMap = events.get(x);
-          if (eventFromMap !== undefined && hasLoaded(eventFromMap)) {
+        {[...events].map(([id, event]) => {
+          if (hasLoaded(event)) {
             return (
               <EventListElement
-                key={x}
-                event={eventFromMap.data}
-                onClickRoute={editEventRoute(x)}
+                key={id}
+                event={event.data}
+                onClickRoute={editEventRoute(id)}
               />
             );
           }
