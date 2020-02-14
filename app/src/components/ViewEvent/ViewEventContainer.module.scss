@@ -1,6 +1,12 @@
 @import 'src/style/constants';
 
+.text {
+  @include regularText;
+  line-height: 1.2;
+}
+
 .subsection {
+  @extend .text;
   margin: 20px 0px;
   white-space: pre-wrap;
 }
@@ -21,9 +27,4 @@
 
 .textCopy {
   padding-left: 10px;
-}
-
-.text {
-  @include regularText;
-  line-height: 1.2;
 }

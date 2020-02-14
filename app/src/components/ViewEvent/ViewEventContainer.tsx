@@ -92,7 +92,7 @@ export const ViewEventContainer = () => {
       )}
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.subsection}>{event.description}</div>
-      <div className={style.text}>
+      <div className={style.subsection}>
         <DateSection startDate={event.start} endDate={event.end} />
         <div className={style.subsection}>Lokasjon: {event.location}</div>
         <div className={style.subsection}>{participantsText} påmeldte</div>
@@ -137,9 +137,13 @@ export const ViewEventContainer = () => {
           </>
         )}
         <h1 className={style.header}>Påmeldte</h1>
-        {participants?.map(p => (
-          <div>{p.email.email}</div>
-        ))}
+        {participants && participants.length > 0 ? (
+          participants.map(p => (
+            <div className={style.text}>{p.email.email}</div>
+          ))
+        ) : (
+          <div className={style.text}>Ingen påmeldte</div>
+        )}
       </div>
     </Page>
   );
