@@ -29,7 +29,7 @@ export const useEvent = (id: string) => {
 };
 
 export const useEvents = () => {
-  const events = eventCache.useMany(
+  const events = eventCache.useAll(
     useCallback(async () => {
       const eventContracts = await getEvents();
       const events: [string, IEvent][] = eventContracts.mapIf(

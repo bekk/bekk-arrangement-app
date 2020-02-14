@@ -56,10 +56,25 @@ export function cachedRemoteData<Key extends string, T>() {
   let cache: Map<Key, RemoteData<T>> = new Map();
 
   return {
-    useMany: (
+    useAll: (
       fetcher: () => Promise<Array<[Key, T]>>
     ): Map<Key, RemoteData<T>> => {
       const values = useRemoteData(fetcher);
+
+      if (hasLoaded(values)) {
+        values.data.forEach(([key, value]) => {
+          cache.set(key, { status: 'PENDING', dataIsStale: true, data: value });
+        });
+
+        return new Map([
+          ...cache,
+          ...values.data.map(
+            ([key, value]) =>
+              [key, { status: 'OK', data: value }] as [Key, Ok<T>]
+          ),
+        ]);
+      }
+
       return cache;
     },
     useOne: ({
