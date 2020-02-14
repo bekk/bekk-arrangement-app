@@ -29,6 +29,7 @@ import { stringifyEmail, parseEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
 import { BlockLink } from '../Common/BlockLink/BlockLink';
 import { ValidatedTextInput } from '../Common/ValidatedTextInput/ValidatedTextInput';
+import { useParticipants } from 'src/hooks/participantHooks';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -40,6 +41,10 @@ export const ViewEventContainer = () => {
   const { catchAndNotify } = useNotification();
 
   const [event] = useEvent(eventId);
+  const [participants] = useParticipants(eventId);
+  const participantsText = `${participants?.length ?? 0}${
+    event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
+  }`;
   const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
   const { createdEventIds } = useCreatedEvents();
   const hasRecentlyCreatedThisEvent = createdEventIds.includes(eventId);
@@ -86,10 +91,11 @@ export const ViewEventContainer = () => {
         </BlockLink>
       )}
       <h1 className={style.header}>{event.title}</h1>
+      <div className={style.subsection}>{event.description}</div>
       <div className={style.text}>
         <DateSection startDate={event.start} endDate={event.end} />
-        <div>Lokasjon: {event.location}</div>
-        <div className={style.subsection}>{event.description}</div>
+        <div className={style.subsection}>Lokasjon: {event.location}</div>
+        <div className={style.subsection}>{participantsText} påmeldte</div>
         <div className={style.subsection}>
           Arrangør: {event.organizerName} -{' '}
           <a
@@ -130,6 +136,10 @@ export const ViewEventContainer = () => {
             <Button onClick={() => addParticipant()}>Meld meg på</Button>
           </>
         )}
+        <h1 className={style.header}>Påmeldte</h1>
+        {participants?.map(p => (
+          <div>{p.email.email}</div>
+        ))}
       </div>
     </Page>
   );
