@@ -21,11 +21,12 @@ export const EventListElement = ({ event, onClickRoute }: IProps) => {
   )}`;
 
   return (
-    <div>
+    <div className={style.row}>
       <Link to={onClickRoute} className={style.link}>
-        <div>{event.title}</div>
+        <div className={style.text}>{event.title}</div>
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
+        <div className={style.organizer}>Arrangeres av {event.organizerName}</div>
       </Link>
     </div>
   );

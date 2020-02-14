@@ -23,7 +23,7 @@ export interface IParticipant {
 }
 
 export interface IEditParticipant {
-  email: string;
+  email: Result<string, Email>;
   eventId: string;
 }
 
@@ -38,12 +38,18 @@ export const serializeParticipant = (
 
 export const deserializeParticpant = (
   participant: IParticipantViewModel
-): IEditParticipant => participant;
+): IEditParticipant => {
+  const email = parseEmail(participant.email);
+  return {
+    ...participant,
+    email,
+  }
+};
 
 export const parseParticipant = (
   participant: IEditParticipant
 ): Result<IEditParticipant, IParticipant> => {
-  const parsedParticipant = parseEmail(participant.email);
+  const parsedParticipant = parseEmail(participant.email.editValue);
   if (isOk(parsedParticipant)) {
     return {
       editValue: participant,
@@ -63,5 +69,5 @@ export const parseParticipant = (
 
 export const initalParticipant: IEditParticipant = {
   eventId: '0',
-  email: '',
+  email: parseEmail(''),
 };

@@ -16,8 +16,7 @@
   border-color: grey;
   background-color: var(--backgroundColor);
   display: block;
-  padding-left: 10px;
-  padding-top: 10px;
+  padding: 10px 10px 0 10px;
   @include regularText;
 }
 
