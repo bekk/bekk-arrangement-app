@@ -9,6 +9,7 @@ import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
 import queryString from 'query-string';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { viewEventRoute } from 'src/routing';
 
 const useQuery = (key: string) => {
   const {
@@ -29,6 +30,8 @@ export const CancelParticipant = () => {
   const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
+  const history = useHistory();
+  const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
 
   const cancelParticipant = catchAndNotify(async () => {
     if (eventId && participantEmail) {
@@ -44,17 +47,10 @@ export const CancelParticipant = () => {
   });
 
   if (!event) {
-    return (
-      <div>
-        Ugyldig url!{' '}
-        <span role="img" aria-label="sad emoji">
-          😔
-        </span>
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
-  const CancelledView = () => (
+  const HasCancelledView = () => (
     <>
       <h1 className={style.header}>Avmelding bekreftet!</h1>
       <div className={style.text}>
@@ -64,18 +60,16 @@ export const CancelParticipant = () => {
     </>
   );
 
-  const ConfirmView = () => (
+  const CancelView = () => (
     <>
-      <h1 className={style.header}>Du er påmeldt!</h1>
-      <div className={style.text}>
-        Gratulerer, du er nå meldt på {event.title} den{' '}
-        {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)} -{' '}
-        {stringifyTime(event.end.time)} med e-post {participantEmail}!
+      <h1 className={style.header}>Avmelding</h1>
+      <div className={style.text}>Vil du melde deg av {event.title}?</div>
+      <div className={style.buttonContainer}>
+        <Button onClick={cancelParticipant}>Meld av</Button>
+        <Button onClick={goToEvent}>Se arrangement</Button>
       </div>
-      <div className={style.text}>Vil du melde deg av?</div>
-      <Button onClick={cancelParticipant}>Meld av</Button>
     </>
   );
 
-  return <Page>{wasDeleted ? <CancelledView /> : <ConfirmView />}</Page>;
+  return <Page>{wasDeleted ? <HasCancelledView /> : <CancelView />}</Page>;
 };

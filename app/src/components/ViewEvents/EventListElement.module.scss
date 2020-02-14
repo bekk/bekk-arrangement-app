@@ -12,20 +12,39 @@
   grid-template-columns: 2fr 1fr;
   padding: 10px 0;
   @media #{$desktop} {
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.row {
+  :hover {
+    text-decoration: underline;
+  }
+}
+
+.text {
+  align-self: center;
+}
+
+.organizer {
+  @extend .text;
+  visibility: hidden;
+  @media #{$desktop} {
+    visibility: visible; 
   }
 }
 
 .date {
   text-align: right;
   white-space: pre-line;
+  align-self: center;
 }
 
 .desktopDate {
   visibility: hidden;
   @media #{$desktop} {
     visibility: visible;
-    text-align: right;
+    text-align: center;
     align-self: center;
   }
 }

@@ -50,7 +50,6 @@ export const EditEventContainer = () => {
     })();
 
   const goToOverview = () => history.push(eventsRoute);
-  const goToEvent = () => history.push(viewEventRoute(eventId));
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
@@ -64,15 +63,14 @@ export const EditEventContainer = () => {
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
-      <div className={style.buttonContainer}>
-        <Button onClick={goToEvent}>Avbryt - til påmelding</Button>
+      <div className={style.previewButton}>
         <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
           Forhåndsvis endringer
         </Button>
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
-        <Button onClick={() => onDeleteEvent(eventId)}>Slett</Button>
+        <Button onClick={() => onDeleteEvent(eventId)}>Avlys arrangement</Button>
       </div>
     </Page>
   );

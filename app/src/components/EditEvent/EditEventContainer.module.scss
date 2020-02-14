@@ -14,3 +14,9 @@
   @include regularText;
   margin-top: 20px;
 }
+
+.previewButton {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}

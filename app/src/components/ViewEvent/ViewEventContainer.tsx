@@ -5,10 +5,8 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
-import { TextInput } from '../Common/TextInput/TextInput';
-import { useEvent, useRecentlyCreatedEvent } from 'src/hooks/eventHooks';
+import { useEvent, useCreatedEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
-import { ValidationResult } from '../Common/ValidationResult/ValidationResult';
 import {
   IParticipant,
   IEditParticipant,
@@ -24,11 +22,13 @@ import {
   viewEventRoute,
   eventsRoute,
   editEventRoute,
+  confirmParticipantRoute,
 } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
-import { stringifyEmail } from 'src/types/email';
+import { stringifyEmail, parseEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
 import { BlockLink } from '../Common/BlockLink/BlockLink';
+import { ValidatedTextInput } from '../Common/ValidatedTextInput/ValidatedTextInput';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -41,8 +41,8 @@ export const ViewEventContainer = () => {
 
   const [event] = useEvent(eventId);
   const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
-  const { createdEventId } = useRecentlyCreatedEvent();
-  const hasRecentlyCreatedThisEvent = eventId === createdEventId;
+  const { createdEventIds } = useCreatedEvents();
+  const hasRecentlyCreatedThisEvent = createdEventIds.includes(eventId);
 
   if (!event) {
     return <div>Loading</div>;
@@ -58,14 +58,12 @@ export const ViewEventContainer = () => {
           cancellationToken: '{cancellationToken}',
         });
       const {
-        cancellationToken,
         participant: { eventId, email },
       } = await postParticipant(participant.validValue, redirectUrlTemplate);
       history.push(
-        cancelParticipantRoute({
+        confirmParticipantRoute({
           eventId,
           email,
-          cancellationToken,
         })
       );
     }
@@ -94,10 +92,17 @@ export const ViewEventContainer = () => {
         <div className={style.subsection}>{event.description}</div>
         <div className={style.subsection}>
           Arrangør: {event.organizerName} -{' '}
-          {stringifyEmail(event.organizerEmail)}
+          <a
+            className={style.text}
+            href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
+              event.title
+            }`}
+          >
+            {stringifyEmail(event.organizerEmail)}
+          </a>
         </div>
         <div className={style.copy}>
-          <Button onClick={copyLink}>Del</Button>
+          <Button onClick={copyLink}>Kopier lenke</Button>
           <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
         </div>
         <h1 className={style.header}>Påmelding</h1>
@@ -108,17 +113,20 @@ export const ViewEventContainer = () => {
           </>
         ) : (
           <>
-            <TextInput
+            <ValidatedTextInput
               label={'E-post'}
               value={participant.editValue.email}
               placeholder={'ola.nordmann@bekk.no'}
               onChange={(email: string) =>
                 setParticipant(
-                  parseParticipant({ ...participant.editValue, email })
+                  parseParticipant({
+                    ...participant.editValue,
+                    email: parseEmail(email),
+                  })
                 )
               }
             />
-            <ValidationResult validationResult={participant.errors} />
+            <br />
             <Button onClick={() => addParticipant()}>Meld meg på</Button>
           </>
         )}

@@ -25,15 +25,19 @@ export const useEvent = (id: string | undefined): [IEvent | undefined] => {
   return [event];
 };
 
-export const useRecentlyCreatedEvent = (): {
-  createdEventId: string | undefined;
+export const useCreatedEvents = (): {
+  createdEventIds: string[];
   setCreatedEventId: (string: string) => void;
 } => {
   const [storage, setStorage] = useLocalStorage({
-    key: 'recently-created-event',
+    key: 'created-events',
   });
+  const parsedStorage: string[] = storage ? JSON.parse(storage) : [];
+  const updateStorage = (string: string) =>
+    JSON.stringify([...parsedStorage, string]);
+
   return {
-    createdEventId: storage,
-    setCreatedEventId: setStorage,
+    createdEventIds: parsedStorage,
+    setCreatedEventId: (string: string) => setStorage(updateStorage(string)),
   };
 };

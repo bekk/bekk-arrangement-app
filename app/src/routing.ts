@@ -8,6 +8,13 @@ export const eventsRoute = '/events';
 export const viewEventRoute = (eventId: string) => `/events/${eventId}`;
 export const editEventRoute = (eventId: string) => `/events/${eventId}/edit`;
 export const createRoute = '/events/create';
+export const confirmParticipantRoute = ({
+  eventId,
+  email,
+}: {
+  eventId: string;
+  email: string;
+}) => `/${eventId}/confirm/${email}`;
 export const cancelParticipantRoute = ({
   eventId,
   email,
