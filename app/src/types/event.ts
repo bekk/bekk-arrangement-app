@@ -176,6 +176,9 @@ export const maybeParseEvent = (eventContract: IEventContract): IEvent => {
   if (isOk(domainEvent)) {
     return domainEvent.validValue;
   }
+  // Man får egt bare lov å kaste new Error
+  // men det er tull
+  // eslint-disable-next-line
   throw {
     status: 'ERROR',
     userMessage:
