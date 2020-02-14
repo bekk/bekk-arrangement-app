@@ -3,6 +3,7 @@ import { isError } from 'util';
 
 export type Ok<T> = {
   status: 'OK';
+  dataIsStale?: false;
   data: T;
 };
 
@@ -12,7 +13,8 @@ export type Loading = {
 
 export type Pending<T> = {
   status: 'PENDING';
-  staleData: T;
+  dataIsStale: true;
+  data: T;
 };
 
 export type NotRequested = {
@@ -34,8 +36,12 @@ export function isPending<T>(data: RemoteData<T>): data is Pending<T> {
   return data.status === 'PENDING';
 }
 
-export function hasLoaded<T>(data: RemoteData<T>): data is Ok<T> {
+export function isOk<T>(data: RemoteData<T>): data is Ok<T> {
   return data.status === 'OK';
+}
+
+export function hasLoaded<T>(data: RemoteData<T>): data is Ok<T> | Pending<T> {
+  return isOk(data) || isPending(data);
 }
 
 export function isNotRequested<T>(data: RemoteData<T>): data is NotRequested {
@@ -48,7 +54,13 @@ export function isBad<T>(data: RemoteData<T>): data is Bad {
 
 export const cachedRemoteData = <Key extends string, T>() => {
   let cache: Record<string, RemoteData<T>> = {};
-  return ({ key, fetcher }: { key: Key; fetcher: () => Promise<T> }) => {
+  return ({
+    key,
+    fetcher,
+  }: {
+    key: Key;
+    fetcher: () => Promise<T>;
+  }): RemoteData<T> => {
     const value = useRemoteData(fetcher);
 
     const cachedValue = cache[key];
@@ -61,7 +73,9 @@ export const cachedRemoteData = <Key extends string, T>() => {
       }
     }
 
-    cache[key] = value;
+    if (hasLoaded(value)) {
+      cache[key] = { status: 'PENDING', dataIsStale: true, data: value.data };
+    }
 
     return value;
   };
@@ -88,7 +102,8 @@ export const useUpdateRemoteData = <T, P>(
         if (hasLoaded(remoteData)) {
           return {
             status: 'PENDING',
-            staleData: remoteData.data,
+            dataIsStale: true,
+            data: remoteData.data,
           };
         }
         if (isError(remoteData) || isNotRequested(remoteData)) {

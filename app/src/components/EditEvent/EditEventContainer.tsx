@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import React from 'react';
 import {
   parseEvent,
@@ -31,7 +31,7 @@ export const EditEventContainer = () => {
   const history = useHistory();
   const { catchAndNotify } = useNotification();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
       setEvent(parseEvent(deserializeEvent(serializeEvent(remoteEvent.data))));
     }
@@ -51,6 +51,7 @@ export const EditEventContainer = () => {
 
   const goToOverview = () => history.push(eventsRoute);
   const goToEvent = () => history.push(viewEventRoute(eventId));
+
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
