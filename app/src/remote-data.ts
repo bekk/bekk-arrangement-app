@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { isError } from 'util';
+import { useNotification } from './components/NotificationHandler/NotificationHandler';
 
 export type Ok<T> = {
   status: 'OK';
@@ -59,7 +60,19 @@ export function cachedRemoteData<Key extends string, T>() {
     useAll: (
       fetcher: () => Promise<Array<[Key, T]>>
     ): Map<Key, RemoteData<T>> => {
+      const { notify } = useNotification();
       const values = useRemoteData(fetcher);
+
+      useEffect(() => {
+        if (isBad(values)) {
+          const message = values.userMessage;
+          notify({
+            type: 'ERROR',
+            title: 'All dataen kan ikkje lastes',
+            message,
+          });
+        }
+      }, [values, notify]);
 
       if (hasLoaded(values)) {
         values.data.forEach(([key, value]) => {

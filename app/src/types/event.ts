@@ -169,3 +169,17 @@ export const initialEvent: IEditEvent = {
   organizerEmail: parseEmail(''),
   maxParticipants: parseMaxAttendees(''),
 };
+
+export const maybeParseEvent = (eventContract: IEventContract): IEvent => {
+  const deserializedEvent = deserializeEvent(eventContract);
+  const domainEvent = parseEvent(deserializedEvent);
+  if (isOk(domainEvent)) {
+    return domainEvent.validValue;
+  }
+  throw {
+    status: 'ERROR',
+    userMessage:
+      'Arrangementobjektet kan ikke parses av følgende grunner: ' +
+      domainEvent.errors.map(x => x.message).join(', '),
+  };
+};
