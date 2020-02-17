@@ -17,6 +17,7 @@ import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
+import { Modal } from '../Common/Modal/Modal';
 
 export const EditEventContainer = () => {
   useAuthentication();
@@ -26,6 +27,7 @@ export const EditEventContainer = () => {
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
   const { catchAndNotify } = useNotification();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (eventId) {
@@ -70,8 +72,30 @@ export const EditEventContainer = () => {
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
-        <Button onClick={() => onDeleteEvent(eventId)}>Avlys arrangement</Button>
+        <Button onClick={() => setShowModal(true)}>Avlys arrangement</Button>
       </div>
+      {showModal && (
+        <Modal
+          closeModal={() => setShowModal(false)}
+          header="Avlys arrangement"
+        >
+          <div>
+            Sikker på at du vil avlyse arrangementet? <br />
+            Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
+            <span role="img" aria-label="grimacing-face">
+              😬
+            </span>
+          </div>
+          <div className={style.buttonContainer}>
+            <Button onClick={() => setShowModal(false)} color="White">
+              Avbryt
+            </Button>
+            <Button onClick={() => onDeleteEvent(eventId)} color="White">
+              Avlys arrangement
+            </Button>
+          </div>
+        </Modal>
+      )}
     </Page>
   );
 

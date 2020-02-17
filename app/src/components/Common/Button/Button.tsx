@@ -1,14 +1,27 @@
 import React from 'react';
 import style from './Button.module.scss';
+import classNames from 'classnames';
 
 interface IProps {
   onClick: () => void;
   disabled?: boolean;
-  children?: string;
+  color?: 'White' | 'Black';
+  children?:
+    | string
+    | (JSX.Element | false)
+    | (JSX.Element | undefined | false)[];
 }
-export const Button = ({ onClick, disabled = false, children }: IProps) => {
+export const Button = ({
+  onClick,
+  color = 'Black',
+  disabled = false,
+  children,
+}: IProps) => {
+  const buttonStyle = classNames(style.button, {
+    [style.whiteButton]: color === 'White',
+  });
   return (
-    <button className={style.button} onClick={onClick} disabled={disabled}>
+    <button className={buttonStyle} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
