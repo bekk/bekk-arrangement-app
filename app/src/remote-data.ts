@@ -76,11 +76,17 @@ export function cachedRemoteData<Key extends string, T>() {
 
       if (hasLoaded(values)) {
         values.data.forEach(([key, value]) => {
-          cache.set(key, {
-            status: 'UPDATING',
-            dataIsStale: true,
-            data: value,
-          });
+          cache = new Map([
+            ...cache,
+            [
+              key,
+              {
+                status: 'UPDATING',
+                dataIsStale: true,
+                data: value,
+              },
+            ],
+          ]);
         });
 
         return new Map([
@@ -114,11 +120,17 @@ export function cachedRemoteData<Key extends string, T>() {
       }
 
       if (hasLoaded(value)) {
-        cache.set(key, {
-          status: 'UPDATING',
-          dataIsStale: true,
-          data: value.data,
-        });
+        cache = new Map([
+          ...cache,
+          [
+            key,
+            {
+              status: 'UPDATING',
+              dataIsStale: true,
+              data: value.data,
+            },
+          ],
+        ]);
       }
 
       return value;
