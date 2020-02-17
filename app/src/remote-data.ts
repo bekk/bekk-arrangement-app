@@ -12,8 +12,8 @@ export type Loading = {
   status: 'LOADING';
 };
 
-export type Pending<T> = {
-  status: 'PENDING';
+export type Updating<T> = {
+  status: 'UPDATING';
   dataIsStale: true;
   data: T;
 };
@@ -27,22 +27,22 @@ export type Bad = {
   userMessage: string;
 };
 
-export type RemoteData<T> = Ok<T> | Loading | Pending<T> | Bad | NotRequested;
+export type RemoteData<T> = Ok<T> | Loading | Updating<T> | Bad | NotRequested;
 
 export function isLoading<T>(data: RemoteData<T>): data is Loading {
   return data.status === 'LOADING';
 }
 
-export function isPending<T>(data: RemoteData<T>): data is Pending<T> {
-  return data.status === 'PENDING';
+export function isUpdating<T>(data: RemoteData<T>): data is Updating<T> {
+  return data.status === 'UPDATING';
 }
 
-export function isOk<T>(data: RemoteData<T>): data is Ok<T> {
+export function isFresh<T>(data: RemoteData<T>): data is Ok<T> {
   return data.status === 'OK';
 }
 
-export function hasLoaded<T>(data: RemoteData<T>): data is Ok<T> | Pending<T> {
-  return isOk(data) || isPending(data);
+export function hasLoaded<T>(data: RemoteData<T>): data is Ok<T> | Updating<T> {
+  return isFresh(data) || isUpdating(data);
 }
 
 export function isNotRequested<T>(data: RemoteData<T>): data is NotRequested {
@@ -76,7 +76,11 @@ export function cachedRemoteData<Key extends string, T>() {
 
       if (hasLoaded(values)) {
         values.data.forEach(([key, value]) => {
-          cache.set(key, { status: 'PENDING', dataIsStale: true, data: value });
+          cache.set(key, {
+            status: 'UPDATING',
+            dataIsStale: true,
+            data: value,
+          });
         });
 
         return new Map([
@@ -111,7 +115,7 @@ export function cachedRemoteData<Key extends string, T>() {
 
       if (hasLoaded(value)) {
         cache.set(key, {
-          status: 'PENDING',
+          status: 'UPDATING',
           dataIsStale: true,
           data: value.data,
         });
@@ -142,7 +146,7 @@ export const useUpdateRemoteData = <T, P>(
       setRemoteData(remoteData => {
         if (hasLoaded(remoteData)) {
           return {
-            status: 'PENDING',
+            status: 'UPDATING',
             dataIsStale: true,
             data: remoteData.data,
           };

@@ -9,7 +9,7 @@ import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
 import queryString from 'query-string';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
-import { hasLoaded } from 'src/remote-data';
+import { hasLoaded, isBad } from 'src/remote-data';
 import { viewEventRoute } from 'src/routing';
 
 const useQuery = (key: string) => {
@@ -47,7 +47,7 @@ export const CancelParticipant = () => {
     }
   });
 
-  if (!hasLoaded(remoteEvent)) {
+  if (isBad(remoteEvent)) {
     return (
       <div>
         Ugyldig url!{' '}
@@ -56,6 +56,10 @@ export const CancelParticipant = () => {
         </span>
       </div>
     );
+  }
+
+  if (!hasLoaded(remoteEvent)) {
+    return <div>Laster...</div>;
   }
 
   const event = remoteEvent.data;

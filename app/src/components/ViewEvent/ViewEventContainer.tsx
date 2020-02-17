@@ -15,8 +15,6 @@ import {
 } from 'src/types/participant';
 import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
-import { Page } from '../Page/Page';
-import { Button } from '../Common/Button/Button';
 import {
   cancelParticipantRoute,
   viewEventRoute,
@@ -24,12 +22,14 @@ import {
   editEventRoute,
   confirmParticipantRoute,
 } from 'src/routing';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail, parseEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
-import { BlockLink } from '../Common/BlockLink/BlockLink';
 import { hasLoaded, isBad } from 'src/remote-data';
-import { ValidatedTextInput } from '../Common/ValidatedTextInput/ValidatedTextInput';
+import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
+import { Page } from 'src/components/Page/Page';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { Button } from 'src/components/Common/Button/Button';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
