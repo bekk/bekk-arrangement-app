@@ -65,6 +65,7 @@ export const ViewEventsContainer = () => {
             return (
               <EventListElement
                 key={x}
+                eventId={x}
                 event={eventFromMap.validValue}
                 onClickRoute={viewEventRoute(x)}
               />
