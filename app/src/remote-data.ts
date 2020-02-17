@@ -56,6 +56,15 @@ export function isBad<T>(data: RemoteData<T>): data is Bad {
 export function cachedRemoteData<Key extends string, T>() {
   let cache: Map<Key, RemoteData<T>> = new Map();
 
+  const updateCache = (key: Key, data: T) => {
+    const value: Updating<T> = {
+      status: 'UPDATING',
+      dataIsStale: true,
+      data,
+    };
+    cache = new Map([...cache, [key, value]]);
+  };
+
   return {
     useAll: (
       fetcher: () => Promise<Array<[Key, T]>>
@@ -76,17 +85,7 @@ export function cachedRemoteData<Key extends string, T>() {
 
       if (hasLoaded(values)) {
         values.data.forEach(([key, value]) => {
-          cache = new Map([
-            ...cache,
-            [
-              key,
-              {
-                status: 'UPDATING',
-                dataIsStale: true,
-                data: value,
-              },
-            ],
-          ]);
+          updateCache(key, value);
         });
 
         return new Map([
@@ -120,17 +119,7 @@ export function cachedRemoteData<Key extends string, T>() {
       }
 
       if (hasLoaded(value)) {
-        cache = new Map([
-          ...cache,
-          [
-            key,
-            {
-              status: 'UPDATING',
-              dataIsStale: true,
-              data: value.data,
-            },
-          ],
-        ]);
+        updateCache(key, value.data);
       }
 
       return value;
