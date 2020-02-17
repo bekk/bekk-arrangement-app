@@ -139,7 +139,7 @@ export const ViewEventContainer = () => {
         <h1 className={style.header}>Påmeldte</h1>
         {participants && participants.length > 0 ? (
           participants.map(p => (
-            <div className={style.text}>{p.email.email}</div>
+            <div className={style.text}>{stringifyEmail(p.email)}</div>
           ))
         ) : (
           <div className={style.text}>Ingen påmeldte</div>

@@ -26,11 +26,11 @@
   align-self: center;
 }
 
-.organizer {
+.desktopText {
   @extend .text;
   visibility: hidden;
   @media #{$desktop} {
-    visibility: visible; 
+    visibility: visible;
   }
 }
 
@@ -41,10 +41,10 @@
 }
 
 .desktopDate {
+  @extend .date;
   visibility: hidden;
   @media #{$desktop} {
     visibility: visible;
     text-align: center;
-    align-self: center;
   }
 }

@@ -32,11 +32,11 @@ export const EventListElement = ({ eventId, event, onClickRoute }: IProps) => {
         <div className={style.text}>{event.title}</div>
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
-        <div className={style.organizer}>
+        <div className={style.desktopText}>
           {participantsCount}
           {participantLimitText} påmeldte
         </div>
-        <div className={style.organizer}>
+        <div className={style.desktopText}>
           Arrangeres av {event.organizerName}
         </div>
       </Link>
