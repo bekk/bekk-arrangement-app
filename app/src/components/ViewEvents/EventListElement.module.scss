@@ -12,7 +12,7 @@
   grid-template-columns: 2fr 1fr;
   padding: 10px 0;
   @media #{$desktop} {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
@@ -26,11 +26,11 @@
   align-self: center;
 }
 
-.organizer {
+.desktopText {
   @extend .text;
   visibility: hidden;
   @media #{$desktop} {
-    visibility: visible; 
+    visibility: visible;
   }
 }
 
@@ -41,10 +41,10 @@
 }
 
 .desktopDate {
+  @extend .date;
   visibility: hidden;
   @media #{$desktop} {
     visibility: visible;
     text-align: center;
-    align-self: center;
   }
 }

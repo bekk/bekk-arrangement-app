@@ -36,14 +36,14 @@ export const serializeParticipant = (
   };
 };
 
-export const deserializeParticpant = (
+export const deserializeParticipant = (
   participant: IParticipantViewModel
 ): IEditParticipant => {
   const email = parseEmail(participant.email);
   return {
     ...participant,
     email,
-  }
+  };
 };
 
 export const parseParticipant = (

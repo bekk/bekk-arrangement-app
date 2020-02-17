@@ -28,8 +28,9 @@ import { hasLoaded, isBad } from 'src/remote-data';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { Page } from 'src/components/Page/Page';
-import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { Button } from 'src/components/Common/Button/Button';
+import { useParticipants } from 'src/hooks/participantHooks';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -44,6 +45,7 @@ export const ViewEventContainer = () => {
   const timeLeft = useTimeLeft(
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
+  const [participants] = useParticipants(eventId);
   const { createdEventIds } = useCreatedEvents();
   const hasRecentlyCreatedThisEvent = createdEventIds.includes(eventId);
 
@@ -56,6 +58,9 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
+  const participantsText = `${participants?.length ?? 0}${
+    event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
+  }`;
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {
@@ -95,10 +100,11 @@ export const ViewEventContainer = () => {
         </BlockLink>
       )}
       <h1 className={style.header}>{event.title}</h1>
-      <div className={style.text}>
+      <div className={style.subsection}>{event.description}</div>
+      <div className={style.subsection}>
         <DateSection startDate={event.start} endDate={event.end} />
-        <div>Lokasjon: {event.location}</div>
-        <div className={style.subsection}>{event.description}</div>
+        <div className={style.subsection}>Lokasjon: {event.location}</div>
+        <div className={style.subsection}>{participantsText} påmeldte</div>
         <div className={style.subsection}>
           Arrangør: {event.organizerName} -{' '}
           <a
@@ -138,6 +144,14 @@ export const ViewEventContainer = () => {
             <br />
             <Button onClick={() => addParticipant()}>Meld meg på</Button>
           </>
+        )}
+        <h1 className={style.header}>Påmeldte</h1>
+        {participants && participants.length > 0 ? (
+          participants.map(p => (
+            <div className={style.text}>{stringifyEmail(p.email)}</div>
+          ))
+        ) : (
+          <div className={style.text}>Ingen påmeldte</div>
         )}
       </div>
     </Page>

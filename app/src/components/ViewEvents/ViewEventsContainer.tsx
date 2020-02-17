@@ -1,11 +1,11 @@
 import React from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
-import { createRoute, editEventRoute } from 'src/routing';
-import { Page } from '../Page/Page';
+import { createRoute, viewEventRoute } from 'src/routing';
 import { useEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { Link } from 'react-router-dom';
+import { Page } from 'src/components/Page/Page';
 
 export const ViewEventsContainer = () => {
   const events = useEvents();
@@ -22,8 +22,9 @@ export const ViewEventsContainer = () => {
             return (
               <EventListElement
                 key={id}
+                eventId={id}
                 event={event.data}
-                onClickRoute={editEventRoute(id)}
+                onClickRoute={viewEventRoute(id)}
               />
             );
           }
