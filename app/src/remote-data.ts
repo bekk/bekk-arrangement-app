@@ -77,7 +77,7 @@ export function cachedRemoteData<Key extends string, T>() {
           const message = values.userMessage;
           notify({
             type: 'ERROR',
-            title: 'All dataen kan ikkje lastes',
+            title: 'Ikke all dataen kunne lastes',
             message,
           });
         }

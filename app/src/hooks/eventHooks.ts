@@ -7,30 +7,24 @@ import { cachedRemoteData } from 'src/remote-data';
 const eventCache = cachedRemoteData<string, IEvent>();
 
 export const useEvent = (id: string) => {
-  const event = eventCache.useOne({
+  return eventCache.useOne({
     key: id,
     fetcher: useCallback(async () => {
       const retrievedEvent = await getEvent(id);
       return maybeParseEvent(retrievedEvent);
     }, [id]),
   });
-
-  return event;
 };
 
 export const useEvents = () => {
-  const events = eventCache.useAll(
+  return eventCache.useAll(
     useCallback(async () => {
       const eventContracts = await getEvents();
-      const events: [string, IEvent][] = eventContracts.map(
-        ({ id, ...event }) => {
-          return [id, maybeParseEvent(event)];
-        }
-      );
-      return events;
+      return eventContracts.map(({ id, ...event }) => {
+        return [id, maybeParseEvent(event)];
+      });
     }, [])
   );
-  return events;
 };
 
 export const useCreatedEvents = (): {
