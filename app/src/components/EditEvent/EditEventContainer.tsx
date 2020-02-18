@@ -19,7 +19,7 @@ import { eventsRoute, viewEventRoute } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { useEvent } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
-import { useQuery } from 'src/utils';
+import { useQuery } from 'src/utils/query-string';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
