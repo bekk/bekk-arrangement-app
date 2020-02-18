@@ -11,6 +11,7 @@ import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { viewEventRoute } from 'src/routing';
 import { useQuery } from 'src/utils/query-string';
+import { useParticipations } from 'src/hooks/participantHooks';
 
 export const CancelParticipant = () => {
   const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();
@@ -19,6 +20,8 @@ export const CancelParticipant = () => {
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
   const history = useHistory();
+  const { removeParticipant } = useParticipations();
+
   const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
 
   const cancelParticipant = catchAndNotify(async () => {
@@ -29,6 +32,9 @@ export const CancelParticipant = () => {
         cancellationToken,
       });
       if (deleted.ok) {
+        if (cancellationToken) {
+          removeParticipant(cancellationToken);
+        }
         setWasDeleted(true);
       }
     }
