@@ -1,4 +1,4 @@
-import { queryStringStringify } from 'src/utils';
+import { queryStringStringify } from 'src/utils/query-string';
 
 export const eventId = ':eventId';
 export const email = ':email';

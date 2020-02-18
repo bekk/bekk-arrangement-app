@@ -152,7 +152,11 @@ export function useAuth0Redirect(): void {
 }
 
 export function hasPermission(permission: string): boolean {
-  const permissions: string[] = getClaimsFromToken(getIdToken())[
+  const token = getIdToken();
+  if (!token) {
+    return false;
+  }
+  const permissions: string[] = getClaimsFromToken(token)[
     'https://api.bekk.no/claims/permission'
   ];
   return permissions.includes(permission);

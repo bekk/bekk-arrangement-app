@@ -10,7 +10,7 @@ import style from './CancelParticipant.module.scss';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { viewEventRoute } from 'src/routing';
-import { useQuery } from 'src/utils';
+import { useQuery } from 'src/utils/query-string';
 
 export const CancelParticipant = () => {
   const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();

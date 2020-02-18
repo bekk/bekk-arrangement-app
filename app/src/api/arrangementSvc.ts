@@ -13,7 +13,7 @@ import {
 } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
-import { queryStringStringify } from 'src/utils';
+import { queryStringStringify } from 'src/utils/query-string';
 
 export const postEvent = (event: IEvent) =>
   post({
