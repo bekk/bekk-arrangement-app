@@ -159,3 +159,4 @@ export function hasPermission(permission: string): boolean {
 }
 
 export const readPermission = 'read:arrangement';
+export const adminPermission = 'admin:arrangement';

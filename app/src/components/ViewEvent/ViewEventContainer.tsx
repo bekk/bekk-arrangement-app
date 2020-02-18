@@ -22,8 +22,8 @@ import {
   editEventRoute,
   confirmParticipantRoute,
 } from 'src/routing';
-import { stringifyEmail, parseEmail } from 'src/types/email';
-import { hasPermission, readPermission } from 'src/auth';
+import { stringifyEmail, parseEmail, serializeEmail } from 'src/types/email';
+import { hasPermission, readPermission, adminPermission } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
@@ -46,8 +46,10 @@ export const ViewEventContainer = () => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
   const [participants] = useParticipants(eventId);
-  const { createdEventIds } = useCreatedEvents();
-  const hasRecentlyCreatedThisEvent = createdEventIds.includes(eventId);
+  const { createdEvents } = useCreatedEvents();
+  const recentlyCreatedThisEvent = createdEvents.find(
+    event => event.eventId === eventId
+  );
 
   if (isBad(remoteEvent)) {
     return <div>{remoteEvent.userMessage}</div>;
@@ -73,6 +75,7 @@ export const ViewEventContainer = () => {
         });
       const {
         participant: { eventId, email },
+        cancellationToken,
       } = await postParticipant(participant.validValue, redirectUrlTemplate);
       history.push(
         confirmParticipantRoute({
@@ -94,8 +97,10 @@ export const ViewEventContainer = () => {
       {hasPermission(readPermission) && (
         <BlockLink to={eventsRoute}>↩︎ Til arrangementer</BlockLink>
       )}
-      {hasRecentlyCreatedThisEvent && (
-        <BlockLink to={editEventRoute(eventId)}>
+      {(recentlyCreatedThisEvent || hasPermission(adminPermission)) && (
+        <BlockLink
+          to={editEventRoute(eventId, recentlyCreatedThisEvent?.editToken)}
+        >
           ✎ Rediger arrangement
         </BlockLink>
       )}
@@ -148,7 +153,9 @@ export const ViewEventContainer = () => {
         <h1 className={style.header}>Påmeldte</h1>
         {participants && participants.length > 0 ? (
           participants.map(p => (
-            <div className={style.text}>{stringifyEmail(p.email)}</div>
+            <div key={serializeEmail(p.email)} className={style.text}>
+              {stringifyEmail(p.email)}
+            </div>
           ))
         ) : (
           <div className={style.text}>Ingen påmeldte</div>

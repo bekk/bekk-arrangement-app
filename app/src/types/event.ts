@@ -7,6 +7,7 @@ import {
   parseMaxAttendees,
   parseLocation,
   deserializeMaxAttendees,
+  WithId,
 } from '.';
 import {
   IDateTime,
@@ -26,7 +27,12 @@ import {
 
 export type EventId = string;
 
-export type IEventList = Record<EventId, IEvent>;
+export type IEventList = Map<EventId, IEvent>;
+
+export interface INewEventViewModel {
+  event: WithId<IEventContract>;
+  editToken: string;
+}
 
 export interface IEventContract {
   title: string;
