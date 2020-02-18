@@ -5,15 +5,15 @@ import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { viewEventRoute, eventsRoute } from 'src/routing';
-import { EditEvent } from '../EditEvent/EditEvent/EditEvent';
-import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
 import { useAuthentication } from 'src/auth';
-import { Page } from '../Page/Page';
 import style from './CreateEventContainer.module.scss';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { useCreatedEvents } from 'src/hooks/eventHooks';
-import { BlockLink } from '../Common/BlockLink/BlockLink';
+import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { Page } from 'src/components/Page/Page';
+import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
+import { Button } from 'src/components/Common/Button/Button';
+import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -25,13 +25,16 @@ export const CreateEventContainer = () => {
   const isDisabled = !isOk(event);
   const history = useHistory();
   const { catchAndNotify } = useNotification();
-  const { setCreatedEventId } = useCreatedEvents();
+  const { setCreatedEvent } = useCreatedEvents();
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
-      const createdEvent = await postEvent(event.validValue);
-      setCreatedEventId(createdEvent.id);
-      history.push(viewEventRoute(createdEvent.id));
+      const {
+        event: { id },
+        editToken,
+      } = await postEvent(event.validValue);
+      setCreatedEvent({ eventId: id, editToken });
+      history.push(viewEventRoute(id));
     }
   });
 

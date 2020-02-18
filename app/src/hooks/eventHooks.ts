@@ -27,19 +27,34 @@ export const useEvents = () => {
   );
 };
 
+type CreatedEvent = {
+  eventId: string;
+  editToken: string;
+};
+const isCreatedEvent = (x: any): x is CreatedEvent =>
+  'eventId' in x &&
+  typeof x.eventId === 'string' &&
+  'editToken' in x &&
+  typeof x.editToken === 'string';
+
 export const useCreatedEvents = (): {
-  createdEventIds: string[];
-  setCreatedEventId: (string: string) => void;
+  createdEvents: CreatedEvent[];
+  setCreatedEvent: (event: CreatedEvent) => void;
 } => {
   const [storage, setStorage] = useLocalStorage({
     key: 'created-events',
   });
-  const parsedStorage: string[] = storage ? JSON.parse(storage) : [];
-  const updateStorage = (string: string) =>
-    JSON.stringify([...parsedStorage, string]);
+
+  const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
+  const validatedStorage = Array.isArray(parsedStorage)
+    ? parsedStorage.filter(isCreatedEvent)
+    : [];
+
+  const updateStorage = (event: CreatedEvent) =>
+    JSON.stringify([...validatedStorage, event]);
 
   return {
-    createdEventIds: parsedStorage,
-    setCreatedEventId: (string: string) => setStorage(updateStorage(string)),
+    createdEvents: validatedStorage,
+    setCreatedEvent: (event: CreatedEvent) => setStorage(updateStorage(event)),
   };
 };

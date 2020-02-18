@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import { queryStringStringify } from 'src/utils';
 
 export const eventId = ':eventId';
 export const email = ':email';
@@ -6,7 +6,9 @@ export const email = ':email';
 export const rootRoute = '/';
 export const eventsRoute = '/events';
 export const viewEventRoute = (eventId: string) => `/events/${eventId}`;
-export const editEventRoute = (eventId: string) => `/events/${eventId}/edit`;
+export const editEventRoute = (eventId: string, editToken?: string) =>
+  `/events/${eventId}/edit${queryStringStringify({ editToken })}`;
+
 export const createRoute = '/events/create';
 export const confirmParticipantRoute = ({
   eventId,
@@ -24,4 +26,4 @@ export const cancelParticipantRoute = ({
   email: string;
   cancellationToken?: string;
 }) =>
-  `/${eventId}/cancel/${email}?${queryString.stringify({ cancellationToken })}`;
+  `/${eventId}/cancel/${email}${queryStringStringify({ cancellationToken })}`;
