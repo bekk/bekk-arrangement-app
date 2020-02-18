@@ -47,12 +47,16 @@ export const ViewEventContainer = () => {
   );
   const [participants] = useParticipants(eventId);
   const { createdEvents } = useCreatedEvents();
+  const recentlyCreatedThisEvent = createdEvents.find(
+    event => event.eventId === eventId
+  );
+
   const {
     participations: participationsInLocalStorage,
     setParticipant: setParticipantInLocalStorage,
   } = useParticipations();
-  const recentlyCreatedThisEvent = createdEvents.find(
-    event => event.eventId === eventId
+  const participationsForThisEvent = participationsInLocalStorage.filter(
+    p => p.eventId === eventId
   );
 
   if (isBad(remoteEvent)) {
@@ -109,6 +113,11 @@ export const ViewEventContainer = () => {
           ✎ Rediger arrangement
         </BlockLink>
       )}
+      {participationsForThisEvent.map(p => (
+        <BlockLink to={cancelParticipantRoute(p)}>
+          &times; Meld {p.email} av arrangementet
+        </BlockLink>
+      ))}
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.subsection}>{event.description}</div>
       <div className={style.subsection}>
