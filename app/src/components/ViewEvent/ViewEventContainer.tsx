@@ -15,8 +15,6 @@ import {
 } from 'src/types/participant';
 import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
-import { Page } from '../Page/Page';
-import { Button } from '../Common/Button/Button';
 import {
   cancelParticipantRoute,
   viewEventRoute,
@@ -24,12 +22,15 @@ import {
   editEventRoute,
   confirmParticipantRoute,
 } from 'src/routing';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { stringifyEmail, parseEmail } from 'src/types/email';
 import { hasPermission, readPermission } from 'src/auth';
-import { BlockLink } from '../Common/BlockLink/BlockLink';
-import { ValidatedTextInput } from '../Common/ValidatedTextInput/ValidatedTextInput';
+import { hasLoaded, isBad } from 'src/remote-data';
+import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
+import { Page } from 'src/components/Page/Page';
+import { Button } from 'src/components/Common/Button/Button';
 import { useParticipants } from 'src/hooks/participantHooks';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -40,18 +41,26 @@ export const ViewEventContainer = () => {
   const history = useHistory();
   const { catchAndNotify } = useNotification();
 
-  const [event] = useEvent(eventId);
+  const remoteEvent = useEvent(eventId);
+  const timeLeft = useTimeLeft(
+    hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
+  );
   const [participants] = useParticipants(eventId);
-  const participantsText = `${participants?.length ?? 0}${
-    event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
-  }`;
-  const timeLeft = useTimeLeft(event && event.openForRegistrationTime);
   const { createdEventIds } = useCreatedEvents();
   const hasRecentlyCreatedThisEvent = createdEventIds.includes(eventId);
 
-  if (!event) {
+  if (isBad(remoteEvent)) {
+    return <div>{remoteEvent.userMessage}</div>;
+  }
+
+  if (!hasLoaded(remoteEvent)) {
     return <div>Loading</div>;
   }
+
+  const event = remoteEvent.data;
+  const participantsText = `${participants?.length ?? 0}${
+    event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
+  }`;
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {

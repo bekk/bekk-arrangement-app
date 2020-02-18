@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react';
-import { getEvent } from 'src/api/arrangementSvc';
-import { IEvent, deserializeEvent, parseEvent } from 'src/types/event';
-import { isOk } from 'src/types/validation';
-import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { useCallback } from 'react';
+import { getEvent, getEvents } from 'src/api/arrangementSvc';
+import { IEvent, maybeParseEvent } from 'src/types/event';
 import { useLocalStorage } from './localStorage';
+import { cachedRemoteData } from 'src/remote-data';
 
-export const useEvent = (id: string | undefined): [IEvent | undefined] => {
-  const [event, setEvent] = useState<IEvent | undefined>(undefined);
-  const { catchAndNotify } = useNotification();
+const eventCache = cachedRemoteData<string, IEvent>();
 
-  useEffect(() => {
-    if (id) {
-      catchAndNotify(async () => {
-        const retrievedEvent = await getEvent(id);
-        const deserializedEvent = deserializeEvent(retrievedEvent);
-        const domainEvent = parseEvent(deserializedEvent);
-        if (isOk(domainEvent)) {
-          setEvent(domainEvent.validValue);
-        }
-      })();
-    }
-  }, [id, catchAndNotify]);
+export const useEvent = (id: string) => {
+  return eventCache.useOne({
+    key: id,
+    fetcher: useCallback(async () => {
+      const retrievedEvent = await getEvent(id);
+      return maybeParseEvent(retrievedEvent);
+    }, [id]),
+  });
+};
 
-  return [event];
+export const useEvents = () => {
+  return eventCache.useAll(
+    useCallback(async () => {
+      const eventContracts = await getEvents();
+      return eventContracts.map(({ id, ...event }) => {
+        return [id, maybeParseEvent(event)];
+      });
+    }, [])
+  );
 };
 
 export const useCreatedEvents = (): {

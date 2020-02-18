@@ -7,16 +7,19 @@ import { stringifyTime } from 'src/types/time';
 import { Button } from '../Common/Button/Button';
 import style from './ConfirmParticipant.module.scss';
 import { viewEventRoute } from 'src/routing';
+import { hasLoaded } from 'src/remote-data';
 
 export const ConfirmParticipant = () => {
-  const { eventId, email: participantEmail } = useParams();
-  const [event] = useEvent(eventId);
+  const { eventId = 'UGYLDIG-URL', email: participantEmail } = useParams();
+  const remoteEvent = useEvent(eventId);
   const history = useHistory();
   const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
 
-  if (!event) {
+  if (!hasLoaded(remoteEvent)) {
     return <div>Loading...</div>;
   }
+
+  const event = remoteEvent.data;
 
   return (
     <Page>
