@@ -29,7 +29,7 @@ import { useNotification } from 'src/components/NotificationHandler/Notification
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import { useParticipants } from 'src/hooks/participantHooks';
+import { useParticipants, useParticipations } from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
@@ -47,6 +47,10 @@ export const ViewEventContainer = () => {
   );
   const [participants] = useParticipants(eventId);
   const { createdEvents } = useCreatedEvents();
+  const {
+    participations: participationsInLocalStorage,
+    setParticipant: setParticipantInLocalStorage,
+  } = useParticipations();
   const recentlyCreatedThisEvent = createdEvents.find(
     event => event.eventId === eventId
   );
@@ -77,6 +81,7 @@ export const ViewEventContainer = () => {
         participant: { eventId, email },
         cancellationToken,
       } = await postParticipant(participant.validValue, redirectUrlTemplate);
+      setParticipantInLocalStorage({ eventId, email, cancellationToken });
       history.push(
         confirmParticipantRoute({
           eventId,
