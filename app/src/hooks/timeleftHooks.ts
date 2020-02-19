@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { calculateTimeLeft } from 'src/utils/timeleft';
 
-export const useTimeLeft = (time: Date | undefined) => {
+export const useTimeLeft = (time: Date | false) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,

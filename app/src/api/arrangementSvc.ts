@@ -1,7 +1,11 @@
 import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
-import { IParticipant, INewParticipantViewModel } from 'src/types/participant';
+import {
+  IParticipant,
+  INewParticipantViewModel,
+  IParticipantViewModel,
+} from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
 import queryString from 'query-string';
@@ -40,6 +44,12 @@ export const deleteEvent = (eventId: string) =>
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
   });
+
+export const getParticipantsForEvent = (eventId: string) =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events/${eventId}/participants`,
+  }).then(response => response as IParticipantViewModel[]);
 
 export const postParticipant = (
   participant: IParticipant,
