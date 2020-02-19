@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
@@ -9,8 +9,8 @@ import {
   parseLocation,
 } from 'src/types';
 import { parseEmail } from 'src/types/email';
-import { parseTimeInstance } from 'src/types/time-instance';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
+import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -31,6 +31,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
+
       <div>
         <ValidatedTextInput
           label="Navn på arrangør"
@@ -44,6 +45,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
+
       <div>
         <ValidatedTextInput
           label="E-post arrangør"
@@ -57,6 +59,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
+
       <ValidatedTextInput
         label={'Lokasjon'}
         placeholder="Vippetangen"
@@ -68,6 +71,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
+
       <ValidatedTextInput
         label={'Beskrivelse'}
         placeholder={'Dette er en beskrivelse'}
@@ -79,6 +83,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
+
       <DateTimeInput
         label={'Starter'}
         value={event.start}
@@ -89,6 +94,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
+
       <DateTimeInput
         label={'Slutter'}
         value={event.end}
@@ -99,16 +105,18 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <ValidatedTextInput
+
+      <DateTimeInputWithTimezone
         label={'Påmelding åpner'}
         value={event.openForRegistration}
         onChange={openForRegistration =>
           updateEvent({
             ...event,
-            openForRegistration: parseTimeInstance(openForRegistration),
+            openForRegistration,
           })
         }
       />
+
       <ValidatedTextInput
         label={'Maks antall'}
         placeholder="0 (ingen grense)"

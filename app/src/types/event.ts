@@ -169,7 +169,9 @@ export const initialEditEvent = (): IEditEvent => {
       date: dateToString(eventStartDate),
       time: ['20', '00'],
     }),
-    openForRegistration: parseTimeInstance(openForRegistrationTime.toJSON()),
+    openForRegistration: parseTimeInstance(
+      deserializeTimeInstance(openForRegistrationTime.getTime().toString())
+    ),
     organizerName: parseHost(''),
     organizerEmail: parseEmail(''),
     maxParticipants: parseMaxAttendees(''),
