@@ -37,9 +37,9 @@ const isCreatedEvent = (x: any): x is EditEventToken =>
   'editToken' in x &&
   typeof x.editToken === 'string';
 
-export const useEditableEvents = (): {
-  createdEvents: EditEventToken[];
-  setCreatedEvent: (event: EditEventToken) => void;
+export const useSavedEditableEvents = (): {
+  savedEvents: EditEventToken[];
+  saveEditableEvents: (event: EditEventToken) => void;
 } => {
   const [storage, setStorage] = useLocalStorage({
     key: 'editable-events',
@@ -57,8 +57,8 @@ export const useEditableEvents = (): {
     ]);
 
   return {
-    createdEvents: validatedStorage,
-    setCreatedEvent: (event: EditEventToken) =>
+    savedEvents: validatedStorage,
+    saveEditableEvents: (event: EditEventToken) =>
       setStorage(updateStorage(event)),
   };
 };

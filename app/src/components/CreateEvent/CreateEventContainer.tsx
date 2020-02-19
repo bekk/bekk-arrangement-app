@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { viewEventRoute, eventsRoute, editEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
 import style from './CreateEventContainer.module.scss';
-import { useEditableEvents } from 'src/hooks/eventHooks';
+import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
 import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
@@ -25,7 +25,7 @@ export const CreateEventContainer = () => {
   const isDisabled = !isOk(event);
   const history = useHistory();
   const { catchAndNotify } = useNotification();
-  const { setCreatedEvent } = useEditableEvents();
+  const { saveEditableEvents } = useSavedEditableEvents();
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
@@ -35,7 +35,7 @@ export const CreateEventContainer = () => {
         event: { id },
         editToken,
       } = await postEvent(event.validValue, redirectUrlTemplate);
-      setCreatedEvent({ eventId: id, editToken });
+      saveEditableEvents({ eventId: id, editToken });
       history.push(viewEventRoute(id));
     }
   });
