@@ -51,7 +51,7 @@ const isCreatedEvent = (x: any): x is Participation =>
   'cancellationToken' in x &&
   typeof x.cancellationToken === 'string';
 
-export const useParticipations = () => {
+export const useSavedParticipations = () => {
   const [storage, setStorage] = useLocalStorage({
     key: 'participations',
   });
@@ -72,10 +72,10 @@ export const useParticipations = () => {
     );
 
   return {
-    participations: validatedStorage,
-    setParticipant: (participant: Participation) =>
+    savedParticipations: validatedStorage,
+    saveParticipation: (participant: Participation) =>
       setStorage(updateStorage(participant)),
-    removeParticipant: (participant: { eventId: string; email: string }) =>
+    removeSavedParticipant: (participant: { eventId: string; email: string }) =>
       setStorage(removeFromStorage(participant)),
   };
 };

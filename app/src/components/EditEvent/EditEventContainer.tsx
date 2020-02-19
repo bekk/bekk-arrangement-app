@@ -17,7 +17,7 @@ import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
-import { useEvent, useEditableEvents } from 'src/hooks/eventHooks';
+import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
 
@@ -31,7 +31,7 @@ export const EditEventContainer = () => {
   const editToken = useQuery('editToken');
   const { catchAndNotify } = useNotification();
 
-  const { setCreatedEvent } = useEditableEvents();
+  const { saveEditableEvents } = useSavedEditableEvents();
 
   useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
@@ -41,9 +41,9 @@ export const EditEventContainer = () => {
 
   useEffect(() => {
     if (editToken) {
-      setCreatedEvent({ eventId, editToken });
+      saveEditableEvents({ eventId, editToken });
     }
-  }, [eventId, editToken, setCreatedEvent]);
+  }, [eventId, editToken, saveEditableEvents]);
 
   if (!event || !eventId) {
     return <div>Loading</div>;

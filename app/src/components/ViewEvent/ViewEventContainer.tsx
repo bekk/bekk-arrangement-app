@@ -5,7 +5,7 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
-import { useEvent, useEditableEvents } from 'src/hooks/eventHooks';
+import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import {
   IParticipant,
@@ -29,7 +29,10 @@ import { useNotification } from 'src/components/NotificationHandler/Notification
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import { useParticipants, useParticipations } from 'src/hooks/participantHooks';
+import {
+  useParticipants,
+  useSavedParticipations,
+} from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
@@ -46,15 +49,15 @@ export const ViewEventContainer = () => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
   const [participants] = useParticipants(eventId);
-  const { createdEvents } = useEditableEvents();
-  const recentlyCreatedThisEvent = createdEvents.find(
+  const { savedEvents } = useSavedEditableEvents();
+  const recentlyCreatedThisEvent = savedEvents.find(
     event => event.eventId === eventId
   );
 
   const {
-    participations: participationsInLocalStorage,
-    setParticipant: setParticipantInLocalStorage,
-  } = useParticipations();
+    savedParticipations: participationsInLocalStorage,
+    saveParticipation: setParticipantInLocalStorage,
+  } = useSavedParticipations();
   const participationsForThisEvent = participationsInLocalStorage.filter(
     p => p.eventId === eventId
   );

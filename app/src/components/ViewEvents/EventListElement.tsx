@@ -6,7 +6,7 @@ import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { useParticipants } from 'src/hooks/participantHooks';
 import { viewEventRoute, editEventRoute } from 'src/routing';
-import { useEditableEvents } from 'src/hooks/eventHooks';
+import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { hasPermission, adminPermission } from 'src/auth';
 
 interface IProps {
@@ -28,7 +28,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
     event.end.time
   )}`;
 
-  const { createdEvents } = useEditableEvents();
+  const { savedEvents: createdEvents } = useSavedEditableEvents();
   const createdThisEvent = createdEvents.find(x => x.eventId === eventId);
 
   const viewRoute = viewEventRoute(eventId);
