@@ -32,9 +32,7 @@ export const CancelParticipant = () => {
         cancellationToken,
       });
       if (deleted.ok) {
-        if (cancellationToken) {
-          removeParticipant(cancellationToken);
-        }
+        removeParticipant({ eventId, email: participantEmail });
         setWasDeleted(true);
       }
     }

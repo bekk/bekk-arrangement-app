@@ -64,16 +64,18 @@ export const useParticipations = () => {
   const updateStorage = (participant: Participation) =>
     JSON.stringify([...validatedStorage, participant]);
 
-  const removeFromStorage = (cancellationToken: string) =>
+  const removeFromStorage = (p: { eventId: string; email: string }) =>
     JSON.stringify(
-      validatedStorage.filter(x => x.cancellationToken !== cancellationToken)
+      validatedStorage.filter(
+        x => !(x.eventId === p.eventId && x.email === p.email)
+      )
     );
 
   return {
     participations: validatedStorage,
     setParticipant: (participant: Participation) =>
       setStorage(updateStorage(participant)),
-    removeParticipant: (cancellationToken: string) =>
-      setStorage(removeFromStorage(cancellationToken)),
+    removeParticipant: (participant: { eventId: string; email: string }) =>
+      setStorage(removeFromStorage(participant)),
   };
 };
