@@ -1,7 +1,7 @@
 import {
   IEvent,
   serializeEvent,
-  IEventContract,
+  IEventViewModel,
   INewEventViewModel,
 } from 'src/types/event';
 import { post, get, del, put } from './crud';
@@ -15,35 +15,35 @@ import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
 import { queryStringStringify } from 'src/utils/query-string';
 
-export const postEvent = (event: IEvent) =>
+export const postEvent = (event: IEvent, redirectUrlTemplate: string) =>
   post({
     host: getArrangementSvcUrl(),
     path: '/events',
-    body: serializeEvent(event),
+    body: serializeEvent(event, redirectUrlTemplate),
   }).then(response => response as INewEventViewModel);
 
 export const putEvent = (
   eventId: string,
   event: IEvent,
   editToken?: string
-): Promise<IEventContract> =>
+): Promise<IEventViewModel> =>
   put({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}${queryStringStringify({ editToken })}`,
     body: serializeEvent(event),
-  }).then(response => response as IEventContract);
+  }).then(response => response as IEventViewModel);
 
-export const getEvent = (eventId: string): Promise<IEventContract> =>
+export const getEvent = (eventId: string): Promise<IEventViewModel> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
-  }).then(response => response as IEventContract);
+  }).then(response => response as IEventViewModel);
 
 export const getEvents = () =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events`,
-  }).then(response => response as WithId<IEventContract>[]);
+  }).then(response => response as WithId<IEventViewModel>[]);
 
 export const deleteEvent = (eventId: string, editToken?: string) =>
   del({
