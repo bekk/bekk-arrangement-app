@@ -4,7 +4,7 @@ import { IEditEvent, parseEvent, IEvent, initialEvent } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
 import { useHistory } from 'react-router';
-import { viewEventRoute, eventsRoute } from 'src/routing';
+import { viewEventRoute, eventsRoute, editEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
 import style from './CreateEventContainer.module.scss';
 import { useCreatedEvents } from 'src/hooks/eventHooks';
@@ -29,10 +29,12 @@ export const CreateEventContainer = () => {
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
+      const redirectUrlTemplate =
+        document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
         event: { id },
         editToken,
-      } = await postEvent(event.validValue);
+      } = await postEvent(event.validValue, redirectUrlTemplate);
       setCreatedEvent({ eventId: id, editToken });
       history.push(viewEventRoute(id));
     }
