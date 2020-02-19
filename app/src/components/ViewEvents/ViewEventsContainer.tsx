@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
-import { createRoute, viewEventRoute } from 'src/routing';
+import { createRoute } from 'src/routing';
 import { useEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { Link } from 'react-router-dom';
@@ -20,12 +20,7 @@ export const ViewEventsContainer = () => {
         {[...events].map(([id, event]) => {
           if (hasLoaded(event)) {
             return (
-              <EventListElement
-                key={id}
-                eventId={id}
-                event={event.data}
-                onClickRoute={viewEventRoute(id)}
-              />
+              <EventListElement key={id} eventId={id} event={event.data} />
             );
           }
         })}
