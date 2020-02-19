@@ -5,14 +5,16 @@ import style from './EventListElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { useParticipants } from 'src/hooks/participantHooks';
+import { viewEventRoute, editEventRoute } from 'src/routing';
+import { useCreatedEvents } from 'src/hooks/eventHooks';
+import { hasPermission, adminPermission } from 'src/auth';
 
 interface IProps {
   eventId: string;
   event: IEvent;
-  onClickRoute: string;
 }
 
-export const EventListElement = ({ eventId, event, onClickRoute }: IProps) => {
+export const EventListElement = ({ eventId, event }: IProps) => {
   const [participants] = useParticipants(eventId);
   const participantsCount = participants?.length ?? 0;
   const participantLimitText =
@@ -26,9 +28,18 @@ export const EventListElement = ({ eventId, event, onClickRoute }: IProps) => {
     event.end.time
   )}`;
 
+  const { createdEvents } = useCreatedEvents();
+  const createdThisEvent = createdEvents.find(x => x.eventId === eventId);
+
+  const viewRoute = viewEventRoute(eventId);
+  const editRoute =
+    createdThisEvent || hasPermission(adminPermission)
+      ? editEventRoute(eventId, createdThisEvent?.editToken)
+      : undefined;
+
   return (
     <div className={style.row}>
-      <Link to={onClickRoute} className={style.link}>
+      <Link to={viewRoute} className={style.link}>
         <div className={style.text}>{event.title}</div>
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
@@ -40,6 +51,7 @@ export const EventListElement = ({ eventId, event, onClickRoute }: IProps) => {
           Arrangeres av {event.organizerName}
         </div>
       </Link>
+      {editRoute && <Link to={editRoute}>✎</Link>}
     </div>
   );
 };
