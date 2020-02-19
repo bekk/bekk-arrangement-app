@@ -5,7 +5,7 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
-import { useEvent, useCreatedEvents } from 'src/hooks/eventHooks';
+import { useEvent, useEditableEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import {
   IParticipant,
@@ -46,7 +46,7 @@ export const ViewEventContainer = () => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
   const [participants] = useParticipants(eventId);
-  const { createdEvents } = useCreatedEvents();
+  const { createdEvents } = useEditableEvents();
   const recentlyCreatedThisEvent = createdEvents.find(
     event => event.eventId === eventId
   );

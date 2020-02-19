@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import {
   parseEvent,
@@ -17,7 +17,7 @@ import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
-import { useEvent } from 'src/hooks/eventHooks';
+import { useEvent, useEditableEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
 
@@ -31,11 +31,19 @@ export const EditEventContainer = () => {
   const editToken = useQuery('editToken');
   const { catchAndNotify } = useNotification();
 
+  const { setCreatedEvent } = useEditableEvents();
+
   useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
       setEvent(parseEvent(deserializeEvent(serializeEvent(remoteEvent.data))));
     }
   }, [remoteEvent]);
+
+  useEffect(() => {
+    if (editToken) {
+      setCreatedEvent({ eventId, editToken });
+    }
+  }, [eventId, editToken, setCreatedEvent]);
 
   if (!event || !eventId) {
     return <div>Loading</div>;
