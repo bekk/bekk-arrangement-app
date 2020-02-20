@@ -13,6 +13,7 @@ import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
+import { Modal } from 'src/components/Common/Modal/Modal';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
@@ -30,6 +31,7 @@ export const EditEventContainer = () => {
   const history = useHistory();
   const editToken = useQuery('editToken');
   const { catchAndNotify } = useNotification();
+  const [showModal, setShowModal] = useState(false);
 
   const { saveEditableEvents } = useSavedEditableEvents();
 
@@ -67,6 +69,26 @@ export const EditEventContainer = () => {
     goToOverview();
   });
 
+  const CancelModal = () => (
+    <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
+      <p>
+        Sikker på at du vil avlyse arrangementet? <br />
+        Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
+        <span role="img" aria-label="grimacing-face">
+          😬
+        </span>
+      </p>
+      <div className={style.buttonContainer}>
+        <Button onClick={() => setShowModal(false)} color="White">
+          Avbryt
+        </Button>
+        <Button onClick={() => onDeleteEvent(eventId)} color="White">
+          Avlys arrangement
+        </Button>
+      </div>
+    </Modal>
+  );
+
   const renderEditView = () => (
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
@@ -78,10 +100,9 @@ export const EditEventContainer = () => {
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={goToOverview}>Avbryt</Button>
-        <Button onClick={() => onDeleteEvent(eventId)}>
-          Avlys arrangement
-        </Button>
+        <Button onClick={() => setShowModal(true)}>Avlys arrangement</Button>
       </div>
+      {showModal && <CancelModal />}
     </Page>
   );
 

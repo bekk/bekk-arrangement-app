@@ -29,3 +29,14 @@
     cursor: initial;
   }
 }
+
+.whiteButton {
+  background-color: var(--headerColor);
+  border: 1px solid var(--backgroundColor);
+
+  &:hover {
+    background-color: var(--backgroundColor);
+    color: var(--headerColor);
+    cursor: pointer;
+  }
+}
