@@ -1,4 +1,4 @@
-import { Result, isOk } from './validation';
+import { Result, isOk } from 'src/types/validation';
 import {
   concatLists,
   parseTitle,
@@ -13,8 +13,8 @@ import {
   EditDateTime,
   parseDateTime,
   deserializeDateTime,
-} from './date-time';
-import { parseEmail, Email, serializeEmail } from './email';
+} from 'src/types/date-time';
+import { parseEmail, Email, serializeEmail } from 'src/types/email';
 import {
   TimeInstanceContract,
   EditTimeInstance,
@@ -22,7 +22,7 @@ import {
   deserializeTimeInstance,
   parseTimeInstance,
   serializeTimeInstance,
-} from './time-instance';
+} from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
 import { dateToString } from './date';
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { DateInput } from '../DateInput/DateInput';
+import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import style from './DateTimeInput.module.scss';
 import { Result } from 'src/types/validation';
 import classNames from 'classnames';
-import { ValidationResult } from '../ValidationResult/ValidationResult';
+import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import {
   parseTimeInstance,
   EditTimeInstance,

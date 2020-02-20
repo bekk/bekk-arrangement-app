@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import style from './TimeInput.module.scss';
-import { EditTimeInstance, timezoneStart, timezoneEnd } from 'src/types/time-instance';
+import { EditTimeInstance } from 'src/types/time-instance';
+import { range } from 'lodash';
 
 interface IProps {
   value: EditTimeInstance;
@@ -8,20 +9,19 @@ interface IProps {
 }
 
 export const TimeInputWithTimezone = ({ value, onChange }: IProps) => {
-  const hour = value.hour;
-  const minute = value.minute;
-  const timezone = value.timezone;
 
-  const updateHour = (newHour: string) => {
-    onChange({...value, hour: newHour});
+  const {hour, minute, timezone} = value;
+
+  const updateHour = (hour: string) => {
+    onChange({...value, hour});
   };
 
-  const updateMinute = (newMinute: string) => {
-    onChange({...value, minute: newMinute});
+  const updateMinute = (minute: string) => {
+    onChange({...value, minute});
   };
 
-  const updateTimezone = (newTimezone: number) => {
-    onChange({...value, timezone: newTimezone});
+  const updateTimezone = (timezone: number) => {
+    onChange({...value, timezone});
   };
 
   const { focusMinuteRefWhenHourFull, minuteRef } = useHourMinuteFocus(hour);
@@ -32,7 +32,7 @@ export const TimeInputWithTimezone = ({ value, onChange }: IProps) => {
 
   return (
     <div className={style.timeInputContainer}>
-      <label className={style.label}>Tidssone:</label>
+      <label className={style.label}>Tidssone(UTC):</label>
       <select
       className={style.dropdown}
         name="tidssone"
@@ -62,11 +62,10 @@ export const TimeInputWithTimezone = ({ value, onChange }: IProps) => {
 };
 
 const timezoneList = () => {
-  const listus = []
-  for (let index = timezoneStart; index <= timezoneEnd; index++) {
-        listus.push(<option key={index} value={index}>{index}</option>)    
-  }
-  return listus;
+  return range(-12, 12).map(i =>{
+    const displayValue = i > 0 ? `+${i}`: i;
+    return <option key={i} value={i}>{displayValue}</option>  
+  })
 }
 
 const useHourMinuteFocus = (hour: string) => {

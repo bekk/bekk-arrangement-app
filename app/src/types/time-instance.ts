@@ -18,14 +18,7 @@ export const deserializeTimeInstance = (
   time: TimeInstanceContract
 ): EditTimeInstance => {
   const timeDate = new Date(Number(time));
-  return dateToTimeInstance(timeDate);
-};
 
-export const getDateString = (date: EditTimeInstance): string => {
-  return `${date.year}-${date.month}-${date.day}`;
-};
-
-export const dateToTimeInstance = (timeDate: Date) => {
   const year = timeDate.getFullYear().toString();
 
   // Month range is 0-11. We need to '+1' to make the month readable for Date()
@@ -42,11 +35,14 @@ export const dateToTimeInstance = (timeDate: Date) => {
   return { year, month, day, hour, minute, timezone };
 };
 
-const twoDigitValue = (value: number): string => {
-  return value < 10 ? '0' + value : value.toString();
+export const getDateString = (date: EditTimeInstance): string => {
+  return `${date.year}-${date.month}-${date.day}`;
 };
 
-export const editTimeInstanceToDate = (t: EditTimeInstance): Date => {
+const twoDigitValue = (value: number): string =>
+  value.toString().padStart(2, '0');
+
+export const parseTimeInstanceToDate = (t: EditTimeInstance): Date => {
   const timeDateString = `${t.year}-${t.month}-${t.day}T${t.hour}:${
     t.minute
   }${getTimezoneInISOFormat(t.timezone)}`;
@@ -55,13 +51,11 @@ export const editTimeInstanceToDate = (t: EditTimeInstance): Date => {
 };
 
 const getTimezoneInISOFormat = (timezone: number): string => {
-  const positiveTimezone = Math.abs(timezone);
+  const positiveTimezone = twoDigitValue(Math.abs(timezone));
   if (timezone > 0) {
-    if (timezone >= 10) return `+${positiveTimezone}:00`;
-    return `+0${positiveTimezone}:00`;
+    return `+${positiveTimezone}:00`;
   }
-  if (timezone <= -10) return `-${positiveTimezone}:00`;
-  return `-0${positiveTimezone}:00`;
+  return `-${positiveTimezone}:00`;
 };
 
 export const parseDateStringToTimeInstance = (
@@ -88,7 +82,7 @@ export const parseTimeInstance = (
     minute: twoDigitValue(Number(timeInstance.minute)),
   };
 
-  const timestamp = editTimeInstanceToDate(newTimeInstance);
+  const timestamp = parseTimeInstanceToDate(newTimeInstance);
   const validator = validate<EditTimeInstance, TimeInstance>(timeInstance, {
     "Can't have more than 60 minutes in an hour":
       Number(timeInstance.minute) > 59,

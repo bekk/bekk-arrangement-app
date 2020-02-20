@@ -5,7 +5,7 @@ import {
   parseDate,
   EditDate,
   stringifyDate,
-} from './date';
+} from 'src/types/date';
 import {
   ITime,
   parseTime,
@@ -13,8 +13,8 @@ import {
   ITimeContract,
   EditTime,
   deserializeTime,
-} from './time';
-import { isOk, Result } from './validation';
+} from 'src/types/time';
+import { isOk, Result } from 'src/types/validation';
 import { isAfter } from 'date-fns';
 import { concatLists } from '.';
 
