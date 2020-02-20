@@ -177,3 +177,20 @@ export const initialEditEvent = (): IEditEvent => {
     maxParticipants: parseMaxAttendees(''),
   };
 };
+
+export const maybeParseEvent = (eventContract: IEventContract): IEvent => {
+  const deserializedEvent = deserializeEvent(eventContract);
+  const domainEvent = parseEvent(deserializedEvent);
+  if (isOk(domainEvent)) {
+    return domainEvent.validValue;
+  }
+  // Man får egt bare lov å kaste new Error
+  // men det er tull
+  // eslint-disable-next-line
+  throw {
+    status: 'ERROR',
+    userMessage:
+      'Arrangementobjektet kan ikke parses av følgende grunner: ' +
+      domainEvent.errors.map(x => x.message).join(', '),
+  };
+};

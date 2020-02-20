@@ -5,6 +5,8 @@ import {
   parseDate,
   EditDate,
   stringifyDate,
+  datesInOrder,
+  isSameDate,
 } from 'src/types/date';
 import {
   ITime,
@@ -12,6 +14,7 @@ import {
   stringifyTime,
   ITimeContract,
   EditTime,
+  timesInOrder,
   deserializeTime,
 } from 'src/types/time';
 import { isOk, Result } from 'src/types/validation';
@@ -64,6 +67,25 @@ export const deserializeDateTime = (
 export const isInTheFuture = ({ date, time }: IDateTime) => {
   const now = new Date();
   return isAfter(toDate({ date, time }), now);
+};
+
+export const isInOrder = ({
+  first,
+  last,
+}: {
+  first: IDateTime;
+  last: IDateTime;
+}) => {
+  if (datesInOrder({ first: first.date, last: last.date })) {
+    return true;
+  }
+  if (
+    isSameDate(first.date, last.date) &&
+    timesInOrder({ first: first.time, last: last.time })
+  ) {
+    return true;
+  }
+  return false;
 };
 
 export const toDate = ({ date, time }: IDateTime) =>

@@ -42,12 +42,32 @@ export const dateAsText = (date: IDate) => {
   );
 };
 
-export const isSameDate = (date: IDate, otherDate: IDate) => {
-  return (
-    date.year === otherDate.year &&
-    date.month === otherDate.month &&
-    date.day === otherDate.day
-  );
+export const isSameDate = (date: IDate, otherDate: IDate) =>
+  date.year === otherDate.year &&
+  date.month === otherDate.month &&
+  date.day === otherDate.day;
+
+export const datesInOrder = ({
+  first,
+  last,
+}: {
+  first: IDate;
+  last: IDate;
+}) => {
+  if (first.year < last.year) {
+    return true;
+  }
+  if (first.year === last.year && first.month < last.month) {
+    return true;
+  }
+  if (
+    first.year === last.year &&
+    first.month === last.month &&
+    first.day < last.day
+  ) {
+    return true;
+  }
+  return false;
 };
 
 export const deserializeDate = ({

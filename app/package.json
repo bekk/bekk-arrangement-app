@@ -33,7 +33,10 @@
     "server": "node server.js"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-throw-literal": 0
+    }
   },
   "browserslist": {
     "production": [
