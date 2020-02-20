@@ -11,15 +11,15 @@ import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
-import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
-import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
+import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { Page } from 'src/components/Page/Page';
+import { Button } from 'src/components/Common/Button/Button';
+import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
