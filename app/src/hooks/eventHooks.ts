@@ -31,7 +31,7 @@ type EditEventToken = {
   eventId: string;
   editToken: string;
 };
-const isCreatedEvent = (x: any): x is EditEventToken =>
+const isEditEventTokenType = (x: any): x is EditEventToken =>
   'eventId' in x &&
   typeof x.eventId === 'string' &&
   'editToken' in x &&
@@ -47,7 +47,7 @@ export const useSavedEditableEvents = (): {
 
   const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
   const validatedStorage = Array.isArray(parsedStorage)
-    ? parsedStorage.filter(isCreatedEvent)
+    ? parsedStorage.filter(isEditEventTokenType)
     : [];
 
   const updateStorage = (event: EditEventToken) =>

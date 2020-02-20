@@ -43,7 +43,7 @@ type Participation = {
   email: string;
   cancellationToken: string;
 };
-const isCreatedEvent = (x: any): x is Participation =>
+const isParticipationAndHasCancellationToken = (x: any): x is Participation =>
   'eventId' in x &&
   typeof x.eventId === 'string' &&
   'email' in x &&
@@ -58,7 +58,7 @@ export const useSavedParticipations = () => {
 
   const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
   const validatedStorage = Array.isArray(parsedStorage)
-    ? parsedStorage.filter(isCreatedEvent)
+    ? parsedStorage.filter(isParticipationAndHasCancellationToken)
     : [];
 
   const updateStorage = (participant: Participation) =>
