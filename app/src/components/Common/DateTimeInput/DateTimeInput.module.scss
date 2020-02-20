@@ -10,7 +10,11 @@
   white-space: pre-wrap;
   @include regularText;
   display: grid;
-  margin-top: 50px;
+}
+
+.timeWithTimezone {
+  display: flex;
+  flex-direction: row;
 }
 
 .label {

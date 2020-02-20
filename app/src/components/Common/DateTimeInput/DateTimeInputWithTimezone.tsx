@@ -24,30 +24,20 @@ export const DateTimeInputWithTimezone = ({
   });
 
   return (
-    <>
+    <section className={style.grid}>
       <label className={style.dateTimeInput}>{label}</label>
-      <section>
-        <div className={containerStyle}>
-          <TimezoneDropdown
-            value={value.editValue.timezone}
-            onChange={timezone => {
-              const newRegistrationTimeInstance = {
-                ...value.editValue,
-                timezone,
-              };
-              onChange(parseTimeInstance(newRegistrationTimeInstance));
-            }}
-          />
-          <DateInput
-            value={value.editValue.date}
-            onChange={openForRegistrationDate => {
-              const newRegistrationTimeInstance = {
-                ...value.editValue,
-                date: openForRegistrationDate,
-              };
-              onChange(parseTimeInstance(newRegistrationTimeInstance));
-            }}
-          />
+      <div className={containerStyle}>
+        <DateInput
+          value={value.editValue.date}
+          onChange={openForRegistrationDate => {
+            const newRegistrationTimeInstance = {
+              ...value.editValue,
+              date: openForRegistrationDate,
+            };
+            onChange(parseTimeInstance(newRegistrationTimeInstance));
+          }}
+        />
+        <div className={style.timeWithTimezone}>
           <TimeInput
             value={value.editValue.time}
             onChange={openForRegistrationTime => {
@@ -58,9 +48,19 @@ export const DateTimeInputWithTimezone = ({
               onChange(parseTimeInstance(newRegistrationTimeInstance));
             }}
           />
+          <TimezoneDropdown
+            value={value.editValue.timezone}
+            onChange={timezone => {
+              const newRegistrationTimeInstance = {
+                ...value.editValue,
+                timezone,
+              };
+              onChange(parseTimeInstance(newRegistrationTimeInstance));
+            }}
+          />
         </div>
-        <ValidationResult validationResult={value.errors} />
-      </section>
-    </>
+      </div>
+      <ValidationResult validationResult={value.errors} />
+    </section>
   );
 };

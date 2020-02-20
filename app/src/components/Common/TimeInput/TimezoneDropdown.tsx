@@ -11,7 +11,6 @@ export const TimezoneDropdown = ({ value, onChange }: IProps) => {
   const updateTimezone = (timezone: number) => onChange(timezone);
   return (
     <div className={style.timeInputContainer}>
-      <label className={style.label}>Tidssone(UTC):</label>
       <select
         className={style.dropdown}
         name="tidssone"
@@ -30,6 +29,7 @@ export const TimezoneDropdown = ({ value, onChange }: IProps) => {
           );
         })}
       </select>
+      <label className={style.label}>(UTC)</label>
     </div>
   );
 };
