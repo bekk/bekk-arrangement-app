@@ -1,4 +1,4 @@
-import { Result, isOk } from './validation';
+import { Result, isOk } from 'src/types/validation';
 import {
   concatLists,
   parseTitle,
@@ -14,8 +14,8 @@ import {
   EditDateTime,
   parseDateTime,
   deserializeDateTime,
-} from './date-time';
-import { parseEmail, Email, serializeEmail } from './email';
+} from 'src/types/date-time';
+import { parseEmail, Email, serializeEmail } from 'src/types/email';
 import {
   TimeInstanceContract,
   EditTimeInstance,
@@ -23,7 +23,9 @@ import {
   deserializeTimeInstance,
   parseTimeInstance,
   serializeTimeInstance,
-} from './time-instance';
+} from 'src/types/time-instance';
+import { addWeeks } from 'date-fns/esm/fp';
+import { dateToString } from './date';
 import { editEventRoute } from 'src/routing';
 
 export type EventId = string;
@@ -66,7 +68,7 @@ export interface IEditEvent {
   location: Result<string, string>;
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
-  openForRegistration: Result<EditTimeInstance, Date>;
+  openForRegistration: Result<EditTimeInstance, TimeInstance>;
   organizerName: Result<string, string>;
   organizerEmail: Result<string, Email>;
   maxParticipants: Result<string, number>;
@@ -176,22 +178,28 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
   };
 };
 
-export const initialEvent: IEditEvent = {
-  title: parseTitle(''),
-  description: parseDescription(''),
-  location: parseLocation(''),
-  start: parseDateTime({
-    date: '2020-01-02',
-    time: ['17', '00'],
-  }),
-  end: parseDateTime({
-    date: '2020-01-01',
-    time: ['20', '00'],
-  }),
-  openForRegistration: parseTimeInstance('2020-01-01 00:00'),
-  organizerName: parseHost(''),
-  organizerEmail: parseEmail(''),
-  maxParticipants: parseMaxAttendees(''),
+export const initialEditEvent = (): IEditEvent => {
+  const eventStartDate = addWeeks(2, new Date());
+  const openForRegistrationTime = addWeeks(-1, eventStartDate);
+  return {
+    title: parseTitle(''),
+    description: parseDescription(''),
+    location: parseLocation(''),
+    start: parseDateTime({
+      date: dateToString(eventStartDate),
+      time: ['17', '00'],
+    }),
+    end: parseDateTime({
+      date: dateToString(eventStartDate),
+      time: ['20', '00'],
+    }),
+    openForRegistration: parseTimeInstance(
+      deserializeTimeInstance(openForRegistrationTime.getTime().toString())
+    ),
+    organizerName: parseHost(''),
+    organizerEmail: parseEmail(''),
+    maxParticipants: parseMaxAttendees(''),
+  };
 };
 
 export const maybeParseEvent = (eventContract: IEventViewModel): IEvent => {

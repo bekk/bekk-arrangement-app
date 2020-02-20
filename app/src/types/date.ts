@@ -86,9 +86,13 @@ export const stringifyDate = ({ year, month, day }: IDate) =>
 
 export const getTodayDeserialized = () => {
   const today = new Date();
+  return dateToString(today);
+};
+
+export const dateToString = (date: Date) => {
   return deserializeDate({
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    day: today.getDate(),
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
   });
 };

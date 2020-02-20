@@ -7,17 +7,17 @@ import {
   stringifyDate,
   datesInOrder,
   isSameDate,
-} from './date';
+} from 'src/types/date';
 import {
   ITime,
   parseTime,
   stringifyTime,
   ITimeContract,
   EditTime,
-  deserializeTime,
   timesInOrder,
-} from './time';
-import { isOk, Result } from './validation';
+  deserializeTime,
+} from 'src/types/time';
+import { isOk, Result } from 'src/types/validation';
 import { isAfter } from 'date-fns';
 import { concatLists } from '.';
 

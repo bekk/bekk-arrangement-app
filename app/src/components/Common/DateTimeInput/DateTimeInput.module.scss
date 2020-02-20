@@ -6,6 +6,17 @@
   margin-top: 50px;
 }
 
+.dateTimeInput {
+  white-space: pre-wrap;
+  @include regularText;
+  display: grid;
+}
+
+.timeWithTimezone {
+  display: flex;
+  flex-direction: row;
+}
+
 .label {
   white-space: pre-wrap;
   align-self: center;

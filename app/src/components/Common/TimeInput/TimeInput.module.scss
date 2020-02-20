@@ -15,6 +15,20 @@
   }
 }
 
+.label {
+  white-space: pre-wrap;
+  align-self: center;
+  @include regularText;
+}
+
+.dropdown {
+  white-space: pre-wrap;
+  align-self: center;
+  background-color: #222;
+  border: none;
+  @include regularText;
+}
+
 .timeInputContainer {
   display: flex;
   border: none;
