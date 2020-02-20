@@ -151,11 +151,19 @@ export function useAuth0Redirect(): void {
   }, []);
 }
 
-export function hasPermission(permission: string): boolean {
-  const permissions: string[] = getClaimsFromToken(getIdToken())[
+function hasPermission(permission: string): boolean {
+  const token = getIdToken();
+  if (!token) {
+    return false;
+  }
+  const permissions: string[] = getClaimsFromToken(token)[
     'https://api.bekk.no/claims/permission'
   ];
   return permissions.includes(permission);
 }
 
-export const readPermission = 'read:arrangement';
+const readPermission = 'read:arrangement';
+const adminPermission = 'admin:arrangement';
+
+export const userIsLoggedIn = () => hasPermission(readPermission);
+export const userIsAdmin = () => hasPermission(adminPermission);

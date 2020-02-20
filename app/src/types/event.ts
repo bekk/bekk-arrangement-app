@@ -7,6 +7,7 @@ import {
   parseMaxAttendees,
   parseLocation,
   deserializeMaxAttendees,
+  WithId,
 } from '.';
 import {
   IDateTime,
@@ -25,12 +26,18 @@ import {
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
 import { dateToString } from './date';
+import { editEventRoute } from 'src/routing';
 
 export type EventId = string;
 
-export type IEventList = Record<EventId, IEvent>;
+export type IEventList = Map<EventId, IEvent>;
 
-export interface IEventContract {
+export interface INewEventViewModel {
+  event: WithId<IEventViewModel>;
+  editToken: string;
+}
+
+export interface IEventViewModel {
   title: string;
   description: string;
   location: string;
@@ -40,6 +47,19 @@ export interface IEventContract {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
+}
+
+export interface IEventWriteModel {
+  title: string;
+  description: string;
+  location: string;
+  startDate: IDateTime;
+  endDate: IDateTime;
+  openForRegistrationTime: TimeInstanceContract;
+  organizerName: string;
+  organizerEmail: string;
+  maxParticipants: number;
+  editUrlTemplate: string;
 }
 
 export interface IEditEvent {
@@ -66,7 +86,10 @@ export interface IEvent {
   maxParticipants: number;
 }
 
-export const serializeEvent = (event: IEvent): IEventContract => ({
+export const serializeEvent = (
+  event: IEvent,
+  redirectUrlTemplate: string = ''
+): IEventWriteModel => ({
   title: event.title,
   description: event.description,
   location: event.location,
@@ -76,9 +99,10 @@ export const serializeEvent = (event: IEvent): IEventContract => ({
   organizerName: event.organizerName,
   organizerEmail: serializeEmail(event.organizerEmail),
   maxParticipants: event.maxParticipants,
+  editUrlTemplate: redirectUrlTemplate,
 });
 
-export const deserializeEvent = (event: IEventContract): IEditEvent => {
+export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
   const title = parseTitle(event.title);
   const location = parseLocation(event.location);
   const description = parseDescription(event.description);
@@ -178,7 +202,7 @@ export const initialEditEvent = (): IEditEvent => {
   };
 };
 
-export const maybeParseEvent = (eventContract: IEventContract): IEvent => {
+export const maybeParseEvent = (eventContract: IEventViewModel): IEvent => {
   const deserializedEvent = deserializeEvent(eventContract);
   const domainEvent = parseEvent(deserializedEvent);
   if (isOk(domainEvent)) {

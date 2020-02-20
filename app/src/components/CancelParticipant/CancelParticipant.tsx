@@ -7,23 +7,11 @@ import { Button } from '../Common/Button/Button';
 import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
-import queryString from 'query-string';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { viewEventRoute } from 'src/routing';
-
-const useQuery = (key: string) => {
-  const {
-    location: { search },
-  } = useHistory();
-  const params = queryString.parse(search);
-  if (key in params) {
-    const value = params[key];
-    if (typeof value === 'string') {
-      return value;
-    }
-  }
-};
+import { useQuery } from 'src/utils/query-string';
+import { useSavedParticipations } from 'src/hooks/participantHooks';
 
 export const CancelParticipant = () => {
   const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();
@@ -32,6 +20,8 @@ export const CancelParticipant = () => {
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
   const history = useHistory();
+  const { removeSavedParticipant } = useSavedParticipations();
+
   const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
 
   const cancelParticipant = catchAndNotify(async () => {
@@ -42,6 +32,7 @@ export const CancelParticipant = () => {
         cancellationToken,
       });
       if (deleted.ok) {
+        removeSavedParticipant({ eventId, email: participantEmail });
         setWasDeleted(true);
       }
     }

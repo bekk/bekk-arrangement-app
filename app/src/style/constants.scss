@@ -5,7 +5,7 @@ $mobileMinWidth: 321px;
 $smallMobileWidth: 375px;
 $tabletMinWidth: 768px;
 $largeTabletMinWidth: 1024px;
-$minDesktopWidth: 950px;
+$desktopMinWidth: 950px;
 $desktopMaxWidth: 1025px;
 
 $headerDesktop: 50px;
@@ -17,6 +17,11 @@ $smallMobile: 12px;
 $buttonMobile: 16px;
 
 $desktop: 'only screen and (min-width: #{$mobileMaxWidth})';
+
+$modalWidth: 600px;
+$modalHeight: 350px;
+$crossSize: 50px;
+$modalPadding: 45px;
 
 @mixin boldText {
   color: var(--textColor);

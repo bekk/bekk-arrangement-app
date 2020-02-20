@@ -27,19 +27,38 @@ export const useEvents = () => {
   );
 };
 
-export const useCreatedEvents = (): {
-  createdEventIds: string[];
-  setCreatedEventId: (string: string) => void;
+type EditEventToken = {
+  eventId: string;
+  editToken: string;
+};
+const isEditEventTokenType = (x: any): x is EditEventToken =>
+  'eventId' in x &&
+  typeof x.eventId === 'string' &&
+  'editToken' in x &&
+  typeof x.editToken === 'string';
+
+export const useSavedEditableEvents = (): {
+  savedEvents: EditEventToken[];
+  saveEditableEvents: (event: EditEventToken) => void;
 } => {
   const [storage, setStorage] = useLocalStorage({
-    key: 'created-events',
+    key: 'editable-events',
   });
-  const parsedStorage: string[] = storage ? JSON.parse(storage) : [];
-  const updateStorage = (string: string) =>
-    JSON.stringify([...parsedStorage, string]);
+
+  const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
+  const validatedStorage = Array.isArray(parsedStorage)
+    ? parsedStorage.filter(isEditEventTokenType)
+    : [];
+
+  const updateStorage = (event: EditEventToken) =>
+    JSON.stringify([
+      ...validatedStorage.filter(x => x.eventId !== event.eventId),
+      event,
+    ]);
 
   return {
-    createdEventIds: parsedStorage,
-    setCreatedEventId: (string: string) => setStorage(updateStorage(string)),
+    savedEvents: validatedStorage,
+    saveEditableEvents: (event: EditEventToken) =>
+      setStorage(updateStorage(event)),
   };
 };
