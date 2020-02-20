@@ -4,13 +4,9 @@ import style from './DateTimeInput.module.scss';
 import { Result } from 'src/types/validation';
 import classNames from 'classnames';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
-import {
-  parseTimeInstance,
-  EditTimeInstance,
-  getDateString,
-  parseDateStringToTimeInstance,
-} from 'src/types/time-instance';
-import { TimeInputWithTimezone } from '../TimeInput/TimeInputWithTimezone';
+import { parseTimeInstance, EditTimeInstance } from 'src/types/time-instance';
+import { TimezoneDropdown } from 'src/components/Common/TimeInput/TimezoneDropdown';
+import { TimeInput } from '../TimeInput/TimeInput';
 
 interface IProps {
   label: string;
@@ -26,30 +22,40 @@ export const DateTimeInputWithTimezone = ({
   const containerStyle = classNames(style.container, {
     [style.error]: Boolean(value.errors),
   });
+
   return (
     <>
       <label className={style.dateTimeInput}>{label}</label>
       <section>
         <div className={containerStyle}>
-          <DateInput
-            value={getDateString(value.editValue)}
-            onChange={openForRegistration => {
-              const newDateTimeInstance = parseDateStringToTimeInstance(
-                openForRegistration
-              );
+          <TimezoneDropdown
+            value={value.editValue.timezone}
+            onChange={timezone => {
               const newRegistrationTimeInstance = {
                 ...value.editValue,
-                year: newDateTimeInstance.year,
-                month: newDateTimeInstance.month,
-                day: newDateTimeInstance.day,
+                timezone,
               };
               onChange(parseTimeInstance(newRegistrationTimeInstance));
             }}
           />
-          <TimeInputWithTimezone
-            value={value.editValue}
-            onChange={newOpenForRegistrationTime => {
-              onChange(parseTimeInstance(newOpenForRegistrationTime));
+          <DateInput
+            value={value.editValue.date}
+            onChange={openForRegistrationDate => {
+              const newRegistrationTimeInstance = {
+                ...value.editValue,
+                date: openForRegistrationDate,
+              };
+              onChange(parseTimeInstance(newRegistrationTimeInstance));
+            }}
+          />
+          <TimeInput
+            value={value.editValue.time}
+            onChange={openForRegistrationTime => {
+              const newRegistrationTimeInstance = {
+                ...value.editValue,
+                time: openForRegistrationTime,
+              };
+              onChange(parseTimeInstance(newRegistrationTimeInstance));
             }}
           />
         </div>

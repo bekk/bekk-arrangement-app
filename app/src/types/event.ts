@@ -48,7 +48,7 @@ export interface IEditEvent {
   location: Result<string, string>;
   start: Result<EditDateTime, IDateTime>;
   end: Result<EditDateTime, IDateTime>;
-  openForRegistration: Result<EditTimeInstance, Date>;
+  openForRegistration: Result<EditTimeInstance, TimeInstance>;
   organizerName: Result<string, string>;
   organizerEmail: Result<string, Email>;
   maxParticipants: Result<string, number>;
