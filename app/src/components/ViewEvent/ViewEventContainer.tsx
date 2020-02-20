@@ -50,9 +50,7 @@ export const ViewEventContainer = () => {
   );
   const [participants] = useParticipants(eventId);
   const { savedEvents } = useSavedEditableEvents();
-  const recentlyCreatedThisEvent = savedEvents.find(
-    event => event.eventId === eventId
-  );
+  const editTokenFound = savedEvents.find(event => event.eventId === eventId);
 
   const {
     savedParticipations: participationsInLocalStorage,
@@ -106,13 +104,11 @@ export const ViewEventContainer = () => {
 
   return (
     <Page>
-      {userIsLoggedIn && (
+      {userIsLoggedIn() && (
         <BlockLink to={eventsRoute}>↩︎ Til arrangementer</BlockLink>
       )}
-      {(recentlyCreatedThisEvent || userIsAdmin()) && (
-        <BlockLink
-          to={editEventRoute(eventId, recentlyCreatedThisEvent?.editToken)}
-        >
+      {(editTokenFound || userIsAdmin()) && (
+        <BlockLink to={editEventRoute(eventId, editTokenFound?.editToken)}>
           ✎ Rediger arrangement
         </BlockLink>
       )}
