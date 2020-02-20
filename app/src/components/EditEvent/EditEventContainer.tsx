@@ -1,65 +1,73 @@
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import {
   parseEvent,
   IEditEvent,
   deserializeEvent,
   IEvent,
+  serializeEvent,
 } from 'src/types/event';
-import { putEvent, getEvent, deleteEvent } from 'src/api/arrangementSvc';
+import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
-import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
-import { useAuthentication } from 'src/auth';
-import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
-import { Modal } from '../Common/Modal/Modal';
+import { Modal } from 'src/components/Common/Modal/Modal';
+import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
+import { hasLoaded } from 'src/remote-data';
+import { useQuery } from 'src/utils/query-string';
+import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { Page } from 'src/components/Page/Page';
+import { Button } from 'src/components/Common/Button/Button';
+import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 
 export const EditEventContainer = () => {
-  useAuthentication();
-  const { eventId } = useParams();
+  const { eventId = 'URL-FEIL' } = useParams();
 
+  const remoteEvent = useEvent(eventId);
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
+  const editToken = useQuery('editToken');
   const { catchAndNotify } = useNotification();
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    if (eventId) {
-      catchAndNotify(async () => {
-        const retrievedEvent = await getEvent(eventId);
-        setEvent(parseEvent(deserializeEvent(retrievedEvent)));
-      })();
+  const { saveEditableEvents } = useSavedEditableEvents();
+
+  useLayoutEffect(() => {
+    if (hasLoaded(remoteEvent)) {
+      setEvent(parseEvent(deserializeEvent(serializeEvent(remoteEvent.data))));
     }
-  }, [eventId, catchAndNotify]);
+  }, [remoteEvent]);
+
+  useEffect(() => {
+    if (editToken) {
+      saveEditableEvents({ eventId, editToken });
+    }
+  }, [eventId, editToken, saveEditableEvents]);
 
   if (!event || !eventId) {
     return <div>Loading</div>;
   }
 
-  const editEventFunction = () =>
+  const putEditedEvent =
+    isOk(event) &&
     catchAndNotify(async () => {
-      if (isOk(event)) {
-        const updatedEvent = await putEvent(eventId, event.validValue);
-        setEvent(parseEvent(deserializeEvent(updatedEvent)));
-        history.push(viewEventRoute(eventId));
-      }
-    })();
+      const updatedEvent = await putEvent(eventId, event.validValue, editToken);
+      setEvent(parseEvent(deserializeEvent(updatedEvent)));
+      history.push(viewEventRoute(eventId));
+    });
 
   const goToOverview = () => history.push(eventsRoute);
+
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
-  const onDeleteEvent = (eventId: string) =>
-    catchAndNotify(async () => {
-      await deleteEvent(eventId);
-      goToOverview();
-    })();
+  const onDeleteEvent = catchAndNotify(async (eventId: string) => {
+    await deleteEvent(eventId, editToken);
+    goToOverview();
+  });
 
   const CancelModal = () => (
     <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
@@ -99,13 +107,13 @@ export const EditEventContainer = () => {
   );
 
   const renderPreviewEvent = () => {
-    if (isOk(event)) {
+    if (putEditedEvent && isOk(event)) {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
-            <Button onClick={editEventFunction}>Oppdater arrangement</Button>
+            <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
           </div>
         </Page>
       );

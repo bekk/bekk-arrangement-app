@@ -17,6 +17,7 @@
 }
 
 .row {
+  display: flex;
   :hover {
     text-decoration: underline;
   }

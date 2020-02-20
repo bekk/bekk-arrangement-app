@@ -1,56 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
-import { createRoute, viewEventRoute } from 'src/routing';
-import { getEvents } from 'src/api/arrangementSvc';
-import { WithId } from 'src/types';
-import {
-  IEvent,
-  IEventContract,
-  deserializeEvent,
-  parseEvent,
-  IEditEvent,
-} from 'src/types/event';
-import { isOk, Result } from 'src/types/validation';
+import { createRoute } from 'src/routing';
+import { useEvents } from 'src/hooks/eventHooks';
+import { hasLoaded } from 'src/remote-data';
 import { Link } from 'react-router-dom';
-import { Page } from '../Page/Page';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
-
-const toParsedEventsMap = (
-  events: WithId<IEventContract>[]
-): Map<string, Result<IEditEvent, IEvent>> => {
-  return new Map(
-    events.map<[string, Result<IEditEvent, IEvent>]>(e => {
-      const parsedEvent = parseEvent(deserializeEvent(e));
-      return [e.id, parsedEvent];
-    })
-  );
-};
-
-const useEvents = () => {
-  const [events, setEvents] = useState<
-    Map<string, Result<IEditEvent, IEvent>>
-  >();
-  const { catchAndNotify } = useNotification();
-
-  useEffect(() => {
-    catchAndNotify(async () => {
-      const events = await getEvents();
-      const eventsMap = toParsedEventsMap(events);
-      setEvents(eventsMap);
-    })();
-  }, [catchAndNotify]);
-
-  return events;
-};
+import { Page } from 'src/components/Page/Page';
 
 export const ViewEventsContainer = () => {
   const events = useEvents();
-
-  if (!events) {
-    return <div>Loading</div>;
-  }
-  const eventsKeys = Array.from(events.keys());
 
   return (
     <Page>
@@ -59,19 +17,12 @@ export const ViewEventsContainer = () => {
         <AddEventButton />
       </div>
       <div>
-        {eventsKeys.map((x, i) => {
-          const eventFromMap = events.get(x);
-          if (eventFromMap !== undefined && isOk(eventFromMap)) {
+        {[...events].map(([id, event]) => {
+          if (hasLoaded(event)) {
             return (
-              <EventListElement
-                key={x}
-                eventId={x}
-                event={eventFromMap.validValue}
-                onClickRoute={viewEventRoute(x)}
-              />
+              <EventListElement key={id} eventId={id} event={event.data} />
             );
           }
-          return <div key={i}>Event with id {x} is no good </div>;
         })}
       </div>
     </Page>
