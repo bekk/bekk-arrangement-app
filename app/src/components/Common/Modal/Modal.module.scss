@@ -32,6 +32,10 @@
 .header {
   @include boldText;
   color: var(--backgroundColor);
+  height: $modalPadding;
+  padding-left: $modalPadding;
+  margin-bottom: 20px;
+  max-width: 600px;
 }
 
 .modalContent {
@@ -48,13 +52,4 @@
   height: $crossSize;
   z-index: 4;
   cursor: pointer;
-}
-
-.headerContainer {
-  display: flex;
-  justify-content: space-between;
-  height: $modalPadding;
-  padding-left: $modalPadding;
-  margin-bottom: 20px;
-  max-width: 600px;
 }

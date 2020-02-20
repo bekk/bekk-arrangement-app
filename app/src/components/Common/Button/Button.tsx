@@ -1,15 +1,13 @@
 import React from 'react';
 import style from './Button.module.scss';
 import classNames from 'classnames';
+import { ReactChild } from 'src/types';
 
 interface IProps {
   onClick: () => void;
   disabled?: boolean;
   color?: 'White' | 'Black';
-  children?:
-    | string
-    | (JSX.Element | false)
-    | (JSX.Element | undefined | false)[];
+  children?: ReactChild;
 }
 export const Button = ({
   onClick,

@@ -63,13 +63,13 @@ export const EditEventContainer = () => {
 
   const CancelModal = () => (
     <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
-      <div>
+      <p>
         Sikker på at du vil avlyse arrangementet? <br />
         Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
         <span role="img" aria-label="grimacing-face">
           😬
         </span>
-      </div>
+      </p>
       <div className={style.buttonContainer}>
         <Button onClick={() => setShowModal(false)} color="White">
           Avbryt

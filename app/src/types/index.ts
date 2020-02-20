@@ -3,6 +3,8 @@ import { validate, Result } from './validation';
 export type Optional<T> = T | undefined;
 export type WithId<T> = T & { id: string };
 
+export type ReactChild = JSX.Element | string | false | undefined;
+
 export const concatLists = <T>(...list: Optional<T[]>[]): T[] =>
   list.flatMap(materialize);
 
