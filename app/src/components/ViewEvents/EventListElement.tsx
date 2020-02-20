@@ -15,8 +15,8 @@ interface IProps {
 }
 
 export const EventListElement = ({ eventId, event }: IProps) => {
-  const [participants] = useParticipants(eventId);
-  const participantsCount = participants?.length ?? 0;
+  const participants = useParticipants(eventId);
+  const participantsCount = participants?.size ?? 0;
   const participantLimitText =
     event.maxParticipants === 0 ? '' : ` av ${event.maxParticipants}`;
   const dateText = isSameDate(event.start.date, event.end.date)

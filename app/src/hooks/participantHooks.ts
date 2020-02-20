@@ -1,41 +1,26 @@
-import { useState, useEffect } from 'react';
-import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { useCallback } from 'react';
 import { getParticipantsForEvent } from 'src/api/arrangementSvc';
-import { isOk } from 'src/types/validation';
 import {
-  deserializeParticipant,
-  parseParticipant,
   IParticipant,
+  IParticipantViewModel,
+  maybeParseParticipant,
 } from 'src/types/participant';
 import { useLocalStorage } from 'src/hooks/localStorage';
+import { cachedRemoteData } from 'src/remote-data';
 
-export const useParticipants = (
-  id: string | undefined
-): [IParticipant[] | undefined] => {
-  const [participants, setParticipants] = useState<IParticipant[] | undefined>(
-    undefined
+const participantsCache = cachedRemoteData<string, IParticipant>();
+const hashKey = (participant: IParticipantViewModel) =>
+  participant.eventId.concat(participant.email);
+
+export const useParticipants = (id: string) => {
+  return participantsCache.useAll(
+    useCallback(async () => {
+      const participantContracts = await getParticipantsForEvent(id);
+      return participantContracts.map((participant: IParticipantViewModel) => {
+        return [hashKey(participant), maybeParseParticipant(participant)];
+      });
+    }, [id])
   );
-  const { catchAndNotify } = useNotification();
-
-  useEffect(() => {
-    if (id) {
-      catchAndNotify(async () => {
-        const retrievedParticipants = await getParticipantsForEvent(id);
-        const deserializedParticipants = retrievedParticipants.map(
-          participant => deserializeParticipant(participant)
-        );
-        const domainParticipants = deserializedParticipants.map(participant =>
-          parseParticipant(participant)
-        );
-        const validParticipants = domainParticipants.mapIf(p =>
-          isOk(p) ? p.validValue : undefined
-        );
-        setParticipants(validParticipants);
-      })();
-    }
-  }, [id, catchAndNotify]);
-
-  return [participants];
 };
 
 type Participation = {

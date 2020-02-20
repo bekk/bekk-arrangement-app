@@ -67,6 +67,25 @@ export const parseParticipant = (
   };
 };
 
+export const maybeParseParticipant = (
+  participantContract: IParticipantViewModel
+): IParticipant => {
+  const deserializedParticipant = deserializeParticipant(participantContract);
+  const domainParticipant = parseParticipant(deserializedParticipant);
+  if (isOk(domainParticipant)) {
+    return domainParticipant.validValue;
+  }
+  // Man får egt bare lov å kaste new Error
+  // men det er tull
+  // eslint-disable-next-line
+  throw {
+    status: 'ERROR',
+    userMessage:
+      'Deltakeren kan ikke parses av følgende grunner: ' +
+      domainParticipant.errors.map(x => x.message).join(', '),
+  };
+};
+
 export const initalParticipant: IEditParticipant = {
   eventId: '0',
   email: parseEmail(''),
