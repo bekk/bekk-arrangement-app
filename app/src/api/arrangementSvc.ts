@@ -1,4 +1,9 @@
-import { IEvent, serializeEvent, IEventContract } from 'src/types/event';
+import {
+  IEvent,
+  serializeEvent,
+  IEventViewModel,
+  INewEventViewModel,
+} from 'src/types/event';
 import { post, get, del, put } from './crud';
 import { WithId } from 'src/types';
 import {
@@ -8,60 +13,66 @@ import {
 } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
-import queryString from 'query-string';
+import { queryStringStringify } from 'src/utils/query-string';
 
-export const postEvent = (event: IEvent) =>
+export const postEvent = (
+  event: IEvent,
+  editUrlTemplate: string
+): Promise<INewEventViewModel> =>
   post({
     host: getArrangementSvcUrl(),
     path: '/events',
-    body: serializeEvent(event),
-  }).then(response => response as WithId<IEventContract>);
+    body: serializeEvent(event, editUrlTemplate),
+  });
 
 export const putEvent = (
   eventId: string,
-  event: IEvent
-): Promise<IEventContract> =>
+  event: IEvent,
+  editToken?: string
+): Promise<IEventViewModel> =>
   put({
     host: getArrangementSvcUrl(),
-    path: `/events/${eventId}`,
+    path: `/events/${eventId}${queryStringStringify({ editToken })}`,
     body: serializeEvent(event),
-  }).then(response => response as IEventContract);
+  });
 
-export const getEvent = (eventId: string): Promise<IEventContract> =>
+export const getEvent = (eventId: string): Promise<IEventViewModel> =>
   get({
-    host: getArrangementSvcUrl(),
-    path: `/events/${eventId}`,
-  }).then(response => response as IEventContract);
-
-export const getEvents = () =>
-  get({
-    host: getArrangementSvcUrl(),
-    path: `/events`,
-  }).then(response => response as WithId<IEventContract>[]);
-
-export const deleteEvent = (eventId: string) =>
-  del({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
   });
 
-export const getParticipantsForEvent = (eventId: string) =>
+export const getEvents = (): Promise<WithId<IEventViewModel>[]> =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events`,
+  });
+
+export const deleteEvent = (eventId: string, editToken?: string) =>
+  del({
+    host: getArrangementSvcUrl(),
+    path: `/events/${eventId}${queryStringStringify({ editToken })}`,
+  });
+
+export const getParticipantsForEvent = (
+  eventId: string
+): Promise<IParticipantViewModel[]> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}/participants`,
-  }).then(response => response as IParticipantViewModel[]);
+  });
 
 export const postParticipant = (
   participant: IParticipant,
-  redirectUrlTemplate: string
-) =>
+  cancelUrlTemplate: string
+): Promise<INewParticipantViewModel> =>
   post({
     host: getArrangementSvcUrl(),
     path: `/events/${participant.eventId}/participants/${serializeEmail(
       participant.email
     )}`,
-    body: { redirectUrlTemplate },
-  }).then(response => response as INewParticipantViewModel);
+    body: { cancelUrlTemplate },
+  });
 
 export const deleteParticipant = ({
   eventId,
@@ -74,7 +85,7 @@ export const deleteParticipant = ({
 }) =>
   del({
     host: getArrangementSvcUrl(),
-    path: `/events/${eventId}/participants/${participantEmail}?${queryString.stringify(
+    path: `/events/${eventId}/participants/${participantEmail}${queryStringStringify(
       { cancellationToken }
     )}`,
   });

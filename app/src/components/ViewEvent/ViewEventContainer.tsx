@@ -5,7 +5,7 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
-import { useEvent, useCreatedEvents } from 'src/hooks/eventHooks';
+import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import {
   IParticipant,
@@ -22,14 +22,17 @@ import {
   editEventRoute,
   confirmParticipantRoute,
 } from 'src/routing';
-import { stringifyEmail, parseEmail } from 'src/types/email';
-import { hasPermission, readPermission } from 'src/auth';
+import { stringifyEmail, parseEmail, serializeEmail } from 'src/types/email';
+import { userIsLoggedIn, userIsAdmin } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import { useParticipants } from 'src/hooks/participantHooks';
+import {
+  useParticipants,
+  useSavedParticipations,
+} from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const ViewEventContainer = () => {
@@ -46,8 +49,16 @@ export const ViewEventContainer = () => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
   const [participants] = useParticipants(eventId);
-  const { createdEventIds } = useCreatedEvents();
-  const hasRecentlyCreatedThisEvent = createdEventIds.includes(eventId);
+  const { savedEvents } = useSavedEditableEvents();
+  const editTokenFound = savedEvents.find(event => event.eventId === eventId);
+
+  const {
+    savedParticipations: participationsInLocalStorage,
+    saveParticipation: setParticipantInLocalStorage,
+  } = useSavedParticipations();
+  const participationsForThisEvent = participationsInLocalStorage.filter(
+    p => p.eventId === eventId
+  );
 
   if (isBad(remoteEvent)) {
     return <div>{remoteEvent.userMessage}</div>;
@@ -64,7 +75,7 @@ export const ViewEventContainer = () => {
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {
-      const redirectUrlTemplate =
+      const cancelUrlTemplate =
         document.location.origin +
         cancelParticipantRoute({
           eventId: '{eventId}',
@@ -73,7 +84,9 @@ export const ViewEventContainer = () => {
         });
       const {
         participant: { eventId, email },
-      } = await postParticipant(participant.validValue, redirectUrlTemplate);
+        cancellationToken,
+      } = await postParticipant(participant.validValue, cancelUrlTemplate);
+      setParticipantInLocalStorage({ eventId, email, cancellationToken });
       history.push(
         confirmParticipantRoute({
           eventId,
@@ -91,14 +104,19 @@ export const ViewEventContainer = () => {
 
   return (
     <Page>
-      {hasPermission(readPermission) && (
+      {userIsLoggedIn() && (
         <BlockLink to={eventsRoute}>↩︎ Til arrangementer</BlockLink>
       )}
-      {hasRecentlyCreatedThisEvent && (
-        <BlockLink to={editEventRoute(eventId)}>
+      {(editTokenFound || userIsAdmin()) && (
+        <BlockLink to={editEventRoute(eventId, editTokenFound?.editToken)}>
           ✎ Rediger arrangement
         </BlockLink>
       )}
+      {participationsForThisEvent.map(p => (
+        <BlockLink to={cancelParticipantRoute(p)}>
+          &times; Meld {p.email} av arrangementet
+        </BlockLink>
+      ))}
       <h1 className={style.header}>{event.title}</h1>
       <div className={style.subsection}>{event.description}</div>
       <div className={style.subsection}>
@@ -148,7 +166,9 @@ export const ViewEventContainer = () => {
         <h1 className={style.header}>Påmeldte</h1>
         {participants && participants.length > 0 ? (
           participants.map(p => (
-            <div className={style.text}>{stringifyEmail(p.email)}</div>
+            <div key={serializeEmail(p.email)} className={style.text}>
+              {stringifyEmail(p.email)}
+            </div>
           ))
         ) : (
           <div className={style.text}>Ingen påmeldte</div>

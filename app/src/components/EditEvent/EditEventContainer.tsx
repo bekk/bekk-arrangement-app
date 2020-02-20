@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import {
   parseEvent,
@@ -11,25 +11,27 @@ import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
 import { isOk, Result } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
-import { Button } from '../Common/Button/Button';
-import { PreviewEvent } from '../PreviewEvent/PreviewEvent';
-import { useAuthentication } from 'src/auth';
-import { Page } from '../Page/Page';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
-import { useNotification } from '../NotificationHandler/NotificationHandler';
-import { useEvent } from 'src/hooks/eventHooks';
+import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
+import { useQuery } from 'src/utils/query-string';
+import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { Page } from 'src/components/Page/Page';
+import { Button } from 'src/components/Common/Button/Button';
+import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 
 export const EditEventContainer = () => {
-  useAuthentication();
   const { eventId = 'URL-FEIL' } = useParams();
 
   const remoteEvent = useEvent(eventId);
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
+  const editToken = useQuery('editToken');
   const { catchAndNotify } = useNotification();
+
+  const { saveEditableEvents } = useSavedEditableEvents();
 
   useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
@@ -37,17 +39,23 @@ export const EditEventContainer = () => {
     }
   }, [remoteEvent]);
 
+  useEffect(() => {
+    if (editToken) {
+      saveEditableEvents({ eventId, editToken });
+    }
+  }, [eventId, editToken, saveEditableEvents]);
+
   if (!event || !eventId) {
     return <div>Loading</div>;
   }
 
-  const editEventFunction = catchAndNotify(async () => {
-    if (isOk(event)) {
-      const updatedEvent = await putEvent(eventId, event.validValue);
+  const putEditedEvent =
+    isOk(event) &&
+    catchAndNotify(async () => {
+      const updatedEvent = await putEvent(eventId, event.validValue, editToken);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
       history.push(viewEventRoute(eventId));
-    }
-  });
+    });
 
   const goToOverview = () => history.push(eventsRoute);
 
@@ -55,7 +63,7 @@ export const EditEventContainer = () => {
     setEvent(parseEvent(editEvent));
 
   const onDeleteEvent = catchAndNotify(async (eventId: string) => {
-    await deleteEvent(eventId);
+    await deleteEvent(eventId, editToken);
     goToOverview();
   });
 
@@ -78,13 +86,13 @@ export const EditEventContainer = () => {
   );
 
   const renderPreviewEvent = () => {
-    if (isOk(event)) {
+    if (putEditedEvent && isOk(event)) {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
-            <Button onClick={editEventFunction}>Oppdater arrangement</Button>
+            <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
           </div>
         </Page>
       );
