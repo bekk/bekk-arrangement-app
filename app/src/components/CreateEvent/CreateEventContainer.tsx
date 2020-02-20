@@ -29,12 +29,12 @@ export const CreateEventContainer = () => {
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
-      const redirectUrlTemplate =
+      const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
         event: { id },
         editToken,
-      } = await postEvent(event.validValue, redirectUrlTemplate);
+      } = await postEvent(event.validValue, editUrlTemplate);
       saveEditableEvents({ eventId: id, editToken });
       history.push(viewEventRoute(id));
     }

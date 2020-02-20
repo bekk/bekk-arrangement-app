@@ -57,7 +57,7 @@ export interface IEventWriteModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
-  redirectUrlTemplate: string;
+  editUrlTemplate: string;
 }
 
 export interface IEditEvent {
@@ -97,7 +97,7 @@ export const serializeEvent = (
   organizerName: event.organizerName,
   organizerEmail: serializeEmail(event.organizerEmail),
   maxParticipants: event.maxParticipants,
-  redirectUrlTemplate,
+  editUrlTemplate: redirectUrlTemplate,
 });
 
 export const deserializeEvent = (event: IEventViewModel): IEditEvent => {

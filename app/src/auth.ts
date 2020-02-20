@@ -151,7 +151,7 @@ export function useAuth0Redirect(): void {
   }, []);
 }
 
-export function hasPermission(permission: string): boolean {
+function hasPermission(permission: string): boolean {
   const token = getIdToken();
   if (!token) {
     return false;
@@ -162,5 +162,8 @@ export function hasPermission(permission: string): boolean {
   return permissions.includes(permission);
 }
 
-export const readPermission = 'read:arrangement';
-export const adminPermission = 'admin:arrangement';
+const readPermission = 'read:arrangement';
+const adminPermission = 'admin:arrangement';
+
+export const userIsLoggedIn = () => hasPermission(readPermission);
+export const userIsAdmin = () => hasPermission(adminPermission);

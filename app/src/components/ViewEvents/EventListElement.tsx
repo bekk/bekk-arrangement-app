@@ -7,7 +7,7 @@ import { stringifyTime } from 'src/types/time';
 import { useParticipants } from 'src/hooks/participantHooks';
 import { viewEventRoute, editEventRoute } from 'src/routing';
 import { useSavedEditableEvents } from 'src/hooks/eventHooks';
-import { hasPermission, adminPermission } from 'src/auth';
+import { userIsAdmin } from 'src/auth';
 
 interface IProps {
   eventId: string;
@@ -33,7 +33,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
 
   const viewRoute = viewEventRoute(eventId);
   const editRoute =
-    createdThisEvent || hasPermission(adminPermission)
+    createdThisEvent || userIsAdmin()
       ? editEventRoute(eventId, createdThisEvent?.editToken)
       : undefined;
 

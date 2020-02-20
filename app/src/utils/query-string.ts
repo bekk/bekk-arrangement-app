@@ -1,7 +1,9 @@
 import queryString from 'query-string';
 import { useHistory } from 'react-router';
 
-export const queryStringStringify = (queries: any): string => {
+export const queryStringStringify = (
+  queries: Record<string, string | number | undefined>
+): string => {
   const query = queryString.stringify(queries);
   if (query) {
     return `?${query}`;

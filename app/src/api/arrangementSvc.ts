@@ -15,12 +15,15 @@ import { getArrangementSvcUrl } from 'src/config';
 import { serializeEmail } from 'src/types/email';
 import { queryStringStringify } from 'src/utils/query-string';
 
-export const postEvent = (event: IEvent, redirectUrlTemplate: string) =>
+export const postEvent = (
+  event: IEvent,
+  editUrlTemplate: string
+): Promise<INewEventViewModel> =>
   post({
     host: getArrangementSvcUrl(),
     path: '/events',
-    body: serializeEvent(event, redirectUrlTemplate),
-  }).then(response => response as INewEventViewModel);
+    body: serializeEvent(event, editUrlTemplate),
+  });
 
 export const putEvent = (
   eventId: string,
@@ -31,19 +34,19 @@ export const putEvent = (
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}${queryStringStringify({ editToken })}`,
     body: serializeEvent(event),
-  }).then(response => response as IEventViewModel);
+  });
 
 export const getEvent = (eventId: string): Promise<IEventViewModel> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}`,
-  }).then(response => response as IEventViewModel);
+  });
 
-export const getEvents = () =>
+export const getEvents = (): Promise<WithId<IEventViewModel>[]> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events`,
-  }).then(response => response as WithId<IEventViewModel>[]);
+  });
 
 export const deleteEvent = (eventId: string, editToken?: string) =>
   del({
@@ -51,23 +54,25 @@ export const deleteEvent = (eventId: string, editToken?: string) =>
     path: `/events/${eventId}${queryStringStringify({ editToken })}`,
   });
 
-export const getParticipantsForEvent = (eventId: string) =>
+export const getParticipantsForEvent = (
+  eventId: string
+): Promise<IParticipantViewModel[]> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}/participants`,
-  }).then(response => response as IParticipantViewModel[]);
+  });
 
 export const postParticipant = (
   participant: IParticipant,
-  redirectUrlTemplate: string
-) =>
+  cancelUrlTemplate: string
+): Promise<INewParticipantViewModel> =>
   post({
     host: getArrangementSvcUrl(),
     path: `/events/${participant.eventId}/participants/${serializeEmail(
       participant.email
     )}`,
-    body: { redirectUrlTemplate },
-  }).then(response => response as INewParticipantViewModel);
+    body: { cancelUrlTemplate },
+  });
 
 export const deleteParticipant = ({
   eventId,

@@ -23,7 +23,7 @@ import {
   confirmParticipantRoute,
 } from 'src/routing';
 import { stringifyEmail, parseEmail, serializeEmail } from 'src/types/email';
-import { hasPermission, readPermission, adminPermission } from 'src/auth';
+import { userIsLoggedIn, userIsAdmin } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
@@ -77,7 +77,7 @@ export const ViewEventContainer = () => {
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {
-      const redirectUrlTemplate =
+      const cancelUrlTemplate =
         document.location.origin +
         cancelParticipantRoute({
           eventId: '{eventId}',
@@ -87,7 +87,7 @@ export const ViewEventContainer = () => {
       const {
         participant: { eventId, email },
         cancellationToken,
-      } = await postParticipant(participant.validValue, redirectUrlTemplate);
+      } = await postParticipant(participant.validValue, cancelUrlTemplate);
       setParticipantInLocalStorage({ eventId, email, cancellationToken });
       history.push(
         confirmParticipantRoute({
@@ -106,10 +106,10 @@ export const ViewEventContainer = () => {
 
   return (
     <Page>
-      {hasPermission(readPermission) && (
+      {userIsLoggedIn && (
         <BlockLink to={eventsRoute}>↩︎ Til arrangementer</BlockLink>
       )}
-      {(recentlyCreatedThisEvent || hasPermission(adminPermission)) && (
+      {(recentlyCreatedThisEvent || userIsAdmin()) && (
         <BlockLink
           to={editEventRoute(eventId, recentlyCreatedThisEvent?.editToken)}
         >

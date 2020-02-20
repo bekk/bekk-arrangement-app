@@ -49,7 +49,7 @@ export const EditEventContainer = () => {
     return <div>Loading</div>;
   }
 
-  const editEventFunction =
+  const putEditedEvent =
     isOk(event) &&
     catchAndNotify(async () => {
       const updatedEvent = await putEvent(eventId, event.validValue, editToken);
@@ -86,13 +86,13 @@ export const EditEventContainer = () => {
   );
 
   const renderPreviewEvent = () => {
-    if (editEventFunction && isOk(event)) {
+    if (putEditedEvent && isOk(event)) {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
-            <Button onClick={editEventFunction}>Oppdater arrangement</Button>
+            <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
           </div>
         </Page>
       );
