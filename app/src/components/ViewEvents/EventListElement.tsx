@@ -8,6 +8,7 @@ import { useParticipants } from 'src/hooks/participantHooks';
 import { viewEventRoute, editEventRoute } from 'src/routing';
 import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { userIsAdmin } from 'src/auth';
+import { hasLoaded } from 'src/remote-data';
 
 interface IProps {
   eventId: string;
@@ -16,7 +17,9 @@ interface IProps {
 
 export const EventListElement = ({ eventId, event }: IProps) => {
   const participants = useParticipants(eventId);
-  const participantsCount = participants?.size ?? 0;
+  const participantsCount = hasLoaded(participants)
+    ? participants.data.length
+    : 0;
   const participantLimitText =
     event.maxParticipants === 0 ? '' : ` av ${event.maxParticipants}`;
   const dateText = isSameDate(event.start.date, event.end.date)

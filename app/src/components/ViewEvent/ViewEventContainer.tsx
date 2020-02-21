@@ -48,7 +48,7 @@ export const ViewEventContainer = () => {
   const timeLeft = useTimeLeft(
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
-  const participants = useParticipants(eventId);
+  const remoteParticipants = useParticipants(eventId);
   const { savedEvents } = useSavedEditableEvents();
   const editTokenFound = savedEvents.find(event => event.eventId === eventId);
 
@@ -69,7 +69,11 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
-  const participantsText = `${participants.size ?? 0}${
+  const participants = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data
+    : [];
+
+  const participantsText = `${participants.length}${
     event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
   }`;
 
@@ -164,15 +168,13 @@ export const ViewEventContainer = () => {
           </>
         )}
         <h1 className={style.header}>Påmeldte</h1>
-        {participants && participants.size > 0 ? (
-          [...participants].map(([id, p]) => {
-            if (hasLoaded(p)) {
-              return (
-                <div key={serializeEmail(p.data.email)} className={style.text}>
-                  {stringifyEmail(p.data.email)}
-                </div>
-              );
-            }
+        {participants.length > 0 ? (
+          [...participants].map(p => {
+            return (
+              <div key={serializeEmail(p.email)} className={style.text}>
+                {stringifyEmail(p.email)}
+              </div>
+            );
           })
         ) : (
           <div className={style.text}>Ingen påmeldte</div>

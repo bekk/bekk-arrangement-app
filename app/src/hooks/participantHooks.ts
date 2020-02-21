@@ -8,19 +8,18 @@ import {
 import { useLocalStorage } from 'src/hooks/localStorage';
 import { cachedRemoteData } from 'src/remote-data';
 
-const participantsCache = cachedRemoteData<string, IParticipant>();
-const hashKey = (participant: IParticipantViewModel) =>
-  participant.eventId.concat(participant.email);
+const participantsCache = cachedRemoteData<string, IParticipant[]>();
 
-export const useParticipants = (id: string) => {
-  return participantsCache.useAll(
-    useCallback(async () => {
-      const participantContracts = await getParticipantsForEvent(id);
-      return participantContracts.map((participant: IParticipantViewModel) => {
-        return [hashKey(participant), maybeParseParticipant(participant)];
-      });
-    }, [id])
-  );
+export const useParticipants = (eventId: string) => {
+  return participantsCache.useOne({
+    key: eventId,
+    fetcher: useCallback(async () => {
+      const participantContracts = await getParticipantsForEvent(eventId);
+      return participantContracts.map((participant: IParticipantViewModel) =>
+        maybeParseParticipant(participant)
+      );
+    }, [eventId]),
+  });
 };
 
 type Participation = {
