@@ -169,7 +169,7 @@ export const ViewEventContainer = () => {
         )}
         <h1 className={style.header}>Påmeldte</h1>
         {participants.length > 0 ? (
-          [...participants].map(p => {
+          participants.map(p => {
             return (
               <div key={serializeEmail(p.email)} className={style.text}>
                 {stringifyEmail(p.email)}

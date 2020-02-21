@@ -75,9 +75,7 @@ export const maybeParseParticipant = (
   if (isOk(domainParticipant)) {
     return domainParticipant.validValue;
   }
-  // Man får egt bare lov å kaste new Error
-  // men det er tull
-  // eslint-disable-next-line
+
   throw {
     status: 'ERROR',
     userMessage:
