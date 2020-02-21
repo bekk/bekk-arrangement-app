@@ -17,11 +17,11 @@ export const ViewEventsContainer = () => {
         <AddEventButton />
       </div>
       <div>
-        {[...events].map(([id, event]) => {
-          return hasLoaded(event) ? (
+        {[...events].map(([id, event]) =>
+          hasLoaded(event) ? (
             <EventListElement key={id} eventId={id} event={event.data} />
-          ) : null;
-        })}
+          ) : null
+        )}
       </div>
     </Page>
   );
