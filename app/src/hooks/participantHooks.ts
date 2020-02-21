@@ -1,41 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { useCallback } from 'react';
 import { getParticipantsForEvent } from 'src/api/arrangementSvc';
-import { isOk } from 'src/types/validation';
 import {
-  deserializeParticipant,
-  parseParticipant,
   IParticipant,
+  IParticipantViewModel,
+  maybeParseParticipant,
 } from 'src/types/participant';
 import { useLocalStorage } from 'src/hooks/localStorage';
+import { cachedRemoteData } from 'src/remote-data';
 
-export const useParticipants = (
-  id: string | undefined
-): [IParticipant[] | undefined] => {
-  const [participants, setParticipants] = useState<IParticipant[] | undefined>(
-    undefined
-  );
-  const { catchAndNotify } = useNotification();
+const participantsCache = cachedRemoteData<string, IParticipant[]>();
 
-  useEffect(() => {
-    if (id) {
-      catchAndNotify(async () => {
-        const retrievedParticipants = await getParticipantsForEvent(id);
-        const deserializedParticipants = retrievedParticipants.map(
-          participant => deserializeParticipant(participant)
-        );
-        const domainParticipants = deserializedParticipants.map(participant =>
-          parseParticipant(participant)
-        );
-        const validParticipants = domainParticipants.mapIf(p =>
-          isOk(p) ? p.validValue : undefined
-        );
-        setParticipants(validParticipants);
-      })();
-    }
-  }, [id, catchAndNotify]);
-
-  return [participants];
+export const useParticipants = (eventId: string) => {
+  return participantsCache.useOne({
+    key: eventId,
+    fetcher: useCallback(async () => {
+      const participantContracts = await getParticipantsForEvent(eventId);
+      return participantContracts.map((participant: IParticipantViewModel) =>
+        maybeParseParticipant(participant)
+      );
+    }, [eventId]),
+  });
 };
 
 type Participation = {

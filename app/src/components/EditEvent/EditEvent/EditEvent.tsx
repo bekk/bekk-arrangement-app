@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {

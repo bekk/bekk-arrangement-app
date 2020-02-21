@@ -26,7 +26,6 @@ import {
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
 import { dateToString } from './date';
-import { editEventRoute } from 'src/routing';
 
 export type EventId = string;
 
