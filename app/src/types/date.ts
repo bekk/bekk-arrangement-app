@@ -21,7 +21,7 @@ export const parseDate = (date: EditDate): Result<EditDate, IDate> => {
   const day = Number(dates[3]);
 
   const validator = validate<EditDate, IDate>(dates[0] || date, {
-    'Trenger år, måned og dato i YYYY-MM-DD format': dates.length <= 3,
+    'Trenger år, måned og dato i DD-MM-YYYY format': dates.length <= 3,
     'År må være et heltall': !Number.isInteger(year),
     'Måned må være et heltall': !Number.isInteger(month),
     'Dag må være et heltall': !Number.isInteger(day),
