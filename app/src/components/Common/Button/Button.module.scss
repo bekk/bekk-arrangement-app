@@ -8,6 +8,8 @@
   max-width: 140px;
   padding: 0 10px;
   border: 1px solid var(--backgroundColor);
+  transition: background-color $transitionLength, color $transitionLength,
+    border $transitionLength;
   @media #{$desktop} {
     width: 200px;
   }

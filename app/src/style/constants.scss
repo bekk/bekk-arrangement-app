@@ -23,6 +23,8 @@ $modalHeight: 350px;
 $crossSize: 50px;
 $modalPadding: 45px;
 
+$transitionLength: 0.2s;
+
 @mixin boldText {
   color: var(--textColor);
   font-size: $textMobile;
