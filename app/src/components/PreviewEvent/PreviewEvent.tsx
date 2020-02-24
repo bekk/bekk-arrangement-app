@@ -61,7 +61,7 @@ export const PreviewEvent = ({ event }: IProps) => {
       <DateInfo
         formatedDate={stringifyTimeInstanceDate(event.openForRegistrationTime)}
         formatedTime={stringifyTimeInstanceTime(event.openForRegistrationTime)}
-        label={'Starter'}
+        label={'Påmelding åpner'}
       />
       <Info text={event.maxParticipants.toString()} label={'Maks antall'} />
     </>
