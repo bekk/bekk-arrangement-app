@@ -31,12 +31,14 @@
 }
 
 .whiteButton {
-  background-color: var(--headerColor);
-  border: 1px solid var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border: 1px solid var(--headerColor);
+  color: var(--headerColor);
 
   &:hover {
-    background-color: var(--backgroundColor);
-    color: var(--headerColor);
+    background-color: var(--headerColor);
+    color: var(--backgroundColor);
+    border: 1px solid var(--backgroundColor);
     cursor: pointer;
   }
 }

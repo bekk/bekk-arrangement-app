@@ -164,7 +164,9 @@ export const ViewEventContainer = () => {
           </a>
         </div>
         <div className={style.copy}>
-          <Button onClick={copyLink}>Kopier lenke</Button>
+          <Button color="White" onClick={copyLink}>
+            Kopier lenke
+          </Button>
           <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
         </div>
         <h1 className={style.header}>Påmelding</h1>
