@@ -2,19 +2,20 @@
 
 .button {
   @include buttonText;
-  background-color: var(--textColor);
+  background-color: var(--headerColor);
   height: 44px;
   min-width: 100px;
   max-width: 140px;
   padding: 0 10px;
-  border: 1px solid var(--textColor);
+  border: 1px solid var(--backgroundColor);
   @media #{$desktop} {
     width: 200px;
   }
 
   &:hover {
     background-color: var(--backgroundColor);
-    color: var(--textColor);
+    border: 1px solid var(--headerColor);
+    color: var(--headerColor);
     cursor: pointer;
   }
   &:focus {

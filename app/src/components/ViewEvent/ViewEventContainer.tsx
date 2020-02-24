@@ -111,19 +111,22 @@ export const ViewEventContainer = () => {
     if (isInThePast(event.end)) {
       return (
         <p>
-          Stengt <br /> Arrangementet har allerede funnet sted
+          Stengt <br />
+          Arrangementet har allerede funnet sted
         </p>
       );
     } else if (timeLeft.difference > 0) {
       return (
         <p>
-          Stengt <br /> Åpner om {asString(timeLeft)}
+          Stengt <br />
+          Åpner om {asString(timeLeft)}
         </p>
       );
     } else if (eventIsFull) {
       return (
         <p>
-          Stengt <br /> Arrangementet er dessverre fullt
+          Stengt <br />
+          Arrangementet er dessverre fullt
         </p>
       );
     } else {
