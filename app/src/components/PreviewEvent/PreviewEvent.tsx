@@ -1,10 +1,12 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
 import style from './PreviewEvent.module.scss';
-import { IDateTime } from 'src/types/date-time';
 import { stringifyTime } from 'src/types/time';
 import { stringifyDate } from 'src/types/date';
-import { stringifyTimeInstance } from 'src/types/time-instance';
+import {
+  stringifyTimeInstanceDate,
+  stringifyTimeInstanceTime,
+} from 'src/types/time-instance';
 import { stringifyEmail } from 'src/types/email';
 
 interface IProps {
@@ -12,11 +14,19 @@ interface IProps {
 }
 
 export const PreviewEvent = ({ event }: IProps) => {
-  const TimeInfo = ({ date, label }: { date: IDateTime; label: string }) => (
+  const DateInfo = ({
+    formatedDate,
+    formatedTime,
+    label,
+  }: {
+    formatedDate: string;
+    formatedTime: string;
+    label: string;
+  }) => (
     <div className={style.dataEntry}>
       <div className={style.labelText}>{label}</div>
-      <div>{stringifyDate(date.date)}</div>
-      <div>{stringifyTime(date.time)}</div>
+      <div>{formatedDate}</div>
+      <div>{formatedTime}</div>
     </div>
   );
 
@@ -38,11 +48,20 @@ export const PreviewEvent = ({ event }: IProps) => {
       />
       <Info text={event.location} label={'Lokasjon'} />
       <Info text={event.description} label={'Beskrivelse'} />
-      <TimeInfo date={event.start} label={'Starter'} />
-      <TimeInfo date={event.end} label={'Slutter'} />
-      <Info
-        label={'Påmeldingen åpner'}
-        text={stringifyTimeInstance(event.openForRegistrationTime)}
+      <DateInfo
+        formatedDate={stringifyDate(event.start.date)}
+        formatedTime={stringifyTime(event.start.time)}
+        label={'Starter'}
+      />
+      <DateInfo
+        formatedDate={stringifyDate(event.end.date)}
+        formatedTime={stringifyTime(event.end.time)}
+        label={'Starter'}
+      />
+      <DateInfo
+        formatedDate={stringifyTimeInstanceDate(event.openForRegistrationTime)}
+        formatedTime={stringifyTimeInstanceTime(event.openForRegistrationTime)}
+        label={'Påmelding åpner'}
       />
       <Info text={event.maxParticipants.toString()} label={'Maks antall'} />
     </>

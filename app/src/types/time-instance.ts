@@ -82,5 +82,10 @@ export const serializeTimeInstance = (
   time: TimeInstance
 ): TimeInstanceContract => time.getTime().toString();
 
-export const stringifyTimeInstance = (date: TimeInstance): string =>
-  date.toLocaleDateString();
+export const stringifyTimeInstanceDate = (date: TimeInstance): string =>
+  `${twoDigitValue(date.getDay())}.${twoDigitValue(
+    date.getMonth() + 1
+  )}.${date.getFullYear()}`;
+
+export const stringifyTimeInstanceTime = (date: TimeInstance): string =>
+  `${twoDigitValue(date.getHours())}:${twoDigitValue(date.getMinutes())}`;
