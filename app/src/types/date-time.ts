@@ -18,7 +18,7 @@ import {
   deserializeTime,
 } from 'src/types/time';
 import { isOk, Result } from 'src/types/validation';
-import { isAfter } from 'date-fns';
+import { isAfter, isBefore } from 'date-fns';
 import { concatLists } from '.';
 
 export type IDateTimeContract = {
@@ -67,6 +67,11 @@ export const deserializeDateTime = (
 export const isInTheFuture = ({ date, time }: IDateTime) => {
   const now = new Date();
   return isAfter(toDate({ date, time }), now);
+};
+
+export const isInThePast = ({ date, time }: IDateTime) => {
+  const now = new Date();
+  return isBefore(toDate({ date, time }), now);
 };
 
 export const isInOrder = ({

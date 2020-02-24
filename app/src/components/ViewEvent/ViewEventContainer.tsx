@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from './ViewEventContainer.module.scss';
-import { IDateTime } from 'src/types/date-time';
+import { IDateTime, isInThePast } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
@@ -76,6 +76,7 @@ export const ViewEventContainer = () => {
   const participantsText = `${participants.length}${
     event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
   }`;
+  const eventIsFull = event.maxParticipants === participants.length;
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {
@@ -106,19 +107,43 @@ export const ViewEventContainer = () => {
     setWasCopied(true);
   };
 
+  const closedEventText = () => {
+    if (isInThePast(event.end)) {
+      return (
+        <p>
+          Stengt <br /> Arrangementet har allerede funnet sted
+        </p>
+      );
+    } else if (timeLeft.difference > 0) {
+      return (
+        <p>
+          Stengt <br /> Åpner om {asString(timeLeft)}
+        </p>
+      );
+    } else if (eventIsFull) {
+      return (
+        <p>
+          Stengt <br /> Arrangementet er dessverre fullt
+        </p>
+      );
+    } else {
+      return undefined;
+    }
+  };
+
   return (
     <Page>
       {userIsLoggedIn() && (
-        <BlockLink to={eventsRoute}>↩︎ Til arrangementer</BlockLink>
+        <BlockLink to={eventsRoute}>Til arrangementer</BlockLink>
       )}
       {(editTokenFound || userIsAdmin()) && (
         <BlockLink to={editEventRoute(eventId, editTokenFound?.editToken)}>
-          ✎ Rediger arrangement
+          Rediger arrangement
         </BlockLink>
       )}
       {participationsForThisEvent.map(p => (
-        <BlockLink to={cancelParticipantRoute(p)}>
-          &times; Meld {p.email} av arrangementet
+        <BlockLink key={p.email} to={cancelParticipantRoute(p)}>
+          Meld {p.email} av arrangementet
         </BlockLink>
       ))}
       <h1 className={style.header}>{event.title}</h1>
@@ -143,12 +168,7 @@ export const ViewEventContainer = () => {
           <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
         </div>
         <h1 className={style.header}>Påmelding</h1>
-        {timeLeft.difference > 0 ? (
-          <>
-            <div>Stengt</div>
-            <p>Åpner om {asString(timeLeft)}</p>
-          </>
-        ) : (
+        {closedEventText() ?? (
           <>
             <ValidatedTextInput
               label={'E-post'}
