@@ -23,7 +23,7 @@ export const createLocation = (value: string): Result<string, string> => {
 export const parseDescription = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Beskrivelse må ha minst tre tegn': value.length < 3,
-    'Beskrivelse må ha maks 255 tegn': value.length > 255,
+    'Beskrivelse kan ha maks 255 tegn': value.length > 255,
   });
   return validator.resolve(value);
 };
@@ -31,7 +31,7 @@ export const parseDescription = (value: string): Result<string, string> => {
 export const parseLocation = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Sted må ha minst tre tegn': value.length < 3,
-    'Sted må ha maks 60 tegn': value.length > 60,
+    'Sted kan ha maks 60 tegn': value.length > 60,
   });
   return validator.resolve(value);
 };
@@ -39,7 +39,7 @@ export const parseLocation = (value: string): Result<string, string> => {
 export const parseTitle = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Tittel må ha minst tre tegn': value.length < 3,
-    'Tittel må ha maks 60 tegn': value.length > 60,
+    'Tittel kan ha maks 60 tegn': value.length > 60,
   });
   return validator.resolve(value);
 };
@@ -47,7 +47,7 @@ export const parseTitle = (value: string): Result<string, string> => {
 export const parseHost = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Arrangør må ha minst tre tegn': value.length < 3,
-    'Arrangør må ha maks 50 tegn': value.length > 50,
+    'Arrangør kan ha maks 50 tegn': value.length > 50,
   });
   return validator.resolve(value);
 };
