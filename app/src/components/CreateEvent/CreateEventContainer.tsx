@@ -19,7 +19,6 @@ import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
-import { ButtonLink } from 'src/components/Common/ButtonLink/ButtonLink';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -62,9 +61,9 @@ export const CreateEventContainer = () => {
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={addEvent}>Opprett arrangement</Button>
-            <ButtonLink onClick={() => setPreviewState(false)}>
+            <Button displayAsLink onClick={() => setPreviewState(false)}>
               Tilbake
-            </ButtonLink>
+            </Button>
           </div>
         </Page>
       );

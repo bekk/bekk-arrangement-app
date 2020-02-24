@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import style from './BlockLink.module.scss';
-
-type ReactElement = JSX.Element | string | false | null | undefined;
+import { ReactChild } from 'src/types';
 
 interface IProps {
   to: string;
-  children: ReactElement | ReactElement[];
+  children: ReactChild | ReactChild[];
 }
 
 export const BlockLink = ({ to, children }: IProps) => (

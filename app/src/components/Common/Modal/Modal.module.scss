@@ -19,7 +19,7 @@
   flex-direction: column;
   @include regularText;
   color: var(--backgroundColor);
-  background-color: var(--headerColor);
+  background-color: var(--lightTextColor);
   z-index: 3;
   line-height: initial;
   padding: 20px;

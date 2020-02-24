@@ -22,7 +22,6 @@ import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
-import { ButtonLink } from 'src/components/Common/ButtonLink/ButtonLink';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
@@ -110,9 +109,9 @@ export const EditEventContainer = () => {
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
-            <ButtonLink onClick={() => setPreviewState(false)}>
+            <Button displayAsLink onClick={() => setPreviewState(false)}>
               Tilbake
-            </ButtonLink>
+            </Button>
             <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
           </div>
         </Page>

@@ -2,7 +2,7 @@
 
 .button {
   @include buttonText;
-  background-color: var(--headerColor);
+  background-color: var(--lightTextColor);
   height: 44px;
   min-width: 100px;
   max-width: 140px;
@@ -16,8 +16,8 @@
 
   &:hover {
     background-color: var(--backgroundColor);
-    border: 1px solid var(--headerColor);
-    color: var(--headerColor);
+    border: 1px solid var(--lightTextColor);
+    color: var(--lightTextColor);
     cursor: pointer;
   }
   &:focus {
@@ -35,13 +35,22 @@
 
 .whiteButton {
   background-color: var(--backgroundColor);
-  border: 1px solid var(--headerColor);
-  color: var(--headerColor);
+  border: 1px solid var(--lightTextColor);
+  color: var(--lightTextColor);
 
   &:hover {
-    background-color: var(--headerColor);
+    background-color: var(--lightTextColor);
     color: var(--backgroundColor);
     border: 1px solid var(--backgroundColor);
     cursor: pointer;
   }
+}
+
+.link {
+  @include regularText;
+  display: block;
+  text-decoration: underline;
+  margin-top: 20px;
+  border: none;
+  background-color: transparent;
 }

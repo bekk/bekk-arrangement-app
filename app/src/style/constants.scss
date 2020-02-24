@@ -44,7 +44,7 @@ $transitionLength: 0.2s;
 }
 
 @mixin headerText {
-  color: var(--headerColor);
+  color: var(--lightTextColor);
   font-size: $headerMobile;
   font-family: $serifFontRegular;
   @media #{$desktop} {
