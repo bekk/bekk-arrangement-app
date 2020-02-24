@@ -23,7 +23,7 @@
   /* Define default color scheme for users without support for 'prefers-color-scheme' */
   --backgroundColor: var(--svart);
   --textColor: var(--overskyet);
-  --headerColor: var(--hvit);
+  --lightTextColor: var(--hvit);
   --linkColor: var(--morgendis);
   --linkColorHover: var(--hvit);
   --fadedColor: var(--morgendis);
@@ -37,7 +37,7 @@
   /* no-preference and perfers dark should use dark mode version */
   @media (prefers-color-scheme: no-preference), (prefers-color-scheme: dark) {
     --backgroundColor: var(--svart);
-    --headerColor: var(--hvit);
+    --lightTextColor: var(--hvit);
     --textColor: var(--overskyet);
     --linkColor: var(--morgendis);
     --linkColorHover: var(--hvit);

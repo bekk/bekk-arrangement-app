@@ -1,19 +1,17 @@
 import React from 'react';
-import { useParams, useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { Page } from '../Page/Page';
 import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
-import { Button } from '../Common/Button/Button';
 import style from './ConfirmParticipant.module.scss';
 import { viewEventRoute } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const ConfirmParticipant = () => {
   const { eventId = 'UGYLDIG-URL', email: participantEmail } = useParams();
   const remoteEvent = useEvent(eventId);
-  const history = useHistory();
-  const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
 
   if (!hasLoaded(remoteEvent)) {
     return <div>Loading...</div>;
@@ -34,7 +32,9 @@ export const ConfirmParticipant = () => {
         Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
         avmelding står i e-posten.
       </div>
-      <Button onClick={goToEvent}>Tilbake til arrangement</Button>
+      <BlockLink to={viewEventRoute(eventId)}>
+        Tilbake til arrangement
+      </BlockLink>
     </Page>
   );
 };

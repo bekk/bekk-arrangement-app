@@ -23,6 +23,8 @@ $modalHeight: 350px;
 $crossSize: 50px;
 $modalPadding: 45px;
 
+$transitionLength: 0.2s;
+
 @mixin boldText {
   color: var(--textColor);
   font-size: $textMobile;
@@ -42,7 +44,7 @@ $modalPadding: 45px;
 }
 
 @mixin headerText {
-  color: var(--headerColor);
+  color: var(--lightTextColor);
   font-size: $headerMobile;
   font-family: $serifFontRegular;
   @media #{$desktop} {

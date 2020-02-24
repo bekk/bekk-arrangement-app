@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
 import { Page } from '../Page/Page';
@@ -12,6 +12,7 @@ import { hasLoaded, isBad } from 'src/remote-data';
 import { viewEventRoute } from 'src/routing';
 import { useQuery } from 'src/utils/query-string';
 import { useSavedParticipations } from 'src/hooks/participantHooks';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const CancelParticipant = () => {
   const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();
@@ -19,10 +20,7 @@ export const CancelParticipant = () => {
   const cancellationToken = useQuery('cancellationToken');
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
-  const history = useHistory();
   const { removeSavedParticipant } = useSavedParticipations();
-
-  const goToEvent = () => eventId && history.push(viewEventRoute(eventId));
 
   const cancelParticipant = catchAndNotify(async () => {
     if (eventId && participantEmail) {
@@ -71,7 +69,7 @@ export const CancelParticipant = () => {
       <div className={style.text}>Vil du melde deg av {event.title}?</div>
       <div className={style.buttonContainer}>
         <Button onClick={cancelParticipant}>Meld av</Button>
-        <Button onClick={goToEvent}>Se arrangement</Button>
+        <BlockLink to={viewEventRoute(eventId)}>Se arrangement</BlockLink>
       </div>
     </>
   );

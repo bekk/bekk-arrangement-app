@@ -61,7 +61,9 @@ export const CreateEventContainer = () => {
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={addEvent}>Opprett arrangement</Button>
-            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+            <Button displayAsLink onClick={() => setPreviewState(false)}>
+              Tilbake
+            </Button>
           </div>
         </Page>
       );

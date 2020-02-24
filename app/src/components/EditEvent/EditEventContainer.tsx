@@ -21,6 +21,7 @@ import { useNotification } from 'src/components/NotificationHandler/Notification
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
+import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
@@ -59,14 +60,12 @@ export const EditEventContainer = () => {
       history.push(viewEventRoute(eventId));
     });
 
-  const goToOverview = () => history.push(eventsRoute);
-
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
   const onDeleteEvent = catchAndNotify(async (eventId: string) => {
     await deleteEvent(eventId, editToken);
-    goToOverview();
+    history.push(eventsRoute);
   });
 
   const CancelModal = () => (
@@ -79,9 +78,7 @@ export const EditEventContainer = () => {
         </span>
       </p>
       <div className={style.buttonContainer}>
-        <Button onClick={() => setShowModal(false)} color="White">
-          Avbryt
-        </Button>
+        <Button onClick={() => setShowModal(false)}>Avbryt</Button>
         <Button onClick={() => onDeleteEvent(eventId)} color="White">
           Avlys arrangement
         </Button>
@@ -99,7 +96,7 @@ export const EditEventContainer = () => {
         </Button>
       </div>
       <div className={style.buttonContainer}>
-        <Button onClick={goToOverview}>Avbryt</Button>
+        <BlockLink to={eventsRoute}>Avbryt</BlockLink>
         <Button onClick={() => setShowModal(true)}>Avlys arrangement</Button>
       </div>
       {showModal && <CancelModal />}
@@ -112,7 +109,9 @@ export const EditEventContainer = () => {
         <Page>
           <PreviewEvent event={event.validValue} />
           <div className={style.buttonContainer}>
-            <Button onClick={() => setPreviewState(false)}>Tilbake</Button>
+            <Button displayAsLink onClick={() => setPreviewState(false)}>
+              Tilbake
+            </Button>
             <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
           </div>
         </Page>

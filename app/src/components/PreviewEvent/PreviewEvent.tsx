@@ -15,18 +15,18 @@ interface IProps {
 
 export const PreviewEvent = ({ event }: IProps) => {
   const DateInfo = ({
-    formatedDate,
-    formatedTime,
+    formattedDate,
+    formattedTime,
     label,
   }: {
-    formatedDate: string;
-    formatedTime: string;
+    formattedDate: string;
+    formattedTime: string;
     label: string;
   }) => (
     <div className={style.dataEntry}>
       <div className={style.labelText}>{label}</div>
-      <div>{formatedDate}</div>
-      <div>{formatedTime}</div>
+      <div>{formattedDate}</div>
+      <div>{formattedTime}</div>
     </div>
   );
 
@@ -49,18 +49,18 @@ export const PreviewEvent = ({ event }: IProps) => {
       <Info text={event.location} label={'Lokasjon'} />
       <Info text={event.description} label={'Beskrivelse'} />
       <DateInfo
-        formatedDate={stringifyDate(event.start.date)}
-        formatedTime={stringifyTime(event.start.time)}
+        formattedDate={stringifyDate(event.start.date)}
+        formattedTime={stringifyTime(event.start.time)}
         label={'Starter'}
       />
       <DateInfo
-        formatedDate={stringifyDate(event.end.date)}
-        formatedTime={stringifyTime(event.end.time)}
-        label={'Starter'}
+        formattedDate={stringifyDate(event.end.date)}
+        formattedTime={stringifyTime(event.end.time)}
+        label={'Slutter'}
       />
       <DateInfo
-        formatedDate={stringifyTimeInstanceDate(event.openForRegistrationTime)}
-        formatedTime={stringifyTimeInstanceTime(event.openForRegistrationTime)}
+        formattedDate={stringifyTimeInstanceDate(event.openForRegistrationTime)}
+        formattedTime={stringifyTimeInstanceTime(event.openForRegistrationTime)}
         label={'Påmelding åpner'}
       />
       <Info text={event.maxParticipants.toString()} label={'Maks antall'} />
