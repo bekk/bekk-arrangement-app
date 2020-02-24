@@ -5,7 +5,7 @@ type ReactElement = JSX.Element | string | false | null | undefined;
 
 interface IProps {
   onClick: () => void;
-  children: ReactElement | ReactElement[];
+  children: ReactElement;
 }
 
 export const ButtonLink = ({ onClick, children }: IProps) => (

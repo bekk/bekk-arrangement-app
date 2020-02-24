@@ -79,9 +79,7 @@ export const EditEventContainer = () => {
         </span>
       </p>
       <div className={style.buttonContainer}>
-        <Button color="Black" onClick={() => setShowModal(false)}>
-          Avbryt
-        </Button>
+        <Button onClick={() => setShowModal(false)}>Avbryt</Button>
         <Button onClick={() => onDeleteEvent(eventId)} color="White">
           Avlys arrangement
         </Button>
