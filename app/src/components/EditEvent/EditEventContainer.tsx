@@ -1,11 +1,11 @@
 import { useState, useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import {
-  parseEvent,
+  parseEditEvent,
   IEditEvent,
   deserializeEvent,
   IEvent,
-  serializeEvent,
+  toWriteEvent,
 } from 'src/types/event';
 import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
@@ -38,7 +38,8 @@ export const EditEventContainer = () => {
 
   useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
-      setEvent(parseEvent(deserializeEvent(serializeEvent(remoteEvent.data))));
+      setEvent(deserializeEvent(remoteEvent.data));
+      //setEvent(parseEditEvent(parseViewEvent(toWriteEvent(remoteEvent.data))));
     }
   }, [remoteEvent]);
 
@@ -55,13 +56,14 @@ export const EditEventContainer = () => {
   const putEditedEvent =
     isOk(event) &&
     catchAndNotify(async () => {
-      const updatedEvent = await putEvent(eventId, event.validValue, editToken);
-      setEvent(parseEvent(deserializeEvent(updatedEvent)));
+      const writeEvent = toWriteEvent(event.validValue);
+      const updatedEvent = await putEvent(eventId, writeEvent, editToken);
+      setEvent(parseEditEvent(deserializeEvent(updatedEvent)));
       history.push(viewEventRoute(eventId));
     });
 
   const updateEvent = (editEvent: IEditEvent) =>
-    setEvent(parseEvent(editEvent));
+    setEvent(parseEditEvent(editEvent));
 
   const onDeleteEvent = catchAndNotify(async (eventId: string) => {
     await deleteEvent(eventId, editToken);

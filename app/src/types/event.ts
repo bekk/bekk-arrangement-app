@@ -1,4 +1,4 @@
-import { Result, isOk } from 'src/types/validation';
+import { Result, isOk, IError } from 'src/types/validation';
 import {
   concatLists,
   parseTitle,
@@ -7,7 +7,6 @@ import {
   parseMaxAttendees,
   parseLocation,
   deserializeMaxAttendees,
-  WithId,
 } from '.';
 import {
   IDateTime,
@@ -31,12 +30,13 @@ export type EventId = string;
 
 export type IEventList = Map<EventId, IEvent>;
 
-export interface INewEventViewModel {
-  event: WithId<IEventViewModel>;
+export interface IEventViewModelWithToken {
+  event: IEventViewModel;
   editToken: string;
 }
 
 export interface IEventViewModel {
+  id: string;
   title: string;
   description: string;
   location: string;
@@ -85,7 +85,7 @@ export interface IEvent {
   maxParticipants: number;
 }
 
-export const serializeEvent = (
+export const toWriteEvent = (
   event: IEvent,
   redirectUrlTemplate: string = ''
 ): IEventWriteModel => ({
@@ -100,6 +100,59 @@ export const serializeEvent = (
   maxParticipants: event.maxParticipants,
   editUrlTemplate: redirectUrlTemplate,
 });
+
+export const parseViewEvent = (
+  viewmodel: IEventViewModel
+): IEvent | IError[] => {
+  const title = parseTitle(viewmodel.title);
+  const location = parseLocation(viewmodel.location);
+  const description = parseDescription(viewmodel.description);
+  const start = parseDateTime(deserializeDateTime(viewmodel.startDate));
+  const end = parseDateTime(deserializeDateTime(viewmodel.endDate));
+  const openForRegistration = parseTimeInstance(
+    deserializeTimeInstance(viewmodel.openForRegistrationTime)
+  );
+  const organizerName = parseHost(viewmodel.organizerName);
+  const organizerEmail = parseEmail(viewmodel.organizerEmail);
+  const maxParticipants = parseMaxAttendees(
+    deserializeMaxAttendees(viewmodel.maxParticipants)
+  );
+  if (
+    isOk(start) &&
+    isOk(end) &&
+    isOk(openForRegistration) &&
+    isOk(title) &&
+    isOk(location) &&
+    isOk(description) &&
+    isOk(organizerName) &&
+    isOk(organizerEmail) &&
+    isOk(maxParticipants)
+  ) {
+    return {
+      title: title.validValue,
+      description: description.validValue,
+      location: location.validValue,
+      start: start.validValue,
+      end: end.validValue,
+      openForRegistrationTime: openForRegistration.validValue,
+      organizerName: organizerName.validValue,
+      organizerEmail: organizerEmail.validValue,
+      maxParticipants: maxParticipants.validValue,
+    };
+  } else {
+    const errors = concatLists(
+      start.errors,
+      end.errors,
+      openForRegistration.errors,
+      title.errors,
+      description.errors,
+      organizerName.errors,
+      organizerEmail.errors,
+      maxParticipants.errors
+    );
+    return errors;
+  }
+};
 
 export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
   const title = parseTitle(event.title);
@@ -131,7 +184,9 @@ export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
   };
 };
 
-export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
+export const parseEditEvent = (
+  event: IEditEvent
+): Result<IEditEvent, IEvent> => {
   if (
     isOk(event.start) &&
     isOk(event.end) &&
@@ -203,7 +258,7 @@ export const initialEditEvent = (): IEditEvent => {
 
 export const maybeParseEvent = (eventContract: IEventViewModel): IEvent => {
   const deserializedEvent = deserializeEvent(eventContract);
-  const domainEvent = parseEvent(deserializedEvent);
+  const domainEvent = parseEditEvent(deserializedEvent);
   if (isOk(domainEvent)) {
     return domainEvent.validValue;
   }

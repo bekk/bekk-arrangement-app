@@ -2,9 +2,10 @@ import { useState } from 'react';
 import React from 'react';
 import {
   IEditEvent,
-  parseEvent,
+  parseEditEvent,
   IEvent,
   initialEditEvent,
+  toWriteEvent,
 } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
 import { isOk, Result } from 'src/types/validation';
@@ -24,7 +25,7 @@ export const CreateEventContainer = () => {
   useAuthentication();
 
   const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
-    parseEvent(initialEditEvent())
+    parseEditEvent(initialEditEvent())
   );
   const [previewState, setPreviewState] = useState(false);
   const isDisabled = !isOk(event);
@@ -36,10 +37,11 @@ export const CreateEventContainer = () => {
     if (isOk(event)) {
       const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
+      const writeEvent = toWriteEvent(event.validValue, editUrlTemplate);
       const {
         event: { id },
         editToken,
-      } = await postEvent(event.validValue, editUrlTemplate);
+      } = await postEvent(writeEvent);
       saveEditableEvents({ eventId: id, editToken });
       history.push(viewEventRoute(id));
     }
@@ -52,7 +54,7 @@ export const CreateEventContainer = () => {
   };
 
   const updateEvent = (editEvent: IEditEvent) =>
-    setEvent(parseEvent(editEvent));
+    setEvent(parseEditEvent(editEvent));
 
   const renderPreviewEvent = () => {
     if (isOk(event)) {

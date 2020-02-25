@@ -1,7 +1,6 @@
 import { validate, Result } from './validation';
 
 export type Optional<T> = T | undefined;
-export type WithId<T> = T & { id: string };
 
 export type ReactChild = JSX.Element | string | false | undefined;
 

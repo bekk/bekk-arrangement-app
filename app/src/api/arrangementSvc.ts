@@ -1,11 +1,9 @@
 import {
-  IEvent,
-  serializeEvent,
   IEventViewModel,
-  INewEventViewModel,
+  IEventViewModelWithToken,
+  IEventWriteModel,
 } from 'src/types/event';
 import { post, get, del, put } from './crud';
-import { WithId } from 'src/types';
 import {
   IParticipant,
   INewParticipantViewModel,
@@ -16,24 +14,23 @@ import { serializeEmail } from 'src/types/email';
 import { queryStringStringify } from 'src/utils/query-string';
 
 export const postEvent = (
-  event: IEvent,
-  editUrlTemplate: string
-): Promise<INewEventViewModel> =>
+  event: IEventWriteModel
+): Promise<IEventViewModelWithToken> =>
   post({
     host: getArrangementSvcUrl(),
     path: '/events',
-    body: serializeEvent(event, editUrlTemplate),
+    body: event,
   });
 
 export const putEvent = (
   eventId: string,
-  event: IEvent,
+  event: IEventWriteModel,
   editToken?: string
 ): Promise<IEventViewModel> =>
   put({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}${queryStringStringify({ editToken })}`,
-    body: serializeEvent(event),
+    body: event,
   });
 
 export const getEvent = (eventId: string): Promise<IEventViewModel> =>
@@ -42,7 +39,7 @@ export const getEvent = (eventId: string): Promise<IEventViewModel> =>
     path: `/events/${eventId}`,
   });
 
-export const getEvents = (): Promise<WithId<IEventViewModel>[]> =>
+export const getEvents = (): Promise<IEventViewModel[]> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events`,
