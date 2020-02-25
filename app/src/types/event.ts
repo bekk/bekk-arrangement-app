@@ -8,6 +8,7 @@ import {
   parseLocation,
   deserializeMaxAttendees,
   WithId,
+  parseQuestion,
 } from '.';
 import {
   IDateTime,
@@ -46,6 +47,7 @@ export interface IEventViewModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
+  participantQuestion: string;
 }
 
 export interface IEventWriteModel {
@@ -59,6 +61,7 @@ export interface IEventWriteModel {
   organizerEmail: string;
   maxParticipants: number;
   editUrlTemplate: string;
+  participantQuestion: string;
 }
 
 export interface IEditEvent {
@@ -71,6 +74,7 @@ export interface IEditEvent {
   organizerName: Result<string, string>;
   organizerEmail: Result<string, Email>;
   maxParticipants: Result<string, number>;
+  participantQuestion: Result<string, string>;
 }
 
 export interface IEvent {
@@ -83,6 +87,7 @@ export interface IEvent {
   organizerName: string;
   organizerEmail: Email;
   maxParticipants: number;
+  participantQuestion: string;
 }
 
 export const serializeEvent = (
@@ -99,6 +104,7 @@ export const serializeEvent = (
   organizerEmail: serializeEmail(event.organizerEmail),
   maxParticipants: event.maxParticipants,
   editUrlTemplate: redirectUrlTemplate,
+  participantQuestion: event.participantQuestion,
 });
 
 export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
@@ -117,6 +123,7 @@ export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
   const maxParticipants = parseMaxAttendees(
     deserializeMaxAttendees(event.maxParticipants)
   );
+  const participantQuestion = parseQuestion(event.participantQuestion);
 
   return {
     title,
@@ -128,6 +135,7 @@ export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
     organizerName,
     organizerEmail,
     maxParticipants,
+    participantQuestion,
   };
 };
 
@@ -141,7 +149,8 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
     isOk(event.description) &&
     isOk(event.organizerName) &&
     isOk(event.organizerEmail) &&
-    isOk(event.maxParticipants)
+    isOk(event.maxParticipants) &&
+    isOk(event.participantQuestion)
   ) {
     return {
       editValue: event,
@@ -156,6 +165,7 @@ export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
         organizerName: event.organizerName.validValue,
         organizerEmail: event.organizerEmail.validValue,
         maxParticipants: event.maxParticipants.validValue,
+        participantQuestion: event.participantQuestion.validValue,
       },
     };
   }
@@ -198,6 +208,7 @@ export const initialEditEvent = (): IEditEvent => {
     organizerName: parseHost(''),
     organizerEmail: parseEmail(''),
     maxParticipants: parseMaxAttendees(''),
+    participantQuestion: parseQuestion(''),
   };
 };
 

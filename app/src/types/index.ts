@@ -62,3 +62,10 @@ export const parseMaxAttendees = (value: string): Result<string, number> => {
   });
   return validator.resolve(number);
 };
+
+export const parseQuestion = (value: string): Result<string, string> => {
+  const validator = validate<string, string>(value, {
+    'Spørsmål til deltaker kan ha maks 500 tegn': value.length > 500,
+  });
+  return validator.resolve(value);
+};

@@ -7,6 +7,7 @@ import {
   parseHost,
   parseMaxAttendees,
   parseLocation,
+  parseQuestion,
 } from 'src/types';
 import { parseEmail } from 'src/types/email';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
@@ -127,6 +128,18 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           updateEvent({
             ...event,
             maxParticipants: parseMaxAttendees(maxParticipants),
+          })
+        }
+      />
+
+      <ValidatedTextInput
+        label={'Spørsmål til deltakere'}
+        placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+        value={event.participantQuestion}
+        onChange={question =>
+          updateEvent({
+            ...event,
+            participantQuestion: parseQuestion(question),
           })
         }
       />
