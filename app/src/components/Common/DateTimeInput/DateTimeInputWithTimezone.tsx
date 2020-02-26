@@ -24,8 +24,8 @@ export const DateTimeInputWithTimezone = ({
   });
 
   return (
-    <section className={style.grid}>
-      <label className={style.dateTimeInput}>{label}</label>
+    <div className={style.toggledGrid}>
+      <label className={style.label}>{label}</label>
       <div className={containerStyle}>
         <DateInput
           value={value.editValue.date}
@@ -61,6 +61,6 @@ export const DateTimeInputWithTimezone = ({
         </div>
       </div>
       <ValidationResult validationResult={value.errors} />
-    </section>
+    </div>
   );
 };

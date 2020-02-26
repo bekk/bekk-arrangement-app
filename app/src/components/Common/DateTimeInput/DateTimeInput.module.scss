@@ -6,6 +6,13 @@
   margin-top: 50px;
 }
 
+.toggledGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
 .dateTimeInput {
   white-space: pre-wrap;
   @include regularText;

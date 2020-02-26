@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
@@ -7,12 +7,14 @@ import {
   parseHost,
   parseMaxAttendees,
   parseLocation,
+  parseTakesRegistrations,
 } from 'src/types';
 import { parseEmail } from 'src/types/email';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
 import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
 import { Result, isOk } from 'src/types/validation';
+import { Checkbox } from '@bekk/storybook';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -20,6 +22,10 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
+  const [takeRegistrations, setTakeRegistrations] = useState(
+    event.takesRegistrations.editValue
+  );
+  console.log('eventtt:', event);
   return (
     <>
       <ValidatedTextInput
@@ -108,16 +114,32 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         }
       />
 
-      <DateTimeInputWithTimezone
-        label={'Påmelding åpner'}
-        value={event.openForRegistration}
-        onChange={openForRegistration =>
+      <Checkbox
+        onDarkBackground
+        isChecked={takeRegistrations}
+        onChange={checkState => {
+          setTakeRegistrations(checkState);
           updateEvent({
             ...event,
-            openForRegistration,
-          })
-        }
-      />
+            takesRegistrations: parseTakesRegistrations(checkState),
+          });
+        }}
+      >
+        <>Aktiver påmelding</>
+      </Checkbox>
+
+      {event.takesRegistrations.editValue && (
+        <DateTimeInputWithTimezone
+          label={'Påmelding åpner'}
+          value={event.openForRegistration}
+          onChange={openForRegistration =>
+            updateEvent({
+              ...event,
+              openForRegistration,
+            })
+          }
+        />
+      )}
 
       <ValidatedTextInput
         label={'Maks antall'}

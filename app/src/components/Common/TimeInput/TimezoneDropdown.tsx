@@ -16,7 +16,6 @@ export const TimezoneDropdown = ({ value, onChange }: IProps) => {
         name="tidssone"
         value={value}
         onChange={v => {
-          console.log();
           updateTimezone(Number(v.target.value));
         }}
       >

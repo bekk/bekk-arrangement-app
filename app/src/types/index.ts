@@ -55,6 +55,15 @@ export const parseHost = (value: string): Result<string, string> => {
 export const deserializeMaxAttendees = (value: number): string =>
   value !== 0 ? value.toString() : '';
 
+export const parseTakesRegistrations = (
+  value: boolean
+): Result<boolean, boolean> => {
+  const validator = validate<boolean, boolean>(value, {
+    test: value !== undefined,
+  });
+  return validator.resolve(value);
+};
+
 export const parseMaxAttendees = (value: string): Result<string, number> => {
   const number = Number(value);
   const validator = validate<string, number>(value, {
