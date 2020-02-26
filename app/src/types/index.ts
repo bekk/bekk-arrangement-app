@@ -23,7 +23,6 @@ export const createLocation = (value: string): Result<string, string> => {
 export const parseDescription = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Beskrivelse må ha minst tre tegn': value.length < 3,
-    'Beskrivelse kan ha maks 255 tegn': value.length > 255,
   });
   return validator.resolve(value);
 };
