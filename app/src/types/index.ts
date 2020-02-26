@@ -23,7 +23,6 @@ export const createLocation = (value: string): Result<string, string> => {
 export const parseDescription = (value: string): Result<string, string> => {
   const validator = validate<string, string>(value, {
     'Beskrivelse må ha minst tre tegn': value.length < 3,
-    'Beskrivelse kan ha maks 255 tegn': value.length > 255,
   });
   return validator.resolve(value);
 };
@@ -61,4 +60,11 @@ export const parseMaxAttendees = (value: string): Result<string, number> => {
     'Verdien må være et tall': !Number.isInteger(number),
   });
   return validator.resolve(number);
+};
+
+export const parseQuestion = (value: string): Result<string, string> => {
+  const validator = validate<string, string>(value, {
+    'Spørsmål til deltaker kan ha maks 500 tegn': value.length > 500,
+  });
+  return validator.resolve(value);
 };

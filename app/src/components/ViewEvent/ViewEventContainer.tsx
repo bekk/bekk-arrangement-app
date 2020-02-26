@@ -12,6 +12,8 @@ import {
   IEditParticipant,
   parseParticipant,
   initalParticipant,
+  parseName,
+  parseComment,
 } from 'src/types/participant';
 import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
@@ -76,7 +78,13 @@ export const ViewEventContainer = () => {
   const participantsText = `${participants.length}${
     event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
   }`;
-  const eventIsFull = event.maxParticipants === participants.length;
+  const eventIsFull =
+    event.maxParticipants !== 0 &&
+    event.maxParticipants === participants.length;
+  const participantQuestion =
+    event.participantQuestion === ''
+      ? 'Allergier, preferanser eller noe annet på hjertet?'
+      : event.participantQuestion;
 
   const addParticipant = catchAndNotify(async () => {
     if (isOk(participant)) {
@@ -176,6 +184,19 @@ export const ViewEventContainer = () => {
         {closedEventText() ?? (
           <>
             <ValidatedTextInput
+              label={'Navn'}
+              value={participant.editValue.name}
+              placeholder={'Ola Nordmann'}
+              onChange={(name: string) =>
+                setParticipant(
+                  parseParticipant({
+                    ...participant.editValue,
+                    name: parseName(name),
+                  })
+                )
+              }
+            />
+            <ValidatedTextInput
               label={'E-post'}
               value={participant.editValue.email}
               placeholder={'ola.nordmann@bekk.no'}
@@ -184,6 +205,19 @@ export const ViewEventContainer = () => {
                   parseParticipant({
                     ...participant.editValue,
                     email: parseEmail(email),
+                  })
+                )
+              }
+            />
+            <ValidatedTextInput
+              label={participantQuestion}
+              value={participant.editValue.comment}
+              placeholder={'Kommentar til arrangør'}
+              onChange={(comment: string) =>
+                setParticipant(
+                  parseParticipant({
+                    ...participant.editValue,
+                    comment: parseComment(comment),
                   })
                 )
               }
@@ -197,7 +231,7 @@ export const ViewEventContainer = () => {
           participants.map(p => {
             return (
               <div key={serializeEmail(p.email)} className={style.text}>
-                {stringifyEmail(p.email)}
+                {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
               </div>
             );
           })

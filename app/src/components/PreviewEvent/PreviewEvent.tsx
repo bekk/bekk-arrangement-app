@@ -64,6 +64,7 @@ export const PreviewEvent = ({ event }: IProps) => {
         label={'Påmelding åpner'}
       />
       <Info text={event.maxParticipants.toString()} label={'Maks antall'} />
+      <Info text={event.participantQuestion} label={'Spørsmål til deltakere'} />
     </>
   );
 };

@@ -20,6 +20,10 @@
   @include regularText;
 }
 
+input::-webkit-input-placeholder {
+  line-height: 1.5;
+}
+
 .visited {
   border-color: var(--textColor);
 }

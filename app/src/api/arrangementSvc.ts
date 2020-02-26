@@ -71,7 +71,11 @@ export const postParticipant = (
     path: `/events/${participant.eventId}/participants/${serializeEmail(
       participant.email
     )}`,
-    body: { cancelUrlTemplate },
+    body: {
+      name: participant.name,
+      comment: participant.comment,
+      cancelUrlTemplate,
+    },
   });
 
 export const deleteParticipant = ({
