@@ -76,7 +76,7 @@ export const ViewEventContainer = () => {
     : [];
 
   const participantsText = `${participants.length}${
-    event?.maxParticipants === 0 ? '' : ' av ' + event?.maxParticipants
+    event?.maxParticipants === 0 ? ' av ∞' : ' av ' + event?.maxParticipants
   }`;
   const eventIsFull =
     event.maxParticipants !== 0 &&
@@ -113,6 +113,7 @@ export const ViewEventContainer = () => {
     const url = document.location.origin + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
     setWasCopied(true);
+    setTimeout(() => setWasCopied(false), 3000);
   };
 
   const closedEventText = () => {
@@ -157,14 +158,33 @@ export const ViewEventContainer = () => {
           Meld {p.email} av arrangementet
         </BlockLink>
       ))}
-      <h1 className={style.header}>{event.title}</h1>
-      <div className={style.subsection}>{event.description}</div>
-      <div className={style.subsection}>
-        <DateSection startDate={event.start} endDate={event.end} />
-        <div className={style.subsection}>Lokasjon: {event.location}</div>
-        <div className={style.subsection}>{participantsText} påmeldte</div>
-        <div className={style.subsection}>
-          Arrangør: {event.organizerName} -{' '}
+
+      <section className={style.container}>
+        <h1 className={style.header}>{event.title}</h1>
+        <div className={style.buttonContainer}>
+          <Button color="White" onClick={copyLink}>
+            {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
+          </Button>
+        </div>
+        <div className={style.infoContainer}>
+          <p className={style.infoHeader}>Når</p>
+          <DateSection startDate={event.start} endDate={event.end} />
+        </div>
+        <div className={style.infoContainer}>
+          <p className={style.infoHeader}>Påmeldte</p>
+          <p>{participantsText}</p>
+        </div>
+        <div className={style.infoContainer}>
+          <p className={style.infoHeader}>Lokasjon</p>
+          <p>{event.location}</p>
+        </div>
+
+        <div className={style.organizerName}>
+          <p className={style.infoHeader}>Arrangør</p>
+          <p className={style.text}>{event.organizerName}</p>
+        </div>
+        <div className={style.contactInfo}>
+          <p className={style.infoHeader}>Kontaktinfo</p>
           <a
             className={style.text}
             href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
@@ -174,13 +194,14 @@ export const ViewEventContainer = () => {
             {stringifyEmail(event.organizerEmail)}
           </a>
         </div>
-        <div className={style.copy}>
-          <Button color="White" onClick={copyLink}>
-            Kopier lenke
-          </Button>
-          <p className={style.textCopy}>{wasCopied && 'URL kopiert!'}</p>
+
+        <div className={style.descriptionContainer}>
+          <p className={style.textBlock}>{event.description}</p>
         </div>
-        <h1 className={style.header}>Påmelding</h1>
+      </section>
+
+      <section>
+        <h1 className={style.subHeader}>Påmelding</h1>
         {closedEventText() ?? (
           <>
             <ValidatedTextInput
@@ -226,7 +247,7 @@ export const ViewEventContainer = () => {
             <Button onClick={() => addParticipant()}>Meld meg på</Button>
           </>
         )}
-        <h1 className={style.header}>Påmeldte</h1>
+        <h1 className={style.subHeader}>Påmeldte</h1>
         {participants.length > 0 ? (
           participants.map(p => {
             return (
@@ -238,7 +259,7 @@ export const ViewEventContainer = () => {
         ) : (
           <div className={style.text}>Ingen påmeldte</div>
         )}
-      </div>
+      </section>
     </Page>
   );
 };
@@ -251,14 +272,14 @@ interface IDateProps {
 const DateSection = ({ startDate, endDate }: IDateProps) => {
   if (isSameDate(startDate.date, endDate.date)) {
     return (
-      <p>
+      <p className={style.dateText}>
         {capitalize(dateAsText(startDate.date))} <br />
         fra {stringifyTime(startDate.time)} til {stringifyTime(endDate.time)}
       </p>
     );
   }
   return (
-    <p>
+    <p className={style.dateText}>
       Fra {dateAsText(startDate.date)} {stringifyTime(startDate.time)} <br />
       Til {dateAsText(endDate.date)} {stringifyTime(endDate.time)}
     </p>
