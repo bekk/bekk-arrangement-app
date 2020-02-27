@@ -10,6 +10,7 @@
 
 .textArea {
   width: 100%;
+  resize: vertical;
   line-height: 1.5;
   outline: none;
   border: none;
@@ -18,4 +19,12 @@
   background-color: var(--backgroundColor);
   display: block;
   @include regularText;
+}
+
+.visited {
+  border-color: var(--textColor);
+}
+
+.error {
+  border-color: var(--error);
 }

@@ -14,6 +14,7 @@ import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/Val
 import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
 import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
 import { Result, isOk } from 'src/types/validation';
+import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -75,7 +76,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         }
       />
 
-      <ValidatedTextInput
+      <ValidatedTextArea
         label={'Beskrivelse'}
         placeholder={'Dette er en beskrivelse'}
         value={event.description}

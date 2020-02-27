@@ -19,6 +19,7 @@ import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { parseQuestion } from 'src/types';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -47,6 +48,12 @@ export const CreateEventContainer = () => {
 
   const validatePreview = () => {
     if (isOk(event)) {
+      if (event.validValue.participantQuestion === '') {
+        updateEvent({
+          ...event.editValue,
+          participantQuestion: parseQuestion('Allergier / preferanser'),
+        });
+      }
       setPreviewState(true);
     }
   };

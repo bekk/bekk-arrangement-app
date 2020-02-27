@@ -22,6 +22,7 @@ import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { parseQuestion } from 'src/types';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
@@ -68,6 +69,19 @@ export const EditEventContainer = () => {
     history.push(eventsRoute);
   });
 
+  const isDisabled = !isOk(event);
+  const validatePreview = () => {
+    if (isOk(event)) {
+      if (event.validValue.participantQuestion === '') {
+        updateEvent({
+          ...event.editValue,
+          participantQuestion: parseQuestion('Allergier / preferanser'),
+        });
+      }
+      setPreviewState(true);
+    }
+  };
+
   const CancelModal = () => (
     <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
       <p>
@@ -91,7 +105,7 @@ export const EditEventContainer = () => {
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.previewButton}>
-        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        <Button onClick={validatePreview} disabled={isDisabled}>
           Forhåndsvis endringer
         </Button>
       </div>
