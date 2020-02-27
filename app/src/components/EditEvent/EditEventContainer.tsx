@@ -69,6 +69,7 @@ export const EditEventContainer = () => {
       history.push(viewEventRoute(eventId));
     });
 
+  const isDisabled = !isOk(event);
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
@@ -76,8 +77,6 @@ export const EditEventContainer = () => {
     await deleteEvent(eventId, editToken);
     history.push(eventsRoute);
   });
-
-  const isDisabled = !isOk(event);
 
   const CancelModal = () => (
     <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
