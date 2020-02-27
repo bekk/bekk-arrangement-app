@@ -166,25 +166,24 @@ export const ViewEventContainer = () => {
             {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
           </Button>
         </div>
-        <div className={style.infoContainer}>
+        <div className={style.timeContainer}>
           <p className={style.infoHeader}>Når</p>
           <DateSection startDate={event.start} endDate={event.end} />
         </div>
-        <div className={style.infoContainer}>
+        <div className={style.participantsContainer}>
           <p className={style.infoHeader}>Påmeldte</p>
-          <p>{participantsText}</p>
+          <p className={style.text}>{participantsText}</p>
         </div>
-        <div className={style.infoContainer}>
+        <div className={style.locationContainer}>
           <p className={style.infoHeader}>Lokasjon</p>
-          <p>{event.location}</p>
+          <p className={style.text}>{event.location}</p>
         </div>
-
         <div className={style.organizerName}>
           <p className={style.infoHeader}>Arrangør</p>
           <p className={style.text}>{event.organizerName}</p>
         </div>
         <div className={style.contactInfo}>
-          <p className={style.infoHeader}>Kontaktinfo</p>
+          <p className={style.infoHeader}>Kontakt</p>
           <a
             className={style.text}
             href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
@@ -194,7 +193,6 @@ export const ViewEventContainer = () => {
             {stringifyEmail(event.organizerEmail)}
           </a>
         </div>
-
         <div className={style.descriptionContainer}>
           <p className={style.textBlock}>{event.description}</p>
         </div>
