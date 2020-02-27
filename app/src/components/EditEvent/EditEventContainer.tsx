@@ -56,6 +56,14 @@ export const EditEventContainer = () => {
   const putEditedEvent =
     isOk(event) &&
     catchAndNotify(async () => {
+      if (event.validValue.participantQuestion === '') {
+        updateEvent({
+          ...event.editValue,
+          participantQuestion: parseQuestion(
+            'Allergier, preferanser eller noe annet på hjertet?'
+          ),
+        });
+      }
       const updatedEvent = await putEvent(eventId, event.validValue, editToken);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
       history.push(viewEventRoute(eventId));
@@ -72,12 +80,6 @@ export const EditEventContainer = () => {
   const isDisabled = !isOk(event);
   const validatePreview = () => {
     if (isOk(event)) {
-      if (event.validValue.participantQuestion === '') {
-        updateEvent({
-          ...event.editValue,
-          participantQuestion: parseQuestion('Allergier / preferanser'),
-        });
-      }
       setPreviewState(true);
     }
   };

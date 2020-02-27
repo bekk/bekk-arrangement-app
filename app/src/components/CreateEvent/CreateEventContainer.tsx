@@ -35,6 +35,14 @@ export const CreateEventContainer = () => {
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
+      if (event.validValue.participantQuestion === '') {
+        updateEvent({
+          ...event.editValue,
+          participantQuestion: parseQuestion(
+            'Allergier, preferanser eller noe annet på hjertet?'
+          ),
+        });
+      }
       const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
@@ -48,12 +56,6 @@ export const CreateEventContainer = () => {
 
   const validatePreview = () => {
     if (isOk(event)) {
-      if (event.validValue.participantQuestion === '') {
-        updateEvent({
-          ...event.editValue,
-          participantQuestion: parseQuestion('Allergier / preferanser'),
-        });
-      }
       setPreviewState(true);
     }
   };

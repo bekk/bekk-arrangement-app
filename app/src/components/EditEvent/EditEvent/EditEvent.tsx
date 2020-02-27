@@ -134,7 +134,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       />
 
       <ValidatedTextInput
-        label={'Spørsmål til deltakere'}
+        label={'Spørsmål til deltaker ved påmelding'}
         placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
         value={event.participantQuestion}
         onChange={question =>
