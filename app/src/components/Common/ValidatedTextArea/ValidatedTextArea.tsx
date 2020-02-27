@@ -17,8 +17,7 @@ export const ValidatedTextArea = ({
   value,
   onChange,
 }: ValidTextAreaProps) => {
-  const [hasLostFocus, setLostFocus] = useState(false);
-  const shouldShowErrors = hasLostFocus;
+  const [showError, setShowError] = useState(false);
   return (
     <>
       <TextArea
@@ -26,10 +25,10 @@ export const ValidatedTextArea = ({
         placeholder={placeholder}
         value={value.editValue}
         onChange={onChange}
-        isError={shouldShowErrors && Boolean(value.errors)}
-        onBlur={() => setLostFocus(true)}
+        isError={showError && Boolean(value.errors)}
+        onBlur={() => setShowError(true)}
       />
-      {shouldShowErrors && <ValidationResult validationResult={value.errors} />}
+      {showError && <ValidationResult validationResult={value.errors} />}
     </>
   );
 };
