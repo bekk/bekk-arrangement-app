@@ -1,4 +1,4 @@
-import { Editable, IError, isIErrorList, editable } from 'src/types/validation';
+import { IError, isIErrorList } from 'src/types/validation';
 import {
   parseTitle,
   parseDescription,
@@ -9,7 +9,12 @@ import {
   parseQuestion,
   toEditMaxAttendees,
 } from '.';
-import { IDateTime, EditDateTime, toEditDateTime } from 'src/types/date-time';
+import {
+  IDateTime,
+  EditDateTime,
+  toEditDateTime,
+  parseEditDateTime,
+} from 'src/types/date-time';
 import {
   Email,
   toEditEmail,
@@ -23,10 +28,13 @@ import {
   parseTimeInstanceViewModel,
   toTimeInstanceWriteModel,
   toEditTimeInstance,
+  parseEditTimeInstance,
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
 import { isErrorFree } from 'src/utils';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
+import { parseEditTime } from 'src/types/time';
+import { parseName } from 'src/types/participant';
 
 export type EventId = string;
 
@@ -78,16 +86,16 @@ export interface IEvent {
 }
 
 export interface IEditEvent {
-  title: Editable<string, string>;
-  description: Editable<string, string>;
-  location: Editable<string, string>;
-  start: Editable<EditDateTime, IDateTime>;
-  end: Editable<EditDateTime, IDateTime>;
-  openForRegistrationTime: Editable<TimeInstanceEdit, TimeInstance>;
-  organizerName: Editable<string, string>;
-  organizerEmail: Editable<string, Email>;
-  maxParticipants: Editable<string, number>;
-  participantQuestion: Editable<string, string>;
+  title: string;
+  description: string;
+  location: string;
+  start: EditDateTime;
+  end: EditDateTime;
+  openForRegistrationTime: TimeInstanceEdit;
+  organizerName: string;
+  organizerEmail: string;
+  maxParticipants: string;
+  participantQuestion: string;
 }
 
 export const parseEditEvent = ({
@@ -103,18 +111,16 @@ export const parseEditEvent = ({
   participantQuestion,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
-    title: title.errors ?? title.validValue,
-    description: description.errors ?? description.validValue,
-    location: location.errors ?? location.validValue,
-    start: start.errors ?? start.validValue,
-    end: end.errors ?? end.validValue,
-    openForRegistrationTime:
-      openForRegistrationTime.errors ?? openForRegistrationTime.validValue,
-    organizerName: organizerName.errors ?? organizerName.validValue,
-    organizerEmail: organizerEmail.errors ?? organizerEmail.validValue,
-    maxParticipants: maxParticipants.errors ?? maxParticipants.validValue,
-    participantQuestion:
-      participantQuestion.errors ?? participantQuestion.validValue,
+    title: parseTitle(title),
+    description: parseDescription(description),
+    location: parseLocation(location),
+    start: parseEditDateTime(start),
+    end: parseEditDateTime(end),
+    openForRegistrationTime: parseEditTimeInstance(openForRegistrationTime),
+    organizerName: parseName(organizerName),
+    organizerEmail: parseEditEmail(organizerEmail),
+    maxParticipants: parseMaxAttendees(maxParticipants),
+    participantQuestion: parseQuestion(participantQuestion),
   };
 
   if (!isErrorFree(event)) {
@@ -199,18 +205,16 @@ export const toEditEvent = ({
   maxParticipants,
   participantQuestion,
 }: IEvent): IEditEvent => ({
-  title: editable(title),
-  description: editable(description),
-  location: editable(location),
-  start: editable(toEditDateTime(start)),
-  end: editable(toEditDateTime(end)),
-  openForRegistrationTime: editable(
-    toEditTimeInstance(openForRegistrationTime)
-  ),
-  organizerName: editable(organizerName),
-  organizerEmail: editable(toEditEmail(organizerEmail)),
-  maxParticipants: editable(toEditMaxAttendees(maxParticipants)),
-  participantQuestion: editable(participantQuestion),
+  title,
+  description,
+  location,
+  start: toEditDateTime(start),
+  end: toEditDateTime(end),
+  openForRegistrationTime: toEditTimeInstance(openForRegistrationTime),
+  organizerName,
+  organizerEmail: toEditEmail(organizerEmail),
+  maxParticipants: toEditMaxAttendees(maxParticipants),
+  participantQuestion,
 });
 
 export const initialEvent = (): IEvent => {

@@ -68,12 +68,3 @@ export const validate = <From, To>(
     reject: (errorMessage: string) => error(errorMessage),
   };
 };
-
-export const editable = <EditThing, ParsedThing>(
-  edit: EditThing
-): Editable<EditThing, ParsedThing> => {
-  return {
-    editValue: edit,
-    errors: [],
-  };
-};

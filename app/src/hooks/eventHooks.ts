@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { getEvent, getEvents } from 'src/api/arrangementSvc';
-import { IEvent, maybeParseEvent } from 'src/types/event';
+import { IEvent, parseEventViewModel } from 'src/types/event';
 import { useLocalStorage } from './localStorage';
 import { cachedRemoteData } from 'src/remote-data';
 
@@ -11,7 +11,7 @@ export const useEvent = (id: string) => {
     key: id,
     fetcher: useCallback(async () => {
       const retrievedEvent = await getEvent(id);
-      return maybeParseEvent(retrievedEvent);
+      return parseEventViewModel(retrievedEvent);
     }, [id]),
   });
 };
@@ -21,7 +21,7 @@ export const useEvents = () => {
     useCallback(async () => {
       const eventContracts = await getEvents();
       return eventContracts.map(({ id, ...event }) => {
-        return [id, maybeParseEvent(event)];
+        return [id, parseEventViewModel(event)];
       });
     }, [])
   );

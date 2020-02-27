@@ -2,16 +2,15 @@ import { useState } from 'react';
 import React from 'react';
 import {
   IEditEvent,
-  parseEvent,
-  IEvent,
-  initialEditEvent,
+  initialEvent,
+  toEditEvent,
+  parseEditEvent,
 } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
-import { isValid, Editable } from 'src/types/validation';
+import { isIErrorList } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { viewEventRoute, eventsRoute, editEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
-import style from './CreateEventContainer.module.scss';
 import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
@@ -19,46 +18,44 @@ import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import style from './CreateEventContainer.module.scss';
 
 export const CreateEventContainer = () => {
   useAuthentication();
-
-  const [event, setEvent] = useState<Editable<IEditEvent, IEvent>>(
-    parseEvent(initialEditEvent())
-  );
   const [previewState, setPreviewState] = useState(false);
-  const isDisabled = !isValid(event);
+
+  const [event, setEvent] = useState<IEditEvent>(toEditEvent(initialEvent()));
+  const parsedEvent = parseEditEvent(event);
+  const isInvalid = isIErrorList(parsedEvent);
+
   const history = useHistory();
   const { catchAndNotify } = useNotification();
   const { saveEditableEvents } = useSavedEditableEvents();
 
   const addEvent = catchAndNotify(async () => {
-    if (isValid(event)) {
+    if (!isIErrorList(parsedEvent)) {
       const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
         event: { id },
         editToken,
-      } = await postEvent(event.validValue, editUrlTemplate);
+      } = await postEvent(parsedEvent, editUrlTemplate);
       saveEditableEvents({ eventId: id, editToken });
       history.push(viewEventRoute(id));
     }
   });
 
   const validatePreview = () => {
-    if (isValid(event)) {
+    if (!isInvalid) {
       setPreviewState(true);
     }
   };
 
-  const updateEvent = (editEvent: IEditEvent) =>
-    setEvent(parseEvent(editEvent));
-
   const renderPreviewEvent = () => {
-    if (isValid(event)) {
+    if (!isIErrorList(parsedEvent)) {
       return (
         <Page>
-          <PreviewEvent event={event.validValue} />
+          <PreviewEvent event={parsedEvent} />
           <div className={style.buttonContainer}>
             <Button onClick={addEvent}>Opprett arrangement</Button>
             <Button displayAsLink onClick={() => setPreviewState(false)}>
@@ -73,9 +70,9 @@ export const CreateEventContainer = () => {
   const renderCreateView = () => (
     <Page>
       <h1 className={style.header}>Opprett arrangement</h1>
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <EditEvent eventResult={event} updateEvent={setEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={validatePreview} disabled={isDisabled}>
+        <Button onClick={validatePreview} disabled={isInvalid}>
           Forhåndsvisning
         </Button>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>

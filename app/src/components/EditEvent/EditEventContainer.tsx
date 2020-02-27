@@ -1,33 +1,33 @@
 import { useState, useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import {
-  parseEvent,
   IEditEvent,
   parseEventViewModel,
-  IEvent,
-  serializeEvent,
+  toEditEvent,
+  parseEditEvent,
 } from 'src/types/event';
 import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
-import { isValid, Editable } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
 import { Modal } from 'src/components/Common/Modal/Modal';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
-import { hasLoaded } from 'src/remote-data';
+import { hasLoaded, isLoading } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { isIErrorList } from 'src/types/validation';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
 
   const remoteEvent = useEvent(eventId);
-  const [event, setEvent] = useState<Editable<IEditEvent, IEvent>>();
+  const [event, setEvent] = useState<IEditEvent>();
+
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
   const editToken = useQuery('editToken');
@@ -36,11 +36,18 @@ export const EditEventContainer = () => {
 
   const { saveEditableEvents } = useSavedEditableEvents();
 
+  const validEvent = (() => {
+    if (event) {
+      const vEvent = parseEditEvent(event);
+      if (!isIErrorList(vEvent)) {
+        return vEvent;
+      }
+    }
+  })();
+
   useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
-      setEvent(
-        parseEvent(parseEventViewModel(serializeEvent(remoteEvent.data)))
-      );
+      setEvent(toEditEvent(remoteEvent.data));
     }
   }, [remoteEvent]);
 
@@ -50,20 +57,21 @@ export const EditEventContainer = () => {
     }
   }, [eventId, editToken, saveEditableEvents]);
 
-  if (!event || !eventId) {
+  if (!hasLoaded(remoteEvent)) {
     return <div>Loading</div>;
   }
 
+  if (!event || !eventId) {
+    return <div>Kan ikke finne event med id {eventId}</div>;
+  }
+
   const putEditedEvent =
-    isValid(event) &&
+    validEvent &&
     catchAndNotify(async () => {
-      const updatedEvent = await putEvent(eventId, event.validValue, editToken);
-      setEvent(parseEvent(parseEventViewModel(updatedEvent)));
+      const updatedEvent = await putEvent(eventId, validEvent, editToken);
+      setEvent(toEditEvent(parseEventViewModel(updatedEvent)));
       history.push(viewEventRoute(eventId));
     });
-
-  const updateEvent = (editEvent: IEditEvent) =>
-    setEvent(parseEvent(editEvent));
 
   const onDeleteEvent = catchAndNotify(async (eventId: string) => {
     await deleteEvent(eventId, editToken);
@@ -91,12 +99,9 @@ export const EditEventContainer = () => {
   const renderEditView = () => (
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
-      <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
+      <EditEvent eventResult={event} updateEvent={setEvent} />
       <div className={style.previewButton}>
-        <Button
-          onClick={() => setPreviewState(true)}
-          disabled={!isValid(event)}
-        >
+        <Button onClick={() => setPreviewState(true)} disabled={!validEvent}>
           Forhåndsvis endringer
         </Button>
       </div>
@@ -109,10 +114,10 @@ export const EditEventContainer = () => {
   );
 
   const renderPreviewEvent = () => {
-    if (putEditedEvent && isValid(event)) {
+    if (putEditedEvent && validEvent) {
       return (
         <Page>
-          <PreviewEvent event={event.validValue} />
+          <PreviewEvent event={validEvent} />
           <div className={style.buttonContainer}>
             <Button displayAsLink onClick={() => setPreviewState(false)}>
               Tilbake

@@ -40,10 +40,10 @@ export const parseEditDate = (date: EditDate): IDate | IError[] => {
 export const parseDateViewModel = identityFunction;
 export const toDateWriteModel = identityFunction;
 
-export const toEditDate = ({ year, month, day }: IDate): EditDate =>
-  `${day.toString().padStart(2, '0')}.${month
+export const toEditDate = ({ year, month, day }: IDate): string =>
+  `${year.toString().padStart(4, '0')}-${month
     .toString()
-    .padStart(2, '0')}.${year}`;
+    .padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
 // Util functions
 
@@ -83,10 +83,10 @@ export const datesInOrder = ({
   return false;
 };
 
-export const stringifyDate = ({ year, month, day }: IDate): string =>
-  `${year.toString().padStart(4, '0')}.${month
+export const stringifyDate = ({ year, month, day }: IDate): EditDate =>
+  `${day.toString().padStart(2, '0')}.${month
     .toString()
-    .padStart(2, '0')}.${day.toString().padStart(2, '0')}`;
+    .padStart(2, '0')}.${year}`;
 
 export const dateToIDate = (date: Date): IDate => ({
   year: date.getFullYear(),

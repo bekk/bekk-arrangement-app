@@ -9,172 +9,184 @@ import {
   parseLocation,
   parseQuestion,
 } from 'src/types';
-import { parseEmail } from 'src/types/email';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
-import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
-import { Editable, isValid } from 'src/types/validation';
+import {
+  EditDateTime,
+  isInOrder,
+  parseEditDateTime,
+} from 'src/types/date-time';
+import { isIErrorList } from 'src/types/validation';
+import { parseEditEmail } from 'src/types/email';
 
 interface IProps {
   eventResult: IEditEvent;
   updateEvent: (event: IEditEvent) => void;
 }
 
-export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
-  return (
-    <>
+export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
+  <>
+    <ValidatedTextInput
+      label={'Tittel'}
+      placeholder="Fest på Skuret"
+      value={event.title}
+      validation={parseTitle}
+      onChange={title =>
+        updateEvent({
+          ...event,
+          title,
+        })
+      }
+    />
+
+    <div>
       <ValidatedTextInput
-        label={'Tittel'}
-        placeholder="Fest på Skuret"
-        value={event.title}
-        onChange={title =>
+        label="Navn på arrangør"
+        placeholder="Ola Nordmann"
+        value={event.organizerName}
+        validation={parseHost}
+        onChange={organizerName =>
           updateEvent({
             ...event,
-            title: parseTitle(title),
+            organizerName,
           })
         }
       />
+    </div>
 
-      <div>
-        <ValidatedTextInput
-          label="Navn på arrangør"
-          placeholder="Ola Nordmann"
-          value={event.organizerName}
-          onChange={organizerName =>
-            updateEvent({
-              ...event,
-              organizerName: parseHost(organizerName),
-            })
-          }
-        />
-      </div>
-
-      <div>
-        <ValidatedTextInput
-          label="E-post arrangør"
-          placeholder="ola.nordmann@bekk.no"
-          value={event.organizerEmail}
-          onChange={organizerEmail =>
-            updateEvent({
-              ...event,
-              organizerEmail: parseEmail(organizerEmail),
-            })
-          }
-        />
-      </div>
-
+    <div>
       <ValidatedTextInput
-        label={'Lokasjon'}
-        placeholder="Vippetangen"
-        value={event.location}
-        onChange={location =>
+        label="E-post arrangør"
+        placeholder="ola.nordmann@bekk.no"
+        value={event.organizerEmail}
+        validation={parseEditEmail}
+        onChange={organizerEmail =>
           updateEvent({
             ...event,
-            location: parseLocation(location),
+            organizerEmail,
           })
         }
       />
+    </div>
 
-      <ValidatedTextInput
-        label={'Beskrivelse'}
-        placeholder={'Dette er en beskrivelse'}
-        value={event.description}
-        onChange={description =>
-          updateEvent({
-            ...event,
-            description: parseDescription(description),
-          })
-        }
-      />
+    <ValidatedTextInput
+      label={'Lokasjon'}
+      placeholder="Vippetangen"
+      value={event.location}
+      validation={parseLocation}
+      onChange={location =>
+        updateEvent({
+          ...event,
+          location,
+        })
+      }
+    />
 
-      <DateTimeInput
-        label={'Starter'}
-        value={event.start}
-        onChange={start =>
-          updateEvent({
-            ...event,
-            ...setStartEndDates(event, ['set-start', start]),
-          })
-        }
-      />
+    <ValidatedTextInput
+      label={'Beskrivelse'}
+      placeholder={'Dette er en beskrivelse'}
+      value={event.description}
+      validation={parseDescription}
+      onChange={description =>
+        updateEvent({
+          ...event,
+          description,
+        })
+      }
+    />
 
-      <DateTimeInput
-        label={'Slutter'}
-        value={event.end}
-        onChange={end =>
-          updateEvent({
-            ...event,
-            ...setStartEndDates(event, ['set-end', end]),
-          })
-        }
-      />
+    <DateTimeInput
+      label={'Starter'}
+      value={event.start}
+      onChange={start =>
+        updateEvent({
+          ...event,
+          ...setStartEndDates(event, ['set-start', start]),
+        })
+      }
+    />
 
-      <DateTimeInputWithTimezone
-        label={'Påmelding åpner'}
-        value={event.openForRegistration}
-        onChange={openForRegistration =>
-          updateEvent({
-            ...event,
-            openForRegistration,
-          })
-        }
-      />
+    <DateTimeInput
+      label={'Slutter'}
+      value={event.end}
+      onChange={end =>
+        updateEvent({
+          ...event,
+          ...setStartEndDates(event, ['set-end', end]),
+        })
+      }
+    />
 
-      <ValidatedTextInput
-        label={'Maks antall'}
-        placeholder="0 (ingen grense)"
-        value={event.maxParticipants}
-        onChange={maxParticipants =>
-          updateEvent({
-            ...event,
-            maxParticipants: parseMaxAttendees(maxParticipants),
-          })
-        }
-      />
+    <DateTimeInputWithTimezone
+      label={'Påmelding åpner'}
+      value={event.openForRegistrationTime}
+      onChange={openForRegistrationTime =>
+        updateEvent({
+          ...event,
+          openForRegistrationTime,
+        })
+      }
+    />
 
-      <ValidatedTextInput
-        label={'Spørsmål til deltakere'}
-        placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
-        value={event.participantQuestion}
-        onChange={question =>
-          updateEvent({
-            ...event,
-            participantQuestion: parseQuestion(question),
-          })
-        }
-      />
-    </>
-  );
-};
+    <ValidatedTextInput
+      label={'Maks antall'}
+      placeholder="0 (ingen grense)"
+      value={event.maxParticipants}
+      validation={parseMaxAttendees}
+      onChange={maxParticipants =>
+        updateEvent({
+          ...event,
+          maxParticipants,
+        })
+      }
+    />
 
-type Action =
-  | ['set-start', Editable<EditDateTime, IDateTime>]
-  | ['set-end', Editable<EditDateTime, IDateTime>];
+    <ValidatedTextInput
+      label={'Spørsmål til deltakere'}
+      placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+      value={event.participantQuestion}
+      validation={parseQuestion}
+      onChange={participantQuestion =>
+        updateEvent({
+          ...event,
+          participantQuestion,
+        })
+      }
+    />
+  </>
+);
+
+type Action = ['set-start', EditDateTime] | ['set-end', EditDateTime];
 
 type State = {
-  start: Editable<EditDateTime, IDateTime>;
-  end: Editable<EditDateTime, IDateTime>;
+  start: EditDateTime;
+  end: EditDateTime;
 };
 
 const setStartEndDates = (
   { start, end }: State,
   [type, date]: Action
 ): State => {
-  if (isValid(start) && isValid(end) && isValid(date)) {
-    const first = type === 'set-start' ? date : start;
-    const last = type === 'set-end' ? date : end;
+  const parsedStart = parseEditDateTime(start);
+  const parsedEnd = parseEditDateTime(end);
+  const parsedDate = parseEditDateTime(date);
+  if (
+    !isIErrorList(parsedStart) &&
+    !isIErrorList(parsedEnd) &&
+    !isIErrorList(parsedDate)
+  ) {
+    const first = type === 'set-start' ? parsedDate : parsedStart;
+    const last = type === 'set-end' ? parsedDate : parsedEnd;
 
-    if (!isInOrder({ first: first.validValue, last: last.validValue })) {
+    if (!isInOrder({ first, last })) {
       return { start: date, end: date };
     }
+  }
 
-    return { start: first, end: last };
-  } else {
-    switch (type) {
-      case 'set-start':
-        return { end, start: date };
-      case 'set-end':
-        return { start, end: date };
-    }
+  switch (type) {
+    case 'set-start':
+      return { start: date, end };
+    case 'set-end':
+      return { start, end: date };
   }
 };

@@ -1,15 +1,10 @@
-import {
-  Editable,
-  validate,
-  IError,
-  isIErrorList,
-  editable,
-} from './validation';
+import { validate, IError, isIErrorList } from './validation';
 import {
   Email,
   toEmailWriteModel,
   parseEmailViewModel,
   toEditEmail,
+  parseEditEmail,
 } from './email';
 import { isErrorFree } from 'src/utils';
 
@@ -39,9 +34,9 @@ export interface IParticipant {
 }
 
 export interface IEditParticipant {
-  name: Editable<string, string>;
-  email: Editable<string, Email>;
-  comment: Editable<string, string>;
+  name: string;
+  email: string;
+  comment: string;
 }
 
 export const toParticipantWriteModel = (
@@ -88,9 +83,9 @@ export const parseEditParticipant = ({
   comment,
 }: IEditParticipant): IParticipant | IError[] => {
   const participant = {
-    name: name.errors ?? name.validValue,
-    email: email.errors ?? email.validValue,
-    comment: comment.errors ?? comment.validValue,
+    name: parseName(name),
+    email: parseEditEmail(email),
+    comment: parseComment(comment),
   };
 
   if (!isErrorFree(participant)) {
@@ -107,9 +102,9 @@ export const toEditParticipant = ({
   email,
   comment,
 }: IParticipant): IEditParticipant => ({
-  name: editable(name),
-  email: editable(toEditEmail(email)),
-  comment: editable(comment),
+  name,
+  email: toEditEmail(email),
+  comment,
 });
 
 export const parseName = (value: string): string | IError[] => {

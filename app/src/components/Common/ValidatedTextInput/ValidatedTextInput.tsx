@@ -1,5 +1,5 @@
 import React from 'react';
-import { Editable } from 'src/types/validation';
+import { IError, isIErrorList } from 'src/types/validation';
 import { useState } from 'react';
 import { ValidationResult } from '../ValidationResult/ValidationResult';
 import { TextInput } from '../TextInput/TextInput';
@@ -7,7 +7,8 @@ import { TextInput } from '../TextInput/TextInput';
 interface ValidTextInputProps {
   label: string;
   placeholder?: string;
-  value: Editable<string, any>;
+  value: string;
+  validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
 }
 
@@ -15,21 +16,27 @@ export const ValidatedTextInput = ({
   label,
   placeholder,
   value,
+  validation,
   onChange,
 }: ValidTextInputProps) => {
+  const errors = validation(value);
+
   const [hasLostFocus, setLostFocus] = useState(false);
   const shouldShowErrors = hasLostFocus;
+
   return (
     <>
       <TextInput
         label={label}
         placeholder={placeholder}
-        value={value.editValue}
+        value={value}
         onChange={onChange}
-        isError={shouldShowErrors && Boolean(value.errors)}
+        isError={shouldShowErrors && isIErrorList(errors)}
         onBlur={() => setLostFocus(true)}
       />
-      {shouldShowErrors && <ValidationResult validationResult={value.errors} />}
+      {shouldShowErrors && isIErrorList(errors) && (
+        <ValidationResult validationResult={errors} />
+      )}
     </>
   );
 };
