@@ -178,14 +178,11 @@ export const ViewEventContainer = () => {
           <p className={style.infoHeader}>Lokasjon</p>
           <p className={style.text}>{event.location}</p>
         </div>
-        <div className={style.organizerName}>
+        <div className={style.organizerContainer}>
           <p className={style.infoHeader}>Arrangør</p>
           <p className={style.text}>{event.organizerName}</p>
-        </div>
-        <div className={style.contactInfo}>
-          <p className={style.infoHeader}>Kontakt</p>
           <a
-            className={style.text}
+            className={style.emailLink}
             href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
               event.title
             }`}

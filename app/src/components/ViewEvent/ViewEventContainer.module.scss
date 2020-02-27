@@ -76,28 +76,24 @@
   margin-bottom: 10px;
 }
 
-.organizerName {
+.organizerContainer {
   @extend .text;
   grid-row: 5;
   grid-column: 1 / 4;
-
   @media #{$desktop} {
     grid-row: 3;
     grid-column: 1 / 2;
   }
 }
 
-.contactInfo {
+.emailLink {
   @extend .text;
-  grid-row: 6;
-  grid-column: 1 / 4;
-  @media #{$desktop} {
-    grid-row: 4;
-  }
+  display: block;
+  margin-top: 5px;
 }
 
 .descriptionContainer {
-  grid-row: 7;
+  grid-row: 6;
   grid-column: 1 / 4;
 }
 
