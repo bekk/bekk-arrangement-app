@@ -17,8 +17,7 @@ export const ValidatedTextInput = ({
   value,
   onChange,
 }: ValidTextInputProps) => {
-  const [hasLostFocus, setLostFocus] = useState(false);
-  const shouldShowErrors = hasLostFocus;
+  const [showErrors, setShowErrors] = useState(false);
   return (
     <>
       <TextInput
@@ -26,10 +25,10 @@ export const ValidatedTextInput = ({
         placeholder={placeholder}
         value={value.editValue}
         onChange={onChange}
-        isError={shouldShowErrors && Boolean(value.errors)}
-        onBlur={() => setLostFocus(true)}
+        isError={showErrors && Boolean(value.errors)}
+        onBlur={() => setShowErrors(true)}
       />
-      {shouldShowErrors && <ValidationResult validationResult={value.errors} />}
+      {showErrors && <ValidationResult validationResult={value.errors} />}
     </>
   );
 };

@@ -20,8 +20,9 @@ import { useQuery } from 'src/utils/query-string';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
+import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { parseQuestion } from 'src/types';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
@@ -55,11 +56,20 @@ export const EditEventContainer = () => {
   const putEditedEvent =
     isOk(event) &&
     catchAndNotify(async () => {
+      if (event.validValue.participantQuestion === '') {
+        updateEvent({
+          ...event.editValue,
+          participantQuestion: parseQuestion(
+            'Allergier, preferanser eller noe annet på hjertet?'
+          ),
+        });
+      }
       const updatedEvent = await putEvent(eventId, event.validValue, editToken);
       setEvent(parseEvent(deserializeEvent(updatedEvent)));
       history.push(viewEventRoute(eventId));
     });
 
+  const isDisabled = !isOk(event);
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
@@ -91,7 +101,7 @@ export const EditEventContainer = () => {
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.previewButton}>
-        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        <Button onClick={() => setPreviewState(true)} disabled={isDisabled}>
           Forhåndsvis endringer
         </Button>
       </div>
@@ -107,7 +117,7 @@ export const EditEventContainer = () => {
     if (putEditedEvent && isOk(event)) {
       return (
         <Page>
-          <PreviewEvent event={event.validValue} />
+          <PreviewEventContainer event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button displayAsLink onClick={() => setPreviewState(false)}>
               Tilbake

@@ -15,10 +15,11 @@ import style from './CreateEventContainer.module.scss';
 import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
-import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
+import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { parseQuestion } from 'src/types';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -34,6 +35,14 @@ export const CreateEventContainer = () => {
 
   const addEvent = catchAndNotify(async () => {
     if (isOk(event)) {
+      if (event.validValue.participantQuestion === '') {
+        updateEvent({
+          ...event.editValue,
+          participantQuestion: parseQuestion(
+            'Allergier, preferanser eller noe annet på hjertet?'
+          ),
+        });
+      }
       const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
@@ -45,12 +54,6 @@ export const CreateEventContainer = () => {
     }
   });
 
-  const validatePreview = () => {
-    if (isOk(event)) {
-      setPreviewState(true);
-    }
-  };
-
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
@@ -58,7 +61,7 @@ export const CreateEventContainer = () => {
     if (isOk(event)) {
       return (
         <Page>
-          <PreviewEvent event={event.validValue} />
+          <PreviewEventContainer event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={addEvent}>Opprett arrangement</Button>
             <Button displayAsLink onClick={() => setPreviewState(false)}>
@@ -75,7 +78,7 @@ export const CreateEventContainer = () => {
       <h1 className={style.header}>Opprett arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={validatePreview} disabled={isDisabled}>
+        <Button onClick={() => setPreviewState(true)} disabled={isDisabled}>
           Forhåndsvisning
         </Button>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>

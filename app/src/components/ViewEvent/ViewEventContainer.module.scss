@@ -3,28 +3,9 @@
 .text {
   @include regularText;
   line-height: 1.2;
+  margin: 0;
 }
 
-.subsection {
-  @extend .text;
-  margin: 20px 0px;
-  white-space: pre-wrap;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  @include headerText;
-}
-
-.copy {
-  display: flex;
-  justify-content: left;
-}
-
-.textCopy {
-  padding-left: 10px;
+.subHeader {
+  @include subHeaderText;
 }
