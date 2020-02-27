@@ -71,7 +71,7 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
     return (
       <p className={style.dateText}>
         {capitalize(dateAsText(startDate.date))} <br />
-        fra {stringifyTime(startDate.time)} til {stringifyTime(endDate.time)}
+        Fra {stringifyTime(startDate.time)} til {stringifyTime(endDate.time)}
       </p>
     );
   }

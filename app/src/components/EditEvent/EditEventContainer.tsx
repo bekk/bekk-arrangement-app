@@ -78,11 +78,6 @@ export const EditEventContainer = () => {
   });
 
   const isDisabled = !isOk(event);
-  const validatePreview = () => {
-    if (isOk(event)) {
-      setPreviewState(true);
-    }
-  };
 
   const CancelModal = () => (
     <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
@@ -107,7 +102,7 @@ export const EditEventContainer = () => {
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.previewButton}>
-        <Button onClick={validatePreview} disabled={isDisabled}>
+        <Button onClick={() => setPreviewState(true)} disabled={isDisabled}>
           Forhåndsvis endringer
         </Button>
       </div>

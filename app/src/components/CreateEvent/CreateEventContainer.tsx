@@ -54,12 +54,6 @@ export const CreateEventContainer = () => {
     }
   });
 
-  const validatePreview = () => {
-    if (isOk(event)) {
-      setPreviewState(true);
-    }
-  };
-
   const updateEvent = (editEvent: IEditEvent) =>
     setEvent(parseEvent(editEvent));
 
@@ -84,7 +78,7 @@ export const CreateEventContainer = () => {
       <h1 className={style.header}>Opprett arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={validatePreview} disabled={isDisabled}>
+        <Button onClick={() => setPreviewState(true)} disabled={isDisabled}>
           Forhåndsvisning
         </Button>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>
