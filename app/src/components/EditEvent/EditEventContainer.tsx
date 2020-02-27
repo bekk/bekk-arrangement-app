@@ -20,7 +20,7 @@ import { useQuery } from 'src/utils/query-string';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
+import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { parseQuestion } from 'src/types';
 
@@ -121,7 +121,7 @@ export const EditEventContainer = () => {
     if (putEditedEvent && isOk(event)) {
       return (
         <Page>
-          <PreviewEvent event={event.validValue} />
+          <PreviewEventContainer event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button displayAsLink onClick={() => setPreviewState(false)}>
               Tilbake

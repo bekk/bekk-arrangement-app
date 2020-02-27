@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import style from './ViewEventContainer.module.scss';
-import { IDateTime, isInThePast } from 'src/types/date-time';
+import { isInThePast } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
-import { dateAsText, isSameDate } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
@@ -19,7 +17,6 @@ import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import {
   cancelParticipantRoute,
-  viewEventRoute,
   eventsRoute,
   editEventRoute,
   confirmParticipantRoute,
@@ -36,13 +33,14 @@ import {
   useSavedParticipations,
 } from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
   const [participant, setParticipant] = useState<
     Result<IEditParticipant, IParticipant>
   >(parseParticipant({ ...initalParticipant, eventId }));
-  const [wasCopied, setWasCopied] = useState(false);
+
   const history = useHistory();
   const { catchAndNotify } = useNotification();
 
@@ -109,13 +107,6 @@ export const ViewEventContainer = () => {
     }
   });
 
-  const copyLink = async () => {
-    const url = document.location.origin + viewEventRoute(eventId);
-    await navigator.clipboard.writeText(url);
-    setWasCopied(true);
-    setTimeout(() => setWasCopied(false), 3000);
-  };
-
   const closedEventText = () => {
     if (isInThePast(event.end)) {
       return (
@@ -158,43 +149,7 @@ export const ViewEventContainer = () => {
           Meld {p.email} av arrangementet
         </BlockLink>
       ))}
-
-      <section className={style.container}>
-        <h1 className={style.header}>{event.title}</h1>
-        <div className={style.buttonContainer}>
-          <Button color="White" onClick={copyLink}>
-            {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
-          </Button>
-        </div>
-        <div className={style.timeContainer}>
-          <p className={style.infoHeader}>Når</p>
-          <DateSection startDate={event.start} endDate={event.end} />
-        </div>
-        <div className={style.participantsContainer}>
-          <p className={style.infoHeader}>Påmeldte</p>
-          <p className={style.text}>{participantsText}</p>
-        </div>
-        <div className={style.locationContainer}>
-          <p className={style.infoHeader}>Lokasjon</p>
-          <p className={style.text}>{event.location}</p>
-        </div>
-        <div className={style.organizerContainer}>
-          <p className={style.infoHeader}>Arrangør</p>
-          <p className={style.text}>{event.organizerName}</p>
-          <a
-            className={style.emailLink}
-            href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
-              event.title
-            }`}
-          >
-            {stringifyEmail(event.organizerEmail)}
-          </a>
-        </div>
-        <div className={style.descriptionContainer}>
-          <p className={style.textBlock}>{event.description}</p>
-        </div>
-      </section>
-
+      <ViewEvent event={event} participantsText={participantsText} />
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
         {closedEventText() ?? (
@@ -258,28 +213,3 @@ export const ViewEventContainer = () => {
     </Page>
   );
 };
-
-interface IDateProps {
-  startDate: IDateTime;
-  endDate: IDateTime;
-}
-
-const DateSection = ({ startDate, endDate }: IDateProps) => {
-  if (isSameDate(startDate.date, endDate.date)) {
-    return (
-      <p className={style.dateText}>
-        {capitalize(dateAsText(startDate.date))} <br />
-        fra {stringifyTime(startDate.time)} til {stringifyTime(endDate.time)}
-      </p>
-    );
-  }
-  return (
-    <p className={style.dateText}>
-      Fra {dateAsText(startDate.date)} {stringifyTime(startDate.time)} <br />
-      Til {dateAsText(endDate.date)} {stringifyTime(endDate.time)}
-    </p>
-  );
-};
-
-export const capitalize = (text: string) =>
-  text.charAt(0).toUpperCase() + text.substring(1);

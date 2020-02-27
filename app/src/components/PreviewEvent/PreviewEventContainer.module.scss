@@ -1,0 +1,12 @@
+@import 'src/style/constants';
+
+.previewContainer {
+  border: 1px dashed var(--disabled);
+  padding: 30px;
+  position: relative;
+  pointer-events: none;
+}
+
+.header {
+  @include headerText;
+}

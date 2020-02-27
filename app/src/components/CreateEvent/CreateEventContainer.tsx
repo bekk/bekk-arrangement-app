@@ -15,7 +15,7 @@ import style from './CreateEventContainer.module.scss';
 import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
-import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
+import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
@@ -65,7 +65,7 @@ export const CreateEventContainer = () => {
     if (isOk(event)) {
       return (
         <Page>
-          <PreviewEvent event={event.validValue} />
+          <PreviewEventContainer event={event.validValue} />
           <div className={style.buttonContainer}>
             <Button onClick={addEvent}>Opprett arrangement</Button>
             <Button displayAsLink onClick={() => setPreviewState(false)}>

@@ -32,7 +32,7 @@ export const TextArea = ({
       </label>
       <TextareaAutosize
         className={inputStyle}
-        minRows={1}
+        minRows={2}
         id={label}
         placeholder={placeholder}
         value={value}

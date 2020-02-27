@@ -1,24 +1,24 @@
 @import 'src/style/constants';
-@import 'src/style/fonts';
 
 .textLabel {
   display: block;
-  margin-top: 20px;
+  margin-top: 50px;
   padding-bottom: 5px;
-  @include regularText;
+  @include boldText;
 }
 
 .textArea {
   width: 100%;
-  resize: vertical;
   line-height: 1.5;
   outline: none;
   border: none;
   border-bottom: solid 1px;
-  border-color: var(--textColor);
+  border-color: var(--disabled);
   background-color: var(--backgroundColor);
   display: block;
+  padding: 10px 10px 0 10px;
   @include regularText;
+  resize: vertical;
 }
 
 .visited {
