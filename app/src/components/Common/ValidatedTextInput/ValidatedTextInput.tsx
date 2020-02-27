@@ -1,5 +1,5 @@
 import React from 'react';
-import { Result } from 'src/types/validation';
+import { Editable } from 'src/types/validation';
 import { useState } from 'react';
 import { ValidationResult } from '../ValidationResult/ValidationResult';
 import { TextInput } from '../TextInput/TextInput';
@@ -7,7 +7,7 @@ import { TextInput } from '../TextInput/TextInput';
 interface ValidTextInputProps {
   label: string;
   placeholder?: string;
-  value: Result<string, any>;
+  value: Editable<string, any>;
   onChange: (value: string) => void;
 }
 

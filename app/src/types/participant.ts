@@ -1,11 +1,21 @@
-import { Result, isOk, validate } from './validation';
-import { parseEmail, serializeEmail, Email } from './email';
-import { concatLists } from 'src/types';
+import {
+  Editable,
+  validate,
+  IError,
+  isIErrorList,
+  editable,
+} from './validation';
+import {
+  Email,
+  toEmailWriteModel,
+  parseEmailViewModel,
+  toEditEmail,
+} from './email';
+import { isErrorFree } from 'src/utils';
 
 export interface IParticipantWriteModel {
   name: string;
   email: string;
-  eventId: string;
   comment: string;
 }
 
@@ -25,107 +35,100 @@ export interface INewParticipantViewModel {
 export interface IParticipant {
   name: string;
   email: Email;
-  eventId: string;
   comment: string;
 }
 
 export interface IEditParticipant {
-  name: Result<string, string>;
-  email: Result<string, Email>;
-  eventId: string;
-  comment: Result<string, string>;
+  name: Editable<string, string>;
+  email: Editable<string, Email>;
+  comment: Editable<string, string>;
 }
 
-export const serializeParticipant = (
+export const toParticipantWriteModel = (
   participant: IParticipant
 ): IParticipantWriteModel => {
   return {
     ...participant,
-    email: serializeEmail(participant.email),
+    email: toEmailWriteModel(participant.email),
   };
 };
 
-export const deserializeParticipant = (
-  participant: IParticipantViewModel
-): IEditParticipant => {
-  const email = parseEmail(participant.email);
-  const name = parseName(participant.name);
-  const comment = parseComment(participant.comment);
-  return {
-    ...participant,
+export const parseParticipantViewModel = (
+  participantView: IParticipantViewModel
+): IParticipant => {
+  const email = parseEmailViewModel(participantView.email);
+  const name = parseName(participantView.name);
+  const comment = parseComment(participantView.comment);
+  const participant = {
+    ...participantView,
     email,
     name,
     comment,
   };
-};
 
-export const parseParticipant = (
-  participant: IEditParticipant
-): Result<IEditParticipant, IParticipant> => {
-  if (
-    isOk(participant.email) &&
-    isOk(participant.name) &&
-    isOk(participant.comment)
-  ) {
-    return {
-      editValue: participant,
-      errors: undefined,
-      validValue: {
-        ...participant,
-        email: participant.email.validValue,
-        name: participant.name.validValue,
-        comment: participant.comment.validValue,
-      },
+  if (!isErrorFree(participant)) {
+    throw {
+      status: 'ERROR',
+      userMessage:
+        'Participant kan ikke parses av følgende grunner: ' +
+        Object.values(participant)
+          .filter(isIErrorList)
+          .flat()
+          .map(x => x.message)
+          .join(', '),
     };
   }
 
-  const errors = concatLists(
-    participant.name.errors,
-    participant.comment.errors,
-    participant.email.errors
-  );
-
-  return {
-    editValue: participant,
-    errors,
-  };
+  return participant;
 };
 
-export const maybeParseParticipant = (
-  participantContract: IParticipantViewModel
-): IParticipant => {
-  const deserializedParticipant = deserializeParticipant(participantContract);
-  const domainParticipant = parseParticipant(deserializedParticipant);
-  if (isOk(domainParticipant)) {
-    return domainParticipant.validValue;
+export const parseEditParticipant = ({
+  name,
+  email,
+  comment,
+}: IEditParticipant): IParticipant | IError[] => {
+  const participant = {
+    name: name.errors ?? name.validValue,
+    email: email.errors ?? email.validValue,
+    comment: comment.errors ?? comment.validValue,
+  };
+
+  if (!isErrorFree(participant)) {
+    return Object.values(participant)
+      .filter(isIErrorList)
+      .flat();
   }
 
-  throw {
-    status: 'ERROR',
-    userMessage:
-      'Deltakeren kan ikke parses av følgende grunner: ' +
-      domainParticipant.errors.map(x => x.message).join(', '),
-  };
+  return participant;
 };
 
-export const parseName = (value: string): Result<string, string> => {
-  const validator = validate<string, string>(value, {
+export const toEditParticipant = ({
+  name,
+  email,
+  comment,
+}: IParticipant): IEditParticipant => ({
+  name: editable(name),
+  email: editable(toEditEmail(email)),
+  comment: editable(comment),
+});
+
+export const parseName = (value: string): string | IError[] => {
+  const validator = validate<string, string>({
     'Navn må ha minst tre tegn': value.length < 3,
     'Navn kan ha maks 60 tegn': value.length > 60,
   });
   return validator.resolve(value);
 };
 
-export const parseComment = (value: string): Result<string, string> => {
-  const validator = validate<string, string>(value, {
+export const parseComment = (value: string): string | IError[] => {
+  const validator = validate<string, string>({
     'Kommentar kan ha maks 500 tegn': value.length > 500,
   });
   return validator.resolve(value);
 };
 
-export const initalParticipant: IEditParticipant = {
-  eventId: '0',
-  email: parseEmail(''),
-  name: parseName(''),
-  comment: parseComment(''),
+export const initalParticipant: IParticipant = {
+  email: { email: '' },
+  name: '',
+  comment: '',
 };

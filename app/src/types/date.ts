@@ -1,10 +1,11 @@
-import { validate, Result } from './validation';
+import { validate, IError } from './validation';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/esm/locale';
+import { identityFunction } from 'src/utils';
 
 export type IDateContract = IDate;
-
-export type EditDate = string;
+export type IDateWriteModel = IDateContract;
+export type IDateViewModel = IDateContract;
 
 export interface IDate {
   day: number;
@@ -12,7 +13,9 @@ export interface IDate {
   year: number;
 }
 
-export const parseDate = (date: EditDate): Result<EditDate, IDate> => {
+export type EditDate = string;
+
+export const parseEditDate = (date: EditDate): IDate | IError[] => {
   const dateISO8601 = /^([0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/;
   const dates = date.match(dateISO8601) || [];
 
@@ -20,7 +23,7 @@ export const parseDate = (date: EditDate): Result<EditDate, IDate> => {
   const month = Number(dates[2]);
   const day = Number(dates[3]);
 
-  const validator = validate<EditDate, IDate>(dates[0] || date, {
+  const validator = validate<EditDate, IDate>({
     'Trenger år, måned og dato i DD-MM-YYYY format': dates.length <= 3,
     'År må være et heltall': !Number.isInteger(year),
     'Måned må være et heltall': !Number.isInteger(month),
@@ -34,7 +37,17 @@ export const parseDate = (date: EditDate): Result<EditDate, IDate> => {
   });
 };
 
-export const dateAsText = (date: IDate) => {
+export const parseDateViewModel = identityFunction;
+export const toDateWriteModel = identityFunction;
+
+export const toEditDate = ({ year, month, day }: IDate): EditDate =>
+  `${day.toString().padStart(2, '0')}.${month
+    .toString()
+    .padStart(2, '0')}.${year}`;
+
+// Util functions
+
+export const dateAsText = (date: IDate): string => {
   return format(
     new Date(date.year, date.month - 1, date.day),
     'cccc dd. MMMM yyyy',
@@ -70,29 +83,13 @@ export const datesInOrder = ({
   return false;
 };
 
-export const deserializeDate = ({
-  year,
-  month,
-  day,
-}: IDateContract): EditDate =>
-  `${year}-${month.toString().padStart(2, '0')}-${day
+export const stringifyDate = ({ year, month, day }: IDate): string =>
+  `${year.toString().padStart(4, '0')}.${month
     .toString()
-    .padStart(2, '0')}`;
+    .padStart(2, '0')}.${day.toString().padStart(2, '0')}`;
 
-export const stringifyDate = ({ year, month, day }: IDate) =>
-  `${day.toString().padStart(2, '0')}.${month
-    .toString()
-    .padStart(2, '0')}.${year}`;
-
-export const getTodayDeserialized = () => {
-  const today = new Date();
-  return dateToString(today);
-};
-
-export const dateToString = (date: Date) => {
-  return deserializeDate({
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate(),
-  });
-};
+export const dateToIDate = (date: Date): IDate => ({
+  year: date.getFullYear(),
+  month: date.getMonth() + 1,
+  day: date.getDate(),
+});

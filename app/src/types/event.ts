@@ -1,36 +1,36 @@
-import { Result, isOk } from 'src/types/validation';
+import { Editable, IError, isIErrorList, editable } from 'src/types/validation';
 import {
-  concatLists,
   parseTitle,
   parseDescription,
   parseHost,
   parseMaxAttendees,
   parseLocation,
-  deserializeMaxAttendees,
   WithId,
   parseQuestion,
+  toEditMaxAttendees,
 } from '.';
+import { IDateTime, EditDateTime, toEditDateTime } from 'src/types/date-time';
 import {
-  IDateTime,
-  EditDateTime,
-  parseDateTime,
-  deserializeDateTime,
-} from 'src/types/date-time';
-import { parseEmail, Email, serializeEmail } from 'src/types/email';
+  Email,
+  toEditEmail,
+  parseEditEmail,
+  toEmailWriteModel,
+} from 'src/types/email';
 import {
   TimeInstanceContract,
-  EditTimeInstance,
+  TimeInstanceEdit,
   TimeInstance,
-  deserializeTimeInstance,
-  parseTimeInstance,
-  serializeTimeInstance,
+  parseTimeInstanceViewModel,
+  toTimeInstanceWriteModel,
+  toEditTimeInstance,
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
-import { dateToString } from './date';
+import { isErrorFree } from 'src/utils';
+import { parseDateViewModel, dateToIDate } from 'src/types/date';
 
 export type EventId = string;
 
-export type IEventList = Map<EventId, IEvent>;
+export type EventList = Map<EventId, IEvent>;
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -64,19 +64,6 @@ export interface IEventWriteModel {
   participantQuestion: string;
 }
 
-export interface IEditEvent {
-  title: Result<string, string>;
-  description: Result<string, string>;
-  location: Result<string, string>;
-  start: Result<EditDateTime, IDateTime>;
-  end: Result<EditDateTime, IDateTime>;
-  openForRegistration: Result<EditTimeInstance, TimeInstance>;
-  organizerName: Result<string, string>;
-  organizerEmail: Result<string, Email>;
-  maxParticipants: Result<string, number>;
-  participantQuestion: Result<string, string>;
-}
-
 export interface IEvent {
   title: string;
   description: string;
@@ -90,141 +77,161 @@ export interface IEvent {
   participantQuestion: string;
 }
 
-export const serializeEvent = (
+export interface IEditEvent {
+  title: Editable<string, string>;
+  description: Editable<string, string>;
+  location: Editable<string, string>;
+  start: Editable<EditDateTime, IDateTime>;
+  end: Editable<EditDateTime, IDateTime>;
+  openForRegistrationTime: Editable<TimeInstanceEdit, TimeInstance>;
+  organizerName: Editable<string, string>;
+  organizerEmail: Editable<string, Email>;
+  maxParticipants: Editable<string, number>;
+  participantQuestion: Editable<string, string>;
+}
+
+export const parseEditEvent = ({
+  title,
+  description,
+  location,
+  start,
+  end,
+  openForRegistrationTime,
+  organizerName,
+  organizerEmail,
+  maxParticipants,
+  participantQuestion,
+}: IEditEvent): IEvent | IError[] => {
+  const event = {
+    title: title.errors ?? title.validValue,
+    description: description.errors ?? description.validValue,
+    location: location.errors ?? location.validValue,
+    start: start.errors ?? start.validValue,
+    end: end.errors ?? end.validValue,
+    openForRegistrationTime:
+      openForRegistrationTime.errors ?? openForRegistrationTime.validValue,
+    organizerName: organizerName.errors ?? organizerName.validValue,
+    organizerEmail: organizerEmail.errors ?? organizerEmail.validValue,
+    maxParticipants: maxParticipants.errors ?? maxParticipants.validValue,
+    participantQuestion:
+      participantQuestion.errors ?? participantQuestion.validValue,
+  };
+
+  if (!isErrorFree(event)) {
+    const errors = Object.values(event)
+      .filter(isIErrorList)
+      .flat();
+
+    return errors;
+  }
+
+  return event;
+};
+
+export const toEventWriteModel = (
   event: IEvent,
-  redirectUrlTemplate: string = ''
+  editUrlTemplate: string = ''
 ): IEventWriteModel => ({
-  title: event.title,
-  description: event.description,
-  location: event.location,
+  ...event,
+  openForRegistrationTime: toTimeInstanceWriteModel(
+    event.openForRegistrationTime
+  ),
+  organizerEmail: toEmailWriteModel(event.organizerEmail),
   startDate: event.start,
   endDate: event.end,
-  openForRegistrationTime: serializeTimeInstance(event.openForRegistrationTime),
-  organizerName: event.organizerName,
-  organizerEmail: serializeEmail(event.organizerEmail),
-  maxParticipants: event.maxParticipants,
-  editUrlTemplate: redirectUrlTemplate,
-  participantQuestion: event.participantQuestion,
+  editUrlTemplate,
 });
 
-export const deserializeEvent = (event: IEventViewModel): IEditEvent => {
-  const title = parseTitle(event.title);
-  const location = parseLocation(event.location);
-  const description = parseDescription(event.description);
+export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
+  const title = parseTitle(eventView.title);
+  const location = parseLocation(eventView.location);
+  const description = parseDescription(eventView.description);
 
-  const start = parseDateTime(deserializeDateTime(event.startDate));
-  const end = parseDateTime(deserializeDateTime(event.endDate));
-  const openForRegistration = parseTimeInstance(
-    deserializeTimeInstance(event.openForRegistrationTime)
+  const start = parseDateViewModel(eventView.startDate);
+  const end = parseDateViewModel(eventView.endDate);
+  const openForRegistration = parseTimeInstanceViewModel(
+    eventView.openForRegistrationTime
   );
 
-  const organizerName = parseHost(event.organizerName);
-  const organizerEmail = parseEmail(event.organizerEmail);
-  const maxParticipants = parseMaxAttendees(
-    deserializeMaxAttendees(event.maxParticipants)
-  );
-  const participantQuestion = parseQuestion(event.participantQuestion);
+  const organizerName = parseHost(eventView.organizerName);
+  const organizerEmail = parseEditEmail(eventView.organizerEmail);
+  const maxParticipants = eventView.maxParticipants;
+  const participantQuestion = parseQuestion(eventView.participantQuestion);
 
-  return {
+  const event = {
     title,
     location,
     description,
     start,
     end,
-    openForRegistration,
+    openForRegistrationTime: openForRegistration,
     organizerName,
     organizerEmail,
     maxParticipants,
     participantQuestion,
   };
-};
 
-export const parseEvent = (event: IEditEvent): Result<IEditEvent, IEvent> => {
-  if (
-    isOk(event.start) &&
-    isOk(event.end) &&
-    isOk(event.openForRegistration) &&
-    isOk(event.title) &&
-    isOk(event.location) &&
-    isOk(event.description) &&
-    isOk(event.organizerName) &&
-    isOk(event.organizerEmail) &&
-    isOk(event.maxParticipants) &&
-    isOk(event.participantQuestion)
-  ) {
-    return {
-      editValue: event,
-      errors: undefined,
-      validValue: {
-        title: event.title.validValue,
-        description: event.description.validValue,
-        location: event.location.validValue,
-        start: event.start.validValue,
-        end: event.end.validValue,
-        openForRegistrationTime: event.openForRegistration.validValue,
-        organizerName: event.organizerName.validValue,
-        organizerEmail: event.organizerEmail.validValue,
-        maxParticipants: event.maxParticipants.validValue,
-        participantQuestion: event.participantQuestion.validValue,
-      },
+  if (!isErrorFree(event)) {
+    throw {
+      status: 'ERROR',
+      userMessage:
+        'Arrangementobjektet kan ikke parses av følgende grunner: ' +
+        Object.values(event)
+          .filter(isIErrorList)
+          .flat()
+          .map(x => x.message)
+          .join(', '),
     };
   }
 
-  const errors = concatLists(
-    event.start.errors,
-    event.end.errors,
-    event.openForRegistration.errors,
-    event.title.errors,
-    event.description.errors,
-    event.organizerName.errors,
-    event.organizerEmail.errors,
-    event.maxParticipants.errors
-  );
-
-  return {
-    editValue: event,
-    errors,
-  };
+  return event;
 };
 
-export const initialEditEvent = (): IEditEvent => {
+export const toEditEvent = ({
+  title,
+  description,
+  location,
+  start,
+  end,
+  openForRegistrationTime,
+  organizerName,
+  organizerEmail,
+  maxParticipants,
+  participantQuestion,
+}: IEvent): IEditEvent => ({
+  title: editable(title),
+  description: editable(description),
+  location: editable(location),
+  start: editable(toEditDateTime(start)),
+  end: editable(toEditDateTime(end)),
+  openForRegistrationTime: editable(
+    toEditTimeInstance(openForRegistrationTime)
+  ),
+  organizerName: editable(organizerName),
+  organizerEmail: editable(toEditEmail(organizerEmail)),
+  maxParticipants: editable(toEditMaxAttendees(maxParticipants)),
+  participantQuestion: editable(participantQuestion),
+});
+
+export const initialEvent = (): IEvent => {
   const eventStartDate = addWeeks(2, new Date());
   const openForRegistrationTime = addWeeks(-1, eventStartDate);
   return {
-    title: parseTitle(''),
-    description: parseDescription(''),
-    location: parseLocation(''),
-    start: parseDateTime({
-      date: dateToString(eventStartDate),
-      time: ['17', '00'],
-    }),
-    end: parseDateTime({
-      date: dateToString(eventStartDate),
-      time: ['20', '00'],
-    }),
-    openForRegistration: parseTimeInstance(
-      deserializeTimeInstance(openForRegistrationTime.getTime().toString())
-    ),
-    organizerName: parseHost(''),
-    organizerEmail: parseEmail(''),
-    maxParticipants: parseMaxAttendees(''),
-    participantQuestion: parseQuestion(''),
-  };
-};
-
-export const maybeParseEvent = (eventContract: IEventViewModel): IEvent => {
-  const deserializedEvent = deserializeEvent(eventContract);
-  const domainEvent = parseEvent(deserializedEvent);
-  if (isOk(domainEvent)) {
-    return domainEvent.validValue;
-  }
-  // Man får egt bare lov å kaste new Error
-  // men det er tull
-  // eslint-disable-next-line
-  throw {
-    status: 'ERROR',
-    userMessage:
-      'Arrangementobjektet kan ikke parses av følgende grunner: ' +
-      domainEvent.errors.map(x => x.message).join(', '),
+    title: '',
+    description: '',
+    location: '',
+    start: {
+      date: dateToIDate(eventStartDate),
+      time: { hour: 17, minute: 0 },
+    },
+    end: {
+      date: dateToIDate(eventStartDate),
+      time: { hour: 17, minute: 0 },
+    },
+    openForRegistrationTime,
+    organizerName: '',
+    organizerEmail: { email: '' },
+    maxParticipants: 0,
+    participantQuestion: '',
   };
 };

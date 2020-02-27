@@ -15,7 +15,7 @@ import {
   parseName,
   parseComment,
 } from 'src/types/participant';
-import { Result, isOk } from 'src/types/validation';
+import { Editable, isValid } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import {
   cancelParticipantRoute,
@@ -40,7 +40,7 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
   const [participant, setParticipant] = useState<
-    Result<IEditParticipant, IParticipant>
+    Editable<IEditParticipant, IParticipant>
   >(parseParticipant({ ...initalParticipant, eventId }));
   const [wasCopied, setWasCopied] = useState(false);
   const history = useHistory();
@@ -87,7 +87,7 @@ export const ViewEventContainer = () => {
       : event.participantQuestion;
 
   const addParticipant = catchAndNotify(async () => {
-    if (isOk(participant)) {
+    if (isValid(participant)) {
       const cancelUrlTemplate =
         document.location.origin +
         cancelParticipantRoute({

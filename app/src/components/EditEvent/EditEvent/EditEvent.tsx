@@ -13,7 +13,7 @@ import { parseEmail } from 'src/types/email';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
 import { IDateTime, EditDateTime, isInOrder } from 'src/types/date-time';
-import { Result, isOk } from 'src/types/validation';
+import { Editable, isValid } from 'src/types/validation';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -148,19 +148,19 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
 };
 
 type Action =
-  | ['set-start', Result<EditDateTime, IDateTime>]
-  | ['set-end', Result<EditDateTime, IDateTime>];
+  | ['set-start', Editable<EditDateTime, IDateTime>]
+  | ['set-end', Editable<EditDateTime, IDateTime>];
 
 type State = {
-  start: Result<EditDateTime, IDateTime>;
-  end: Result<EditDateTime, IDateTime>;
+  start: Editable<EditDateTime, IDateTime>;
+  end: Editable<EditDateTime, IDateTime>;
 };
 
 const setStartEndDates = (
   { start, end }: State,
   [type, date]: Action
 ): State => {
-  if (isOk(start) && isOk(end) && isOk(date)) {
+  if (isValid(start) && isValid(end) && isValid(date)) {
     const first = type === 'set-start' ? date : start;
     const last = type === 'set-end' ? date : end;
 

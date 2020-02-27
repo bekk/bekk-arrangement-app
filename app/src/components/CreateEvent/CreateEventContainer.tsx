@@ -7,7 +7,7 @@ import {
   initialEditEvent,
 } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
-import { isOk, Result } from 'src/types/validation';
+import { isValid, Editable } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { viewEventRoute, eventsRoute, editEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
@@ -23,17 +23,17 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 export const CreateEventContainer = () => {
   useAuthentication();
 
-  const [event, setEvent] = useState<Result<IEditEvent, IEvent>>(
+  const [event, setEvent] = useState<Editable<IEditEvent, IEvent>>(
     parseEvent(initialEditEvent())
   );
   const [previewState, setPreviewState] = useState(false);
-  const isDisabled = !isOk(event);
+  const isDisabled = !isValid(event);
   const history = useHistory();
   const { catchAndNotify } = useNotification();
   const { saveEditableEvents } = useSavedEditableEvents();
 
   const addEvent = catchAndNotify(async () => {
-    if (isOk(event)) {
+    if (isValid(event)) {
       const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
@@ -46,7 +46,7 @@ export const CreateEventContainer = () => {
   });
 
   const validatePreview = () => {
-    if (isOk(event)) {
+    if (isValid(event)) {
       setPreviewState(true);
     }
   };
@@ -55,7 +55,7 @@ export const CreateEventContainer = () => {
     setEvent(parseEvent(editEvent));
 
   const renderPreviewEvent = () => {
-    if (isOk(event)) {
+    if (isValid(event)) {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />

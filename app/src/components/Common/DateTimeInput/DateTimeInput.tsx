@@ -3,14 +3,14 @@ import { DateInput } from '../DateInput/DateInput';
 import { TimeInput } from '../TimeInput/TimeInput';
 import { EditDateTime, IDateTime, parseDateTime } from 'src/types/date-time';
 import style from './DateTimeInput.module.scss';
-import { Result } from 'src/types/validation';
+import { Editable } from 'src/types/validation';
 import classNames from 'classnames';
 import { ValidationResult } from '../ValidationResult/ValidationResult';
 
 interface IProps {
   label: string;
-  value: Result<EditDateTime, IDateTime>;
-  onChange: (datetime: Result<EditDateTime, IDateTime>) => void;
+  value: Editable<EditDateTime, IDateTime>;
+  onChange: (datetime: Editable<EditDateTime, IDateTime>) => void;
 }
 
 export const DateTimeInput = ({ label, value, onChange }: IProps) => {

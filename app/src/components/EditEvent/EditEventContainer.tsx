@@ -3,13 +3,13 @@ import React from 'react';
 import {
   parseEvent,
   IEditEvent,
-  deserializeEvent,
+  parseEventViewModel,
   IEvent,
   serializeEvent,
 } from 'src/types/event';
 import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
-import { isOk, Result } from 'src/types/validation';
+import { isValid, Editable } from 'src/types/validation';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
@@ -27,7 +27,7 @@ export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
 
   const remoteEvent = useEvent(eventId);
-  const [event, setEvent] = useState<Result<IEditEvent, IEvent>>();
+  const [event, setEvent] = useState<Editable<IEditEvent, IEvent>>();
   const [previewState, setPreviewState] = useState(false);
   const history = useHistory();
   const editToken = useQuery('editToken');
@@ -38,7 +38,9 @@ export const EditEventContainer = () => {
 
   useLayoutEffect(() => {
     if (hasLoaded(remoteEvent)) {
-      setEvent(parseEvent(deserializeEvent(serializeEvent(remoteEvent.data))));
+      setEvent(
+        parseEvent(parseEventViewModel(serializeEvent(remoteEvent.data)))
+      );
     }
   }, [remoteEvent]);
 
@@ -53,10 +55,10 @@ export const EditEventContainer = () => {
   }
 
   const putEditedEvent =
-    isOk(event) &&
+    isValid(event) &&
     catchAndNotify(async () => {
       const updatedEvent = await putEvent(eventId, event.validValue, editToken);
-      setEvent(parseEvent(deserializeEvent(updatedEvent)));
+      setEvent(parseEvent(parseEventViewModel(updatedEvent)));
       history.push(viewEventRoute(eventId));
     });
 
@@ -91,7 +93,10 @@ export const EditEventContainer = () => {
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={event.editValue} updateEvent={updateEvent} />
       <div className={style.previewButton}>
-        <Button onClick={() => setPreviewState(true)} disabled={!isOk(event)}>
+        <Button
+          onClick={() => setPreviewState(true)}
+          disabled={!isValid(event)}
+        >
           Forhåndsvis endringer
         </Button>
       </div>
@@ -104,7 +109,7 @@ export const EditEventContainer = () => {
   );
 
   const renderPreviewEvent = () => {
-    if (putEditedEvent && isOk(event)) {
+    if (putEditedEvent && isValid(event)) {
       return (
         <Page>
           <PreviewEvent event={event.validValue} />

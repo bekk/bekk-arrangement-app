@@ -1,17 +1,17 @@
 import React from 'react';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import style from './DateTimeInput.module.scss';
-import { Result } from 'src/types/validation';
+import { Editable } from 'src/types/validation';
 import classNames from 'classnames';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
-import { parseTimeInstance, EditTimeInstance } from 'src/types/time-instance';
+import { parseTimeInstance, TimeInstanceEdit } from 'src/types/time-instance';
 import { TimezoneDropdown } from 'src/components/Common/TimeInput/TimezoneDropdown';
 import { TimeInput } from '../TimeInput/TimeInput';
 
 interface IProps {
   label: string;
-  value: Result<EditTimeInstance, Date>;
-  onChange: (datetime: Result<EditTimeInstance, Date>) => void;
+  value: Editable<TimeInstanceEdit, Date>;
+  onChange: (datetime: Editable<TimeInstanceEdit, Date>) => void;
 }
 
 export const DateTimeInputWithTimezone = ({
