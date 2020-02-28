@@ -21,7 +21,7 @@ import {
   parseTimeViewModel,
   toTimeWriteModel,
 } from 'src/types/time';
-import { IError, isIErrorList } from 'src/types/validation';
+import { IError, isValid } from 'src/types/validation';
 import { isAfter, isBefore } from 'date-fns';
 import { concatLists } from 'src/utils';
 
@@ -48,7 +48,7 @@ export const parseEditDateTime = (
   const date = parseEditDate(datetime.date);
   const time = parseEditTime(datetime.time);
 
-  if (!isIErrorList(date) && !isIErrorList(time)) {
+  if (isValid(date) && isValid(time)) {
     return { date, time };
   }
 

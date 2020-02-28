@@ -108,7 +108,7 @@ export const toEditParticipant = ({
 });
 
 export const parseName = (value: string): string | IError[] => {
-  const validator = validate<string, string>({
+  const validator = validate<string>({
     'Navn må ha minst tre tegn': value.length < 3,
     'Navn kan ha maks 60 tegn': value.length > 60,
   });
@@ -116,7 +116,7 @@ export const parseName = (value: string): string | IError[] => {
 };
 
 export const parseComment = (value: string): string | IError[] => {
-  const validator = validate<string, string>({
+  const validator = validate<string>({
     'Kommentar kan ha maks 500 tegn': value.length > 500,
   });
   return validator.resolve(value);

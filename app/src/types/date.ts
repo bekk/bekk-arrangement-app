@@ -23,7 +23,7 @@ export const parseEditDate = (date: EditDate): IDate | IError[] => {
   const month = Number(dates[2]);
   const day = Number(dates[3]);
 
-  const validator = validate<EditDate, IDate>({
+  const validator = validate<IDate>({
     'Trenger år, måned og dato i DD-MM-YYYY format': dates.length <= 3,
     'År må være et heltall': !Number.isInteger(year),
     'Måned må være et heltall': !Number.isInteger(month),

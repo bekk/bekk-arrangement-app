@@ -7,7 +7,6 @@ import {
   parseEditEvent,
 } from 'src/types/event';
 import { postEvent } from 'src/api/arrangementSvc';
-import { isIErrorList } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { viewEventRoute, eventsRoute, editEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
@@ -19,6 +18,7 @@ import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import style from './CreateEventContainer.module.scss';
+import { isValid } from 'src/types/validation';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -26,14 +26,13 @@ export const CreateEventContainer = () => {
 
   const [event, setEvent] = useState<IEditEvent>(toEditEvent(initialEvent()));
   const parsedEvent = parseEditEvent(event);
-  const isInvalid = isIErrorList(parsedEvent);
 
   const history = useHistory();
   const { catchAndNotify } = useNotification();
   const { saveEditableEvents } = useSavedEditableEvents();
 
   const addEvent = catchAndNotify(async () => {
-    if (!isIErrorList(parsedEvent)) {
+    if (isValid(parsedEvent)) {
       const editUrlTemplate =
         document.location.origin + editEventRoute('{eventId}', '{editToken}');
       const {
@@ -46,13 +45,13 @@ export const CreateEventContainer = () => {
   });
 
   const validatePreview = () => {
-    if (!isInvalid) {
+    if (isValid(parsedEvent)) {
       setPreviewState(true);
     }
   };
 
   const renderPreviewEvent = () => {
-    if (!isIErrorList(parsedEvent)) {
+    if (isValid(parsedEvent)) {
       return (
         <Page>
           <PreviewEvent event={parsedEvent} />
@@ -72,7 +71,7 @@ export const CreateEventContainer = () => {
       <h1 className={style.header}>Opprett arrangement</h1>
       <EditEvent eventResult={event} updateEvent={setEvent} />
       <div className={style.buttonContainer}>
-        <Button onClick={validatePreview} disabled={isInvalid}>
+        <Button onClick={validatePreview} disabled={!isValid(parsedEvent)}>
           Forhåndsvisning
         </Button>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>

@@ -24,7 +24,7 @@ export const parseEditTimeInstance = (t: TimeInstanceEdit): Date | IError[] => {
 
   const dateTimeStamp = Date.parse(timeDateString);
 
-  const validator = validate<TimeInstanceEdit, Date>({
+  const validator = validate<Date>({
     'Tiden er ugyldig': isNaN(dateTimeStamp),
   });
   return validator.resolve(new Date(dateTimeStamp));

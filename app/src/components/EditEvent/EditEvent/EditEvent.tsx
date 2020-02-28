@@ -16,8 +16,8 @@ import {
   isInOrder,
   parseEditDateTime,
 } from 'src/types/date-time';
-import { isIErrorList } from 'src/types/validation';
 import { parseEditEmail } from 'src/types/email';
+import { isValid } from 'src/types/validation';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -170,11 +170,7 @@ const setStartEndDates = (
   const parsedStart = parseEditDateTime(start);
   const parsedEnd = parseEditDateTime(end);
   const parsedDate = parseEditDateTime(date);
-  if (
-    !isIErrorList(parsedStart) &&
-    !isIErrorList(parsedEnd) &&
-    !isIErrorList(parsedDate)
-  ) {
+  if (isValid(parsedStart) && isValid(parsedEnd) && isValid(parsedDate)) {
     const first = type === 'set-start' ? parsedDate : parsedStart;
     const last = type === 'set-end' ? parsedDate : parsedEnd;
 

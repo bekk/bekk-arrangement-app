@@ -15,7 +15,6 @@ import {
   toEditParticipant,
   parseEditParticipant,
 } from 'src/types/participant';
-import { isIErrorList } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import {
   cancelParticipantRoute,
@@ -36,6 +35,7 @@ import {
   useSavedParticipations,
 } from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { isValid } from 'src/types/validation';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
@@ -45,7 +45,7 @@ export const ViewEventContainer = () => {
   );
   const validParticipant = (() => {
     const vParticipant = parseEditParticipant(participant);
-    if (!isIErrorList(vParticipant)) {
+    if (isValid(vParticipant)) {
       return vParticipant;
     }
   })();

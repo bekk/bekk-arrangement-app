@@ -3,9 +3,9 @@ import { DateInput } from '../DateInput/DateInput';
 import { TimeInput } from '../TimeInput/TimeInput';
 import { EditDateTime, parseEditDateTime } from 'src/types/date-time';
 import style from './DateTimeInput.module.scss';
-import { isIErrorList } from 'src/types/validation';
 import classNames from 'classnames';
 import { ValidationResult } from '../ValidationResult/ValidationResult';
+import { isValid } from 'src/types/validation';
 
 interface IProps {
   label: string;
@@ -15,11 +15,9 @@ interface IProps {
 
 export const DateTimeInput = ({ label, value, onChange }: IProps) => {
   const dateTime = parseEditDateTime(value);
-  const hasErrors = isIErrorList(dateTime);
-  console.log(value);
 
   const containerStyle = classNames(style.container, {
-    [style.error]: hasErrors,
+    [style.error]: !isValid(dateTime),
   });
   return (
     <section className={style.grid}>
@@ -36,9 +34,7 @@ export const DateTimeInput = ({ label, value, onChange }: IProps) => {
           onChange={time => onChange({ ...value, time })}
         />
       </div>
-      {isIErrorList(dateTime) && (
-        <ValidationResult validationResult={dateTime} />
-      )}
+      {!isValid(dateTime) && <ValidationResult validationResult={dateTime} />}
     </section>
   );
 };

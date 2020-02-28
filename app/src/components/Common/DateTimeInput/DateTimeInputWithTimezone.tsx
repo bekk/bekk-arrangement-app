@@ -1,7 +1,6 @@
 import React from 'react';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import style from './DateTimeInput.module.scss';
-import { Editable, isIErrorList } from 'src/types/validation';
 import classNames from 'classnames';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import {
@@ -10,6 +9,7 @@ import {
 } from 'src/types/time-instance';
 import { TimezoneDropdown } from 'src/components/Common/TimeInput/TimezoneDropdown';
 import { TimeInput } from '../TimeInput/TimeInput';
+import { isValid } from 'src/types/validation';
 
 interface IProps {
   label: string;
@@ -25,7 +25,7 @@ export const DateTimeInputWithTimezone = ({
   const timeInstance = parseEditTimeInstance(value);
 
   const containerStyle = classNames(style.container, {
-    [style.error]: isIErrorList(timeInstance),
+    [style.error]: !isValid(timeInstance),
   });
 
   return (
@@ -62,7 +62,7 @@ export const DateTimeInputWithTimezone = ({
           />
         </div>
       </div>
-      {isIErrorList(timeInstance) && (
+      {!isValid(timeInstance) && (
         <ValidationResult validationResult={timeInstance} />
       )}
     </section>

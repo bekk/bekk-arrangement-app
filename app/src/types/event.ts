@@ -33,7 +33,6 @@ import {
 import { addWeeks } from 'date-fns/esm/fp';
 import { isErrorFree } from 'src/utils';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
-import { parseEditTime } from 'src/types/time';
 import { parseName } from 'src/types/participant';
 
 export type EventId = string;

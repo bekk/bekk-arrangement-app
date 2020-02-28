@@ -15,32 +15,8 @@ const isIError = (error: any): error is IError =>
 export const isIErrorList = (errors: any): errors is IError[] =>
   Array.isArray(errors) && errors.every(isIError);
 
-export type Valid<EditType, ValidType> = {
-  editValue: EditType;
-  validValue: ValidType;
-  errors: undefined;
-};
-
-export type Invalid<EditType> = {
-  editValue: EditType;
-  errors: IError[];
-};
-
-export type Editable<EditType, ValidType> =
-  | Valid<EditType, ValidType>
-  | Invalid<EditType>;
-
-export function isValid<EditType, ValidType>(
-  result: Valid<EditType, ValidType> | Invalid<EditType>
-): result is Valid<EditType, ValidType> {
-  return result.errors === undefined;
-}
-
-export function isInvalid<EditType, ValidType>(
-  result: Valid<EditType, ValidType> | Invalid<EditType>
-): result is Invalid<EditType> {
-  return !isValid(result);
-}
+export const isValid = <T>(notErrors: T): notErrors is Exclude<T, IError[]> =>
+  !isIErrorList(notErrors);
 
 export const error = (message: string): IError => ({
   type: 'Error',
@@ -52,9 +28,7 @@ export const warning = (message: string): IError => ({
   message,
 });
 
-export const validate = <From, To>(
-  validations: Record<string, boolean> = {}
-) => {
+export const validate = <To>(validations: Record<string, boolean> = {}) => {
   const errorMessages = Object.entries(validations)
     .filter(([errorMessage, isError]) => isError)
     .map(([errorMessage]) => errorMessage);

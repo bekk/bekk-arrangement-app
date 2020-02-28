@@ -18,7 +18,7 @@ export const parseEditTime = ([_hour, _minutes]: EditTime):
   const hour = Number(_hour);
   const minute = Number(_minutes);
 
-  const validator = validate<EditTime, ITime>({
+  const validator = validate<ITime>({
     "Can't have more than 60 minutes in an hour": minute > 59,
     "Can't have negative number of minutes": minute < 0,
     'There are not more than 23 hours in a day': hour > 23,

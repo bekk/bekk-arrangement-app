@@ -20,7 +20,7 @@ import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
-import { isIErrorList } from 'src/types/validation';
+import { isValid } from 'src/types/validation';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
@@ -39,7 +39,7 @@ export const EditEventContainer = () => {
   const validEvent = (() => {
     if (event) {
       const vEvent = parseEditEvent(event);
-      if (!isIErrorList(vEvent)) {
+      if (isValid(vEvent)) {
         return vEvent;
       }
     }
