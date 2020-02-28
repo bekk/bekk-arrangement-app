@@ -11,13 +11,14 @@ import {
 } from 'src/types';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
+import { parseEditEmail } from 'src/types/email';
 import {
   EditDateTime,
-  isInOrder,
   parseEditDateTime,
+  isInOrder,
 } from 'src/types/date-time';
-import { parseEditEmail } from 'src/types/email';
 import { isValid } from 'src/types/validation';
+import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -56,8 +57,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
 
     <div>
       <ValidatedTextInput
-        label="E-post arrangør"
-        placeholder="ola.nordmann@bekk.no"
+        label={'Spørsmål til deltaker ved påmelding'}
+        placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
         value={event.organizerEmail}
         validation={parseEditEmail}
         onChange={organizerEmail =>
@@ -82,7 +83,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
       }
     />
 
-    <ValidatedTextInput
+    <ValidatedTextArea
       label={'Beskrivelse'}
       placeholder={'Dette er en beskrivelse'}
       value={event.description}

@@ -10,6 +10,8 @@ $desktopMaxWidth: 1025px;
 
 $headerDesktop: 50px;
 $headerMobile: 30px;
+$subHeaderDesktop: 37px;
+$subHeaderMobile: 25px;
 $textDesktop: 20px;
 $textMobile: 16px;
 $smallDesktop: 16px;
@@ -67,4 +69,13 @@ $transitionLength: 0.2s;
   font-size: $buttonMobile;
   text-align: center;
   overflow-wrap: break-word;
+}
+
+@mixin subHeaderText {
+  color: var(--lightTextColor);
+  font-size: $subHeaderMobile;
+  font-family: $fontRegular;
+  @media #{$desktop} {
+    font-size: $subHeaderDesktop;
+  }
 }

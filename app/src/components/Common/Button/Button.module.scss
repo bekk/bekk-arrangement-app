@@ -31,6 +31,12 @@
     border: 1px solid var(--lightTextColor);
     color: var(--disabled);
     cursor: initial;
+    &:hover {
+      cursor: default;
+      background-color: var(--backgroundColor);
+      border: 1px solid var(--lightTextColor);
+      color: var(--disabled);
+    }
   }
 }
 

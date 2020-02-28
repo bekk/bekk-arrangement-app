@@ -1,11 +1,6 @@
 import { useState, useLayoutEffect, useEffect } from 'react';
 import React from 'react';
-import {
-  IEditEvent,
-  parseEventViewModel,
-  toEditEvent,
-  parseEditEvent,
-} from 'src/types/event';
+import { IEditEvent, toEditEvent, parseEditEvent } from 'src/types/event';
 import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
 import { useParams, useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
@@ -13,14 +8,14 @@ import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
 import { Modal } from 'src/components/Common/Modal/Modal';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
-import { hasLoaded, isLoading } from 'src/remote-data';
+import { hasLoaded } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import { PreviewEvent } from 'src/components/PreviewEvent/PreviewEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
+import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 
 export const EditEventContainer = () => {
   const { eventId = 'URL-FEIL' } = useParams();
@@ -68,8 +63,7 @@ export const EditEventContainer = () => {
   const putEditedEvent =
     validEvent &&
     catchAndNotify(async () => {
-      const updatedEvent = await putEvent(eventId, validEvent, editToken);
-      setEvent(toEditEvent(parseEventViewModel(updatedEvent)));
+      await putEvent(eventId, validEvent, editToken);
       history.push(viewEventRoute(eventId));
     });
 
@@ -117,7 +111,7 @@ export const EditEventContainer = () => {
     if (putEditedEvent && validEvent) {
       return (
         <Page>
-          <PreviewEvent event={validEvent} />
+          <PreviewEventContainer event={validEvent} />
           <div className={style.buttonContainer}>
             <Button displayAsLink onClick={() => setPreviewState(false)}>
               Tilbake
