@@ -35,10 +35,6 @@ import { isErrorFree } from 'src/utils';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
-export type EventId = string;
-
-export type EventList = Map<EventId, IEvent>;
-
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
   editToken: string;

@@ -1,7 +1,6 @@
 import { validate, IError, isIErrorList } from './validation';
 import {
   Email,
-  toEmailWriteModel,
   parseEmailViewModel,
   toEditEmail,
   parseEditEmail,
@@ -10,8 +9,8 @@ import { isErrorFree } from 'src/utils';
 
 export interface IParticipantWriteModel {
   name: string;
-  email: string;
   comment: string;
+  cancelUrlTemplate: string;
 }
 
 export interface IParticipantViewModel {
@@ -40,11 +39,12 @@ export interface IEditParticipant {
 }
 
 export const toParticipantWriteModel = (
-  participant: IParticipant
+  participant: IParticipant,
+  cancelUrlTemplate: string = ''
 ): IParticipantWriteModel => {
   return {
     ...participant,
-    email: toEmailWriteModel(participant.email),
+    cancelUrlTemplate,
   };
 };
 

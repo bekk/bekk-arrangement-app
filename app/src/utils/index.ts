@@ -9,12 +9,6 @@ const materialize = <T>(list: T[] | undefined): T[] => {
   return Array.isArray(list) ? list : [];
 };
 
-export const getNow = () => {
-  const today = new Date();
-  return `${today.getFullYear()}-${today.getMonth() +
-    1}-${today.getDate()}T00:00`;
-};
-
 export const isErrorFree = <T>(
   x: T
 ): x is { [K in keyof T]: Exclude<T[K], IError[]> } =>

@@ -10,6 +10,7 @@ import {
   IParticipant,
   INewParticipantViewModel,
   IParticipantViewModel,
+  toParticipantWriteModel,
 } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { queryStringStringify } from 'src/utils/query-string';
@@ -72,11 +73,7 @@ export const postParticipant = (
     path: `/events/${eventId}/participants/${toEmailWriteModel(
       participant.email
     )}`,
-    body: {
-      name: participant.name,
-      comment: participant.comment,
-      cancelUrlTemplate,
-    },
+    body: toParticipantWriteModel(participant, cancelUrlTemplate),
   });
 
 export const deleteParticipant = ({

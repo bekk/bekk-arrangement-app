@@ -1,11 +1,11 @@
 import React from 'react';
-import { DateInput } from '../DateInput/DateInput';
-import { TimeInput } from '../TimeInput/TimeInput';
 import { EditDateTime, parseEditDateTime } from 'src/types/date-time';
 import style from './DateTimeInput.module.scss';
 import classNames from 'classnames';
-import { ValidationResult } from '../ValidationResult/ValidationResult';
 import { isValid } from 'src/types/validation';
+import { DateInput } from 'src/components/Common/DateInput/DateInput';
+import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
+import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 
 interface IProps {
   label: string;
