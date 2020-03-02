@@ -1,12 +1,11 @@
-import { validate, IError, isIErrorList } from './validation';
+import { validate, IError, assertIsValid } from './validation';
 import {
   Email,
   parseEmailViewModel,
   toEditEmail,
   parseEditEmail,
 } from './email';
-import { isErrorFree, listOfErrors } from 'src/utils';
-import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { listOfErrors } from 'src/utils';
 
 export interface IParticipantWriteModel {
   name: string;
@@ -55,6 +54,7 @@ export const parseParticipantViewModel = (
   const email = parseEmailViewModel(participantView.email);
   const name = parseName(participantView.name);
   const comment = parseComment(participantView.comment);
+
   const participant = {
     ...participantView,
     email,
@@ -62,16 +62,7 @@ export const parseParticipantViewModel = (
     comment,
   };
 
-  if (!isErrorFree(participant)) {
-    throw new UserNotification(
-      'Participant kan ikke parses av følgende grunner: ' +
-        Object.values(participant)
-          .filter(isIErrorList)
-          .flat()
-          .map(x => x.message)
-          .join(', ')
-    );
-  }
+  assertIsValid(participant);
 
   return participant;
 };
@@ -87,7 +78,9 @@ export const parseEditParticipant = ({
     comment: parseComment(comment),
   };
 
-  if (!isErrorFree(participant)) {
+  try {
+    assertIsValid(participant);
+  } catch {
     return listOfErrors(participant);
   }
 

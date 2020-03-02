@@ -1,3 +1,5 @@
+import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
+
 export type ErrorType = 'Error' | 'Warning';
 const isErrorType = (s: string): s is ErrorType =>
   s === 'Error' || s === 'Warning';
@@ -17,6 +19,21 @@ export const isIErrorList = (errors: any): errors is IError[] =>
 
 export const isValid = <T>(notErrors: T): notErrors is Exclude<T, IError[]> =>
   !isIErrorList(notErrors);
+
+export function assertIsValid<T>(
+  validValue: { [K in keyof T]: T[K] | IError[] }
+): asserts validValue is T {
+  if (Object.values(validValue).some(isIErrorList)) {
+    throw new UserNotification(
+      'Kunne ikke parses av følgende grunner: ' +
+        Object.values(validValue)
+          .filter(isIErrorList)
+          .flat()
+          .map(x => x.message)
+          .join(', ')
+    );
+  }
+}
 
 export const error = (message: string): IError => ({
   type: 'Error',

@@ -1,4 +1,4 @@
-import { IError, isIErrorList } from 'src/types/validation';
+import { IError, assertIsValid } from 'src/types/validation';
 import {
   parseTitle,
   parseDescription,
@@ -31,10 +31,9 @@ import {
   parseEditTimeInstance,
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
-import { isErrorFree } from 'src/utils';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
-import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { listOfErrors } from 'src/utils';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -119,12 +118,10 @@ export const parseEditEvent = ({
     participantQuestion: parseQuestion(participantQuestion),
   };
 
-  if (!isErrorFree(event)) {
-    const errors = Object.values(event)
-      .filter(isIErrorList)
-      .flat();
-
-    return errors;
+  try {
+    assertIsValid(event);
+  } catch {
+    return listOfErrors(event);
   }
 
   return event;
@@ -173,16 +170,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     participantQuestion,
   };
 
-  if (!isErrorFree(event)) {
-    throw new UserNotification(
-      'Arrangementobjektet kan ikke parses av følgende grunner: ' +
-        Object.values(event)
-          .filter(isIErrorList)
-          .flat()
-          .map(x => x.message)
-          .join(', ')
-    );
-  }
+  assertIsValid(event);
 
   return event;
 };

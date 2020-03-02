@@ -13,8 +13,3 @@ export const listOfErrors = (obj: Record<string, unknown>): IError[] =>
   Object.values(obj)
     .filter(isIErrorList)
     .flat();
-
-export const isErrorFree = <T>(
-  x: T
-): x is { [K in keyof T]: Exclude<T[K], IError[]> } =>
-  !Object.values(x).some(isIErrorList);
