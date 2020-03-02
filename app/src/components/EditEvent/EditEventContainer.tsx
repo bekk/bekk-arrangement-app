@@ -33,9 +33,9 @@ export const EditEventContainer = () => {
 
   const validEvent = (() => {
     if (event) {
-      const vEvent = parseEditEvent(event);
-      if (isValid(vEvent)) {
-        return vEvent;
+      const validEvent = parseEditEvent(event);
+      if (isValid(validEvent)) {
+        return validEvent;
       }
     }
   })();

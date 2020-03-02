@@ -230,6 +230,6 @@ export const initialEvent = (): IEvent => {
     organizerName: '',
     organizerEmail: { email: '' },
     maxParticipants: 0,
-    participantQuestion: '',
+    participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
   };
 };

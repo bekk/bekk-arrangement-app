@@ -57,8 +57,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
 
     <div>
       <ValidatedTextInput
-        label={'Spørsmål til deltaker ved påmelding'}
-        placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+        label="E-post arrangør"
+        placeholder="ola.nordmann@bekk.no"
         value={event.organizerEmail}
         validation={parseEditEmail}
         onChange={organizerEmail =>

@@ -17,10 +17,12 @@ export type TimeInstanceEdit = {
   timezone: number;
 };
 
-export const parseEditTimeInstance = (t: TimeInstanceEdit): Date | IError[] => {
-  const timeDateString = `${t.date}T${t.time[0]}:${
-    t.time[1]
-  }${getTimezoneInISOFormat(t.timezone)}`;
+export const parseEditTimeInstance = (
+  time: TimeInstanceEdit
+): Date | IError[] => {
+  const timeDateString = `${time.date}T${time.time[0]}:${
+    time.time[1]
+  }${getTimezoneInISOFormat(time.timezone)}`;
 
   const dateTimeStamp = Date.parse(timeDateString);
 
