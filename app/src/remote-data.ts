@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { isError } from 'util';
-import { useNotification } from './components/NotificationHandler/NotificationHandler';
+import {
+  useNotification,
+  UserNotification,
+} from './components/NotificationHandler/NotificationHandler';
 
 export type Ok<T> = {
   status: 'OK';
@@ -74,12 +77,12 @@ export function cachedRemoteData<Key extends string, T>() {
 
       useEffect(() => {
         if (isBad(values)) {
-          const message = values.userMessage;
-          notify({
-            type: 'ERROR',
-            title: 'Ikke all dataen kunne lastes',
-            message,
-          });
+          notify(
+            new UserNotification(
+              values.userMessage,
+              'Ikke all dataen kunne lastes'
+            )
+          );
         }
       }, [values, notify]);
 

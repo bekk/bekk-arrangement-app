@@ -1,46 +1,52 @@
 import React, { useState, createContext, useContext, useCallback } from 'react';
 import { Notification } from '@bekk/storybook';
 
-type NotificationType = 'INFO' | 'WARNING' | 'ERROR';
-
-interface INotification {
-  type: NotificationType;
-  title: string;
-  message: string;
+export class UserNotification extends Error {
+  public title: string;
+  public userMessage: string;
+  constructor(userMessage: string, title: string = 'Feil') {
+    super();
+    this.title = title;
+    this.userMessage = userMessage;
+  }
 }
 
 interface IProps {
   children?: JSX.Element;
 }
 
-type NotifyUser = (n: INotification) => void;
+type NotifyUser = (n: UserNotification) => void;
 
 const NotificationContext = createContext<NotifyUser>(() => undefined);
 
 export const NotificationHandler = ({ children }: IProps) => {
-  const [notification, setNotification] = useState<INotification | undefined>();
-  const notifyUser = (n: INotification) => setNotification(n);
+  const [notification, setNotification] = useState<
+    UserNotification | undefined
+  >();
+  const notifyUser = (n: UserNotification) => setNotification(n);
   return (
     <NotificationContext.Provider value={notifyUser}>
-      {notification ? (
-        <>
-          {children}
+      <>
+        {children}
+        {notification && (
           <Notification
             key={notification.message}
-            notification={notification}
+            notification={{
+              type: 'ERROR',
+              title: notification.title,
+              message: notification.userMessage,
+            }}
             onClose={() => setNotification(undefined)}
             visible={true}
           />
-        </>
-      ) : (
-        children
-      )}
+        )}
+      </>
     </NotificationContext.Provider>
   );
 };
 
 /**
- * notify kan kalles manuelt av klientkode med INotification
+ * notify kan kalles manuelt av klientkode med UserNotification
  *
  * catchAndNotify brukes ved å wrappe ein async funksjon som
  * kan feile. Dvs. `async () => ...` blir `catchAndNotify(() => ...)`
@@ -54,7 +60,7 @@ export const useNotification = () => {
   ): (x?: T) => Promise<R> {
     return (x?: T) =>
       f(x).catch(e => {
-        if (isNotification(e)) {
+        if (e instanceof UserNotification) {
           notify(e);
         }
         return Promise.reject(e);
@@ -63,14 +69,3 @@ export const useNotification = () => {
   const catchAndNotify = useCallback(_catchAndNotify, [notify]);
   return { notify, catchAndNotify };
 };
-
-const isNotification = (notification: any): notification is INotification =>
-  notification &&
-  'type' in notification &&
-  (notification.type === 'INFO' ||
-    notification.type === 'WARNING' ||
-    notification.type === 'ERROR') &&
-  'title' in notification &&
-  typeof notification.title === 'string' &&
-  'message' in notification &&
-  typeof notification.message === 'string';

@@ -5,7 +5,8 @@ import {
   toEditEmail,
   parseEditEmail,
 } from './email';
-import { isErrorFree } from 'src/utils';
+import { isErrorFree, listOfErrors } from 'src/utils';
+import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
 
 export interface IParticipantWriteModel {
   name: string;
@@ -62,16 +63,14 @@ export const parseParticipantViewModel = (
   };
 
   if (!isErrorFree(participant)) {
-    throw {
-      status: 'ERROR',
-      userMessage:
-        'Participant kan ikke parses av følgende grunner: ' +
+    throw new UserNotification(
+      'Participant kan ikke parses av følgende grunner: ' +
         Object.values(participant)
           .filter(isIErrorList)
           .flat()
           .map(x => x.message)
-          .join(', '),
-    };
+          .join(', ')
+    );
   }
 
   return participant;
@@ -89,9 +88,7 @@ export const parseEditParticipant = ({
   };
 
   if (!isErrorFree(participant)) {
-    return Object.values(participant)
-      .filter(isIErrorList)
-      .flat();
+    return listOfErrors(participant);
   }
 
   return participant;

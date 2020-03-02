@@ -57,12 +57,12 @@ async function fetchAndValidate(
     }${(body && ` og body ${body}`) || ''}`,
   } = await response.json().catch(() => ({}));
 
-  return Promise.reject({
-    type: response.status < 400 ? 'WARNING' : 'ERROR',
-    title:
+  return Promise.reject(
+    new userMessage(
+      userMessage,
       response.status < 500
         ? `${response.status} Et nettverkskall har feilet`
-        : `${response.status} Det er noe galt med backenden`,
-    message: userMessage,
-  });
+        : `${response.status} Det er noe galt med backenden`
+    )
+  );
 }

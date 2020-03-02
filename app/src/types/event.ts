@@ -34,6 +34,7 @@ import { addWeeks } from 'date-fns/esm/fp';
 import { isErrorFree } from 'src/utils';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
+import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -173,16 +174,14 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   };
 
   if (!isErrorFree(event)) {
-    throw {
-      status: 'ERROR',
-      userMessage:
-        'Arrangementobjektet kan ikke parses av følgende grunner: ' +
+    throw new UserNotification(
+      'Arrangementobjektet kan ikke parses av følgende grunner: ' +
         Object.values(event)
           .filter(isIErrorList)
           .flat()
           .map(x => x.message)
-          .join(', '),
-    };
+          .join(', ')
+    );
   }
 
   return event;
@@ -225,7 +224,7 @@ export const initialEvent = (): IEvent => {
     },
     end: {
       date: dateToIDate(eventStartDate),
-      time: { hour: 17, minute: 0 },
+      time: { hour: 20, minute: 0 },
     },
     openForRegistrationTime,
     organizerName: '',
