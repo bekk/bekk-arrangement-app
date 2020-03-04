@@ -3,7 +3,7 @@ import { getParticipantsForEvent } from 'src/api/arrangementSvc';
 import {
   IParticipant,
   IParticipantViewModel,
-  maybeParseParticipant,
+  parseParticipantViewModel,
 } from 'src/types/participant';
 import { useLocalStorage } from 'src/hooks/localStorage';
 import { cachedRemoteData } from 'src/remote-data';
@@ -16,7 +16,7 @@ export const useParticipants = (eventId: string) => {
     fetcher: useCallback(async () => {
       const participantContracts = await getParticipantsForEvent(eventId);
       return participantContracts.map((participant: IParticipantViewModel) =>
-        maybeParseParticipant(participant)
+        parseParticipantViewModel(participant)
       );
     }, [eventId]),
   });

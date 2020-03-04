@@ -1,5 +1,6 @@
-import { getAudience, getIssuerDomain, getScopes } from './config';
 import { useEffect, useLayoutEffect } from 'react';
+import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
+import { getScopes, getIssuerDomain, getAudience } from 'src/config';
 const EmployeeIdClaimType = 'https://api.bekk.no/claims/employeeId';
 
 function parseHash(hash: string): any {
@@ -114,14 +115,14 @@ export function isAuthenticated(): boolean {
 
 export function getEmployeeId(): any {
   if (!isAuthenticated()) {
-    throw new Error('User is not authenticated!');
+    throw new UserNotification('User is not authenticated!');
   }
   return getClaimsFromToken(getIdToken())[EmployeeIdClaimType];
 }
 
 export function getRoleClaims(): void {
   if (!isAuthenticated()) {
-    throw new Error('User is not authenticated!');
+    throw new UserNotification('User is not authenticated!');
   }
 }
 

@@ -1,68 +1,83 @@
 import {
   IDate,
-  deserializeDate,
   IDateContract,
-  parseDate,
   EditDate,
-  stringifyDate,
   datesInOrder,
   isSameDate,
+  parseEditDate,
+  stringifyDate,
+  toEditDate,
+  parseDateViewModel,
+  toDateWriteModel,
 } from 'src/types/date';
 import {
   ITime,
-  parseTime,
   stringifyTime,
   ITimeContract,
   EditTime,
   timesInOrder,
-  deserializeTime,
+  parseEditTime,
+  toEditTime,
+  parseTimeViewModel,
+  toTimeWriteModel,
 } from 'src/types/time';
-import { isOk, Result } from 'src/types/validation';
+import { IError, isValid } from 'src/types/validation';
 import { isAfter, isBefore } from 'date-fns';
-import { concatLists } from '.';
+import { concatLists } from 'src/utils';
 
 export type IDateTimeContract = {
   date: IDateContract;
   time: ITimeContract;
 };
-
-export type EditDateTime = {
-  date: EditDate;
-  time: EditTime;
-};
+export type IDateTimeWriteModel = IDateTimeContract;
+export type IDateTimeViewModel = IDateTimeContract;
 
 export interface IDateTime {
   date: IDate;
   time: ITime;
 }
 
-export const parseDateTime = (
-  datetime: EditDateTime
-): Result<EditDateTime, IDateTime> => {
-  const date = parseDate(datetime.date);
-  const time = parseTime(datetime.time);
-
-  if (isOk(date) && isOk(time)) {
-    return {
-      errors: undefined,
-      editValue: datetime,
-      validValue: { date: date.validValue, time: time.validValue },
-    };
-  }
-
-  const errors = concatLists(date.errors, time.errors);
-  return {
-    errors,
-    editValue: datetime,
-  };
+export type EditDateTime = {
+  date: EditDate;
+  time: EditTime;
 };
 
-export const deserializeDateTime = (
-  datetime: IDateTimeContract
-): EditDateTime => ({
-  date: deserializeDate(datetime.date),
-  time: deserializeTime(datetime.time),
+export const parseEditDateTime = (
+  datetime: EditDateTime
+): IDateTime | IError[] => {
+  const date = parseEditDate(datetime.date);
+  const time = parseEditTime(datetime.time);
+
+  if (isValid(date) && isValid(time)) {
+    return { date, time };
+  }
+
+  const errors = concatLists<IError>(date, time);
+  return errors;
+};
+
+export const toEditDateTime = ({ date, time }: IDateTime): EditDateTime => ({
+  date: toEditDate(date),
+  time: toEditTime(time),
 });
+
+export const parseDateTimeViewModel = ({
+  date,
+  time,
+}: IDateTimeViewModel): IDateTime => ({
+  date: parseDateViewModel(date),
+  time: parseTimeViewModel(time),
+});
+
+export const toDateTimeWriteModel = ({
+  date,
+  time,
+}: IDateTime): IDateTimeWriteModel => ({
+  date: toDateWriteModel(date),
+  time: toTimeWriteModel(time),
+});
+
+// Utils function
 
 export const isInTheFuture = ({ date, time }: IDateTime) => {
   const now = new Date();
@@ -93,15 +108,8 @@ export const isInOrder = ({
   return false;
 };
 
-export const toDate = ({ date, time }: IDateTime) =>
+const toDate = ({ date, time }: IDateTime) =>
   new Date(date.year, date.month - 1, date.day, time.hour, time.minute);
 
 export const stringifyDateTime = ({ date, time }: IDateTime) =>
   `${stringifyDate(date)}T${stringifyTime(time)}`;
-
-//Bør nok flyttes ut i en date utils
-export const getNow = () => {
-  const today = new Date();
-  return `${today.getFullYear()}-${today.getMonth() +
-    1}-${today.getDate()}T00:00`;
-};

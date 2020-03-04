@@ -1,36 +1,58 @@
-import { Result, isOk } from './validation';
-import { EditDate, parseDate } from './date';
-import { EditTime, parseTime } from './time';
-import { concatLists } from '.';
+import { IError, validate } from './validation';
+import { EditDate } from './date';
+import { EditTime } from './time';
 
 export const timezoneStart = -11;
 export const timezoneEnd = 12;
 
 export type TimeInstanceContract = string; // BigInt
+export type TimeInstanceViewModel = TimeInstanceContract;
+export type TimeInstanceWriteModel = TimeInstanceContract;
+
 export type TimeInstance = Date;
-export type EditTimeInstance = {
+
+export type TimeInstanceEdit = {
   date: EditDate;
   time: EditTime;
   timezone: number;
 };
 
-export const deserializeTimeInstance = (
-  time: TimeInstanceContract
-): EditTimeInstance => {
-  const timeDate = new Date(Number(time));
+export const parseEditTimeInstance = (
+  time: TimeInstanceEdit
+): Date | IError[] => {
+  const timeDateString = `${time.date}T${time.time[0]}:${
+    time.time[1]
+  }${getTimezoneInISOFormat(time.timezone)}`;
 
-  const year = timeDate.getFullYear().toString();
+  const dateTimeStamp = Date.parse(timeDateString);
+
+  const validator = validate<Date>({
+    'Tiden er ugyldig': isNaN(dateTimeStamp),
+  });
+  return validator.resolve(new Date(dateTimeStamp));
+};
+
+export const toTimeInstanceWriteModel = (
+  time: TimeInstance
+): TimeInstanceWriteModel => time.getTime().toString();
+
+export const parseTimeInstanceViewModel = (
+  time: TimeInstanceViewModel
+): TimeInstance => new Date(Number(time));
+
+export const toEditTimeInstance = (date: TimeInstance): TimeInstanceEdit => {
+  const year = date.getFullYear().toString();
 
   // Month range is 0-11. We need to '+1' to make the month readable for Date()
-  const month = twoDigitValue(timeDate.getMonth() + 1);
-  const day = twoDigitValue(timeDate.getDate());
-  const hour = twoDigitValue(timeDate.getHours());
-  const minute = twoDigitValue(timeDate.getMinutes());
+  const month = twoDigitValue(date.getMonth() + 1);
+  const day = twoDigitValue(date.getDate());
+  const hour = twoDigitValue(date.getHours());
+  const minute = twoDigitValue(date.getMinutes());
 
   // If the timezoneOffset is negative, timezone must be positive.
   // Therefore we must divide by -60
   // (TimezoneOffset is also time difference in minutes)
-  const timezone = timeDate.getTimezoneOffset() / -60;
+  const timezone = date.getTimezoneOffset() / -60;
 
   return {
     date: `${year}-${month}-${day}`,
@@ -39,15 +61,10 @@ export const deserializeTimeInstance = (
   };
 };
 
+// Util functions
+
 const twoDigitValue = (value: number): string =>
   value.toString().padStart(2, '0');
-
-export const parseTimeInstanceToDate = (t: EditTimeInstance): Date => {
-  const timeDateString = `${t.date}T${t.time[0]}:${
-    t.time[1]
-  }${getTimezoneInISOFormat(t.timezone)}`;
-  return new Date(timeDateString);
-};
 
 const getTimezoneInISOFormat = (timezone: number): string => {
   const positiveTimezone = twoDigitValue(Math.abs(timezone));
@@ -56,31 +73,6 @@ const getTimezoneInISOFormat = (timezone: number): string => {
   }
   return `-${positiveTimezone}:00`;
 };
-
-export const parseTimeInstance = (
-  timeInstance: EditTimeInstance
-): Result<EditTimeInstance, TimeInstance> => {
-  const date = parseDate(timeInstance.date);
-  const time = parseTime(timeInstance.time);
-
-  if (isOk(date) && isOk(time)) {
-    return {
-      errors: undefined,
-      editValue: timeInstance,
-      validValue: parseTimeInstanceToDate(timeInstance),
-    };
-  }
-
-  const errors = concatLists(date.errors, time.errors);
-  return {
-    errors,
-    editValue: timeInstance,
-  };
-};
-
-export const serializeTimeInstance = (
-  time: TimeInstance
-): TimeInstanceContract => time.getTime().toString();
 
 export const stringifyTimeInstanceDate = (date: TimeInstance): string =>
   `${twoDigitValue(date.getDay())}.${twoDigitValue(

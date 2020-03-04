@@ -1,22 +1,24 @@
-import { validate, Result } from './validation';
+import { validate, IError } from './validation';
+import { identityFunction } from 'src/utils';
 
 export type ITimeContract = ITime;
-
-export type EditTime = [string, string];
+export type ITimeViewModel = ITimeContract;
+export type ITimeWriteModel = ITimeContract;
 
 export interface ITime {
   hour: number;
   minute: number;
 }
 
-export const parseTime = ([_hour, _minutes]: EditTime): Result<
-  EditTime,
-  ITime
-> => {
+export type EditTime = [string, string];
+
+export const parseEditTime = ([_hour, _minutes]: EditTime):
+  | ITime
+  | IError[] => {
   const hour = Number(_hour);
   const minute = Number(_minutes);
 
-  const validator = validate<EditTime, ITime>([_hour, _minutes], {
+  const validator = validate<ITime>({
     "Can't have more than 60 minutes in an hour": minute > 59,
     "Can't have negative number of minutes": minute < 0,
     'There are not more than 23 hours in a day': hour > 23,
@@ -30,13 +32,18 @@ export const parseTime = ([_hour, _minutes]: EditTime): Result<
   return validator.resolve({ hour, minute });
 };
 
+export const toEditTime = ({ hour, minute }: ITime): EditTime => [
+  hour.toString().padStart(2, '0'),
+  minute.toString().padStart(2, '0'),
+];
+
+export const parseTimeViewModel = identityFunction;
+export const toTimeWriteModel = identityFunction;
+
+// Util functions
+
 export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-
-export const deserializeTime = (time: ITimeContract): EditTime => [
-  time.hour.toString().padStart(2, '0'),
-  time.minute.toString().padStart(2, '0'),
-];
 
 export const timesInOrder = ({
   first,

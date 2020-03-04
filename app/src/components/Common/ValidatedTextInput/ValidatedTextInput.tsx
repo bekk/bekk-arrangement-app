@@ -1,5 +1,5 @@
 import React from 'react';
-import { Result } from 'src/types/validation';
+import { IError, isIErrorList } from 'src/types/validation';
 import { useState } from 'react';
 import { ValidationResult } from '../ValidationResult/ValidationResult';
 import { TextInput } from '../TextInput/TextInput';
@@ -7,7 +7,8 @@ import { TextInput } from '../TextInput/TextInput';
 interface ValidTextInputProps {
   label: string;
   placeholder?: string;
-  value: Result<string, any>;
+  value: string;
+  validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
 }
 
@@ -15,20 +16,26 @@ export const ValidatedTextInput = ({
   label,
   placeholder,
   value,
+  validation,
   onChange,
 }: ValidTextInputProps) => {
-  const [showErrors, setShowErrors] = useState(false);
+  const errors = validation(value);
+
+  const [shouldShowErrors, setShouldShowErrors] = useState(false);
+
   return (
     <>
       <TextInput
         label={label}
         placeholder={placeholder}
-        value={value.editValue}
+        value={value}
         onChange={onChange}
-        isError={showErrors && Boolean(value.errors)}
-        onBlur={() => setShowErrors(true)}
+        isError={shouldShowErrors && isIErrorList(errors)}
+        onBlur={() => setShouldShowErrors(true)}
       />
-      {showErrors && <ValidationResult validationResult={value.errors} />}
+      {shouldShowErrors && isIErrorList(errors) && (
+        <ValidationResult validationResult={errors} />
+      )}
     </>
   );
 };

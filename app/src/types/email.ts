@@ -1,17 +1,29 @@
-import { Result, validate } from './validation';
+import { validate, IError } from './validation';
+
+type EmailViewModel = string;
+type EmailWriteModel = string;
 
 export interface Email {
   email: string;
 }
 
-export const serializeEmail = ({ email }: Email) => email;
-export const stringifyEmail = ({ email }: Email) => email;
+type EditEmail = string;
 
-export const parseEmail = (email: string): Result<string, Email> => {
-  const validator = validate<string, Email>(email, {
-    'E-post må inneholde minst tre tegn': email.length <= 3,
+export const parseEditEmail = (email: string): Email | IError[] => {
+  const validator = validate<Email>({
+    'E-post må inneholde minst tre tegn': email.length < 3,
     'E-post må inneholde et @-tegn': !email.includes('@'),
-    'E-post må inneholde et .-tegn': !email.includes('.'),
   });
   return validator.resolve({ email });
 };
+
+export const toEditEmail = ({ email }: Email): EditEmail => email;
+
+export const parseEmailViewModel = (email: EmailViewModel): Email => ({
+  email,
+});
+export const toEmailWriteModel = ({ email }: Email): EmailWriteModel => email;
+
+// Utils functions
+
+export const stringifyEmail = ({ email }: Email) => email;

@@ -6,14 +6,13 @@ import { asString } from 'src/utils/timeleft';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useParams, useHistory } from 'react-router';
 import {
-  IParticipant,
   IEditParticipant,
-  parseParticipant,
   initalParticipant,
   parseName,
   parseComment,
+  toEditParticipant,
+  parseEditParticipant,
 } from 'src/types/participant';
-import { Result, isOk } from 'src/types/validation';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import {
   cancelParticipantRoute,
@@ -21,7 +20,7 @@ import {
   editEventRoute,
   confirmParticipantRoute,
 } from 'src/routing';
-import { stringifyEmail, parseEmail, serializeEmail } from 'src/types/email';
+import { stringifyEmail, parseEditEmail } from 'src/types/email';
 import { userIsLoggedIn, userIsAdmin } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
@@ -33,13 +32,21 @@ import {
   useSavedParticipations,
 } from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { isValid } from 'src/types/validation';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 
 export const ViewEventContainer = () => {
   const { eventId = '0' } = useParams();
-  const [participant, setParticipant] = useState<
-    Result<IEditParticipant, IParticipant>
-  >(parseParticipant({ ...initalParticipant, eventId }));
+
+  const [participant, setParticipant] = useState<IEditParticipant>(
+    toEditParticipant(initalParticipant)
+  );
+  const validParticipant = (() => {
+    const vParticipant = parseEditParticipant(participant);
+    if (isValid(vParticipant)) {
+      return vParticipant;
+    }
+  })();
 
   const history = useHistory();
   const { catchAndNotify } = useNotification();
@@ -85,7 +92,7 @@ export const ViewEventContainer = () => {
       : event.participantQuestion;
 
   const addParticipant = catchAndNotify(async () => {
-    if (isOk(participant)) {
+    if (validParticipant) {
       const cancelUrlTemplate =
         document.location.origin +
         cancelParticipantRoute({
@@ -94,9 +101,9 @@ export const ViewEventContainer = () => {
           cancellationToken: '{cancellationToken}',
         });
       const {
-        participant: { eventId, email },
+        participant: { email },
         cancellationToken,
-      } = await postParticipant(participant.validValue, cancelUrlTemplate);
+      } = await postParticipant(eventId, validParticipant, cancelUrlTemplate);
       setParticipantInLocalStorage({ eventId, email, cancellationToken });
       history.push(
         confirmParticipantRoute({
@@ -156,41 +163,38 @@ export const ViewEventContainer = () => {
           <>
             <ValidatedTextInput
               label={'Navn'}
-              value={participant.editValue.name}
               placeholder={'Ola Nordmann'}
+              value={participant.name}
+              validation={parseName}
               onChange={(name: string) =>
-                setParticipant(
-                  parseParticipant({
-                    ...participant.editValue,
-                    name: parseName(name),
-                  })
-                )
+                setParticipant({
+                  ...participant,
+                  name,
+                })
               }
             />
             <ValidatedTextInput
               label={'E-post'}
-              value={participant.editValue.email}
               placeholder={'ola.nordmann@bekk.no'}
+              value={participant.email}
+              validation={parseEditEmail}
               onChange={(email: string) =>
-                setParticipant(
-                  parseParticipant({
-                    ...participant.editValue,
-                    email: parseEmail(email),
-                  })
-                )
+                setParticipant({
+                  ...participant,
+                  email,
+                })
               }
             />
             <ValidatedTextInput
               label={participantQuestion}
-              value={participant.editValue.comment}
               placeholder={'Kommentar til arrangør'}
+              value={participant.comment}
+              validation={parseComment}
               onChange={(comment: string) =>
-                setParticipant(
-                  parseParticipant({
-                    ...participant.editValue,
-                    comment: parseComment(comment),
-                  })
-                )
+                setParticipant({
+                  ...participant,
+                  comment,
+                })
               }
             />
             <br />
@@ -201,7 +205,7 @@ export const ViewEventContainer = () => {
         {participants.length > 0 ? (
           participants.map(p => {
             return (
-              <div key={serializeEmail(p.email)} className={style.text}>
+              <div key={stringifyEmail(p.email)} className={style.text}>
                 {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
               </div>
             );
