@@ -1,4 +1,5 @@
 import { getIdToken } from 'src/auth';
+import { UserNotification } from 'src/components/NotificationHandler/NotificationHandler';
 
 interface IRequest {
   host: string;
@@ -58,7 +59,7 @@ async function fetchAndValidate(
   } = await response.json().catch(() => ({}));
 
   return Promise.reject(
-    new userMessage(
+    new UserNotification(
       userMessage,
       response.status < 500
         ? `${response.status} Et nettverkskall har feilet`

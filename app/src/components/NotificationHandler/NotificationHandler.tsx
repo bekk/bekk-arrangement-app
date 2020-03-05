@@ -53,17 +53,20 @@ export const NotificationHandler = ({ children }: IProps) => {
  */
 export const useNotification = () => {
   const notify: NotifyUser = useCallback(useContext(NotificationContext), []);
-  function _catchAndNotify<T, R>(f: () => Promise<R>): () => Promise<R>;
-  function _catchAndNotify<T, R>(f: (x: T) => Promise<R>): (x: T) => Promise<R>;
-  function _catchAndNotify<T, R>(
-    f: (x?: T) => Promise<R>
-  ): (x?: T) => Promise<R> {
+  function _catchAndNotify<T>(f: () => Promise<void>): () => Promise<void>;
+  function _catchAndNotify<T>(
+    f: (x: T) => Promise<void>
+  ): (x: T) => Promise<void>;
+  function _catchAndNotify<T>(
+    f: (x?: T) => Promise<void>
+  ): (x?: T) => Promise<void> {
     return (x?: T) =>
       f(x).catch(e => {
         if (e instanceof UserNotification) {
           notify(e);
+        } else {
+          return Promise.reject(e);
         }
-        return Promise.reject(e);
       });
   }
   const catchAndNotify = useCallback(_catchAndNotify, [notify]);
