@@ -6,7 +6,6 @@ import { useParams, useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, viewEventRoute } from 'src/routing';
-import { Modal } from 'src/components/Common/Modal/Modal';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { useQuery } from 'src/utils/query-string';
@@ -16,48 +15,59 @@ import { Button } from 'src/components/Common/Button/Button';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
 import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
+import { ButtonWithConfirmModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithConfirmModal';
 
-export const EditEventContainer = () => {
-  const { eventId = 'URL-FEIL' } = useParams();
-
+const useEditEvent = () => {
+  const { eventId = '' } = useParams();
   const remoteEvent = useEvent(eventId);
-  const [event, setEvent] = useState<IEditEvent>();
 
-  const [previewState, setPreviewState] = useState(false);
-  const history = useHistory();
-  const editToken = useQuery('editToken');
-  const { catchAndNotify } = useNotification();
-  const [showModal, setShowModal] = useState(false);
-
-  const { saveEditableEvents } = useSavedEditableEvents();
+  const [editEvent, setEditEvent] = useState<IEditEvent>();
+  useLayoutEffect(() => {
+    if (hasLoaded(remoteEvent)) {
+      setEditEvent(toEditEvent(remoteEvent.data));
+    }
+  }, [remoteEvent]);
 
   const validEvent = (() => {
-    if (event) {
-      const validEvent = parseEditEvent(event);
+    if (editEvent) {
+      const validEvent = parseEditEvent(editEvent);
       if (isValid(validEvent)) {
         return validEvent;
       }
     }
   })();
 
-  useLayoutEffect(() => {
-    if (hasLoaded(remoteEvent)) {
-      setEvent(toEditEvent(remoteEvent.data));
-    }
-  }, [remoteEvent]);
+  return { eventId, validEvent, editEvent, setEditEvent };
+};
 
+const useSaveThisEditToken = ({
+  editToken,
+  eventId,
+}: {
+  editToken?: string;
+  eventId: string;
+}) => {
+  const { saveEditableEvents } = useSavedEditableEvents();
   useEffect(() => {
     if (editToken) {
       saveEditableEvents({ eventId, editToken });
     }
   }, [eventId, editToken, saveEditableEvents]);
+};
 
-  if (!hasLoaded(remoteEvent)) {
+export const EditEventContainer = () => {
+  const { eventId, validEvent, editEvent, setEditEvent } = useEditEvent();
+
+  const [previewState, setPreviewState] = useState(false);
+
+  const { catchAndNotify } = useNotification();
+  const history = useHistory();
+
+  const editToken = useQuery('editToken');
+  useSaveThisEditToken({ editToken, eventId });
+
+  if (!editEvent) {
     return <div>Loading</div>;
-  }
-
-  if (!event || !eventId) {
-    return <div>Kan ikke finne event med id {eventId}</div>;
   }
 
   const putEditedEvent =
@@ -67,33 +77,15 @@ export const EditEventContainer = () => {
       history.push(viewEventRoute(eventId));
     });
 
-  const onDeleteEvent = catchAndNotify(async (eventId: string) => {
+  const onDeleteEvent = catchAndNotify(async () => {
     await deleteEvent(eventId, editToken);
     history.push(eventsRoute);
   });
 
-  const CancelModal = () => (
-    <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
-      <p>
-        Sikker på at du vil avlyse arrangementet? <br />
-        Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
-        <span role="img" aria-label="grimacing-face">
-          😬
-        </span>
-      </p>
-      <div className={style.buttonContainer}>
-        <Button onClick={() => setShowModal(false)}>Avbryt</Button>
-        <Button onClick={() => onDeleteEvent(eventId)} color="White">
-          Avlys arrangement
-        </Button>
-      </div>
-    </Modal>
-  );
-
   const renderEditView = () => (
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
-      <EditEvent eventResult={event} updateEvent={setEvent} />
+      <EditEvent eventResult={editEvent} updateEvent={setEditEvent} />
       <div className={style.previewButton}>
         <Button onClick={() => setPreviewState(true)} disabled={!validEvent}>
           Forhåndsvis endringer
@@ -101,9 +93,19 @@ export const EditEventContainer = () => {
       </div>
       <div className={style.buttonContainer}>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>
-        <Button onClick={() => setShowModal(true)}>Avlys arrangement</Button>
+        <ButtonWithConfirmModal
+          text={'Avlys arrangement'}
+          onConfirm={onDeleteEvent}
+        >
+          <p>
+            sikker på at du vil avlyse arrangementet? <br />
+            alle deltakere vil bli slettet. dette kan ikke reverseres{' '}
+            <span role="img" aria-label="grimacing-face">
+              😬
+            </span>
+          </p>
+        </ButtonWithConfirmModal>
       </div>
-      {showModal && <CancelModal />}
     </Page>
   );
 
