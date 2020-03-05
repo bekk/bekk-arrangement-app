@@ -37,6 +37,11 @@ export function usePersistentHistoryState<T>(
 export function usePersistentHistoryState<T>(
   initalSate?: T
 ): [Optional<T>, (newState: T) => void];
+/**
+ * Exactly like React's useState, except it is persisted in the browser's
+ * native history object. This means browsing back and forth using back and forward
+ * buttons does _not_ reset state, like unmounting and mounting a regular component would.
+ */
 export function usePersistentHistoryState<T>(initalSate?: T) {
   const history = useHistory();
   const state = history.location.state || initalSate;

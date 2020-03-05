@@ -27,10 +27,10 @@ const useEditEvent = () => {
 
   const [editEvent, setEditEvent] = usePersistentHistoryState<IEditEvent>();
   useLayoutEffect(() => {
-    if (hasLoaded(remoteEvent)) {
+    if (hasLoaded(remoteEvent) && !editEvent) {
       setEditEvent(toEditEvent(remoteEvent.data));
     }
-  }, [remoteEvent]);
+  }, [remoteEvent, editEvent]);
 
   const validEvent = (() => {
     if (editEvent) {
