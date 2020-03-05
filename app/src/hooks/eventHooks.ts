@@ -3,6 +3,9 @@ import { getEvent, getEvents } from 'src/api/arrangementSvc';
 import { IEvent, parseEventViewModel } from 'src/types/event';
 import { useLocalStorage } from './localStorage';
 import { cachedRemoteData } from 'src/remote-data';
+import { useHistory } from 'react-router';
+import { Optional } from 'src/types';
+import { previewEventRoute } from 'src/routing';
 
 const eventCache = cachedRemoteData<string, IEvent>();
 
@@ -25,6 +28,17 @@ export const useEvents = () => {
       });
     }, [])
   );
+};
+
+export const eventPreview = {
+  useGoto: (eventId: string) => {
+    const history = useHistory();
+    return (event: IEvent) => history.push(previewEventRoute(eventId), event);
+  },
+  useEvent: () => {
+    const history = useHistory();
+    return history.location.state as Optional<IEvent>;
+  },
 };
 
 type EditEventToken = {

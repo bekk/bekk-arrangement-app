@@ -5,8 +5,12 @@ import { deleteEvent } from 'src/api/arrangementSvc';
 import { useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
-import { eventsRoute, previewEventRoute, editTokenKey } from 'src/routing';
-import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
+import { eventsRoute, editTokenKey } from 'src/routing';
+import {
+  useEvent,
+  useSavedEditableEvents,
+  eventPreview,
+} from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import {
   useQuery,
@@ -64,6 +68,7 @@ export const EditEventContainer = () => {
 
   const { catchAndNotify } = useNotification();
   const history = useHistory();
+  const gotoPreview = eventPreview.useGoto(eventId);
 
   const editToken = useQuery(editTokenKey);
   useSaveThisEditToken({ editToken, eventId });
@@ -77,19 +82,16 @@ export const EditEventContainer = () => {
     history.push(eventsRoute);
   });
 
-  const gotoPreview =
-    validEvent &&
-    (() => {
-      history.push(previewEventRoute(eventId), validEvent);
-    });
-
   return (
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={editEvent} updateEvent={setEditEvent} />
       <div className={style.previewButton}>
-        {gotoPreview && (
-          <Button onClick={gotoPreview} disabled={!validEvent}>
+        {validEvent && (
+          <Button
+            onClick={() => gotoPreview(validEvent)}
+            disabled={!validEvent}
+          >
             Forhåndsvis endringer
           </Button>
         )}
