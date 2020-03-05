@@ -1,7 +1,6 @@
 import queryString from 'query-string';
 import { useHistory, useParams } from 'react-router';
 import { Optional } from 'src/types';
-import { useState } from 'react';
 
 export const queryStringStringify = (
   queries: Record<string, string | number | undefined>

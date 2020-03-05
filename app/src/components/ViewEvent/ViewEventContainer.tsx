@@ -4,7 +4,7 @@ import { isInThePast } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
 import { asString } from 'src/utils/timeleft';
 import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
-import { useParams, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import {
   IEditParticipant,
   initalParticipant,
@@ -88,10 +88,7 @@ export const ViewEventContainer = () => {
   const eventIsFull =
     event.maxParticipants !== 0 &&
     event.maxParticipants === participants.length;
-  const participantQuestion =
-    event.participantQuestion === ''
-      ? 'Allergier, preferanser eller noe annet på hjertet?'
-      : event.participantQuestion;
+  const participantQuestion = event.participantQuestion;
 
   const addParticipant = catchAndNotify(async () => {
     if (validParticipant) {

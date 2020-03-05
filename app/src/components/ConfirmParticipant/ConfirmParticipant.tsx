@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { Page } from '../Page/Page';
 import { stringifyDate } from 'src/types/date';

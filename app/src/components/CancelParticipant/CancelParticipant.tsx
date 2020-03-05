@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
 import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
 import { Page } from '../Page/Page';

@@ -1,8 +1,8 @@
-import { useState, useLayoutEffect, useEffect } from 'react';
+import { useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import { IEditEvent, toEditEvent, parseEditEvent } from 'src/types/event';
 import { deleteEvent } from 'src/api/arrangementSvc';
-import { useParams, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, previewEventRoute, editTokenKey } from 'src/routing';
@@ -30,7 +30,7 @@ const useEditEvent = () => {
     if (hasLoaded(remoteEvent) && !editEvent) {
       setEditEvent(toEditEvent(remoteEvent.data));
     }
-  }, [remoteEvent, editEvent]);
+  }, [remoteEvent, editEvent, setEditEvent]);
 
   const validEvent = (() => {
     if (editEvent) {
