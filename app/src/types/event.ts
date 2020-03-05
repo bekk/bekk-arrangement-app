@@ -1,4 +1,4 @@
-import { IError, assertIsValid } from 'src/types/validation';
+import { IError, assertIsValid, listOfErrors } from 'src/types/validation';
 import {
   parseTitle,
   parseDescription,
@@ -33,7 +33,6 @@ import {
 import { addWeeks } from 'date-fns/esm/fp';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
-import { listOfErrors } from 'src/utils';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;

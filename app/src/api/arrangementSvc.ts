@@ -13,7 +13,7 @@ import {
   toParticipantWriteModel,
 } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
-import { queryStringStringify } from 'src/utils/query-string';
+import { queryStringStringify } from 'src/utils/browser-state';
 import { toEmailWriteModel } from 'src/types/email';
 
 export const postEvent = (

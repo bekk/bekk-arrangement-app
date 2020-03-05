@@ -1,11 +1,10 @@
-import { validate, IError, assertIsValid } from './validation';
+import { validate, IError, assertIsValid, listOfErrors } from './validation';
 import {
   Email,
   parseEmailViewModel,
   toEditEmail,
   parseEditEmail,
 } from './email';
-import { listOfErrors } from 'src/utils';
 
 export interface IParticipantWriteModel {
   name: string;

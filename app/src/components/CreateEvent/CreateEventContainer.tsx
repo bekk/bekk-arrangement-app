@@ -54,7 +54,7 @@ export const CreateEventContainer = () => {
     if (isValid(parsedEvent)) {
       return (
         <Page>
-          <PreviewEventContainer event={parsedEvent} />
+          <PreviewEventContainer />
           <div className={style.buttonContainer}>
             <Button onClick={addEvent}>Opprett arrangement</Button>
             <Button displayAsLink onClick={() => setPreviewState(false)}>

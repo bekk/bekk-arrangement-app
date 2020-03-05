@@ -6,7 +6,7 @@ import { stringifyEmail } from 'src/types/email';
 import { isSameDate, dateAsText } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
-import { viewEventRoute, eventId } from 'src/routing';
+import { viewEventRoute, eventIdKey } from 'src/routing';
 
 interface IProps {
   event: IEvent;
@@ -16,7 +16,7 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
 
   const copyLink = async () => {
-    const url = document.location.origin + viewEventRoute(eventId);
+    const url = document.location.origin + viewEventRoute(eventIdKey);
     await navigator.clipboard.writeText(url);
     setWasCopied(true);
     setTimeout(() => setWasCopied(false), 3000);

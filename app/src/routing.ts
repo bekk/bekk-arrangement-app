@@ -1,15 +1,19 @@
-import { queryStringStringify } from 'src/utils/query-string';
+import { queryStringStringify } from 'src/utils/browser-state';
 
-export const eventId = ':eventId';
-export const email = ':email';
+export const eventIdKey = ':eventId';
+export const emailKey = ':email';
+export const editTokenKey = 'editToken';
+export const cancellationTokenKey = 'cancellationToken';
 
 export const rootRoute = '/';
 export const eventsRoute = '/events';
+export const createRoute = '/events/create';
 export const viewEventRoute = (eventId: string) => `/events/${eventId}`;
 export const editEventRoute = (eventId: string, editToken?: string) =>
   `/events/${eventId}/edit${queryStringStringify({ editToken })}`;
+export const previewEventRoute = (eventId: string) =>
+  `/events/${eventId}/preview`;
 
-export const createRoute = '/events/create';
 export const confirmParticipantRoute = ({
   eventId,
   email,

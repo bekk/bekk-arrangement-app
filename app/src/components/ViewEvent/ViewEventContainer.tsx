@@ -19,6 +19,7 @@ import {
   eventsRoute,
   editEventRoute,
   confirmParticipantRoute,
+  eventIdKey,
 } from 'src/routing';
 import { stringifyEmail, parseEditEmail } from 'src/types/email';
 import { userIsLoggedIn, userIsAdmin } from 'src/auth';
@@ -34,9 +35,10 @@ import {
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
+import { useParam } from 'src/utils/browser-state';
 
 export const ViewEventContainer = () => {
-  const { eventId = '0' } = useParams();
+  const eventId = useParam(eventIdKey);
 
   const [participant, setParticipant] = useState<IEditParticipant>(
     toEditParticipant(initalParticipant)
