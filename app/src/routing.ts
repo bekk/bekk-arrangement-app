@@ -8,6 +8,7 @@ export const cancellationTokenKey = 'cancellationToken';
 export const rootRoute = '/';
 export const eventsRoute = '/events';
 export const createRoute = '/events/create';
+export const previewNewEventRoute = `/events/create/preview`;
 export const viewEventRoute = (eventId: string) => `/events/${eventId}`;
 export const editEventRoute = (eventId: string, editToken?: string) =>
   `/events/${eventId}/edit${queryStringStringify({ editToken })}`;

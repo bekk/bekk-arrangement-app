@@ -5,7 +5,7 @@ import { deleteEvent } from 'src/api/arrangementSvc';
 import { useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
-import { eventsRoute, editTokenKey } from 'src/routing';
+import { eventsRoute, editTokenKey, previewEventRoute } from 'src/routing';
 import {
   useEvent,
   useSavedEditableEvents,
@@ -68,7 +68,7 @@ export const EditEventContainer = () => {
 
   const { catchAndNotify } = useNotification();
   const history = useHistory();
-  const gotoPreview = eventPreview.useGoto(eventId);
+  const gotoPreview = eventPreview.useGoto(previewEventRoute(eventId));
 
   const editToken = useQuery(editTokenKey);
   useSaveThisEditToken({ editToken, eventId });

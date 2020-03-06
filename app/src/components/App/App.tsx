@@ -13,6 +13,7 @@ import {
   confirmParticipantRoute,
   previewEventRoute,
   rootRoute,
+  previewNewEventRoute,
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
@@ -23,6 +24,7 @@ import { createBrowserHistory } from 'history';
 import style from './App.module.scss';
 import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
 import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
+import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
 
 const history = createBrowserHistory();
 
@@ -33,17 +35,20 @@ export const App = () => {
       <div className={style.container}>
         <Header />
         <Switch>
-          <Route path={createRoute}>
+          <Route exact path={createRoute}>
             <CreateEventContainer />
           </Route>
-          <Route path={viewEventRoute(eventIdKey)} exact>
+          <Route exact path={viewEventRoute(eventIdKey)}>
             <ViewEventContainer />
           </Route>
-          <Route path={eventsRoute} exact>
+          <Route exact path={eventsRoute}>
             <ViewEventsContainer />
           </Route>
           <Route exact path={editEventRoute(eventIdKey)}>
             <EditEventContainer />
+          </Route>
+          <Route exact path={previewNewEventRoute}>
+            <PreviewNewEventContainer />
           </Route>
           <Route exact path={previewEventRoute(eventIdKey)}>
             <PreviewEventContainer />

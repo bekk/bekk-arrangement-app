@@ -5,7 +5,6 @@ import { useLocalStorage } from './localStorage';
 import { cachedRemoteData } from 'src/remote-data';
 import { useHistory } from 'react-router';
 import { Optional } from 'src/types';
-import { previewEventRoute } from 'src/routing';
 
 const eventCache = cachedRemoteData<string, IEvent>();
 
@@ -31,9 +30,9 @@ export const useEvents = () => {
 };
 
 export const eventPreview = {
-  useGoto: (eventId: string) => {
+  useGoto: (path: string) => {
     const history = useHistory();
-    return (event: IEvent) => history.push(previewEventRoute(eventId), event);
+    return (event: IEvent) => history.push(path, event);
   },
   useEvent: () => {
     const history = useHistory();
