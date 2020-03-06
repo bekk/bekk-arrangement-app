@@ -7,6 +7,7 @@ import { isSameDate, dateAsText } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { viewEventRoute, eventIdKey } from 'src/routing';
+import { useQuery, useParam } from 'src/utils/browser-state';
 
 interface IProps {
   event: IEvent;
@@ -14,9 +15,10 @@ interface IProps {
 }
 export const ViewEvent = ({ event, participantsText }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
+  const eventId = useParam(eventIdKey);
 
   const copyLink = async () => {
-    const url = document.location.origin + viewEventRoute(eventIdKey);
+    const url = document.location.origin + viewEventRoute(eventId);
     await navigator.clipboard.writeText(url);
     setWasCopied(true);
     setTimeout(() => setWasCopied(false), 3000);
