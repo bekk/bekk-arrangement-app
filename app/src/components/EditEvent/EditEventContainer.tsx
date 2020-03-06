@@ -68,6 +68,7 @@ export const EditEventContainer = () => {
 
   const { catchAndNotify } = useNotification();
   const history = useHistory();
+
   const gotoPreview = eventPreview.useGoto(previewEventRoute(eventId));
 
   const editToken = useQuery(editTokenKey);

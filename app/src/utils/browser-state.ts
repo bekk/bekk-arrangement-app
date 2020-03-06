@@ -43,11 +43,12 @@ export function usePersistentHistoryState<T>(
  */
 export function usePersistentHistoryState<T>(initalSate?: T) {
   const history = useHistory();
-  const state = history.location.state || initalSate;
+  const { state = initalSate, pathname, search, hash } = history.location;
+  const currentPath = pathname + search + hash;
   return [
     state,
     (newState: T) => {
-      history.replace(history.location.pathname, newState);
+      history.replace(currentPath, newState);
     },
   ];
 }
