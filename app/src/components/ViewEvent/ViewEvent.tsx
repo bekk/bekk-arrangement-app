@@ -7,7 +7,7 @@ import { isSameDate, dateAsText } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { viewEventRoute, eventIdKey } from 'src/routing';
-import { useQuery, useParam } from 'src/utils/browser-state';
+import { useParam } from 'src/utils/browser-state';
 
 interface IProps {
   event: IEvent;
