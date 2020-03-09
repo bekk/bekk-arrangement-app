@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
 import { Page } from '../Page/Page';
@@ -21,10 +21,21 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 export const CancelParticipant = () => {
   const eventId = useParam(eventIdKey);
   const participantEmail = useParam(emailKey);
+  const cancellationToken = useQuery(cancellationTokenKey);
+
+  const { saveParticipation } = useSavedParticipations();
+  useEffect(() => {
+    if (cancellationToken) {
+      saveParticipation({
+        eventId,
+        email: participantEmail,
+        cancellationToken,
+      });
+    }
+  }, [eventId, participantEmail, cancellationToken]);
 
   const remoteEvent = useEvent(eventId);
 
-  const cancellationToken = useQuery(cancellationTokenKey);
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
   const { removeSavedParticipant } = useSavedParticipations();
