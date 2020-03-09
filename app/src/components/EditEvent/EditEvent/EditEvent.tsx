@@ -19,6 +19,7 @@ import {
 } from 'src/types/date-time';
 import { isValid } from 'src/types/validation';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
+import { Checkbox } from '@bekk/storybook';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -118,16 +119,30 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
       }
     />
 
-    <DateTimeInputWithTimezone
-      label={'Påmelding åpner'}
-      value={event.openForRegistrationTime}
-      onChange={openForRegistrationTime =>
+    <Checkbox
+      label={'Bruk påmeldingsåpning'}
+      onDarkBackground
+      isChecked={event.hasRegistrationOpening}
+      onChange={hasRegistrationOpening => {
         updateEvent({
           ...event,
-          openForRegistrationTime,
-        })
-      }
+          hasRegistrationOpening,
+        });
+      }}
     />
+
+    {event.hasRegistrationOpening && (
+      <DateTimeInputWithTimezone
+        label={'Påmelding åpner'}
+        value={event.openForRegistrationTime}
+        onChange={openForRegistrationTime =>
+          updateEvent({
+            ...event,
+            openForRegistrationTime,
+          })
+        }
+      />
+    )}
 
     <ValidatedTextInput
       label={'Maks antall'}
