@@ -52,12 +52,3 @@ export const parseQuestion = (value: string): string | IError[] => {
   });
   return validator.resolve(value);
 };
-
-export const parseHasRegistrationOpening = (
-  value: boolean
-): boolean | IError[] => {
-  const validator = validate<boolean>({
-    // Denne er enten true eller false. Kan ikke valideres på samme måte som de andre
-  });
-  return validator.resolve(value);
-};

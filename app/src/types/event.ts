@@ -8,7 +8,6 @@ import {
   WithId,
   parseQuestion,
   toEditMaxAttendees,
-  parseHasRegistrationOpening,
 } from '.';
 import {
   IDateTime,
@@ -52,7 +51,6 @@ export interface IEventViewModel {
   organizerEmail: string;
   maxParticipants: number;
   participantQuestion: string;
-  hasRegistrationOpening: boolean;
 }
 
 export interface IEventWriteModel {
@@ -67,7 +65,6 @@ export interface IEventWriteModel {
   maxParticipants: number;
   editUrlTemplate: string;
   participantQuestion: string;
-  hasRegistrationOpening: boolean;
 }
 
 export interface IEvent {
@@ -81,7 +78,6 @@ export interface IEvent {
   organizerEmail: Email;
   maxParticipants: number;
   participantQuestion: string;
-  hasRegistrationOpening: boolean;
 }
 
 export interface IEditEvent {
@@ -95,7 +91,6 @@ export interface IEditEvent {
   organizerEmail: string;
   maxParticipants: string;
   participantQuestion: string;
-  hasRegistrationOpening: boolean;
 }
 
 export const parseEditEvent = ({
@@ -109,7 +104,6 @@ export const parseEditEvent = ({
   organizerEmail,
   maxParticipants,
   participantQuestion,
-  hasRegistrationOpening,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -122,7 +116,6 @@ export const parseEditEvent = ({
     organizerEmail: parseEditEmail(organizerEmail),
     maxParticipants: parseMaxAttendees(maxParticipants),
     participantQuestion: parseQuestion(participantQuestion),
-    hasRegistrationOpening: parseHasRegistrationOpening(hasRegistrationOpening),
   };
 
   try {
@@ -163,9 +156,6 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const organizerEmail = parseEditEmail(eventView.organizerEmail);
   const maxParticipants = eventView.maxParticipants;
   const participantQuestion = parseQuestion(eventView.participantQuestion);
-  const hasRegistrationOpening = parseHasRegistrationOpening(
-    eventView.hasRegistrationOpening
-  );
 
   const event = {
     title,
@@ -178,7 +168,6 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     organizerEmail,
     maxParticipants,
     participantQuestion,
-    hasRegistrationOpening,
   };
 
   assertIsValid(event);
@@ -197,7 +186,6 @@ export const toEditEvent = ({
   organizerEmail,
   maxParticipants,
   participantQuestion,
-  hasRegistrationOpening,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -209,7 +197,6 @@ export const toEditEvent = ({
   organizerEmail: toEditEmail(organizerEmail),
   maxParticipants: toEditMaxAttendees(maxParticipants),
   participantQuestion,
-  hasRegistrationOpening,
 });
 
 export const initialEvent = (): IEvent => {
@@ -232,6 +219,5 @@ export const initialEvent = (): IEvent => {
     organizerEmail: { email: '' },
     maxParticipants: 0,
     participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
-    hasRegistrationOpening: true,
   };
 };

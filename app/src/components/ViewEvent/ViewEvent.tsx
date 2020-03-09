@@ -36,16 +36,11 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
         <p className={style.infoHeader}>Når</p>
         <DateSection startDate={event.start} endDate={event.end} />
       </div>
-      {event.hasRegistrationOpening && (
-        <div className={style.registrationTimeContainer}>
-          <div className={style.text}>
-            {DateTimeSection(
-              event.openForRegistrationTime,
-              event.hasRegistrationOpening
-            )}
-          </div>
+      <div className={style.registrationTimeContainer}>
+        <div className={style.text}>
+          {DateTimeSection(event.openForRegistrationTime)}
         </div>
-      )}
+      </div>
       <div className={style.participantsContainer}>
         <p className={style.infoHeader}>Påmeldte</p>
         <p className={style.text}>{participantsText}</p>
@@ -98,19 +93,15 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
 export const capitalize = (text: string) =>
   text.charAt(0).toUpperCase() + text.substring(1);
 
-const DateTimeSection = (date: Date, hasRegistrationOpening: boolean) => {
-  if (hasRegistrationOpening) {
-    return (
-      <>
-        <p className={style.infoHeader}>Påmelding åpner</p>
-        <p className={style.dateText}>
-          {capitalize(format(date, 'cccc dd. MMMM yyyy', { locale: nb }))}{' '}
-          <br />
-          Klokken:
-          {stringifyTime({ hour: date.getHours(), minute: date.getMinutes() })}
-        </p>{' '}
-      </>
-    );
-  }
-  return <p className={style.infoHeader}>Påmelding åpner</p>;
+const DateTimeSection = (date: Date) => {
+  return (
+    <>
+      <p className={style.infoHeader}>Påmelding åpner</p>
+      <p className={style.dateText}>
+        {capitalize(format(date, 'cccc dd. MMMM yyyy', { locale: nb }))} <br />
+        Klokken:
+        {stringifyTime({ hour: date.getHours(), minute: date.getMinutes() })}
+      </p>{' '}
+    </>
+  );
 };
