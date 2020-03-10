@@ -97,7 +97,7 @@ export const EditEventContainer = () => {
           onConfirm={onDeleteEvent}
         >
           <p>
-            Sikker på at du vil avlyse arrangementet? <br />
+            Er du sikker på at du vil avlyse arrangementet? <br />
             Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
             <span role="img" aria-label="grimacing-face">
               😬
