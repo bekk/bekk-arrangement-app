@@ -3,7 +3,6 @@ import style from './ViewEventContainer.module.scss';
 import { isInThePast } from 'src/types/date-time';
 import { postParticipant } from 'src/api/arrangementSvc';
 import { asString } from 'src/utils/timeleft';
-import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { useHistory } from 'react-router';
 import {
   IEditParticipant,
@@ -28,14 +27,15 @@ import { useNotification } from 'src/components/NotificationHandler/Notification
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
-import {
-  useParticipants,
-  useSavedParticipations,
-} from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { useParam } from 'src/utils/browser-state';
+import { useEvent, useParticipants } from 'src/hooks/cache';
+import {
+  useSavedEditableEvents,
+  useSavedParticipations,
+} from 'src/hooks/saved-tokens';
 
 export const ViewEventContainer = () => {
   const eventId = useParam(eventIdKey);

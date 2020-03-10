@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import style from './EventListElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
-import { useParticipants } from 'src/hooks/participantHooks';
 import { viewEventRoute, editEventRoute } from 'src/routing';
-import { useSavedEditableEvents } from 'src/hooks/eventHooks';
 import { userIsAdmin } from 'src/auth';
 import { hasLoaded } from 'src/remote-data';
+import { useParticipants } from 'src/hooks/cache';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 interface IProps {
   eventId: string;

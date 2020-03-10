@@ -6,11 +6,6 @@ import { useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, editTokenKey, previewEventRoute } from 'src/routing';
-import {
-  useEvent,
-  useSavedEditableEvents,
-  eventPreview,
-} from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import {
   useQuery,
@@ -24,6 +19,9 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
 import { ButtonWithConfirmModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithConfirmModal';
 import { eventIdKey } from 'src/routing';
+import { useEvent } from 'src/hooks/cache';
+import { useGotoEventPreview } from 'src/hooks/history';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);
@@ -69,7 +67,7 @@ export const EditEventContainer = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
-  const gotoPreview = eventPreview.useGoto(previewEventRoute(eventId));
+  const gotoPreview = useGotoEventPreview(previewEventRoute(eventId));
 
   const editToken = useQuery(editTokenKey);
   useSaveThisEditToken({ editToken, eventId });

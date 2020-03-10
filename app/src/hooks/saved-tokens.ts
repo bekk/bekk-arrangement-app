@@ -1,26 +1,44 @@
-import { useCallback } from 'react';
-import { getParticipantsForEvent } from 'src/api/arrangementSvc';
-import {
-  IParticipant,
-  IParticipantViewModel,
-  parseParticipantViewModel,
-} from 'src/types/participant';
+//**  Event  **//
+
 import { useLocalStorage } from 'src/hooks/localStorage';
-import { cachedRemoteData } from 'src/remote-data';
 
-const participantsCache = cachedRemoteData<string, IParticipant[]>();
-
-export const useParticipants = (eventId: string) => {
-  return participantsCache.useOne({
-    key: eventId,
-    fetcher: useCallback(async () => {
-      const participantContracts = await getParticipantsForEvent(eventId);
-      return participantContracts.map((participant: IParticipantViewModel) =>
-        parseParticipantViewModel(participant)
-      );
-    }, [eventId]),
-  });
+type EditEventToken = {
+  eventId: string;
+  editToken: string;
 };
+const isEditEventTokenType = (x: any): x is EditEventToken =>
+  'eventId' in x &&
+  typeof x.eventId === 'string' &&
+  'editToken' in x &&
+  typeof x.editToken === 'string';
+
+export const useSavedEditableEvents = (): {
+  savedEvents: EditEventToken[];
+  saveEditableEvents: (event: EditEventToken) => void;
+} => {
+  const [storage, setStorage] = useLocalStorage({
+    key: 'editable-events',
+  });
+
+  const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
+  const validatedStorage = Array.isArray(parsedStorage)
+    ? parsedStorage.filter(isEditEventTokenType)
+    : [];
+
+  const updateStorage = (event: EditEventToken) =>
+    JSON.stringify([
+      ...validatedStorage.filter(x => x.eventId !== event.eventId),
+      event,
+    ]);
+
+  return {
+    savedEvents: validatedStorage,
+    saveEditableEvents: (event: EditEventToken) =>
+      setStorage(updateStorage(event)),
+  };
+};
+
+//**  Participant  **//
 
 type Participation = {
   eventId: string;

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
@@ -15,8 +14,9 @@ import {
   eventIdKey,
 } from 'src/routing';
 import { useQuery, useParam } from 'src/utils/browser-state';
-import { useSavedParticipations } from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { useEvent } from 'src/hooks/cache';
+import { useSavedParticipations } from 'src/hooks/saved-tokens';
 
 export const CancelParticipant = () => {
   const eventId = useParam(eventIdKey);

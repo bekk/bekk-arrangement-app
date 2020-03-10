@@ -7,7 +7,8 @@ import { viewEventRoute, editEventRoute } from 'src/routing';
 import { postEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
-import { eventPreview, useSavedEditableEvents } from 'src/hooks/eventHooks';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
+import { usePreviewEvent } from 'src/hooks/history';
 
 export const PreviewNewEventContainer = () => {
   const { catchAndNotify } = useNotification();
@@ -15,7 +16,7 @@ export const PreviewNewEventContainer = () => {
 
   const { saveEditableEvents } = useSavedEditableEvents();
 
-  const event = eventPreview.useEvent();
+  const event = usePreviewEvent();
   if (!event) {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
