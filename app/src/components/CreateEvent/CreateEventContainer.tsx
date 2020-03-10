@@ -12,7 +12,7 @@ import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import style from './CreateEventContainer.module.scss';
-import { isValid, IError } from 'src/types/validation';
+import { isValid } from 'src/types/validation';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
 import { useGotoEventPreview } from 'src/hooks/history';
 

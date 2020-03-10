@@ -32,7 +32,7 @@ export const CancelParticipant = () => {
         cancellationToken,
       });
     }
-  }, [eventId, participantEmail, cancellationToken]);
+  }, [eventId, participantEmail, cancellationToken, saveParticipation]);
 
   const remoteEvent = useEvent(eventId);
 

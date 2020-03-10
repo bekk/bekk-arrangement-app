@@ -49,10 +49,15 @@ export const getEvents = (): Promise<WithId<IEventViewModel>[]> =>
     path: `/events`,
   });
 
-export const deleteEvent = (eventId: string, editToken?: string) =>
+export const deleteEvent = (
+  eventId: string,
+  cancellationMessage: string,
+  editToken?: string
+) =>
   del({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}${queryStringStringify({ editToken })}`,
+    body: cancellationMessage,
   });
 
 export const getParticipantsForEvent = (
