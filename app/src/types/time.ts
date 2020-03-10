@@ -45,7 +45,7 @@ export const toTimeWriteModel = identityFunction;
 export const stringifyTime = ({ hour, minute }: ITime): string =>
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
-export const dateToTime = (date: Date): ITime => {
+export const dateToITime = (date: Date): ITime => {
   return { hour: date.getHours(), minute: date.getMinutes() };
 };
 
