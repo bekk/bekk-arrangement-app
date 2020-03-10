@@ -14,6 +14,7 @@ export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
       type="date"
       onChange={v => onChange(v.target.value)}
       value={value}
+      required
     />
   );
 };
