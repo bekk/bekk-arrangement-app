@@ -28,6 +28,12 @@ import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNew
 
 const history = createBrowserHistory();
 
+history.listen((location, action) => {
+  if (action === 'PUSH') {
+    window.scrollTo(0, 0);
+  }
+});
+
 export const App = () => {
   useAuth0Redirect();
   return (
