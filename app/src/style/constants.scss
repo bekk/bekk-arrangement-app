@@ -30,7 +30,7 @@ $transitionLength: 0.2s;
 @mixin boldText {
   color: var(--textColor);
   font-size: $textMobile;
-  font-family: $fontRegular;
+  font-family: $fontMedium;
   @media #{$desktop} {
     font-size: $textDesktop;
   }

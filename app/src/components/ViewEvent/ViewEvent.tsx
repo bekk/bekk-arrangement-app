@@ -17,9 +17,12 @@ interface IProps {
   event: IEvent;
   participantsText: string;
 }
+
 export const ViewEvent = ({ event, participantsText }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
   const eventId = useParam(eventIdKey);
+
+  const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);
@@ -40,16 +43,15 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
         <p className={style.infoHeader}>Når</p>
         <DateSection startDate={event.start} endDate={event.end} />
       </div>
-      <OpenForRegistrationTimeSection date={event.openForRegistrationTime} />
-      <div className={style.participantsContainer}>
-        <p className={style.infoHeader}>Påmeldte</p>
-        <p className={style.text}>{participantsText}</p>
-      </div>
+      {!hasOpenedForRegistration ? (
+        <OpenForRegistrationTimeSection date={event.openForRegistrationTime} />
+      ) : (
+        <div className={style.participantsContainer}>
+          <p className={style.infoHeader}>Påmeldte</p>
+          <p className={style.text}>{participantsText}</p>
+        </div>
+      )}
       <div className={style.locationContainer}>
-        <p className={style.infoHeader}>Lokasjon</p>
-        <p className={style.text}>{event.location}</p>
-      </div>
-      <div className={style.organizerContainer}>
         <p className={style.infoHeader}>Arrangør</p>
         <p className={style.text}>{event.organizerName}</p>
         <a
@@ -60,6 +62,10 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
         >
           {stringifyEmail(event.organizerEmail)}
         </a>
+      </div>
+      <div className={style.organizerContainer}>
+        <p className={style.infoHeader}>Hvor</p>
+        <p className={style.text}>{event.location}</p>
       </div>
       <div className={style.descriptionContainer}>
         <p className={style.textBlock}>{event.description}</p>
