@@ -64,7 +64,13 @@ export const useSavedParticipations = () => {
     : [];
 
   const updateStorage = (participant: Participation) =>
-    JSON.stringify([...validatedStorage, participant]);
+    JSON.stringify([
+      ...validatedStorage.filter(
+        x =>
+          !(participant.eventId === x.eventId && participant.email === x.email)
+      ),
+      participant,
+    ]);
 
   const removeFromStorage = (p: { eventId: string; email: string }) =>
     JSON.stringify(
