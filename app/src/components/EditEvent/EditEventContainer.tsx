@@ -34,14 +34,7 @@ const useEditEvent = () => {
     }
   }, [remoteEvent, editEvent, setEditEvent]);
 
-  const validEvent = (() => {
-    if (editEvent) {
-      const validEvent = parseEditEvent(editEvent);
-      if (isValid(validEvent)) {
-        return validEvent;
-      }
-    }
-  })();
+  const validEvent = validateEvent(editEvent);
 
   return { eventId, validEvent, editEvent, setEditEvent };
 };
@@ -112,4 +105,13 @@ export const EditEventContainer = () => {
       </div>
     </Page>
   );
+};
+
+const validateEvent = (event?: IEditEvent) => {
+  if (event) {
+    const validEvent = parseEditEvent(event);
+    if (isValid(validEvent)) {
+      return validEvent;
+    }
+  }
 };

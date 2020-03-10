@@ -48,7 +48,7 @@ export const CreateEventContainer = () => {
   );
 };
 
-const validateEvent = (event: IEditEvent) => {
+const validateEvent = (event?: IEditEvent) => {
   if (event) {
     const validEvent = parseEditEvent(event);
     if (isValid(validEvent)) {
