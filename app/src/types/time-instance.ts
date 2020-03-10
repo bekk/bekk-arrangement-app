@@ -1,6 +1,8 @@
 import { IError, validate } from './validation';
 import { EditDate } from './date';
 import { EditTime } from './time';
+import { format } from 'date-fns';
+import { nb } from 'date-fns/esm/locale';
 
 export const timezoneStart = -11;
 export const timezoneEnd = 12;
@@ -81,3 +83,9 @@ export const stringifyTimeInstanceDate = (date: TimeInstance): string =>
 
 export const stringifyTimeInstanceTime = (date: TimeInstance): string =>
   `${twoDigitValue(date.getHours())}:${twoDigitValue(date.getMinutes())}`;
+
+export const stringifyTimeInstanceWithDayName = (
+  date: TimeInstance
+): string => {
+  return format(date, 'cccc dd. MMMM yyyy', { locale: nb });
+};
