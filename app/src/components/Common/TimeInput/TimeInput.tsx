@@ -15,13 +15,6 @@ export const TimeInput = ({
   const [hour, setHour] = useUpdateableInitialValue(initialHour);
   const [minute, setMinute] = useUpdateableInitialValue(initialMinute);
 
-  const changeHour = (newHour: string) => {
-    setHour(newHour);
-  };
-  const changeMinute = (newMinute: string) => {
-    setMinute(newMinute);
-  };
-
   const updateTime = () => {
     onChange([hour, minute]);
   };
@@ -38,7 +31,7 @@ export const TimeInput = ({
         className={style.timeInput}
         type="number"
         value={hour}
-        onChange={v => changeHour(v.target.value)}
+        onChange={v => setHour(v.target.value)}
         onBlur={updateTime}
         onKeyDown={focusMinuteRefWhenHourFull}
         onFocus={selectText}
@@ -50,7 +43,7 @@ export const TimeInput = ({
         type="number"
         onBlur={updateTime}
         value={minute}
-        onChange={v => changeMinute(v.target.value)}
+        onChange={v => setMinute(v.target.value)}
         onFocus={selectText}
       />
     </div>
