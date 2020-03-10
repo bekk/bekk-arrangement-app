@@ -8,7 +8,7 @@ import { eventIdKey, editTokenKey, viewEventRoute } from 'src/routing';
 import { putEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
-import { eventPreview } from 'src/hooks/eventHooks';
+import { usePreviewEvent } from 'src/hooks/history';
 
 export const PreviewEventContainer = () => {
   const { catchAndNotify } = useNotification();
@@ -16,7 +16,7 @@ export const PreviewEventContainer = () => {
 
   const eventId = useParam(eventIdKey);
   const editToken = useQuery(editTokenKey);
-  const event = eventPreview.useEvent();
+  const event = usePreviewEvent();
   if (!event) {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }

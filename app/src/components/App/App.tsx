@@ -38,25 +38,25 @@ export const App = () => {
           <Route exact path={createRoute}>
             <CreateEventContainer />
           </Route>
-          <Route exact path={viewEventRoute(eventIdKey)}>
+          <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
           </Route>
           <Route exact path={eventsRoute}>
             <ViewEventsContainer />
           </Route>
-          <Route path={editEventRoute(eventIdKey)}>
+          <Route path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />
           </Route>
           <Route exact path={previewNewEventRoute}>
             <PreviewNewEventContainer />
           </Route>
-          <Route exact path={previewEventRoute(eventIdKey)}>
+          <Route exact path={previewEventRoute(':' + eventIdKey)}>
             <PreviewEventContainer />
           </Route>
           <Route
             path={cancelParticipantRoute({
-              eventId: eventIdKey,
-              email: emailKey,
+              eventId: ':' + eventIdKey,
+              email: ':' + emailKey,
             })}
           >
             <CancelParticipant />
@@ -64,8 +64,8 @@ export const App = () => {
           <Route
             exact
             path={confirmParticipantRoute({
-              eventId: eventIdKey,
-              email: emailKey,
+              eventId: ':' + eventIdKey,
+              email: ':' + emailKey,
             })}
           >
             <ConfirmParticipant />

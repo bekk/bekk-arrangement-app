@@ -6,11 +6,6 @@ import { useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
 import { eventsRoute, editTokenKey, previewEventRoute } from 'src/routing';
-import {
-  useEvent,
-  useSavedEditableEvents,
-  eventPreview,
-} from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import {
   useQuery,
@@ -24,6 +19,9 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
 import { eventIdKey } from 'src/routing';
 import { ButtonWithPromptModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithPromptModal';
+import { useEvent } from 'src/hooks/cache';
+import { useGotoEventPreview } from 'src/hooks/history';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);
@@ -36,14 +34,7 @@ const useEditEvent = () => {
     }
   }, [remoteEvent, editEvent, setEditEvent]);
 
-  const validEvent = (() => {
-    if (editEvent) {
-      const validEvent = parseEditEvent(editEvent);
-      if (isValid(validEvent)) {
-        return validEvent;
-      }
-    }
-  })();
+  const validEvent = validateEvent(editEvent);
 
   return { eventId, validEvent, editEvent, setEditEvent };
 };
@@ -69,7 +60,7 @@ export const EditEventContainer = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
-  const gotoPreview = eventPreview.useGoto(previewEventRoute(eventId));
+  const gotoPreview = useGotoEventPreview(previewEventRoute(eventId));
 
   const editToken = useQuery(editTokenKey);
   useSaveThisEditToken({ editToken, eventId });
@@ -116,4 +107,13 @@ export const EditEventContainer = () => {
       </div>
     </Page>
   );
+};
+
+const validateEvent = (event?: IEditEvent) => {
+  if (event) {
+    const validEvent = parseEditEvent(event);
+    if (isValid(validEvent)) {
+      return validEvent;
+    }
+  }
 };

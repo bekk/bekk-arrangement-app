@@ -1,72 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from './ViewEventContainer.module.scss';
 import { isInThePast } from 'src/types/date-time';
-import { postParticipant } from 'src/api/arrangementSvc';
 import { asString } from 'src/utils/timeleft';
-import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
-import { useHistory } from 'react-router';
-import {
-  IEditParticipant,
-  initalParticipant,
-  parseName,
-  parseComment,
-  toEditParticipant,
-  parseEditParticipant,
-} from 'src/types/participant';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import {
   cancelParticipantRoute,
   eventsRoute,
   editEventRoute,
-  confirmParticipantRoute,
   eventIdKey,
 } from 'src/routing';
-import { stringifyEmail, parseEditEmail } from 'src/types/email';
+import { stringifyEmail } from 'src/types/email';
 import { userIsLoggedIn, userIsAdmin } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
-import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
-import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { Page } from 'src/components/Page/Page';
-import { Button } from 'src/components/Common/Button/Button';
-import {
-  useParticipants,
-  useSavedParticipations,
-} from 'src/hooks/participantHooks';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
-import { isValid } from 'src/types/validation';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { useParam } from 'src/utils/browser-state';
+import { useEvent, useParticipants } from 'src/hooks/cache';
+import {
+  useSavedEditableEvents,
+  useSavedParticipations,
+} from 'src/hooks/saved-tokens';
+import { EditParticipation } from 'src/components/ViewEvent/EditParticipation';
 
 export const ViewEventContainer = () => {
   const eventId = useParam(eventIdKey);
-
-  const [participant, setParticipant] = useState<IEditParticipant>(
-    toEditParticipant(initalParticipant)
-  );
-  const validParticipant = (() => {
-    const vParticipant = parseEditParticipant(participant);
-    if (isValid(vParticipant)) {
-      return vParticipant;
-    }
-  })();
-
-  const history = useHistory();
-  const { catchAndNotify } = useNotification();
-
   const remoteEvent = useEvent(eventId);
-  const timeLeft = useTimeLeft(
-    hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
-  );
+
   const remoteParticipants = useParticipants(eventId);
+
   const { savedEvents } = useSavedEditableEvents();
   const editTokenFound = savedEvents.find(event => event.eventId === eventId);
 
   const {
     savedParticipations: participationsInLocalStorage,
-    saveParticipation: setParticipantInLocalStorage,
   } = useSavedParticipations();
   const participationsForThisEvent = participationsInLocalStorage.filter(
     p => p.eventId === eventId
+  );
+
+  const timeLeft = useTimeLeft(
+    hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
 
   if (isBad(remoteEvent)) {
@@ -78,42 +52,19 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
-  const participants = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data
-    : [];
 
-  const participantsText = `${participants.length}${
-    event?.maxParticipants === 0 ? ' av ∞' : ' av ' + event?.maxParticipants
-  }`;
-  const eventIsFull =
-    event.maxParticipants !== 0 &&
-    event.maxParticipants === participants.length;
-  const participantQuestion = event.participantQuestion;
-
-  const addParticipant = catchAndNotify(async () => {
-    if (validParticipant) {
-      const cancelUrlTemplate =
-        document.location.origin +
-        cancelParticipantRoute({
-          eventId: '{eventId}',
-          email: '{email}',
-          cancellationToken: '{cancellationToken}',
-        });
-      const {
-        participant: { email },
-        cancellationToken,
-      } = await postParticipant(eventId, validParticipant, cancelUrlTemplate);
-      setParticipantInLocalStorage({ eventId, email, cancellationToken });
-      history.push(
-        confirmParticipantRoute({
-          eventId,
-          email,
-        })
-      );
-    }
-  });
+  const participantsText = hasLoaded(remoteParticipants)
+    ? `${remoteParticipants.data.length}${
+        event?.maxParticipants === 0 ? ' av ∞' : ' av ' + event?.maxParticipants
+      }`
+    : 'Laster deltakere...';
 
   const closedEventText = () => {
+    const eventIsFull =
+      event.maxParticipants !== 0 &&
+      hasLoaded(remoteParticipants) &&
+      event.maxParticipants === remoteParticipants.data.length;
+
     if (isInThePast(event.end)) {
       return (
         <p>
@@ -135,8 +86,6 @@ export const ViewEventContainer = () => {
           Arrangementet er dessverre fullt
         </p>
       );
-    } else {
-      return undefined;
     }
   };
 
@@ -159,59 +108,21 @@ export const ViewEventContainer = () => {
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
         {closedEventText() ?? (
-          <>
-            <ValidatedTextInput
-              label={'Navn'}
-              placeholder={'Ola Nordmann'}
-              value={participant.name}
-              validation={parseName}
-              onChange={(name: string) =>
-                setParticipant({
-                  ...participant,
-                  name,
-                })
-              }
-            />
-            <ValidatedTextInput
-              label={'E-post'}
-              placeholder={'ola.nordmann@bekk.no'}
-              value={participant.email}
-              validation={parseEditEmail}
-              onChange={(email: string) =>
-                setParticipant({
-                  ...participant,
-                  email,
-                })
-              }
-            />
-            <ValidatedTextInput
-              label={participantQuestion}
-              placeholder={'Kommentar til arrangør'}
-              value={participant.comment}
-              validation={parseComment}
-              onChange={(comment: string) =>
-                setParticipant({
-                  ...participant,
-                  comment,
-                })
-              }
-            />
-            <br />
-            <Button onClick={() => addParticipant()}>Meld meg på</Button>
-          </>
+          <EditParticipation eventId={eventId} event={event} />
         )}
         <h1 className={style.subHeader}>Påmeldte</h1>
-        {participants.length > 0 ? (
-          participants.map(p => {
-            return (
-              <div key={stringifyEmail(p.email)} className={style.text}>
-                {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
-              </div>
-            );
-          })
-        ) : (
-          <div className={style.text}>Ingen påmeldte</div>
-        )}
+        {hasLoaded(remoteParticipants) &&
+          (remoteParticipants.data.length > 0 ? (
+            remoteParticipants.data.map(p => {
+              return (
+                <div key={stringifyEmail(p.email)} className={style.text}>
+                  {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
+                </div>
+              );
+            })
+          ) : (
+            <div className={style.text}>Ingen påmeldte</div>
+          ))}
       </section>
     </Page>
   );

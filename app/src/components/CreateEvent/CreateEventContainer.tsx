@@ -7,7 +7,6 @@ import {
 } from 'src/types/event';
 import { eventsRoute, previewNewEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
-import { eventPreview } from 'src/hooks/eventHooks';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
@@ -15,6 +14,7 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import style from './CreateEventContainer.module.scss';
 import { isValid } from 'src/types/validation';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
+import { useGotoEventPreview } from 'src/hooks/history';
 
 export const CreateEventContainer = () => {
   useAuthentication();
@@ -22,16 +22,9 @@ export const CreateEventContainer = () => {
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
     toEditEvent(initialEvent())
   );
-  const validEvent = (() => {
-    if (event) {
-      const validEvent = parseEditEvent(event);
-      if (isValid(validEvent)) {
-        return validEvent;
-      }
-    }
-  })();
+  const validEvent = validateEvent(event);
 
-  const gotoPreview = eventPreview.useGoto(previewNewEventRoute);
+  const gotoPreview = useGotoEventPreview(previewNewEventRoute);
 
   const redirectToPreview =
     validEvent &&
@@ -53,4 +46,13 @@ export const CreateEventContainer = () => {
       </div>
     </Page>
   );
+};
+
+const validateEvent = (event?: IEditEvent) => {
+  if (event) {
+    const validEvent = parseEditEvent(event);
+    if (isValid(validEvent)) {
+      return validEvent;
+    }
+  }
 };
