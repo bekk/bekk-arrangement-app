@@ -15,6 +15,7 @@ import {
 import { getArrangementSvcUrl } from 'src/config';
 import { queryStringStringify } from 'src/utils/browser-state';
 import { toEmailWriteModel } from 'src/types/email';
+import { replaceNewLinesWithMarkupForEmail } from 'src/utils';
 
 export const postEvent = (
   event: IEvent,
@@ -49,10 +50,15 @@ export const getEvents = (): Promise<WithId<IEventViewModel>[]> =>
     path: `/events`,
   });
 
-export const deleteEvent = (eventId: string, editToken?: string) =>
+export const deleteEvent = (
+  eventId: string,
+  cancellationMessage: string,
+  editToken?: string
+) =>
   del({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}${queryStringStringify({ editToken })}`,
+    body: replaceNewLinesWithMarkupForEmail(cancellationMessage),
   });
 
 export const getParticipantsForEvent = (

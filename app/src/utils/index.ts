@@ -6,3 +6,6 @@ export const concatLists = <T>(...list: (T[] | unknown)[]): T[] =>
 const materialize = <T>(list: T[] | undefined): T[] => {
   return Array.isArray(list) ? list : [];
 };
+
+export const replaceNewLinesWithMarkupForEmail = (s: string) =>
+  s.replace(/\n/g, '<br/>');

@@ -1,0 +1,9 @@
+@import 'src/style/constants';
+
+.textArea {
+  margin-bottom: 15px;
+  @include regularText;
+  color: black;
+  outline: 0;
+  padding: 10px;
+}

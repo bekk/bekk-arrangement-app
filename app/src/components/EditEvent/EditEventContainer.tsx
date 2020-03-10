@@ -22,8 +22,8 @@ import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
-import { ButtonWithConfirmModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithConfirmModal';
 import { eventIdKey } from 'src/routing';
+import { ButtonWithPromptModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithPromptModal';
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);
@@ -78,10 +78,12 @@ export const EditEventContainer = () => {
     return <div>Loading</div>;
   }
 
-  const onDeleteEvent = catchAndNotify(async () => {
-    await deleteEvent(eventId, editToken);
-    history.push(eventsRoute);
-  });
+  const onDeleteEvent = catchAndNotify(
+    async (messageToParticipants: string) => {
+      await deleteEvent(eventId, messageToParticipants, editToken);
+      history.push(eventsRoute);
+    }
+  );
 
   return (
     <Page>
@@ -99,18 +101,18 @@ export const EditEventContainer = () => {
       </div>
       <div className={style.buttonContainer}>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>
-        <ButtonWithConfirmModal
+        <ButtonWithPromptModal
           text={'Avlys arrangement'}
           onConfirm={onDeleteEvent}
         >
           <p>
-            sikker på at du vil avlyse arrangementet? <br />
-            alle deltakere vil bli slettet. dette kan ikke reverseres{' '}
+            Sikker på at du vil avlyse arrangementet? <br />
+            Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
             <span role="img" aria-label="grimacing-face">
               😬
             </span>
           </p>
-        </ButtonWithConfirmModal>
+        </ButtonWithPromptModal>
       </div>
     </Page>
   );
