@@ -4,9 +4,13 @@ import { IEvent } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
 import { isSameDate, dateAsText } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
+import { stringifyTime, dateToITime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { viewEventRoute, eventId } from 'src/routing';
+import {
+  TimeInstance,
+  stringifyTimeInstanceWithDayName,
+} from 'src/types/time-instance';
 
 interface IProps {
   event: IEvent;
@@ -34,6 +38,7 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
         <p className={style.infoHeader}>Når</p>
         <DateSection startDate={event.start} endDate={event.end} />
       </div>
+      <OpenForRegistrationTimeSection date={event.openForRegistrationTime} />
       <div className={style.participantsContainer}>
         <p className={style.infoHeader}>Påmeldte</p>
         <p className={style.text}>{participantsText}</p>
@@ -85,3 +90,22 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
 
 export const capitalize = (text: string) =>
   text.charAt(0).toUpperCase() + text.substring(1);
+
+interface OpenForRegistrationTimeSectionProps {
+  date: TimeInstance;
+}
+
+const OpenForRegistrationTimeSection = ({
+  date,
+}: OpenForRegistrationTimeSectionProps) => (
+  <div className={style.registrationTimeContainer}>
+    <div className={style.text}>
+      <p className={style.infoHeader}>Påmelding åpner</p>
+      <p className={style.dateText}>
+        {capitalize(stringifyTimeInstanceWithDayName(date))} <br />
+        Klokken:
+        {stringifyTime(dateToITime(date))}
+      </p>
+    </div>
+  </div>
+);
