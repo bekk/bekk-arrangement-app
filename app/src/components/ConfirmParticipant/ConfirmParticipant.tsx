@@ -1,6 +1,5 @@
 import React from 'react';
 import { useEvent } from 'src/hooks/eventHooks';
-import { Page } from '../Page/Page';
 import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import style from './ConfirmParticipant.module.scss';
@@ -8,6 +7,7 @@ import { viewEventRoute, eventIdKey, emailKey } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { useParam } from 'src/utils/browser-state';
+import { Page } from 'src/components/Page/Page';
 
 export const ConfirmParticipant = () => {
   const eventId = useParam(eventIdKey);

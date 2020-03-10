@@ -13,7 +13,7 @@ import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import style from './CreateEventContainer.module.scss';
-import { isValid } from 'src/types/validation';
+import { isValid, IError } from 'src/types/validation';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
 
 export const CreateEventContainer = () => {
@@ -22,14 +22,7 @@ export const CreateEventContainer = () => {
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
     toEditEvent(initialEvent())
   );
-  const validEvent = (() => {
-    if (event) {
-      const validEvent = parseEditEvent(event);
-      if (isValid(validEvent)) {
-        return validEvent;
-      }
-    }
-  })();
+  const validEvent = validateEvent(event);
 
   const gotoPreview = eventPreview.useGoto(previewNewEventRoute);
 
@@ -53,4 +46,13 @@ export const CreateEventContainer = () => {
       </div>
     </Page>
   );
+};
+
+const validateEvent = (event: IEditEvent) => {
+  if (event) {
+    const validEvent = parseEditEvent(event);
+    if (isValid(validEvent)) {
+      return validEvent;
+    }
+  }
 };
