@@ -1,127 +1,117 @@
-import { useState, useLayoutEffect, useEffect } from 'react';
+import { useLayoutEffect, useEffect } from 'react';
 import React from 'react';
 import { IEditEvent, toEditEvent, parseEditEvent } from 'src/types/event';
-import { putEvent, deleteEvent } from 'src/api/arrangementSvc';
-import { useParams, useHistory } from 'react-router';
+import { deleteEvent } from 'src/api/arrangementSvc';
+import { useHistory } from 'react-router';
 import { EditEvent } from './EditEvent/EditEvent';
 import style from './EditEventContainer.module.scss';
-import { eventsRoute, viewEventRoute } from 'src/routing';
-import { Modal } from 'src/components/Common/Modal/Modal';
-import { useEvent, useSavedEditableEvents } from 'src/hooks/eventHooks';
+import { eventsRoute, editTokenKey, previewEventRoute } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
-import { useQuery } from 'src/utils/query-string';
+import {
+  useQuery,
+  useParam,
+  usePersistentHistoryState,
+} from 'src/utils/browser-state';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { isValid } from 'src/types/validation';
-import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
+import { ButtonWithConfirmModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithConfirmModal';
+import { eventIdKey } from 'src/routing';
+import { useEvent } from 'src/hooks/cache';
+import { useGotoEventPreview } from 'src/hooks/history';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
-export const EditEventContainer = () => {
-  const { eventId = 'URL-FEIL' } = useParams();
-
+const useEditEvent = () => {
+  const eventId = useParam(eventIdKey);
   const remoteEvent = useEvent(eventId);
-  const [event, setEvent] = useState<IEditEvent>();
 
-  const [previewState, setPreviewState] = useState(false);
-  const history = useHistory();
-  const editToken = useQuery('editToken');
-  const { catchAndNotify } = useNotification();
-  const [showModal, setShowModal] = useState(false);
-
-  const { saveEditableEvents } = useSavedEditableEvents();
-
-  const validEvent = (() => {
-    if (event) {
-      const validEvent = parseEditEvent(event);
-      if (isValid(validEvent)) {
-        return validEvent;
-      }
-    }
-  })();
-
+  const [editEvent, setEditEvent] = usePersistentHistoryState<IEditEvent>();
   useLayoutEffect(() => {
-    if (hasLoaded(remoteEvent)) {
-      setEvent(toEditEvent(remoteEvent.data));
+    if (hasLoaded(remoteEvent) && !editEvent) {
+      setEditEvent(toEditEvent(remoteEvent.data));
     }
-  }, [remoteEvent]);
+  }, [remoteEvent, editEvent, setEditEvent]);
 
+  const validEvent = validateEvent(editEvent);
+
+  return { eventId, validEvent, editEvent, setEditEvent };
+};
+
+const useSaveThisEditToken = ({
+  editToken,
+  eventId,
+}: {
+  editToken?: string;
+  eventId: string;
+}) => {
+  const { saveEditableEvents } = useSavedEditableEvents();
   useEffect(() => {
     if (editToken) {
       saveEditableEvents({ eventId, editToken });
     }
   }, [eventId, editToken, saveEditableEvents]);
+};
 
-  if (!hasLoaded(remoteEvent)) {
+export const EditEventContainer = () => {
+  const { eventId, validEvent, editEvent, setEditEvent } = useEditEvent();
+
+  const { catchAndNotify } = useNotification();
+  const history = useHistory();
+
+  const gotoPreview = useGotoEventPreview(previewEventRoute(eventId));
+
+  const editToken = useQuery(editTokenKey);
+  useSaveThisEditToken({ editToken, eventId });
+
+  if (!editEvent) {
     return <div>Loading</div>;
   }
 
-  if (!event || !eventId) {
-    return <div>Kan ikke finne event med id {eventId}</div>;
-  }
-
-  const putEditedEvent =
-    validEvent &&
-    catchAndNotify(async () => {
-      await putEvent(eventId, validEvent, editToken);
-      history.push(viewEventRoute(eventId));
-    });
-
-  const onDeleteEvent = catchAndNotify(async (eventId: string) => {
+  const onDeleteEvent = catchAndNotify(async () => {
     await deleteEvent(eventId, editToken);
     history.push(eventsRoute);
   });
 
-  const CancelModal = () => (
-    <Modal closeModal={() => setShowModal(false)} header="Avlys arrangement">
-      <p>
-        Sikker på at du vil avlyse arrangementet? <br />
-        Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
-        <span role="img" aria-label="grimacing-face">
-          😬
-        </span>
-      </p>
-      <div className={style.buttonContainer}>
-        <Button onClick={() => setShowModal(false)}>Avbryt</Button>
-        <Button onClick={() => onDeleteEvent(eventId)} color="White">
-          Avlys arrangement
-        </Button>
-      </div>
-    </Modal>
-  );
-
-  const renderEditView = () => (
+  return (
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
-      <EditEvent eventResult={event} updateEvent={setEvent} />
+      <EditEvent eventResult={editEvent} updateEvent={setEditEvent} />
       <div className={style.previewButton}>
-        <Button onClick={() => setPreviewState(true)} disabled={!validEvent}>
-          Forhåndsvis endringer
-        </Button>
+        {validEvent && (
+          <Button
+            onClick={() => gotoPreview(validEvent)}
+            disabled={!validEvent}
+          >
+            Forhåndsvis endringer
+          </Button>
+        )}
       </div>
       <div className={style.buttonContainer}>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>
-        <Button onClick={() => setShowModal(true)}>Avlys arrangement</Button>
+        <ButtonWithConfirmModal
+          text={'Avlys arrangement'}
+          onConfirm={onDeleteEvent}
+        >
+          <p>
+            sikker på at du vil avlyse arrangementet? <br />
+            alle deltakere vil bli slettet. dette kan ikke reverseres{' '}
+            <span role="img" aria-label="grimacing-face">
+              😬
+            </span>
+          </p>
+        </ButtonWithConfirmModal>
       </div>
-      {showModal && <CancelModal />}
     </Page>
   );
+};
 
-  const renderPreviewEvent = () => {
-    if (putEditedEvent && validEvent) {
-      return (
-        <Page>
-          <PreviewEventContainer event={validEvent} />
-          <div className={style.buttonContainer}>
-            <Button displayAsLink onClick={() => setPreviewState(false)}>
-              Tilbake
-            </Button>
-            <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
-          </div>
-        </Page>
-      );
+const validateEvent = (event?: IEditEvent) => {
+  if (event) {
+    const validEvent = parseEditEvent(event);
+    if (isValid(validEvent)) {
+      return validEvent;
     }
-  };
-
-  return !previewState ? renderEditView() : renderPreviewEvent() || null;
+  }
 };

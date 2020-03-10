@@ -2,10 +2,10 @@ import React from 'react';
 import style from './ViewEventsContainer.module.scss';
 import { EventListElement } from './EventListElement';
 import { createRoute } from 'src/routing';
-import { useEvents } from 'src/hooks/eventHooks';
 import { hasLoaded } from 'src/remote-data';
 import { Link } from 'react-router-dom';
 import { Page } from 'src/components/Page/Page';
+import { useEvents } from 'src/hooks/cache';
 
 export const ViewEventsContainer = () => {
   const events = useEvents();

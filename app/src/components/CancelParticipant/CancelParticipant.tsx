@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { useEvent } from 'src/hooks/eventHooks';
 import { deleteParticipant } from 'src/api/arrangementSvc';
 import { Page } from '../Page/Page';
 import { Button } from '../Common/Button/Button';
@@ -9,15 +7,24 @@ import { stringifyTime } from 'src/types/time';
 import style from './CancelParticipant.module.scss';
 import { useNotification } from '../NotificationHandler/NotificationHandler';
 import { hasLoaded, isBad } from 'src/remote-data';
-import { viewEventRoute } from 'src/routing';
-import { useQuery } from 'src/utils/query-string';
-import { useSavedParticipations } from 'src/hooks/participantHooks';
+import {
+  viewEventRoute,
+  cancellationTokenKey,
+  emailKey,
+  eventIdKey,
+} from 'src/routing';
+import { useQuery, useParam } from 'src/utils/browser-state';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
+import { useEvent } from 'src/hooks/cache';
+import { useSavedParticipations } from 'src/hooks/saved-tokens';
 
 export const CancelParticipant = () => {
-  const { eventId = 'UGYLDIG_URL', email: participantEmail } = useParams();
+  const eventId = useParam(eventIdKey);
+  const participantEmail = useParam(emailKey);
+
   const remoteEvent = useEvent(eventId);
-  const cancellationToken = useQuery('cancellationToken');
+
+  const cancellationToken = useQuery(cancellationTokenKey);
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
   const { removeSavedParticipant } = useSavedParticipations();

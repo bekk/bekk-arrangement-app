@@ -35,6 +35,11 @@ export function assertIsValid<T>(
   }
 }
 
+export const listOfErrors = (obj: Record<string, unknown>): IError[] =>
+  Object.values(obj)
+    .filter(isIErrorList)
+    .flat();
+
 export const error = (message: string): IError => ({
   type: 'Error',
   message,

@@ -6,7 +6,8 @@ import { stringifyEmail } from 'src/types/email';
 import { isSameDate, dateAsText } from 'src/types/date';
 import { stringifyTime, dateToITime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
-import { viewEventRoute, eventId } from 'src/routing';
+import { useParam } from 'src/utils/browser-state';
+import { eventIdKey, viewEventRoute } from 'src/routing';
 import {
   TimeInstance,
   stringifyTimeInstanceWithDayName,
@@ -18,6 +19,7 @@ interface IProps {
 }
 export const ViewEvent = ({ event, participantsText }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
+  const eventId = useParam(eventIdKey);
 
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);

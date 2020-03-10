@@ -7,10 +7,13 @@ import {
   viewEventRoute,
   eventsRoute,
   cancelParticipantRoute,
-  email,
-  eventId,
+  emailKey,
+  eventIdKey,
   editEventRoute,
   confirmParticipantRoute,
+  previewEventRoute,
+  rootRoute,
+  previewNewEventRoute,
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
@@ -20,6 +23,8 @@ import { CancelParticipant } from 'src/components/CancelParticipant/CancelPartic
 import { createBrowserHistory } from 'history';
 import style from './App.module.scss';
 import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
+import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
+import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
 
 const history = createBrowserHistory();
 
@@ -30,31 +35,42 @@ export const App = () => {
       <div className={style.container}>
         <Header />
         <Switch>
-          <Route path={createRoute}>
+          <Route exact path={createRoute}>
             <CreateEventContainer />
           </Route>
-          <Route path={viewEventRoute(eventId)} exact>
+          <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
           </Route>
-          <Route path={eventsRoute} exact>
+          <Route exact path={eventsRoute}>
             <ViewEventsContainer />
           </Route>
-          <Route exact path={editEventRoute(eventId)}>
+          <Route path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />
           </Route>
+          <Route exact path={previewNewEventRoute}>
+            <PreviewNewEventContainer />
+          </Route>
+          <Route exact path={previewEventRoute(':' + eventIdKey)}>
+            <PreviewEventContainer />
+          </Route>
           <Route
-            exact
             path={cancelParticipantRoute({
-              eventId,
-              email,
+              eventId: ':' + eventIdKey,
+              email: ':' + emailKey,
             })}
           >
             <CancelParticipant />
           </Route>
-          <Route exact path={confirmParticipantRoute({ eventId, email })}>
+          <Route
+            exact
+            path={confirmParticipantRoute({
+              eventId: ':' + eventIdKey,
+              email: ':' + emailKey,
+            })}
+          >
             <ConfirmParticipant />
           </Route>
-          <Redirect exact from={'/'} to={eventsRoute} />
+          <Redirect exact from={rootRoute} to={eventsRoute} />
         </Switch>
       </div>
     </Router>

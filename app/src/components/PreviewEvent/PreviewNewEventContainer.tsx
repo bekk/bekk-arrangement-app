@@ -3,29 +3,35 @@ import style from './PreviewEventContainer.module.scss';
 import { Page } from 'src/components/Page/Page';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useHistory } from 'react-router';
-import { useParam, useQuery } from 'src/utils/browser-state';
-import { eventIdKey, editTokenKey, viewEventRoute } from 'src/routing';
-import { putEvent } from 'src/api/arrangementSvc';
+import { viewEventRoute, editEventRoute } from 'src/routing';
+import { postEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 import { usePreviewEvent } from 'src/hooks/history';
 
-export const PreviewEventContainer = () => {
+export const PreviewNewEventContainer = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
-  const eventId = useParam(eventIdKey);
-  const editToken = useQuery(editTokenKey);
+  const { saveEditableEvents } = useSavedEditableEvents();
+
   const event = usePreviewEvent();
   if (!event) {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `0 av ${event.maxParticipants ?? '∞'}`;
+  const participantsText = '';
 
-  const putEditedEvent = catchAndNotify(async () => {
-    await putEvent(eventId, event, editToken);
-    history.push(viewEventRoute(eventId));
+  const postNewEvent = catchAndNotify(async () => {
+    const editUrlTemplate =
+      document.location.origin + editEventRoute('{eventId}', '{editToken}');
+    const {
+      event: { id },
+      editToken,
+    } = await postEvent(event, editUrlTemplate);
+    saveEditableEvents({ eventId: id, editToken });
+    history.push(viewEventRoute(id));
   });
 
   return (
@@ -35,7 +41,7 @@ export const PreviewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
-        <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
+        <Button onClick={postNewEvent}>Opprett arrangement</Button>
       </div>
     </Page>
   );
