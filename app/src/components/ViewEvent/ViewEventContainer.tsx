@@ -52,19 +52,29 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
+  const actualParticipants = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.filter((p, i) => i <= event.maxParticipants)
+    : [];
+  const waitlistedParticipants = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.filter((p, i) => i > event.maxParticipants)
+    : [];
 
-  const participantsText = hasLoaded(remoteParticipants)
-    ? `${remoteParticipants.data.length}${
-        event?.maxParticipants === 0 ? ' av ∞' : ' av ' + event?.maxParticipants
-      }`
-    : 'Laster deltakere...';
+  const participantsText = `${actualParticipants.length}${
+    event?.maxParticipants === 0
+      ? ' av ∞'
+      : ' av ' +
+        event?.maxParticipants +
+        (event.hasWaitingList && waitlistedParticipants.length > 0
+          ? ` og ${waitlistedParticipants.length} på venteliste`
+          : '')
+  }`;
+
+  const eventIsFull =
+    event.maxParticipants !== 0 &&
+    hasLoaded(remoteParticipants) &&
+    event.maxParticipants <= remoteParticipants.data.length;
 
   const closedEventText = () => {
-    const eventIsFull =
-      event.maxParticipants !== 0 &&
-      hasLoaded(remoteParticipants) &&
-      event.maxParticipants === remoteParticipants.data.length;
-
     if (isInThePast(event.end)) {
       return (
         <p>
@@ -79,7 +89,7 @@ export const ViewEventContainer = () => {
           Åpner om {asString(timeLeft)}
         </p>
       );
-    } else if (eventIsFull) {
+    } else if (eventIsFull && !event.hasWaitingList) {
       return (
         <p>
           Stengt <br />
@@ -108,21 +118,41 @@ export const ViewEventContainer = () => {
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
         {closedEventText() ?? (
-          <EditParticipation eventId={eventId} event={event} />
+          <>
+            (eventIsFull && event.hasWaitingList && (
+            <p>
+              Arrangementet er dessverre fullt, men du kan fortsatt bli med på
+              ventelisten!
+            </p>
+            ))
+            <EditParticipation eventId={eventId} event={event} />
+          </>
         )}
         <h1 className={style.subHeader}>Påmeldte</h1>
-        {hasLoaded(remoteParticipants) &&
-          (remoteParticipants.data.length > 0 ? (
-            remoteParticipants.data.map(p => {
-              return (
+        <div>
+          {hasLoaded(remoteParticipants) &&
+            (remoteParticipants.data.length > 0 ? (
+              actualParticipants.map(p => {
+                return (
+                  <div key={stringifyEmail(p.email)} className={style.text}>
+                    {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
+                  </div>
+                );
+              })
+            ) : (
+              <div className={style.text}>Ingen påmeldte</div>
+            ))}
+          {event.hasWaitingList && waitlistedParticipants.length > 0 && (
+            <>
+              <h3>På venteliste</h3>
+              {waitlistedParticipants.map(p => (
                 <div key={stringifyEmail(p.email)} className={style.text}>
                   {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
                 </div>
-              );
-            })
-          ) : (
-            <div className={style.text}>Ingen påmeldte</div>
-          ))}
+              ))}
+            </>
+          )}
+        </div>
       </section>
     </Page>
   );

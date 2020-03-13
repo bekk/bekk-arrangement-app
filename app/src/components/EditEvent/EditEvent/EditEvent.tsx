@@ -19,6 +19,7 @@ import {
 } from 'src/types/date-time';
 import { isValid } from 'src/types/validation';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
+import { Checkbox } from '@bekk/storybook';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -140,6 +141,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
           maxParticipants,
         })
       }
+    />
+    <Checkbox
+      label="Venteliste"
+      onChange={hasWaitingList => updateEvent({ ...event, hasWaitingList })}
+      isChecked={event.hasWaitingList}
+      onDarkBackground={true}
     />
 
     <ValidatedTextInput
