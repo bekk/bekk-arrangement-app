@@ -116,7 +116,11 @@ export const ViewEventContainer = () => {
           <p className={style.text}>{waitlistText}</p>
         ) : null}
         {!closedEventText && (
-          <EditParticipation eventId={eventId} event={event} />
+          <EditParticipation
+            eventId={eventId}
+            event={event}
+            isWaitlisted={eventIsFull && event.hasWaitingList}
+          />
         )}
         <h1 className={style.subHeader}>Påmeldte</h1>
         <div>

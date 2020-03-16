@@ -6,22 +6,53 @@ import { viewEventRoute, eventIdKey, emailKey } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { useParam } from 'src/utils/browser-state';
-import { useEvent } from 'src/hooks/cache';
+import { useEvent, useParticipants } from 'src/hooks/cache';
 import { Page } from 'src/components/Page/Page';
+import { stringifyEmail } from 'src/types/email';
 
 export const ConfirmParticipant = () => {
   const eventId = useParam(eventIdKey);
   const participantEmail = useParam(emailKey);
 
   const remoteEvent = useEvent(eventId);
+  const remoteParticipants = useParticipants(eventId);
 
-  if (!hasLoaded(remoteEvent)) {
+  if (!hasLoaded(remoteEvent) || !hasLoaded(remoteParticipants)) {
     return <div>Loading...</div>;
   }
 
   const event = remoteEvent.data;
+  const participants = remoteParticipants.data.sortBy(p =>
+    p.registrationTime ? p.registrationTime : p.name
+  );
+  const actualParticipants = participants.filter(
+    (p, i) => event.maxParticipants > i
+  );
+  const isWaitlisted =
+    event.hasWaitingList &&
+    !actualParticipants.some(p => stringifyEmail(p.email) === participantEmail);
 
-  return (
+  return isWaitlisted ? (
+    <Page>
+      <h1 className={style.header}>Du er på ventelisten!</h1>
+      <div className={style.text}>
+        Du er nå på venteliste for {event.title} den{' '}
+        {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)} -{' '}
+        {stringifyTime(event.end.time)}{' '}
+        <span role="img" aria-label="hugging face">
+          🤗
+        </span>
+        <br />
+        <br />
+        Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
+        avmelding står i e-posten. <br /> Du vil få beskjed på e-post om du får
+        plass på arrangementet.
+      </div>
+      <BlockLink to={viewEventRoute(eventId)}>
+        Tilbake til arrangement
+      </BlockLink>
+    </Page>
+  ) : (
     <Page>
       <h1 className={style.header}>Du er påmeldt!</h1>
       <div className={style.text}>
@@ -31,6 +62,7 @@ export const ConfirmParticipant = () => {
         <span role="img" aria-label="hugging face">
           🤗
         </span>
+        <br />
         Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
         avmelding står i e-posten.
       </div>

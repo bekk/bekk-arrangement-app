@@ -21,9 +21,10 @@ import { useSavedParticipations } from 'src/hooks/saved-tokens';
 interface Props {
   eventId: string;
   event: IEvent;
+  isWaitlisted: boolean;
 }
 
-export const EditParticipation = ({ eventId, event }: Props) => {
+export const EditParticipation = ({ eventId, event, isWaitlisted }: Props) => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
