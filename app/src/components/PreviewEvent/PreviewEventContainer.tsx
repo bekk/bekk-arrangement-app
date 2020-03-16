@@ -21,7 +21,9 @@ export const PreviewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `0 av ${event.maxParticipants ?? '∞'}`;
+  const participantsText = `0 av ${event.maxParticipants ?? '∞'}${
+    event.hasWaitingList ? ' og 0 på venteliste' : ''
+  }`;
 
   const putEditedEvent = catchAndNotify(async () => {
     await putEvent(eventId, event, editToken);

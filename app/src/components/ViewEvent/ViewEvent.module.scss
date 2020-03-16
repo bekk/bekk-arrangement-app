@@ -63,20 +63,21 @@
 .participantsContainer {
   @extend .text;
   grid-row: 5;
-  grid-column: 2 / 3;
+  grid-column: 1 / 2;
   margin-bottom: 10px;
   @media #{$desktop} {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 2;
   }
 }
 
 .locationContainer {
   @extend .text;
-  grid-row: 6;
+  grid-row: 5;
   grid-column: 2 / 4;
   @media #{$desktop} {
-    grid-row: 4;
+    grid-row: 2;
+    grid-column: 3 / 4;
   }
 }
 
@@ -89,7 +90,7 @@
 
 .organizerContainer {
   @extend .text;
-  grid-row: 5;
+  grid-row: 6;
   grid-column: 1 / 4;
   @media #{$desktop} {
     grid-row: 3;

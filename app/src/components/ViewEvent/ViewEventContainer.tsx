@@ -52,52 +52,43 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
-  const actualParticipants = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.filter((p, i) => i <= event.maxParticipants)
+  const loadedOrderedParticipants = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.sortBy(p =>
+        p.registrationTime ? p.registrationTime : p.name
+      )
     : [];
-  const waitlistedParticipants = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.filter((p, i) => i > event.maxParticipants)
-    : [];
+  const actualParticipants = loadedOrderedParticipants.filter(
+    (p, i) => i < event.maxParticipants
+  );
+  const waitlistedParticipants = loadedOrderedParticipants.filter(
+    (p, i) => i >= event.maxParticipants
+  );
+  const eventIsFull =
+    event.maxParticipants !== 0 &&
+    event.maxParticipants <= loadedOrderedParticipants.length;
 
   const participantsText = `${actualParticipants.length}${
-    event?.maxParticipants === 0
+    event.maxParticipants === 0
       ? ' av ∞'
       : ' av ' +
-        event?.maxParticipants +
-        (event.hasWaitingList && waitlistedParticipants.length > 0
+        event.maxParticipants +
+        (event.hasWaitingList && eventIsFull
           ? ` og ${waitlistedParticipants.length} på venteliste`
           : '')
   }`;
 
-  const eventIsFull =
-    event.maxParticipants !== 0 &&
-    hasLoaded(remoteParticipants) &&
-    event.maxParticipants <= remoteParticipants.data.length;
+  const closedEventText = isInThePast(event.end)
+    ? 'Arrangementet har allerede funnet sted'
+    : timeLeft.difference > 0
+    ? `Åpner om ${asString(timeLeft)}`
+    : eventIsFull && !event.hasWaitingList
+    ? 'Arrangementet er dessverre fullt'
+    : undefined;
 
-  const closedEventText = () => {
-    if (isInThePast(event.end)) {
-      return (
-        <p>
-          Stengt <br />
-          Arrangementet har allerede funnet sted
-        </p>
-      );
-    } else if (timeLeft.difference > 0) {
-      return (
-        <p>
-          Stengt <br />
-          Åpner om {asString(timeLeft)}
-        </p>
-      );
-    } else if (eventIsFull && !event.hasWaitingList) {
-      return (
-        <p>
-          Stengt <br />
-          Arrangementet er dessverre fullt
-        </p>
-      );
-    }
-  };
+  const waitlistText =
+    eventIsFull && event.hasWaitingList
+      ? 'Arrangementet er dessverre fullt, men du kan fortsatt bli med på ventelisten!'
+      : undefined;
 
   return (
     <Page>
@@ -117,31 +108,29 @@ export const ViewEventContainer = () => {
       <ViewEvent event={event} participantsText={participantsText} />
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
-        {closedEventText() ?? (
-          <>
-            (eventIsFull && event.hasWaitingList && (
-            <p>
-              Arrangementet er dessverre fullt, men du kan fortsatt bli med på
-              ventelisten!
-            </p>
-            ))
-            <EditParticipation eventId={eventId} event={event} />
-          </>
+        {closedEventText ? (
+          <p className={style.text}>
+            Stengt <br /> {closedEventText}
+          </p>
+        ) : waitlistText ? (
+          <p className={style.text}>{waitlistText}</p>
+        ) : null}
+        {!closedEventText && (
+          <EditParticipation eventId={eventId} event={event} />
         )}
         <h1 className={style.subHeader}>Påmeldte</h1>
         <div>
-          {hasLoaded(remoteParticipants) &&
-            (remoteParticipants.data.length > 0 ? (
-              actualParticipants.map(p => {
-                return (
-                  <div key={stringifyEmail(p.email)} className={style.text}>
-                    {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
-                  </div>
-                );
-              })
-            ) : (
-              <div className={style.text}>Ingen påmeldte</div>
-            ))}
+          {loadedOrderedParticipants.length > 0 ? (
+            actualParticipants.map(p => {
+              return (
+                <div key={stringifyEmail(p.email)} className={style.text}>
+                  {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
+                </div>
+              );
+            })
+          ) : (
+            <div className={style.text}>Ingen påmeldte</div>
+          )}
           {event.hasWaitingList && waitlistedParticipants.length > 0 && (
             <>
               <h3>På venteliste</h3>
