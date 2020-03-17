@@ -22,15 +22,11 @@ export const ConfirmParticipant = () => {
   }
 
   const event = remoteEvent.data;
-  const participants = remoteParticipants.data.sortBy(p =>
-    p.registrationTime ? p.registrationTime : p.name
-  );
-  const actualParticipants = participants.filter(
-    (p, i) => event.maxParticipants > i
-  );
+  const attendees = remoteParticipants.data.attendees;
+
   const isWaitlisted =
     event.hasWaitingList &&
-    !actualParticipants.some(p => stringifyEmail(p.email) === participantEmail);
+    !attendees.some(p => stringifyEmail(p.email) === participantEmail);
 
   return isWaitlisted ? (
     <Page>

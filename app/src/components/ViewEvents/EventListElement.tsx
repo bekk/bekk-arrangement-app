@@ -17,13 +17,10 @@ interface IProps {
 
 export const EventListElement = ({ eventId, event }: IProps) => {
   const remoteParticipants = useParticipants(eventId);
-  const participants = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data
+  const attendees = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.attendees
     : [];
-  const participantsCount =
-    event.maxParticipants >= participants.length
-      ? participants.length
-      : event.maxParticipants;
+  const participantsCount = attendees.length;
   const participantLimitText =
     event.maxParticipants === 0 ? '' : ` av ${event.maxParticipants}`;
   const dateText = isSameDate(event.start.date, event.end.date)

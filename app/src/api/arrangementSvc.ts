@@ -9,8 +9,8 @@ import { WithId } from 'src/types';
 import {
   IParticipant,
   INewParticipantViewModel,
-  IParticipantViewModel,
   toParticipantWriteModel,
+  IParticipantViewModelsWithWaitingList,
 } from 'src/types/participant';
 import { getArrangementSvcUrl } from 'src/config';
 import { queryStringStringify } from 'src/utils/browser-state';
@@ -62,7 +62,7 @@ export const deleteEvent = (
 
 export const getParticipantsForEvent = (
   eventId: string
-): Promise<IParticipantViewModel[]> =>
+): Promise<IParticipantViewModelsWithWaitingList> =>
   get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}/participants`,

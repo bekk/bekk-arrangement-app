@@ -20,6 +20,16 @@ export interface IParticipantViewModel {
   comment: string;
 }
 
+export interface IParticipantsWithWaitingList {
+  attendees: IParticipant[];
+  waitingList?: IParticipant[];
+}
+
+export interface IParticipantViewModelsWithWaitingList {
+  attendees: IParticipantViewModel[];
+  waitingList?: IParticipantViewModel[];
+}
+
 export interface INewParticipantViewModel {
   participant: IParticipantViewModel;
   cancellationToken: string;

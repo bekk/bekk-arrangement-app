@@ -52,28 +52,23 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
-  const loadedOrderedParticipants = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.sortBy(p =>
-        p.registrationTime ? p.registrationTime : p.name
-      )
+  const attendees = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.attendees
     : [];
-  const actualParticipants = loadedOrderedParticipants.filter(
-    (p, i) => i < event.maxParticipants
-  );
-  const waitlistedParticipants = loadedOrderedParticipants.filter(
-    (p, i) => i >= event.maxParticipants
-  );
-  const eventIsFull =
-    event.maxParticipants !== 0 &&
-    event.maxParticipants <= loadedOrderedParticipants.length;
+  const waitingList = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.waitingList
+    : [];
 
-  const participantsText = `${actualParticipants.length}${
+  const eventIsFull =
+    event.maxParticipants !== 0 && event.maxParticipants === attendees.length;
+
+  const participantsText = `${attendees.length}${
     event.maxParticipants === 0
       ? ' av ∞'
       : ' av ' +
         event.maxParticipants +
-        (event.hasWaitingList && eventIsFull
-          ? ` og ${waitlistedParticipants.length} på venteliste`
+        (waitingList && eventIsFull
+          ? ` og ${waitingList.length} på venteliste`
           : '')
   }`;
 
@@ -81,12 +76,12 @@ export const ViewEventContainer = () => {
     ? 'Arrangementet har allerede funnet sted'
     : timeLeft.difference > 0
     ? `Åpner om ${asString(timeLeft)}`
-    : eventIsFull && !event.hasWaitingList
+    : eventIsFull && !waitingList
     ? 'Arrangementet er dessverre fullt'
     : undefined;
 
   const waitlistText =
-    eventIsFull && event.hasWaitingList
+    eventIsFull && waitingList
       ? 'Arrangementet er dessverre fullt, men du kan fortsatt bli med på ventelisten!'
       : undefined;
 
@@ -124,23 +119,31 @@ export const ViewEventContainer = () => {
         )}
         <h1 className={style.subHeader}>Påmeldte</h1>
         <div>
-          {loadedOrderedParticipants.length > 0 ? (
-            actualParticipants.map(p => {
+          {attendees.length > 0 ? (
+            attendees.map(attendee => {
               return (
-                <div key={stringifyEmail(p.email)} className={style.text}>
-                  {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
+                <div
+                  key={stringifyEmail(attendee.email)}
+                  className={style.text}
+                >
+                  {attendee.name}, {stringifyEmail(attendee.email)}, Kommentar:{' '}
+                  {attendee.comment}
                 </div>
               );
             })
           ) : (
             <div className={style.text}>Ingen påmeldte</div>
           )}
-          {event.hasWaitingList && waitlistedParticipants.length > 0 && (
+          {waitingList && waitingList.length > 0 && (
             <>
               <h3>På venteliste</h3>
-              {waitlistedParticipants.map(p => (
-                <div key={stringifyEmail(p.email)} className={style.text}>
-                  {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
+              {waitingList.map(waitlisted => (
+                <div
+                  key={stringifyEmail(waitlisted.email)}
+                  className={style.text}
+                >
+                  {waitlisted.name}, {stringifyEmail(waitlisted.email)},
+                  Kommentar: {waitlisted.comment}
                 </div>
               ))}
             </>
