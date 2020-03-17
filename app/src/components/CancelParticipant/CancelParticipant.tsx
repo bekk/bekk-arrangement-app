@@ -23,34 +23,38 @@ export const CancelParticipant = () => {
   const participantEmail = useParam(emailKey);
   const cancellationToken = useQuery(cancellationTokenKey);
 
-  const { saveParticipation } = useSavedParticipations();
-  useEffect(() => {
-    if (cancellationToken) {
-      saveParticipation({
-        eventId,
-        email: participantEmail,
-        cancellationToken,
-      });
-    }
-  }, [eventId, participantEmail, cancellationToken, saveParticipation]);
-
   const remoteEvent = useEvent(eventId);
 
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
   const { removeSavedParticipant } = useSavedParticipations();
 
+  const { saveParticipation } = useSavedParticipations();
+  useEffect(() => {
+    if (cancellationToken && !wasDeleted) {
+      saveParticipation({
+        eventId,
+        email: participantEmail,
+        cancellationToken,
+      });
+    }
+  }, [
+    eventId,
+    participantEmail,
+    cancellationToken,
+    saveParticipation,
+    wasDeleted,
+  ]);
+
   const cancelParticipant = catchAndNotify(async () => {
     if (eventId && participantEmail) {
-      const deleted = await deleteParticipant({
+      await deleteParticipant({
         eventId,
         participantEmail,
         cancellationToken,
       });
-      if (deleted.ok) {
-        removeSavedParticipant({ eventId, email: participantEmail });
-        setWasDeleted(true);
-      }
+      setWasDeleted(true);
+      removeSavedParticipant({ eventId, email: participantEmail });
     }
   });
 
