@@ -39,7 +39,6 @@ export interface IParticipant {
   name: string;
   email: Email;
   comment: string;
-  registrationTime?: number;
 }
 
 export interface IEditParticipant {
