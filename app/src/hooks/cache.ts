@@ -50,14 +50,8 @@ export const useParticipants = (eventId: string) => {
     fetcher: useCallback(async () => {
       const { attendees, waitingList } = await getParticipantsForEvent(eventId);
       return {
-        attendees: attendees.map((participant: IParticipantViewModel) =>
-          parseParticipantViewModel(participant)
-        ),
-        waitingList: waitingList
-          ? waitingList.map((participant: IParticipantViewModel) =>
-              parseParticipantViewModel(participant)
-            )
-          : undefined,
+        attendees: attendees.map(parseParticipantViewModel),
+        waitingList: waitingList?.map(parseParticipantViewModel),
       };
     }, [eventId]),
   });
