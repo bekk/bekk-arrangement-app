@@ -51,7 +51,7 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
           <p className={style.text}>{participantsText}</p>
         </div>
       )}
-      <div className={style.locationContainer}>
+      <div className={style.organizerContainer}>
         <p className={style.infoHeader}>Arrangør</p>
         <p className={style.text}>{event.organizerName}</p>
         <a
@@ -63,7 +63,7 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
           {stringifyEmail(event.organizerEmail)}
         </a>
       </div>
-      <div className={style.organizerContainer}>
+      <div className={style.locationContainer}>
         <p className={style.infoHeader}>Hvor</p>
         <p className={style.text}>{event.location}</p>
       </div>

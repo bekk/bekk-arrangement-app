@@ -7,9 +7,9 @@ import {
   getParticipantsForEvent,
 } from 'src/api/arrangementSvc';
 import {
-  IParticipant,
   IParticipantViewModel,
   parseParticipantViewModel,
+  IParticipantsWithWaitingList,
 } from 'src/types/participant';
 
 //**  Event  **//
@@ -39,16 +39,20 @@ export const useEvents = () => {
 
 //**  Participant  **//
 
-const participantsCache = cachedRemoteData<string, IParticipant[]>();
+const participantsCache = cachedRemoteData<
+  string,
+  IParticipantsWithWaitingList
+>();
 
 export const useParticipants = (eventId: string) => {
   return participantsCache.useOne({
     key: eventId,
     fetcher: useCallback(async () => {
-      const participantContracts = await getParticipantsForEvent(eventId);
-      return participantContracts.map((participant: IParticipantViewModel) =>
-        parseParticipantViewModel(participant)
-      );
+      const { attendees, waitingList } = await getParticipantsForEvent(eventId);
+      return {
+        attendees: attendees.map(parseParticipantViewModel),
+        waitingList: waitingList?.map(parseParticipantViewModel),
+      };
     }, [eventId]),
   });
 };

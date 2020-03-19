@@ -52,42 +52,38 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
+  const attendees = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.attendees
+    : [];
+  const waitingList = hasLoaded(remoteParticipants)
+    ? remoteParticipants.data.waitingList
+    : [];
 
-  const participantsText = hasLoaded(remoteParticipants)
-    ? `${remoteParticipants.data.length}${
-        event?.maxParticipants === 0 ? ' av ∞' : ' av ' + event?.maxParticipants
-      }`
-    : 'Laster deltakere...';
+  const eventIsFull =
+    event.maxParticipants !== 0 && event.maxParticipants === attendees.length;
 
-  const closedEventText = () => {
-    const eventIsFull =
-      event.maxParticipants !== 0 &&
-      hasLoaded(remoteParticipants) &&
-      event.maxParticipants === remoteParticipants.data.length;
+  const participantsText = `${attendees.length}${
+    event.maxParticipants === 0
+      ? ' av ∞'
+      : ' av ' +
+        event.maxParticipants +
+        (waitingList && eventIsFull
+          ? ` og ${waitingList.length} på venteliste`
+          : '')
+  }`;
 
-    if (isInThePast(event.end)) {
-      return (
-        <p>
-          Stengt <br />
-          Arrangementet har allerede funnet sted
-        </p>
-      );
-    } else if (timeLeft.difference > 0) {
-      return (
-        <p>
-          Stengt <br />
-          Åpner om {asString(timeLeft)}
-        </p>
-      );
-    } else if (eventIsFull) {
-      return (
-        <p>
-          Stengt <br />
-          Arrangementet er dessverre fullt
-        </p>
-      );
-    }
-  };
+  const closedEventText = isInThePast(event.end)
+    ? 'Arrangementet har allerede funnet sted'
+    : timeLeft.difference > 0
+    ? `Åpner om ${asString(timeLeft)}`
+    : eventIsFull && !waitingList
+    ? 'Arrangementet er dessverre fullt'
+    : undefined;
+
+  const waitlistText =
+    eventIsFull && waitingList
+      ? 'Arrangementet er dessverre fullt, men du kan fortsatt bli med på ventelisten!'
+      : undefined;
 
   return (
     <Page>
@@ -107,22 +103,52 @@ export const ViewEventContainer = () => {
       <ViewEvent event={event} participantsText={participantsText} />
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
-        {closedEventText() ?? (
-          <EditParticipation eventId={eventId} event={event} />
+        {closedEventText ? (
+          <p className={style.text}>
+            Stengt <br /> {closedEventText}
+          </p>
+        ) : waitlistText ? (
+          <p className={style.text}>{waitlistText}</p>
+        ) : null}
+        {!closedEventText && (
+          <EditParticipation
+            eventId={eventId}
+            event={event}
+            isWaitlisted={eventIsFull && event.hasWaitingList}
+          />
         )}
         <h1 className={style.subHeader}>Påmeldte</h1>
-        {hasLoaded(remoteParticipants) &&
-          (remoteParticipants.data.length > 0 ? (
-            remoteParticipants.data.map(p => {
+        <div>
+          {attendees.length > 0 ? (
+            attendees.map(attendee => {
               return (
-                <div key={stringifyEmail(p.email)} className={style.text}>
-                  {p.name}, {stringifyEmail(p.email)}, Kommentar: {p.comment}
+                <div
+                  key={stringifyEmail(attendee.email)}
+                  className={style.text}
+                >
+                  {attendee.name}, {stringifyEmail(attendee.email)}, Kommentar:{' '}
+                  {attendee.comment}
                 </div>
               );
             })
           ) : (
             <div className={style.text}>Ingen påmeldte</div>
-          ))}
+          )}
+          {waitingList && waitingList.length > 0 && (
+            <>
+              <h3>På venteliste</h3>
+              {waitingList.map(waitlisted => (
+                <div
+                  key={stringifyEmail(waitlisted.email)}
+                  className={style.text}
+                >
+                  {waitlisted.name}, {stringifyEmail(waitlisted.email)},
+                  Kommentar: {waitlisted.comment}
+                </div>
+              ))}
+            </>
+          )}
+        </div>
       </section>
     </Page>
   );

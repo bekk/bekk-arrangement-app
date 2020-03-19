@@ -7,14 +7,14 @@ export const useLocalStorage = ({
 }: {
   key: string;
 }): [Option<string>, (str: string) => void] => {
-  const [cache, setCache] = useState<Option<string>>(undefined);
-
   const readLocalStorage = useCallback((): Option<string> => {
     const inStorage = localStorage.getItem(key);
     if (inStorage !== null) {
       return inStorage;
     }
   }, [key]);
+
+  const [cache, setCache] = useState<Option<string>>(readLocalStorage());
 
   const setLocalStorage = (value: string) => {
     localStorage.setItem(key, value);

@@ -7,8 +7,16 @@
   background-color: var(--backgroundColor);
   display: block;
   width: 120px;
+  text-align: center;
+  line-height: 2;
   @include regularText;
   @media #{$desktop} {
     width: 160px;
   }
+}
+
+.iPhone {
+  // Må teste på en iPhone om dette funker
+  //-webkit-appearance: none;
+  color: var(--backgroundColor);
 }

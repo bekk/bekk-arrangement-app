@@ -50,6 +50,7 @@ export interface IEventViewModel {
   organizerEmail: string;
   maxParticipants: number;
   participantQuestion: string;
+  hasWaitingList: boolean;
 }
 
 export interface IEventWriteModel {
@@ -64,6 +65,7 @@ export interface IEventWriteModel {
   maxParticipants: number;
   editUrlTemplate: string;
   participantQuestion: string;
+  hasWaitingList: boolean;
 }
 
 export interface IEvent {
@@ -77,6 +79,7 @@ export interface IEvent {
   organizerEmail: Email;
   maxParticipants: number;
   participantQuestion: string;
+  hasWaitingList: boolean;
 }
 
 export interface IEditEvent {
@@ -90,6 +93,7 @@ export interface IEditEvent {
   organizerEmail: string;
   maxParticipants: string;
   participantQuestion: string;
+  hasWaitingList: boolean;
 }
 
 export const parseEditEvent = ({
@@ -103,6 +107,7 @@ export const parseEditEvent = ({
   organizerEmail,
   maxParticipants,
   participantQuestion,
+  hasWaitingList,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -115,6 +120,7 @@ export const parseEditEvent = ({
     organizerEmail: parseEditEmail(organizerEmail),
     maxParticipants: parseMaxAttendees(maxParticipants),
     participantQuestion: parseQuestion(participantQuestion),
+    hasWaitingList: hasWaitingList,
   };
 
   try {
@@ -155,6 +161,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const organizerEmail = parseEditEmail(eventView.organizerEmail);
   const maxParticipants = eventView.maxParticipants;
   const participantQuestion = parseQuestion(eventView.participantQuestion);
+  const hasWaitingList = eventView.hasWaitingList;
 
   const event = {
     title,
@@ -167,6 +174,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     organizerEmail,
     maxParticipants,
     participantQuestion,
+    hasWaitingList,
   };
 
   assertIsValid(event);
@@ -185,6 +193,7 @@ export const toEditEvent = ({
   organizerEmail,
   maxParticipants,
   participantQuestion,
+  hasWaitingList,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -196,6 +205,7 @@ export const toEditEvent = ({
   organizerEmail: toEditEmail(organizerEmail),
   maxParticipants: toEditMaxAttendees(maxParticipants),
   participantQuestion,
+  hasWaitingList,
 });
 
 export const initialEvent = (): IEvent => {
@@ -218,5 +228,6 @@ export const initialEvent = (): IEvent => {
     organizerEmail: { email: '' },
     maxParticipants: 0,
     participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
+    hasWaitingList: false,
   };
 };
