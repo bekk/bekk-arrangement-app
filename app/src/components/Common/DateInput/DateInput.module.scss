@@ -6,16 +6,17 @@
   outline: none;
   background-color: var(--backgroundColor);
   display: block;
-  width: 120px;
-  text-align: center;
+  width: 60%;
+  text-align: left;
+  align-self: center;
   @include regularText;
   @media #{$desktop} {
     width: 160px;
+    text-align: center;
   }
 }
 
 .iOS {
   -webkit-appearance: none;
   -moz-appearance: none;
-  width: 130px;
 }

@@ -2,7 +2,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr;
   margin-top: 50px;
   @media #{$desktop} {
     grid-template-columns: 1fr 1fr;
@@ -21,9 +21,10 @@
 }
 
 .label {
+  grid-row: 1;
   white-space: pre-wrap;
   align-self: center;
-  @include regularText;
+  @include boldText;
 }
 
 .container {
@@ -31,6 +32,10 @@
   justify-content: space-between;
   border-bottom: solid 1px;
   border-color: var(--textColor);
+  grid-row: 2;
+  @media #{$desktop} {
+    grid-row: 1;
+  }
 }
 
 .error {
