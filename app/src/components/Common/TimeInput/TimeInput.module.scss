@@ -6,8 +6,8 @@
   background-color: var(--backgroundColor);
   text-align: center;
   align-self: center;
-  width: 25px;
-  margin: 2px;
+  width: 40px;
+  margin: 5px;
   line-height: 2;
   @include regularText;
   @media #{$desktop} {
@@ -42,4 +42,5 @@
   text-align: center;
   align-self: center;
   line-height: 2;
+  margin: 5px 0;
 }
