@@ -48,10 +48,11 @@ export const DateTimeInputWithTimezone = ({
               onChange({
                 ...value,
                 time,
+                timezone: 1,
               });
             }}
           />
-          <TimezoneDropdown
+          {/* <TimezoneDropdown
             value={value.timezone}
             onChange={timezone => {
               onChange({
@@ -59,7 +60,7 @@ export const DateTimeInputWithTimezone = ({
                 timezone,
               });
             }}
-          />
+          /> */}
         </div>
       </div>
       {!isValid(timeInstance) && (

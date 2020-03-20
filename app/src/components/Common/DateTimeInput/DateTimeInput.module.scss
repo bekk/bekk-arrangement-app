@@ -2,8 +2,11 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   margin-top: 50px;
+  @media #{$desktop} {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .dateTimeInput {

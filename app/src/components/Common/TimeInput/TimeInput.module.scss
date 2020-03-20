@@ -33,7 +33,10 @@
   display: flex;
   border: none;
   flex-direction: row;
-  width: fit-content;
+  width: 70px;
+  @media #{$desktop} {
+    width: fit-content;
+  }
 }
 
 .text {
