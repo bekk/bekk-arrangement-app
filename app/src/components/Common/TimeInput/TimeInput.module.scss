@@ -6,7 +6,7 @@
   background-color: var(--backgroundColor);
   text-align: center;
   align-self: center;
-  width: 20px;
+  width: 25px;
   margin: 2px;
   line-height: 2;
   @include regularText;
@@ -34,14 +34,12 @@
   display: flex;
   border: none;
   flex-direction: row;
-  width: 70px;
-  @media #{$desktop} {
-    width: fit-content;
-  }
+  width: fit-content;
 }
 
 .text {
   @include regularText;
   text-align: center;
   align-self: center;
+  line-height: 2;
 }
