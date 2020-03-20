@@ -9,9 +9,11 @@ interface IProps {
 }
 
 export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
-  const isIPhone = window.navigator.userAgent.includes('iPhone');
+  const iOSDevice =
+    window.navigator.userAgent.includes('iPhone') ||
+    window.navigator.userAgent.includes('iPad');
   const dateStyle = classNames(style.dateInput, {
-    [style.iPhone]: isIPhone,
+    [style.iOS]: iOSDevice,
   });
 
   return (
