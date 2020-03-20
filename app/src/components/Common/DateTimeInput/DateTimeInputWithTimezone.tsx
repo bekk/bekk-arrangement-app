@@ -7,7 +7,6 @@ import {
   TimeInstanceEdit,
   parseEditTimeInstance,
 } from 'src/types/time-instance';
-import { TimezoneDropdown } from 'src/components/Common/TimeInput/TimezoneDropdown';
 import { TimeInput } from '../TimeInput/TimeInput';
 import { isValid } from 'src/types/validation';
 
@@ -30,7 +29,7 @@ export const DateTimeInputWithTimezone = ({
 
   return (
     <section className={style.grid}>
-      <label className={style.dateTimeInput}>{label}</label>
+      <label className={style.label}>{label}</label>
       <div className={containerStyle}>
         <DateInput
           value={value.date}
@@ -41,28 +40,19 @@ export const DateTimeInputWithTimezone = ({
             });
           }}
         />
-        <div className={style.timeWithTimezone}>
-          <TimeInput
-            value={value.time}
-            onChange={time => {
-              onChange({
-                ...value,
-                time,
-                timezone: 1,
-              });
-            }}
-          />
-          {/* <TimezoneDropdown
-            value={value.timezone}
-            onChange={timezone => {
-              onChange({
-                ...value,
-                timezone,
-              });
-            }}
-          /> */}
-        </div>
+
+        <TimeInput
+          value={value.time}
+          onChange={time => {
+            onChange({
+              ...value,
+              time,
+              timezone: 1,
+            });
+          }}
+        />
       </div>
+
       {!isValid(timeInstance) && (
         <ValidationResult validationResult={timeInstance} />
       )}
