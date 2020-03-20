@@ -6,7 +6,7 @@
   background-color: var(--backgroundColor);
   text-align: center;
   align-self: center;
-  width: 40px;
+  width: 30px;
   margin: 5px;
   line-height: 2;
   @include regularText;
@@ -40,7 +40,6 @@
 .text {
   @include regularText;
   text-align: center;
-  align-self: center;
   line-height: 2;
   margin: 5px 0;
 }

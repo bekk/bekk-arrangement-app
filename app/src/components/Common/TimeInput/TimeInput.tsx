@@ -30,7 +30,6 @@ export const TimeInput = ({
       <input
         className={style.timeInput}
         type="number"
-        pattern="[0-9]*"
         inputMode="numeric"
         value={hour}
         onChange={v => setHour(v.target.value)}
@@ -43,7 +42,6 @@ export const TimeInput = ({
         className={style.timeInput}
         ref={minuteRef}
         type="number"
-        pattern="[0-9]*"
         inputMode="numeric"
         onBlur={updateTime}
         value={minute}
