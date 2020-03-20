@@ -19,14 +19,14 @@ export const parseEditTime = ([_hour, _minutes]: EditTime):
   const minute = Number(_minutes);
 
   const validator = validate<ITime>({
-    "Can't have more than 60 minutes in an hour": minute > 59,
-    "Can't have negative number of minutes": minute < 0,
-    'There are not more than 23 hours in a day': hour > 23,
-    "Can't have a negative amount of hours in a day": hour < 0,
-    'Hours needs to be a number': isNaN(hour) || _hour === '',
-    'Minutes needs to be a number': isNaN(minute) || _minutes === '',
-    'Number of hours needs to be an integer': !Number.isInteger(hour),
-    'Number of minutes needs to be an integer': !Number.isInteger(minute),
+    'Kan ikke ha mer enn 60 minutter i en time': minute > 59,
+    'Minutt kan ikke ha negativ verdi': minute < 0,
+    'Det er ikke mer enn 24 timer i et døgn': hour > 23,
+    'Time kan ikke ha negativ verdi': hour < 0,
+    'Time må være et heltall':
+      isNaN(hour) || _hour === '' || !Number.isInteger(hour),
+    'Minutt må være et heltall':
+      isNaN(minute) || _minutes === '' || !Number.isInteger(minute),
   });
 
   return validator.resolve({ hour, minute });
