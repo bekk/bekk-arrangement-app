@@ -56,9 +56,8 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
         <p className={style.text}>{event.organizerName}</p>
         <a
           className={style.emailLink}
-          href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${
-            event.title
-          }`}
+          href={`mailto:${stringifyEmail(event.organizerEmail)}?subject=${event.title
+            }`}
         >
           {stringifyEmail(event.organizerEmail)}
         </a>
@@ -68,6 +67,7 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
         <p className={style.text}>{event.location}</p>
       </div>
       <div className={style.descriptionContainer}>
+        <p className={style.infoHeader}>Beskrivelse</p>
         <p className={style.textBlock}>{event.description}</p>
       </div>
     </section>
@@ -111,7 +111,7 @@ const OpenForRegistrationTimeSection = ({
       <p className={style.infoHeader}>Påmelding åpner</p>
       <p className={style.dateText}>
         {capitalize(stringifyTimeInstanceWithDayName(date))} <br />
-        Klokken:
+        Klokken {' '}
         {stringifyTime(dateToITime(date))}
       </p>
     </div>
