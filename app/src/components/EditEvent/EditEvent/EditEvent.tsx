@@ -134,6 +134,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
       label={'Maks antall'}
       placeholder="0 (ingen grense)"
       value={event.maxParticipants}
+      isNumber={true}
       validation={parseMaxAttendees}
       onChange={maxParticipants =>
         updateEvent({

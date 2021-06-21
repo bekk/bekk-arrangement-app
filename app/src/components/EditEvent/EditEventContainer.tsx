@@ -80,30 +80,36 @@ export const EditEventContainer = () => {
     <Page>
       <h1 className={style.header}>Endre arrangement</h1>
       <EditEvent eventResult={editEvent} updateEvent={setEditEvent} />
-      <div className={style.previewButton}>
-        {validEvent && (
-          <Button
-            onClick={() => gotoPreview(validEvent)}
-            disabled={!validEvent}
-          >
-            Forhåndsvis endringer
-          </Button>
-        )}
-      </div>
       <div className={style.buttonContainer}>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>
-        <ButtonWithPromptModal
-          text={'Avlys arrangement'}
-          onConfirm={onDeleteEvent}
-        >
-          <p>
-            Er du sikker på at du vil avlyse arrangementet? <br />
-            Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
-            <span role="img" aria-label="grimacing-face">
-              😬
-            </span>
-          </p>
-        </ButtonWithPromptModal>
+        <div className={style.groupedButtons}>
+          <ButtonWithPromptModal
+            text={'Avlys arrangement'}
+            onConfirm={onDeleteEvent}
+            placeholder="Arrangementet er avlyst pga. ..."
+          >
+            <>
+              <p>
+                Er du sikker på at du vil avlyse arrangementet? <br />
+                Alle deltakere vil bli slettet. Dette kan ikke reverseres {' '}
+                <span role="img" aria-label="grimacing-face">
+                  😬
+                </span>
+              </p>
+              <p>
+                Send en forklarende tekst på e-post til alle påmeldte deltakere:
+              </p>
+            </>
+          </ButtonWithPromptModal>
+          {validEvent && (
+            <Button
+              onClick={() => gotoPreview(validEvent)}
+              disabled={!validEvent}
+            >
+              Forhåndsvis endringer
+            </Button>
+          )}
+        </div>
       </div>
     </Page>
   );

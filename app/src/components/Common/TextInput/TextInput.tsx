@@ -6,6 +6,7 @@ interface IProps {
   label: string;
   value: string;
   placeholder?: string;
+  isNumber?: boolean;
   onChange: (value: string) => void;
   isError?: boolean;
   onBlur?: () => void;
@@ -16,6 +17,7 @@ export const TextInput = ({
   value,
   onChange,
   placeholder = '',
+  isNumber = false, 
   isError = false,
   onBlur = () => undefined,
 }: IProps): JSX.Element => {
@@ -30,7 +32,7 @@ export const TextInput = ({
         {label}
       </label>
       <input
-        type="text"
+        type={isNumber ? "number" : "text"}
         className={inputStyle}
         placeholder={placeholder}
         value={value}

@@ -39,7 +39,10 @@ export const parseHost = (value: string): string | IError[] => {
 export const parseMaxAttendees = (value: string): number | IError[] => {
   const number = Number(value);
   const validator = validate<number>({
-    'Verdien må være et tall': !Number.isInteger(number),
+    'Verdien må være et tall': Number.isNaN(number),
+    'Du kan kun invitere et helt antall mennesker😎': !Number.isInteger(number),
+    'Antallet kan ikke være over 5000, sett 0 hvis uendelig er ønsket': number > 5000, 
+    'Verdien må være positiv': number < 0
   });
   return validator.resolve(number);
 };

@@ -15,8 +15,12 @@
   margin-top: 20px;
 }
 
-.previewButton {
-  margin-top: 20px;
+.groupedButtons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.groupedButtons > :not(:first-child) {
+  margin-left: 10px;
 }

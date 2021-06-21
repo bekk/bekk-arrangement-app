@@ -9,9 +9,10 @@ interface IProps {
   text: string;
   onConfirm: (promptAnswer: string) => void;
   children: ReactChild | ReactChild[];
+  placeholder?: string;
 }
 
-export function ButtonWithPromptModal({ text, onConfirm, children }: IProps) {
+export function ButtonWithPromptModal({ text, onConfirm, placeholder, children }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [promptAnswer, setPromptAnswer] = useState('');
   const confirmAndClose = () => {
@@ -27,6 +28,7 @@ export function ButtonWithPromptModal({ text, onConfirm, children }: IProps) {
             {children}
             <TextareaAutosize
               className={style.textArea}
+              placeholder={placeholder}
               value={promptAnswer}
               onChange={event => setPromptAnswer(event.target.value)}
               minRows={5}
