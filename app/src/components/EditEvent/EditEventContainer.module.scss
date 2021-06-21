@@ -21,6 +21,6 @@
   margin-top: 10px;
 }
 
-.groupedButtons :first-child {
-  margin-right: 10px;
+.groupedButtons :not(:first-child) {
+  margin-left: 10px;
 }
