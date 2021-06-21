@@ -8,6 +8,7 @@ interface ValidTextInputProps {
   label: string;
   placeholder?: string;
   value: string;
+  isNumber?: boolean; 
   validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
 }
@@ -16,6 +17,7 @@ export const ValidatedTextInput = ({
   label,
   placeholder,
   value,
+  isNumber,
   validation,
   onChange,
 }: ValidTextInputProps) => {
@@ -29,6 +31,7 @@ export const ValidatedTextInput = ({
         label={label}
         placeholder={placeholder}
         value={value}
+        isNumber={isNumber}
         onChange={onChange}
         isError={shouldShowErrors && isIErrorList(errors)}
         onBlur={() => setShouldShowErrors(true)}
