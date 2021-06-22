@@ -21,8 +21,8 @@ export const PreviewNewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `0 av ${event.maxParticipants ?? '∞'}${
-    event.hasWaitingList ? ' og 0 på venteliste' : ''
+  const participantsText = `0 av ${event.maxParticipants === 0 ? '∞' : event.maxParticipants}${
+    event.hasWaitingList && event.maxParticipants != 0 ? ' og 0 på venteliste' : ''
   }`;
 
   const postNewEvent = catchAndNotify(async () => {
