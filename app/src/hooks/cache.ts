@@ -7,7 +7,6 @@ import {
   getParticipantsForEvent,
 } from 'src/api/arrangementSvc';
 import {
-  IParticipantViewModel,
   parseParticipantViewModel,
   IParticipantsWithWaitingList,
 } from 'src/types/participant';
@@ -39,10 +38,8 @@ export const useEvents = () => {
 
 //**  Participant  **//
 
-const participantsCache = cachedRemoteData<
-  string,
-  IParticipantsWithWaitingList
->();
+const participantsCache =
+  cachedRemoteData<string, IParticipantsWithWaitingList>();
 
 export const useParticipants = (eventId: string) => {
   return participantsCache.useOne({
