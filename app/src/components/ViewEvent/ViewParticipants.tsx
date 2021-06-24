@@ -2,7 +2,7 @@ import React from 'react';
 import style from './ViewEventContainer.module.scss';
 import { stringifyEmail } from 'src/types/email';
 import { useParticipants } from 'src/hooks/cache';
-import { hasLoaded } from 'src/remote-data';
+import { hasLoaded, isBad } from 'src/remote-data';
 
 interface IProps {
   eventId: string;
@@ -11,6 +11,10 @@ interface IProps {
 
 export const ViewParticipants = ({ eventId, editToken }: IProps) => {
   const remoteParticipants = useParticipants(eventId, editToken);
+
+  if (isBad(remoteParticipants)) {
+    return <div>Det er noe galt med dataen</div>
+  }
 
   if (!hasLoaded(remoteParticipants)) {
     return <div>Laster...</div>;
