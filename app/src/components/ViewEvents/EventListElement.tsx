@@ -19,15 +19,16 @@ export const EventListElement = ({ eventId, event }: IProps) => {
   const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
   const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
     ? remoteNumberOfParticipants.data
-    : '-';
+    : undefined;
 
-  const participantLimitText =
-    event.maxParticipants === 0 ? '' : ` av ${event.maxParticipants}`;
+  const participantText = numberOfParticipants !== undefined && (event.maxParticipants === 0 ? numberOfParticipants : `${Math.min(numberOfParticipants, event.maxParticipants)} av ${event.maxParticipants}`);
+
   const dateText = isSameDate(event.start.date, event.end.date)
     ? `${stringifyDate(event.start.date)}`
     : `${stringifyDate(event.start.date)} \n - ${stringifyDate(
         event.end.date
       )}`;
+
   const desktopTimeText = `${stringifyTime(event.start.time)} - ${stringifyTime(
     event.end.time
   )}`;
@@ -48,8 +49,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
         <div className={style.desktopText}>
-          {numberOfParticipants}
-          {participantLimitText} påmeldte
+          {participantText ?? '-'} påmeldte
         </div>
         <div className={style.desktopText}>
           Arrangeres av {event.organizerName}
