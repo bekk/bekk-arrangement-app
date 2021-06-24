@@ -9,7 +9,6 @@ import {
   getWaitinglistSpot,
 } from 'src/api/arrangementSvc';
 import {
-  IParticipantViewModel,
   parseParticipantViewModel,
   IParticipantsWithWaitingList,
 } from 'src/types/participant';

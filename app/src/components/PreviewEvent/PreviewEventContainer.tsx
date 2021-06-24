@@ -3,19 +3,20 @@ import style from './PreviewEventContainer.module.scss';
 import { Page } from 'src/components/Page/Page';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useHistory } from 'react-router';
-import { useParam, useQuery } from 'src/utils/browser-state';
-import { eventIdKey, editTokenKey, viewEventRoute } from 'src/routing';
+import { useParam } from 'src/utils/browser-state';
+import { eventIdKey, viewEventRoute } from 'src/routing';
 import { putEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
 import { usePreviewEvent } from 'src/hooks/history';
+import { useEditToken } from 'src/hooks/saved-tokens';
 
 export const PreviewEventContainer = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
   const eventId = useParam(eventIdKey);
-  const editToken = useQuery(editTokenKey);
+  const editToken = useEditToken(eventId);
   const event = usePreviewEvent();
   if (!event) {
     return <div>Det finnes ingen event å forhåndsvise</div>;

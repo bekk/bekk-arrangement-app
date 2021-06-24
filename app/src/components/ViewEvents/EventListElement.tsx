@@ -8,7 +8,7 @@ import { viewEventRoute, editEventRoute } from 'src/routing';
 import { userIsAdmin } from 'src/auth';
 import { hasLoaded } from 'src/remote-data';
 import { useNumberOfParticipants } from 'src/hooks/cache';
-import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
+import { useEditToken } from 'src/hooks/saved-tokens';
 
 interface IProps {
   eventId: string;
@@ -33,13 +33,12 @@ export const EventListElement = ({ eventId, event }: IProps) => {
     event.end.time
   )}`;
 
-  const { savedEvents: createdEvents } = useSavedEditableEvents();
-  const createdThisEvent = createdEvents.find((x) => x.eventId === eventId);
+  const editToken = useEditToken(eventId);
 
   const viewRoute = viewEventRoute(eventId);
   const editRoute =
-    createdThisEvent || userIsAdmin()
-      ? editEventRoute(eventId, createdThisEvent?.editToken)
+    editToken || userIsAdmin()
+      ? editEventRoute(eventId, editToken)
       : undefined;
 
   return (

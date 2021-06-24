@@ -17,7 +17,7 @@ import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { useParam } from 'src/utils/browser-state';
 import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
 import {
-  useSavedEditableEvents,
+  useEditToken,
   useSavedParticipations,
 } from 'src/hooks/saved-tokens';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
@@ -27,8 +27,7 @@ export const ViewEventContainer = () => {
   const eventId = useParam(eventIdKey);
   const remoteEvent = useEvent(eventId);
 
-  const { savedEvents } = useSavedEditableEvents();
-  const editTokenFound = savedEvents.find((event) => event.eventId === eventId);
+  const editTokenFound = useEditToken(eventId);
 
   const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
   const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
@@ -94,11 +93,11 @@ export const ViewEventContainer = () => {
       {userIsLoggedIn() && (
         <BlockLink to={eventsRoute}>Til arrangementer</BlockLink>
       )}
-      {(editTokenFound || userIsAdmin()) && (
-        <BlockLink to={editEventRoute(eventId, editTokenFound?.editToken)}>
+      {(editTokenFound || userIsAdmin()) ? (
+        <BlockLink to={editEventRoute(eventId, editTokenFound)}>
           Rediger arrangement
         </BlockLink>
-      )}
+      ) : null}
       {participationsForThisEvent.map((p) => (
         <BlockLink key={p.email} to={cancelParticipantRoute(p)}>
           Meld {p.email} av arrangementet
@@ -123,7 +122,7 @@ export const ViewEventContainer = () => {
         {(editTokenFound || userIsAdmin()) && (
           <ViewParticipants
             eventId={eventId}
-            editToken={editTokenFound?.editToken}
+            editToken={editTokenFound}
           />
         )}
       </section>
