@@ -7,7 +7,7 @@ import { stringifyTime } from 'src/types/time';
 import { viewEventRoute, editEventRoute } from 'src/routing';
 import { userIsAdmin } from 'src/auth';
 import { hasLoaded } from 'src/remote-data';
-import { useNumberOfParticipants, useParticipants } from 'src/hooks/cache';
+import { useNumberOfParticipants } from 'src/hooks/cache';
 import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 interface IProps {

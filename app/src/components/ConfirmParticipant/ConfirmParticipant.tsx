@@ -13,19 +13,19 @@ export const ConfirmParticipant = () => {
   const participantEmail = useParam(emailKey);
 
   const remoteEvent = useEvent(eventId);
-  const remoteWaitinglistspot = useWaitinglistSpot(eventId, participantEmail);
+  const remoteWaitinglistSpot = useWaitinglistSpot(eventId, participantEmail);
 
-  if (!hasLoaded(remoteEvent) || !hasLoaded(remoteWaitinglistspot)) {
+  if (!hasLoaded(remoteEvent) || !hasLoaded(remoteWaitinglistSpot)) {
     return <div>Loading...</div>;
   }
 
   const event = remoteEvent.data;
-  const isWaitlisted = remoteWaitinglistspot.data >= 1;
+  const isWaitlisted = remoteWaitinglistSpot.data >= 1;
 
   return isWaitlisted ? (
     <Page>
       <h1 className={style.header}>
-        Du er nummer {remoteWaitinglistspot.data} på ventelisten!
+        Du er nummer {remoteWaitinglistSpot.data} på ventelisten!
       </h1>
       <div className={style.text}>
         Du er nå på venteliste for {event.title} den{' '}

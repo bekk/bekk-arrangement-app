@@ -56,7 +56,7 @@ export const useParticipants = (eventId: string, editToken?: string) => {
         attendees: attendees.map(parseParticipantViewModel),
         waitingList: waitingList?.map(parseParticipantViewModel),
       };
-    }, [eventId]),
+    }, [eventId, editToken]),
   });
 };
 

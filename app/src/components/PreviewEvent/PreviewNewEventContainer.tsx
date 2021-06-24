@@ -22,7 +22,7 @@ export const PreviewNewEventContainer = () => {
   }
 
   const participantsText = `0 av ${event.maxParticipants === 0 ? '∞' : event.maxParticipants}${
-    event.hasWaitingList && event.maxParticipants != 0 ? ' og 0 på venteliste' : ''
+    event.hasWaitingList && event.maxParticipants !== 0 ? ' og 0 på venteliste' : ''
   }`;
 
   const postNewEvent = catchAndNotify(async () => {

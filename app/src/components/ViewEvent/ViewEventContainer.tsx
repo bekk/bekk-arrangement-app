@@ -118,7 +118,6 @@ export const ViewEventContainer = () => {
           <AddParticipant
             eventId={eventId}
             event={event}
-            isWaitlisted={eventIsFull && event.hasWaitingList}
           />
         )}
         {(editTokenFound || userIsAdmin()) && (
