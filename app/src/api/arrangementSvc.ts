@@ -61,11 +61,31 @@ export const deleteEvent = (
   });
 
 export const getParticipantsForEvent = (
-  eventId: string
+  eventId: string,
+  editToken?: string
 ): Promise<IParticipantViewModelsWithWaitingList> =>
   get({
     host: getArrangementSvcUrl(),
-    path: `/events/${eventId}/participants`,
+    path: `/events/${eventId}/participants${queryStringStringify({
+      editToken,
+    })}`,
+  });
+
+export const getNumberOfParticipantsForEvent = (
+  eventId: string
+): Promise<number> =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events/${eventId}/participants/count`,
+  });
+
+export const getWaitinglistSpot = (
+  eventId: string,
+  email: string
+): Promise<number> =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events/${eventId}/participants/${email}/waitinglist-spot`,
   });
 
 export const postParticipant = (
