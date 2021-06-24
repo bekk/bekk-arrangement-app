@@ -4,7 +4,9 @@ import { useCallback } from 'react';
 import {
   getEvent,
   getEvents,
+  getNumberOfParticipantsForEvent,
   getParticipantsForEvent,
+  getWaitinglistSpot,
 } from 'src/api/arrangementSvc';
 import {
   IParticipantViewModel,
@@ -39,20 +41,47 @@ export const useEvents = () => {
 
 //**  Participant  **//
 
-const participantsCache = cachedRemoteData<
-  string,
-  IParticipantsWithWaitingList
->();
+const participantsCache =
+  cachedRemoteData<string, IParticipantsWithWaitingList>();
 
-export const useParticipants = (eventId: string) => {
+export const useParticipants = (eventId: string, editToken?: string) => {
   return participantsCache.useOne({
     key: eventId,
     fetcher: useCallback(async () => {
-      const { attendees, waitingList } = await getParticipantsForEvent(eventId);
+      const { attendees, waitingList } = await getParticipantsForEvent(
+        eventId,
+        editToken
+      );
       return {
         attendees: attendees.map(parseParticipantViewModel),
         waitingList: waitingList?.map(parseParticipantViewModel),
       };
     }, [eventId]),
+  });
+};
+
+const numberOfParticipantsCache = cachedRemoteData<string, number>();
+
+export const useNumberOfParticipants = (eventId: string) => {
+  return numberOfParticipantsCache.useOne({
+    key: eventId,
+    fetcher: useCallback(async () => {
+      const numberOfParticipants = await getNumberOfParticipantsForEvent(
+        eventId
+      );
+      return numberOfParticipants;
+    }, [eventId]),
+  });
+};
+
+const waitinglistSpotCache = cachedRemoteData<string, number>();
+
+export const useWaitinglistSpot = (eventId: string, email: string) => {
+  return waitinglistSpotCache.useOne({
+    key: `${eventId}:${email}`,
+    fetcher: useCallback(async () => {
+      const waitinglistSpot = await getWaitinglistSpot(eventId, email);
+      return waitinglistSpot;
+    }, [eventId, email]),
   });
 };

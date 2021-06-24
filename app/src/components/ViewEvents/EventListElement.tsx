@@ -7,7 +7,7 @@ import { stringifyTime } from 'src/types/time';
 import { viewEventRoute, editEventRoute } from 'src/routing';
 import { userIsAdmin } from 'src/auth';
 import { hasLoaded } from 'src/remote-data';
-import { useParticipants } from 'src/hooks/cache';
+import { useNumberOfParticipants, useParticipants } from 'src/hooks/cache';
 import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 interface IProps {
@@ -16,11 +16,11 @@ interface IProps {
 }
 
 export const EventListElement = ({ eventId, event }: IProps) => {
-  const remoteParticipants = useParticipants(eventId);
-  const attendees = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.attendees
-    : [];
-  const participantsCount = attendees.length;
+  const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
+  const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
+    ? remoteNumberOfParticipants.data
+    : '-';
+
   const participantLimitText =
     event.maxParticipants === 0 ? '' : ` av ${event.maxParticipants}`;
   const dateText = isSameDate(event.start.date, event.end.date)
@@ -33,7 +33,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
   )}`;
 
   const { savedEvents: createdEvents } = useSavedEditableEvents();
-  const createdThisEvent = createdEvents.find(x => x.eventId === eventId);
+  const createdThisEvent = createdEvents.find((x) => x.eventId === eventId);
 
   const viewRoute = viewEventRoute(eventId);
   const editRoute =
@@ -48,7 +48,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
         <div className={style.desktopText}>
-          {participantsCount}
+          {numberOfParticipants}
           {participantLimitText} påmeldte
         </div>
         <div className={style.desktopText}>

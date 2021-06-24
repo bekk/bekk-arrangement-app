@@ -24,7 +24,7 @@ interface Props {
   isWaitlisted: boolean;
 }
 
-export const EditParticipation = ({ eventId, event, isWaitlisted }: Props) => {
+export const AddParticipant = ({ eventId, event, isWaitlisted }: Props) => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
