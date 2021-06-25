@@ -9,9 +9,12 @@
   left: 0;
   top: 0;
   width: 100vw;
+  max-height: 100vh;
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
   z-index: 3;
+  @media #{$desktop} {
+    background: rgba(0, 0, 0, 0.5);
+  }
 }
 
 .modal {
@@ -27,18 +30,28 @@
   min-width: $modalWidth;
   min-height: $modalHeight;
   max-width: 95vw;
+  @media #{$mobile} {
+    min-width: 100vw;
+    max-width: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+  }
 }
 
 .header {
-  @include boldText;
+  @include headerText;
   color: var(--backgroundColor);
   height: $modalPadding;
+  line-height: 50px;
   padding-left: $modalPadding;
   margin-bottom: 20px;
   max-width: 600px;
 }
 
 .modalContent {
+  @include regularText;
+  color: var(--svart);
+  line-height: 25px;
   padding: $modalPadding;
   padding-top: 0;
   display: flex;
