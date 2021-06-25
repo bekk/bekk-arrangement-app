@@ -22,6 +22,7 @@ export const DateTimeInputWithTimezone = ({
   onChange,
 }: IProps) => {
   const timeInstance = parseEditTimeInstance(value);
+  const timezoneOffsetUTC = new Date().getTimezoneOffset()/(-60)
 
   const containerStyle = classNames(style.container, {
     [style.error]: !isValid(timeInstance),
@@ -47,7 +48,7 @@ export const DateTimeInputWithTimezone = ({
             onChange({
               ...value,
               time,
-              timezone: 1,
+              timezone: timezoneOffsetUTC,
             });
           }}
         />
