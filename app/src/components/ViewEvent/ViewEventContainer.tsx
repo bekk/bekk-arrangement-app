@@ -16,10 +16,7 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { useParam } from 'src/utils/browser-state';
 import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
-import {
-  useEditToken,
-  useSavedParticipations,
-} from 'src/hooks/saved-tokens';
+import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
 
@@ -88,12 +85,17 @@ export const ViewEventContainer = () => {
       ? 'Arrangementet er dessverre fullt, men du kan fortsatt bli med på ventelisten!'
       : undefined;
 
+  const numberOfPossibleParticipantsText =
+    event.maxParticipants === 0
+      ? 'Ubegrenset antall plasser'
+      : event.maxParticipants + ' plasser';
+
   return (
     <Page>
       {userIsLoggedIn() && (
         <BlockLink to={eventsRoute}>Til arrangementer</BlockLink>
       )}
-      {(editTokenFound || userIsAdmin()) ? (
+      {editTokenFound || userIsAdmin() ? (
         <BlockLink to={editEventRoute(eventId, editTokenFound)}>
           Rediger arrangement
         </BlockLink>
@@ -107,23 +109,18 @@ export const ViewEventContainer = () => {
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
         {closedEventText ? (
-          <p className={style.text}>
-            Stengt <br /> {closedEventText}
-          </p>
+          <div>
+            <p>{numberOfPossibleParticipantsText}</p>
+            <p className={style.text}>
+              Påmeldingen er stengt <br /> {closedEventText}
+            </p>
+          </div>
         ) : waitlistText ? (
           <p className={style.text}>{waitlistText}</p>
         ) : null}
-        {!closedEventText && (
-          <AddParticipant
-            eventId={eventId}
-            event={event}
-          />
-        )}
+        {!closedEventText && <AddParticipant eventId={eventId} event={event} />}
         {(editTokenFound || userIsAdmin()) && (
-          <ViewParticipants
-            eventId={eventId}
-            editToken={editTokenFound}
-          />
+          <ViewParticipants eventId={eventId} editToken={editTokenFound} />
         )}
       </section>
     </Page>

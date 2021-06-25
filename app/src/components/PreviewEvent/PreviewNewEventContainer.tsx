@@ -21,8 +21,16 @@ export const PreviewNewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `0 av ${event.maxParticipants === 0 ? '∞' : event.maxParticipants}${
-    event.hasWaitingList && event.maxParticipants !== 0 ? ' og 0 på venteliste' : ''
+  const returnToCreate = () => {
+    history.goBack();
+  };
+
+  const participantsText = `0 av ${
+    event.maxParticipants === 0 ? '∞' : event.maxParticipants
+  }${
+    event.hasWaitingList && event.maxParticipants !== 0
+      ? ' og 0 på venteliste'
+      : ''
   }`;
 
   const postNewEvent = catchAndNotify(async () => {
@@ -43,6 +51,9 @@ export const PreviewNewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
+        <Button onClick={returnToCreate} color="White">
+          Rediger
+        </Button>
         <Button onClick={postNewEvent}>Opprett arrangement</Button>
       </div>
     </Page>
