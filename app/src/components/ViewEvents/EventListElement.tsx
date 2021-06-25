@@ -3,12 +3,15 @@ import { IEvent } from 'src/types/event';
 import { Link } from 'react-router-dom';
 import style from './EventListElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
+import { dateToITime, stringifyTime } from 'src/types/time';
 import { viewEventRoute, editEventRoute } from 'src/routing';
 import { userIsAdmin } from 'src/auth';
 import { hasLoaded } from 'src/remote-data';
 import { useNumberOfParticipants } from 'src/hooks/cache';
 import { useEditToken } from 'src/hooks/saved-tokens';
+import { useTimeLeft } from 'src/hooks/timeleftHooks';
+import { capitalize } from 'src/components/ViewEvent/ViewEvent';
+import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
 
 interface IProps {
   eventId: string;
@@ -17,11 +20,31 @@ interface IProps {
 
 export const EventListElement = ({ eventId, event }: IProps) => {
   const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
+
   const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
     ? remoteNumberOfParticipants.data
     : undefined;
 
-  const participantText = numberOfParticipants !== undefined && (event.maxParticipants === 0 ? numberOfParticipants : `${Math.min(numberOfParticipants, event.maxParticipants)} av ${event.maxParticipants}`);
+  const timeLeft = useTimeLeft(event.openForRegistrationTime);
+
+  const timeLeftText =
+    'Påmelding åpner ' +
+    (timeLeft.days === 0
+      ? 'klokken ' + stringifyTime(dateToITime(event.openForRegistrationTime))
+      : capitalize(
+          stringifyTimeInstanceWithDayName(event.openForRegistrationTime)
+        ));
+
+  console.log(event.title);
+  console.log('time left', timeLeft);
+
+  const participantText =
+    numberOfParticipants !== undefined &&
+    (event.maxParticipants === 0
+      ? numberOfParticipants
+      : `${Math.min(numberOfParticipants, event.maxParticipants)} av ${
+          event.maxParticipants
+        }`);
 
   const dateText = isSameDate(event.start.date, event.end.date)
     ? `${stringifyDate(event.start.date)}`
@@ -37,9 +60,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
 
   const viewRoute = viewEventRoute(eventId);
   const editRoute =
-    editToken || userIsAdmin()
-      ? editEventRoute(eventId, editToken)
-      : undefined;
+    editToken || userIsAdmin() ? editEventRoute(eventId, editToken) : undefined;
 
   return (
     <div className={style.row}>
@@ -48,7 +69,9 @@ export const EventListElement = ({ eventId, event }: IProps) => {
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
         <div className={style.desktopText}>
-          {participantText ?? '-'} påmeldte
+          {timeLeft.difference > 0
+            ? timeLeftText
+            : participantText + ' påmeldte' ?? '- påmeldte'}
         </div>
         <div className={style.desktopText}>
           Arrangeres av {event.organizerName}
