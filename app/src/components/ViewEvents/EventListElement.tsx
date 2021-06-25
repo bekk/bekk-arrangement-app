@@ -35,9 +35,6 @@ export const EventListElement = ({ eventId, event }: IProps) => {
           stringifyTimeInstanceWithDayName(event.openForRegistrationTime)
         ));
 
-  console.log(event.title);
-  console.log('time left', timeLeft);
-
   const participantText =
     numberOfParticipants !== undefined &&
     (event.maxParticipants === 0
