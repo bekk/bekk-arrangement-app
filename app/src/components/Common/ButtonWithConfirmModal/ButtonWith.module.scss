@@ -7,4 +7,12 @@
   outline: 0;
   padding: 10px;
   resize: vertical;
+  width: 100%;
+}
+
+.groupedButtons {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  margin-top: 10px;
 }
