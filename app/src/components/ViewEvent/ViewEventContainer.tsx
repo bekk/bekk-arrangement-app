@@ -86,7 +86,7 @@ export const ViewEventContainer = () => {
       : undefined;
 
   const numberOfPossibleParticipantsText =
-    event.maxParticipants == 0
+    event.maxParticipants === 0
       ? 'Ubegrenset antall plasser'
       : event.maxParticipants + ' plasser';
 
