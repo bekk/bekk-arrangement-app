@@ -4,15 +4,11 @@ import { Page } from 'src/components/Page/Page';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useHistory } from 'react-router';
 import { useParam } from 'src/utils/browser-state';
-import { editEventRoute, eventIdKey, viewEventRoute } from 'src/routing';
+import { eventIdKey, viewEventRoute } from 'src/routing';
 import { putEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
-import {
-  useGotoEventEdit,
-  useGotoEventPreview,
-  usePreviewEvent,
-} from 'src/hooks/history';
+import { usePreviewEvent } from 'src/hooks/history';
 import { useEditToken } from 'src/hooks/saved-tokens';
 
 export const PreviewEventContainer = () => {
