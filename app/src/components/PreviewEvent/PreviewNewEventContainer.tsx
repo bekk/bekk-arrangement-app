@@ -51,8 +51,10 @@ export const PreviewNewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
+        <Button onClick={returnToCreate} color="White">
+          Rediger
+        </Button>
         <Button onClick={postNewEvent}>Opprett arrangement</Button>
-        <Button onClick={returnToCreate}>Tilbake til redigering</Button>
       </div>
     </Page>
   );

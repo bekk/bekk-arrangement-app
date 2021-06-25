@@ -46,10 +46,10 @@ export const PreviewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
-        <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
         <Button color="White" onClick={returnToEdit}>
-          Tilbake til redigering
+          Rediger
         </Button>
+        <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
       </div>
     </Page>
   );
