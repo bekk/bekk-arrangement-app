@@ -10,9 +10,16 @@ interface IProps {
   onConfirm: (promptAnswer: string) => void;
   children: ReactChild | ReactChild[];
   placeholder?: string;
+  textareaLabel?: string;
 }
 
-export function ButtonWithPromptModal({ text, onConfirm, placeholder, children }: IProps) {
+export function ButtonWithPromptModal({
+  text,
+  onConfirm,
+  placeholder,
+  children,
+  textareaLabel,
+}: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [promptAnswer, setPromptAnswer] = useState('');
   const confirmAndClose = () => {
@@ -26,16 +33,24 @@ export function ButtonWithPromptModal({ text, onConfirm, placeholder, children }
         <Modal header={text} closeModal={() => setShowModal(false)}>
           <>
             {children}
-            <TextareaAutosize
-              className={style.textArea}
-              placeholder={placeholder}
-              value={promptAnswer}
-              onChange={event => setPromptAnswer(event.target.value)}
-              minRows={5}
-            />
-            <Button color={'White'} onClick={confirmAndClose}>
-              {text}
-            </Button>
+            <div>
+              <p>{textareaLabel}</p>
+              <TextareaAutosize
+                className={style.textArea}
+                placeholder={placeholder}
+                value={promptAnswer}
+                onChange={(event) => setPromptAnswer(event.target.value)}
+                minRows={5}
+              />
+            </div>
+            <div className={style.groupedButtons}>
+              <Button color={'White'} onClick={confirmAndClose}>
+                {text}
+              </Button>
+              <Button color={'Black'} onClick={() => setShowModal(false)}>
+                Avbryt
+              </Button>
+            </div>
           </>
         </Modal>
       )}

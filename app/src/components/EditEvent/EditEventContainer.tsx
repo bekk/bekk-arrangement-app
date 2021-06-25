@@ -87,17 +87,15 @@ export const EditEventContainer = () => {
             text={'Avlys arrangement'}
             onConfirm={onDeleteEvent}
             placeholder="Arrangementet er avlyst pga. ..."
+            textareaLabel="Send en forklarende tekst på e-post til alle påmeldte deltakere:"
           >
             <>
               <p>
                 Er du sikker på at du vil avlyse arrangementet? <br />
-                Alle deltakere vil bli slettet. Dette kan ikke reverseres {' '}
+                Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
                 <span role="img" aria-label="grimacing-face">
                   😬
                 </span>
-              </p>
-              <p>
-                Send en forklarende tekst på e-post til alle påmeldte deltakere:
               </p>
             </>
           </ButtonWithPromptModal>

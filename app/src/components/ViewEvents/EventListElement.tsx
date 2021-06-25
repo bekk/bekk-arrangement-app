@@ -7,8 +7,8 @@ import { stringifyTime } from 'src/types/time';
 import { viewEventRoute, editEventRoute } from 'src/routing';
 import { userIsAdmin } from 'src/auth';
 import { hasLoaded } from 'src/remote-data';
-import { useParticipants } from 'src/hooks/cache';
-import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
+import { useNumberOfParticipants } from 'src/hooks/cache';
+import { useEditToken } from 'src/hooks/saved-tokens';
 
 interface IProps {
   eventId: string;
@@ -16,29 +16,29 @@ interface IProps {
 }
 
 export const EventListElement = ({ eventId, event }: IProps) => {
-  const remoteParticipants = useParticipants(eventId);
-  const attendees = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.attendees
-    : [];
-  const participantsCount = attendees.length;
-  const participantLimitText =
-    event.maxParticipants === 0 ? '' : ` av ${event.maxParticipants}`;
+  const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
+  const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
+    ? remoteNumberOfParticipants.data
+    : undefined;
+
+  const participantText = numberOfParticipants !== undefined && (event.maxParticipants === 0 ? numberOfParticipants : `${Math.min(numberOfParticipants, event.maxParticipants)} av ${event.maxParticipants}`);
+
   const dateText = isSameDate(event.start.date, event.end.date)
     ? `${stringifyDate(event.start.date)}`
     : `${stringifyDate(event.start.date)} \n - ${stringifyDate(
         event.end.date
       )}`;
+
   const desktopTimeText = `${stringifyTime(event.start.time)} - ${stringifyTime(
     event.end.time
   )}`;
 
-  const { savedEvents: createdEvents } = useSavedEditableEvents();
-  const createdThisEvent = createdEvents.find(x => x.eventId === eventId);
+  const editToken = useEditToken(eventId);
 
   const viewRoute = viewEventRoute(eventId);
   const editRoute =
-    createdThisEvent || userIsAdmin()
-      ? editEventRoute(eventId, createdThisEvent?.editToken)
+    editToken || userIsAdmin()
+      ? editEventRoute(eventId, editToken)
       : undefined;
 
   return (
@@ -48,8 +48,7 @@ export const EventListElement = ({ eventId, event }: IProps) => {
         <div className={style.date}>{dateText}</div>
         <div className={style.desktopDate}> {desktopTimeText}</div>
         <div className={style.desktopText}>
-          {participantsCount}
-          {participantLimitText} påmeldte
+          {participantText ?? '-'} påmeldte
         </div>
         <div className={style.desktopText}>
           Arrangeres av {event.organizerName}

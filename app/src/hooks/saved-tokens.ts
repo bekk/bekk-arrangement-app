@@ -38,6 +38,12 @@ export const useSavedEditableEvents = (): {
   };
 };
 
+export const useEditToken = (eventId: string) => {
+  const { savedEvents: createdEvents } = useSavedEditableEvents();
+  const event = createdEvents.find((x) => x.eventId === eventId);
+  
+  return event?.editToken;
+}
 //**  Participant  **//
 
 type Participation = {

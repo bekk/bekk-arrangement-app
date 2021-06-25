@@ -9,34 +9,35 @@ import {
   editEventRoute,
   eventIdKey,
 } from 'src/routing';
-import { stringifyEmail } from 'src/types/email';
 import { userIsLoggedIn, userIsAdmin } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { Page } from 'src/components/Page/Page';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { useParam } from 'src/utils/browser-state';
-import { useEvent, useParticipants } from 'src/hooks/cache';
+import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
 import {
-  useSavedEditableEvents,
+  useEditToken,
   useSavedParticipations,
 } from 'src/hooks/saved-tokens';
-import { EditParticipation } from 'src/components/ViewEvent/EditParticipation';
+import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
+import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
 
 export const ViewEventContainer = () => {
   const eventId = useParam(eventIdKey);
   const remoteEvent = useEvent(eventId);
 
-  const remoteParticipants = useParticipants(eventId);
+  const editTokenFound = useEditToken(eventId);
 
-  const { savedEvents } = useSavedEditableEvents();
-  const editTokenFound = savedEvents.find(event => event.eventId === eventId);
+  const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
+  const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
+    ? remoteNumberOfParticipants.data
+    : '-';
 
-  const {
-    savedParticipations: participationsInLocalStorage,
-  } = useSavedParticipations();
+  const { savedParticipations: participationsInLocalStorage } =
+    useSavedParticipations();
   const participationsForThisEvent = participationsInLocalStorage.filter(
-    p => p.eventId === eventId
+    (p) => p.eventId === eventId
   );
 
   const timeLeft = useTimeLeft(
@@ -52,23 +53,25 @@ export const ViewEventContainer = () => {
   }
 
   const event = remoteEvent.data;
-  const attendees = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.attendees
-    : [];
-  const waitingList = hasLoaded(remoteParticipants)
-    ? remoteParticipants.data.waitingList
-    : [];
 
   const eventIsFull =
-    event.maxParticipants !== 0 && event.maxParticipants === attendees.length;
+    event.maxParticipants !== 0 &&
+    event.maxParticipants <= numberOfParticipants;
 
-  const participantsText = `${attendees.length}${
+  const waitingList =
+    hasLoaded(remoteNumberOfParticipants) && eventIsFull
+      ? remoteNumberOfParticipants.data - event.maxParticipants
+      : '-';
+
+  const participantsText = `${
+    eventIsFull ? event.maxParticipants : numberOfParticipants
+  }${
     event.maxParticipants === 0
       ? ' av ∞'
       : ' av ' +
         event.maxParticipants +
-        (waitingList && eventIsFull
-          ? ` og ${waitingList.length} på venteliste`
+        (event.hasWaitingList && eventIsFull
+          ? ` og ${waitingList} på venteliste`
           : '')
   }`;
 
@@ -76,7 +79,7 @@ export const ViewEventContainer = () => {
     ? 'Arrangementet har allerede funnet sted'
     : timeLeft.difference > 0
     ? `Åpner om ${asString(timeLeft)}`
-    : eventIsFull && !waitingList
+    : eventIsFull && !event.hasWaitingList
     ? 'Arrangementet er dessverre fullt'
     : undefined;
 
@@ -90,12 +93,12 @@ export const ViewEventContainer = () => {
       {userIsLoggedIn() && (
         <BlockLink to={eventsRoute}>Til arrangementer</BlockLink>
       )}
-      {(editTokenFound || userIsAdmin()) && (
-        <BlockLink to={editEventRoute(eventId, editTokenFound?.editToken)}>
+      {(editTokenFound || userIsAdmin()) ? (
+        <BlockLink to={editEventRoute(eventId, editTokenFound)}>
           Rediger arrangement
         </BlockLink>
-      )}
-      {participationsForThisEvent.map(p => (
+      ) : null}
+      {participationsForThisEvent.map((p) => (
         <BlockLink key={p.email} to={cancelParticipantRoute(p)}>
           Meld {p.email} av arrangementet
         </BlockLink>
@@ -111,44 +114,17 @@ export const ViewEventContainer = () => {
           <p className={style.text}>{waitlistText}</p>
         ) : null}
         {!closedEventText && (
-          <EditParticipation
+          <AddParticipant
             eventId={eventId}
             event={event}
-            isWaitlisted={eventIsFull && event.hasWaitingList}
           />
         )}
-        <h1 className={style.subHeader}>Påmeldte</h1>
-        <div>
-          {attendees.length > 0 ? (
-            attendees.map(attendee => {
-              return (
-                <div
-                  key={stringifyEmail(attendee.email)}
-                  className={style.text}
-                >
-                  {attendee.name}, {stringifyEmail(attendee.email)}, Kommentar:{' '}
-                  {attendee.comment}
-                </div>
-              );
-            })
-          ) : (
-            <div className={style.text}>Ingen påmeldte</div>
-          )}
-          {waitingList && waitingList.length > 0 && (
-            <>
-              <h3>På venteliste</h3>
-              {waitingList.map(waitlisted => (
-                <div
-                  key={stringifyEmail(waitlisted.email)}
-                  className={style.text}
-                >
-                  {waitlisted.name}, {stringifyEmail(waitlisted.email)},
-                  Kommentar: {waitlisted.comment}
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+        {(editTokenFound || userIsAdmin()) && (
+          <ViewParticipants
+            eventId={eventId}
+            editToken={editTokenFound}
+          />
+        )}
       </section>
     </Page>
   );
