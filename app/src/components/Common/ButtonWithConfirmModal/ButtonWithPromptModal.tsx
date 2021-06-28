@@ -10,6 +10,7 @@ interface IProps {
   onConfirm: (promptAnswer: string) => void;
   children: ReactChild | ReactChild[];
   placeholder?: string;
+  textareaLabel?: string;
 }
 
 export function ButtonWithPromptModal({
@@ -42,13 +43,18 @@ export function ButtonWithPromptModal({
                 minRow={5}
               />
             </div>
-            <Button
-              color={'White'}
-              onClick={confirmAndClose}
-              disabled={promptAnswer.length < 3}
-            >
-              {text}
-            </Button>
+            <div className={style.groupedButtons}>
+              <Button
+                color={'White'}
+                onClick={confirmAndClose}
+                disabled={promptAnswer.length < 3}
+              >
+                {text}
+              </Button>
+              <Button color={'Black'} onClick={() => setShowModal(false)}>
+                Avbryt
+              </Button>
+            </div>
           </>
         </Modal>
       )}

@@ -22,9 +22,17 @@ export const PreviewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `0 av ${event.maxParticipants === 0 ? '∞' : event.maxParticipants}${
-    event.hasWaitingList && event.maxParticipants !== 0 ? ' og 0 på venteliste' : ''
+  const participantsText = `0 av ${
+    event.maxParticipants === 0 ? '∞' : event.maxParticipants
+  }${
+    event.hasWaitingList && event.maxParticipants !== 0
+      ? ' og 0 på venteliste'
+      : ''
   }`;
+
+  const returnToEdit = () => {
+    history.goBack();
+  };
 
   const putEditedEvent = catchAndNotify(async () => {
     await putEvent(eventId, event, editToken);
@@ -38,6 +46,9 @@ export const PreviewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
+        <Button color="White" onClick={returnToEdit}>
+          Rediger
+        </Button>
         <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
       </div>
     </Page>
