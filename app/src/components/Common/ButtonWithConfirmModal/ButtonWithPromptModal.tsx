@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button } from 'src/components/Common/Button/Button';
 import { Modal } from 'src/components/Common/Modal/Modal';
 import { ReactChild } from 'src/types';
-import TextareaAutosize from 'react-textarea-autosize';
 import style from './ButtonWith.module.scss';
+import { TextArea } from 'src/components/Common/TextArea/TextArea';
 
 interface IProps {
   text: string;
@@ -12,13 +12,20 @@ interface IProps {
   placeholder?: string;
 }
 
-export function ButtonWithPromptModal({ text, onConfirm, placeholder, children }: IProps) {
+export function ButtonWithPromptModal({
+  text,
+  onConfirm,
+  placeholder,
+  children,
+}: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [promptAnswer, setPromptAnswer] = useState('');
+
   const confirmAndClose = () => {
     onConfirm(promptAnswer);
     setShowModal(false);
   };
+
   return (
     <>
       <Button onClick={() => setShowModal(true)}>{text}</Button>
@@ -26,14 +33,20 @@ export function ButtonWithPromptModal({ text, onConfirm, placeholder, children }
         <Modal header={text} closeModal={() => setShowModal(false)}>
           <>
             {children}
-            <TextareaAutosize
-              className={style.textArea}
-              placeholder={placeholder}
-              value={promptAnswer}
-              onChange={event => setPromptAnswer(event.target.value)}
-              minRows={5}
-            />
-            <Button color={'White'} onClick={confirmAndClose}>
+            <div className={style.textArea}>
+              <TextArea
+                placeholder={placeholder}
+                value={promptAnswer}
+                onChange={(event) => setPromptAnswer(event)}
+                backgroundColor={'White'}
+                minRow={5}
+              />
+            </div>
+            <Button
+              color={'White'}
+              onClick={confirmAndClose}
+              disabled={promptAnswer.length < 3}
+            >
               {text}
             </Button>
           </>
