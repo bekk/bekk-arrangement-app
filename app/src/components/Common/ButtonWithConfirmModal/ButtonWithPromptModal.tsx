@@ -18,6 +18,7 @@ export function ButtonWithPromptModal({
   onConfirm,
   placeholder,
   children,
+  textareaLabel,
 }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [promptAnswer, setPromptAnswer] = useState('');
@@ -35,6 +36,7 @@ export function ButtonWithPromptModal({
           <>
             {children}
             <div className={style.textArea}>
+              <p>{textareaLabel}</p>
               <TextArea
                 placeholder={placeholder}
                 value={promptAnswer}
