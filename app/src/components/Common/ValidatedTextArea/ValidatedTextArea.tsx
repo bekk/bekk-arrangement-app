@@ -5,11 +5,14 @@ import { ValidationResult } from 'src/components/Common/ValidationResult/Validat
 import { IError, isValid } from 'src/types/validation';
 
 interface ValidTextAreaProps {
-  label: string;
+  label?: string;
   placeholder?: string;
   value: string;
   validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
+  backgroundColor?: 'White' | 'Black';
+  minRow?: number;
+  isError?: boolean;
 }
 
 export const ValidatedTextArea = ({
@@ -18,10 +21,14 @@ export const ValidatedTextArea = ({
   value,
   validation,
   onChange,
+  backgroundColor = 'Black',
+  minRow,
+  isError,
 }: ValidTextAreaProps) => {
-  const [showError, setShowError] = useState(false);
+  const [showError, setShowError] = useState(isError);
   const validationResult = validation(value);
-  const isError = !isValid(validationResult);
+  isError = !isValid(validationResult);
+
   return (
     <>
       <TextArea
@@ -31,9 +38,14 @@ export const ValidatedTextArea = ({
         onChange={onChange}
         isError={showError && isError}
         onBlur={() => setShowError(true)}
+        backgroundColor={backgroundColor}
+        minRow={minRow}
       />
       {showError && !isValid(validationResult) && (
-        <ValidationResult validationResult={validationResult} />
+        <ValidationResult
+          validationResult={validationResult}
+          backgroundColor={backgroundColor}
+        />
       )}
     </>
   );
