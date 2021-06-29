@@ -40,7 +40,7 @@ export function ButtonWithPromptModal({
               <TextArea
                 placeholder={placeholder}
                 value={promptAnswer}
-                onChange={(event) => setPromptAnswer(event)}
+                onChange={setPromptAnswer}
                 backgroundColor={'White'}
                 minRow={5}
               />

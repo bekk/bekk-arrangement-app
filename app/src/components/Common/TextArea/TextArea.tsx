@@ -29,7 +29,7 @@ export const TextArea = ({
     [style.visited]: hasVisited,
     [style.error]: hasVisited && isError,
     [style.whiteTextArea]: backgroundColor === 'White',
-    [style.darkBackground]: backgroundColor === 'Black',
+    [style.darkTextArea]: backgroundColor === 'Black',
   });
   return (
     <>
