@@ -1,0 +1,67 @@
+@import 'src/style/constants';
+@import 'src/style/fonts';
+
+.card {
+  border: solid white 1px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  //justify-content: space-between;
+  min-height: 340px;
+  justify-content: space-between;
+  color: var(--lightTextColor);
+  @media #{$desktop} {
+    min-height: 300px;
+  }
+  &:hover {
+    background-color: var(--solnedgang);
+    color: black;
+  }
+}
+
+.link {
+  width: 100%;
+  text-decoration: none;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardContent  {
+  justify-content: space-between;
+}
+
+.title {
+  font-family: $serifFontRegular;
+  font-size: 35px;
+  margin: 10px 0 10px 0;
+  @media #{$desktop} {
+    font-size: 30px;
+  }
+}
+
+.date {
+  font-size: 16px;
+}
+
+.location {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.locationText {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.locationIcon {
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.button {
+  align-self: center;
+  margin-top: auto;
+  padding: 20px;
+}

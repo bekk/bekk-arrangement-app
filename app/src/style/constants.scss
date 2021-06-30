@@ -19,6 +19,7 @@ $buttonMobile: 16px;
 
 $desktop: 'only screen and (min-width: #{$desktopMinWidth})';
 $mobile: 'screen and (max-width: #{$mobileMaxWidth})';
+$tablet: 'only screen and (min-width: #{$tabletMinWidth})';
 
 $modalWidth: 600px;
 $modalHeight: 350px;
@@ -28,7 +29,7 @@ $modalPadding: 45px;
 $transitionLength: 0.2s;
 
 @mixin boldText {
-  color: var(--textColor);
+  color: var(--lightTextColor);
   font-size: $textMobile;
   font-family: $fontMedium;
   @media #{$desktop} {
@@ -37,7 +38,7 @@ $transitionLength: 0.2s;
 }
 
 @mixin regularText {
-  color: var(--textColor);
+  color: var(--lightTextColor);
   font-size: $textMobile;
   font-family: $fontLight;
   @media #{$desktop} {
@@ -55,7 +56,7 @@ $transitionLength: 0.2s;
 }
 
 @mixin smallText {
-  color: var(--textColor);
+  color: var(--lightTextColor);
   font-size: $smallMobile;
   font-family: $fontLight;
   @media #{$desktop} {
@@ -74,7 +75,7 @@ $transitionLength: 0.2s;
 @mixin subHeaderText {
   color: var(--lightTextColor);
   font-size: $subHeaderMobile;
-  font-family: $fontRegular;
+  font-family: $serifFontRegular;
   @media #{$desktop} {
     font-size: $subHeaderDesktop;
   }

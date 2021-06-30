@@ -25,6 +25,7 @@ import style from './App.module.scss';
 import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
 import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
+import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
 
 const history = createBrowserHistory();
 
@@ -46,6 +47,9 @@ export const App = () => {
           </Route>
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
+          </Route>
+          <Route exact path={'/events2'}>
+            <ViewEventsCardsContainer />
           </Route>
           <Route exact path={eventsRoute}>
             <ViewEventsContainer />
