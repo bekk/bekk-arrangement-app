@@ -47,13 +47,13 @@ export function ButtonWithPromptModal({
             </div>
             <div className={style.groupedButtons}>
               <Button
-                color={'White'}
+                color={'Primary'}
                 onClick={confirmAndClose}
                 disabled={promptAnswer.length < 3}
               >
                 {text}
               </Button>
-              <Button color={'Black'} onClick={() => setShowModal(false)}>
+              <Button color={'Secondary'} onClick={() => setShowModal(false)}>
                 Avbryt
               </Button>
             </div>

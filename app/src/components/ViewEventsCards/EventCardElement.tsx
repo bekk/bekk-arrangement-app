@@ -91,7 +91,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         {editRoute && (
           <div className={style.button}>
             <Link to={editRoute}>
-              <Button color="White" onClick={() => console.log('klikk!')}>
+              <Button color="Primary" onClick={() => console.log('klikk!')}>
                 Meld deg på
               </Button>
             </Link>

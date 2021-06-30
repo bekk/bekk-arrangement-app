@@ -51,7 +51,7 @@ export const PreviewNewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
-        <Button onClick={returnToCreate} color="White">
+        <Button onClick={returnToCreate} color="Primary">
           Rediger
         </Button>
         <Button onClick={postNewEvent}>Opprett arrangement</Button>

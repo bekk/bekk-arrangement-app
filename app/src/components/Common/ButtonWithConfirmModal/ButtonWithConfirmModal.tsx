@@ -22,7 +22,7 @@ export function ButtonWithConfirmModal({ text, onConfirm, children }: IProps) {
         <Modal header={text} closeModal={() => setShowModal(false)}>
           <>
             {children}
-            <Button color={'White'} onClick={confirmAndClose}>
+            <Button color={'Primary'} onClick={confirmAndClose}>
               {text}
             </Button>
           </>

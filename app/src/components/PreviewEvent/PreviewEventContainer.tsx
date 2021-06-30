@@ -46,9 +46,7 @@ export const PreviewEventContainer = () => {
         <ViewEvent event={event} participantsText={participantsText} />
       </div>
       <div className={style.buttonContainer}>
-        <Button color="White" onClick={returnToEdit}>
-          Rediger
-        </Button>
+        <Button onClick={returnToEdit}>Rediger</Button>
         <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
       </div>
     </Page>
