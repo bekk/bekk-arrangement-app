@@ -3,16 +3,15 @@ import { IEvent } from 'src/types/event';
 import { Link } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
-import { dateToITime, stringifyTime } from 'src/types/time';
-import { viewEventRoute, editEventRoute } from 'src/routing';
-import { userIsAdmin } from 'src/auth';
+import { stringifyTime } from 'src/types/time';
+import { viewEventRoute } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
-import { useNumberOfParticipants } from 'src/hooks/cache';
-import { useEditToken } from 'src/hooks/saved-tokens';
-import { useTimeLeft } from 'src/hooks/timeleftHooks';
-import { capitalize } from 'src/components/ViewEvent/ViewEvent';
-import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
-import { Button } from 'src/components/Common/Button/Button';
+import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
+import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
+import classNames from 'classnames';
+import { EventState } from 'src/components/ViewEventsCards/EventState';
+import { isInThePast } from 'src/types/date-time';
+import { isNumber } from 'lodash';
 
 interface IProps {
   eventId: string;
@@ -20,39 +19,39 @@ interface IProps {
 }
 
 export const EventCardElement = ({ eventId, event }: IProps) => {
-  const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
+  const editToken = useEditToken(eventId);
 
+  const { savedParticipations: participationsInLocalStorage } =
+    useSavedParticipations();
+  const participationsForThisEvent = participationsInLocalStorage.filter(
+    (p) => p.eventId === eventId
+  );
+
+  const waitingListSpot = useWaitinglistSpot(
+    eventId,
+    participationsForThisEvent[0]?.email
+  );
+
+  const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
   const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
     ? remoteNumberOfParticipants.data
     : undefined;
 
-  const timeLeft = useTimeLeft(event.openForRegistrationTime);
+  const numberOfAvailableSpot =
+    event.maxParticipants !== 0 && numberOfParticipants !== undefined
+      ? event.maxParticipants - numberOfParticipants
+      : undefined;
 
-  const timeLeftText =
-    'Påmelding åpner ' +
-    (timeLeft.days === 0
-      ? 'klokken ' + stringifyTime(dateToITime(event.openForRegistrationTime))
-      : capitalize(
-          stringifyTimeInstanceWithDayName(event.openForRegistrationTime)
-        ));
-
-  const participantText =
-    numberOfParticipants !== undefined &&
-    (event.maxParticipants === 0
-      ? numberOfParticipants
-      : `${Math.min(numberOfParticipants, event.maxParticipants)} av ${
-          event.maxParticipants
-        }`);
-
-  const dateText = isSameDate(event.start.date, event.end.date)
-    ? `${stringifyDate(event.start.date)}`
-    : `${stringifyDate(event.start.date)} \n - ${stringifyDate(
-        event.end.date
-      )}`;
-
-  const desktopTimeText = `${stringifyTime(event.start.time)} - ${stringifyTime(
-    event.end.time
-  )}`;
+  const registrationState =
+    event.maxParticipants === 0
+      ? 'Plass'
+      : numberOfParticipants === undefined
+      ? 'loading'
+      : numberOfParticipants < event.maxParticipants
+      ? 'Plass'
+      : numberOfParticipants >= event.maxParticipants && event.hasWaitingList
+      ? 'Plass på venteliste'
+      : 'Fullt';
 
   const dateTimeText = isSameDate(event.start.date, event.end.date)
     ? `${stringifyDate(event.start.date)}, ${stringifyTime(
@@ -62,14 +61,27 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         event.end.date
       )}`;
 
-  const editToken = useEditToken(eventId);
-
   const viewRoute = viewEventRoute(eventId);
-  const editRoute =
-    editToken || userIsAdmin() ? editEventRoute(eventId, editToken) : undefined;
 
   const [svgColor, setSvgColor] = useState('White');
 
+  const titleStyle = classNames({
+    [style.title]: true,
+    [style.longTitle]: event.title.length >= 25,
+    [style.shortTitle]: event.title.length < 25,
+  });
+
+  const eventState = useGetState({
+    eventId,
+    event,
+    waitingListSpot: hasLoaded(waitingListSpot)
+      ? waitingListSpot.data
+      : 'loading',
+    registrationState,
+    editToken,
+  });
+
+  console.log(event.title, ' ', eventState);
   return (
     <Link to={viewRoute} className={style.link}>
       <div
@@ -78,7 +90,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         onMouseLeave={() => setSvgColor('White')}
       >
         <div className={style.date}>{dateTimeText}</div>
-        <div className={style.title}>{event.title}</div>
+        <div className={titleStyle}>{event.title}</div>
         <div className={style.location}>
           {' '}
           <div className={style.locationIcon}>
@@ -88,15 +100,19 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
           </div>
           <div className={style.locationText}>{event.location}</div>
         </div>
-        {editRoute && (
-          <div className={style.button}>
-            <Link to={editRoute}>
-              <Button color="Primary" onClick={() => console.log('klikk!')}>
-                Meld deg på
-              </Button>
-            </Link>
-          </div>
-        )}
+        <div className={style.button}>
+          <EventState
+            eventId={eventId}
+            eventState={eventState}
+            event={event}
+            numberOfAvailableSpots={numberOfAvailableSpot}
+            waitingListSpot={
+              hasLoaded(waitingListSpot) && isNumber(waitingListSpot.data)
+                ? waitingListSpot.data
+                : undefined
+            }
+          />
+        </div>
       </div>
     </Link>
   );
@@ -125,4 +141,36 @@ const LocationIconComponent = (props: { color: string }) => {
       </defs>
     </svg>
   );
+};
+
+interface EventStateProps {
+  eventId: string;
+  event: IEvent;
+  editToken?: string;
+  waitingListSpot: number | 'ikke-påmeldt' | 'loading';
+  registrationState?: 'Plass' | 'Plass på venteliste' | 'loading' | 'Fullt';
+}
+
+const useGetState = ({
+  eventId,
+  event,
+  editToken,
+  waitingListSpot,
+  registrationState,
+}: EventStateProps) => {
+  if (editToken) return 'Rediger';
+
+  if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
+
+  if (isInThePast(event.end)) return 'Avsluttet';
+
+  if (isNumber(waitingListSpot)) {
+    if (waitingListSpot > 0) return 'På venteliste';
+    else return 'Påmeldt';
+  }
+
+  if (registrationState && registrationState !== 'Fullt') {
+    return registrationState;
+  }
+  return undefined;
 };

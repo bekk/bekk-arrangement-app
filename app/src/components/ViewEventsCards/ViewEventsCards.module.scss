@@ -16,6 +16,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  grid-template-rows: auto;
   margin: 50px auto 0 auto;
   gap: 40px;
   @media #{$tablet} {

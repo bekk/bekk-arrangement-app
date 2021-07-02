@@ -6,7 +6,7 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
-  //justify-content: space-between;
+  height: 100%;
   min-height: 340px;
   justify-content: space-between;
   color: var(--lightTextColor);
@@ -21,6 +21,7 @@
 
 .link {
   width: 100%;
+  height: 100%;
   text-decoration: none;
   align-self: center;
   display: flex;
@@ -33,10 +34,20 @@
 
 .title {
   font-family: $serifFontRegular;
-  font-size: 35px;
   margin: 10px 0 10px 0;
+}
+
+.shortTitle {
+  font-size: 35px;
   @media #{$desktop} {
-    font-size: 30px;
+    font-size: 30;
+  }
+}
+
+.longTitle {
+  font-size: 30px;
+  @media #{$desktop} {
+    font-size: 26;
   }
 }
 
@@ -63,5 +74,59 @@
 .button {
   align-self: center;
   margin-top: auto;
-  padding: 20px;
+  padding: 10px;
+}
+
+.stateText {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.linkButton {
+  @include buttonText;
+  margin-top: 10px;
+  display: block;
+  height: 39px;
+  padding: 10px 20px;
+  min-width: 140px;
+  text-decoration: none;
+  border: 1px solid white;
+  border-radius: 20px;
+  color: var(--lightTextColor);
+  @media #{$desktop} {
+    width: 200px;
+  }
+  &:hover {
+    background-color: var(--nattKontrast);
+    border: 1px solid var(--nattKontrast);
+    color: var(--lightTextColor);
+    cursor: pointer;
+  }
+  &:focus {
+    background-color: var(--nattKontrast);
+    color: var(--lightTextColor);
+    border: 1px solid var(--gulKontrast);
+  }
+  &:active  {
+    background-color: var(--natt);
+    color: var(--lightTextColor);
+    border: 1px solid var(--natt);
+  }
+  &:disabled {
+    background-color: var(--overskyetKontrast);
+    border: 1px solid var(--overskyetKontrast);
+    color: var(--svart70);
+    cursor: initial;
+  }
+}
+
+.test {
+  display: flex;
+  flex-direction: row;
+}
+
+.stateIcon {
+  min-width: 25px;
+  min-height: 25px;
 }

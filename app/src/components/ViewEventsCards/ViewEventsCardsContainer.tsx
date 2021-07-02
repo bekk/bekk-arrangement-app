@@ -5,7 +5,6 @@ import { hasLoaded } from 'src/remote-data';
 import { Link } from 'react-router-dom';
 import { Page } from 'src/components/Page/Page';
 import { useEvents } from 'src/hooks/cache';
-import { EventListElement } from 'src/components/ViewEvents/EventListElement';
 import { EventCardElement } from 'src/components/ViewEventsCards/EventCardElement';
 
 export const ViewEventsCardsContainer = () => {

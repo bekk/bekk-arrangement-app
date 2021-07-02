@@ -27,7 +27,7 @@ export const useSavedEditableEvents = (): {
 
   const updateStorage = (event: EditEventToken) =>
     JSON.stringify([
-      ...validatedStorage.filter(x => x.eventId !== event.eventId),
+      ...validatedStorage.filter((x) => x.eventId !== event.eventId),
       event,
     ]);
 
@@ -41,9 +41,9 @@ export const useSavedEditableEvents = (): {
 export const useEditToken = (eventId: string) => {
   const { savedEvents: createdEvents } = useSavedEditableEvents();
   const event = createdEvents.find((x) => x.eventId === eventId);
-  
+
   return event?.editToken;
-}
+};
 //**  Participant  **//
 
 type Participation = {
@@ -72,7 +72,7 @@ export const useSavedParticipations = () => {
   const updateStorage = (participant: Participation) =>
     JSON.stringify([
       ...validatedStorage.filter(
-        x =>
+        (x) =>
           !(participant.eventId === x.eventId && participant.email === x.email)
       ),
       participant,
@@ -81,7 +81,7 @@ export const useSavedParticipations = () => {
   const removeFromStorage = (p: { eventId: string; email: string }) =>
     JSON.stringify(
       validatedStorage.filter(
-        x => !(x.eventId === p.eventId && x.email === p.email)
+        (x) => !(x.eventId === p.eventId && x.email === p.email)
       )
     );
 
