@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SmileIcon = () => {
+export const SmileIcon = (props: { className: string }) => {
   return (
     <svg
       width="24"
@@ -8,6 +8,7 @@ export const SmileIcon = () => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={props.className}
     >
       <g clip-path="url(#clip0)">
         <path

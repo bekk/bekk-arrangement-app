@@ -7,6 +7,7 @@ import { dateToITime, stringifyTime } from 'src/types/time';
 import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
 import style from './EventCardElement.module.scss';
 import { ReactChild } from 'src/types';
+import { SmileIcon } from 'src/components/Common/Icons/SmileIcon';
 
 export type eventState =
   | 'Rediger'
@@ -16,6 +17,7 @@ export type eventState =
   | 'På venteliste'
   | 'Plass'
   | 'Plass på venteliste'
+  | 'Fullt'
   | 'Laster'
   | undefined;
 interface IProps {
@@ -52,7 +54,12 @@ export const EventState = ({
       return <div className={style.stateText}>Arrangementet er avsluttet</div>;
 
     case 'Påmeldt':
-      return <div className={style.test}>Du er påmeldt!</div>;
+      return (
+        <div className={style.stateIconContainer}>
+          <SmileIcon className={style.stateIcon} />
+          Du er påmeldt!
+        </div>
+      );
 
     case 'På venteliste':
       return (
@@ -84,8 +91,11 @@ export const EventState = ({
         </div>
       );
 
+    case 'Fullt':
+      return <div className={style.stateText}>Arrangementet er fullt</div>;
+
     case 'Laster':
-      return <div>Laster</div>;
+      return <div className={style.stateText}>Laster...</div>;
 
     case undefined:
       return null;

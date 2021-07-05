@@ -79,9 +79,14 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     editToken,
   });
 
+  const cardStyle = classNames(style.card, {
+    [style.cardActive]: eventState !== 'Avsluttet',
+    [style.cardFaded]: eventState === 'Avsluttet', //TODO: legg til faded på avlyst også (|| eventState === 'Avlyst')
+  });
+
   return (
     <Link to={viewRoute} className={style.link}>
-      <div className={style.card}>
+      <div className={cardStyle}>
         <div className={style.date}>{dateTimeText}</div>
         <div className={titleStyle}>{event.title}</div>
         <div className={style.location}>
@@ -134,7 +139,7 @@ const useGetState = ({
     else return 'Påmeldt';
   }
 
-  if (registrationState && registrationState !== 'Fullt') {
+  if (registrationState) {
     return registrationState;
   }
   return undefined;

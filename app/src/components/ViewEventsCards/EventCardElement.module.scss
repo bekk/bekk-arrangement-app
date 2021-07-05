@@ -2,7 +2,7 @@
 @import 'src/style/fonts';
 
 .card {
-  border: solid white 1px;
+  border: solid 1px white;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -17,9 +17,14 @@
     background-color: var(--solnedgang);
     color: black;
   }
-  &:hover .locationIcon path {
+  &:hover path {
     fill: black;
   }
+}
+
+.cardFaded {
+  border-color: var(--svart20);
+  color: var(--svart20);
 }
 
 .link {
@@ -97,6 +102,7 @@
   border: 1px solid white;
   border-radius: 20px;
   color: var(--lightTextColor);
+  background-color: black;
   @media #{$desktop} {
     width: 200px;
   }
@@ -124,12 +130,15 @@
   }
 }
 
-.test {
+.stateIconContainer {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  text-align: center;
 }
 
 .stateIcon {
   min-width: 25px;
   min-height: 25px;
+  margin-right: 8px;
 }
