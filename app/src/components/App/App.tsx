@@ -17,7 +17,6 @@ import {
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
-import { ViewEventsContainer } from 'src/components/ViewEvents/ViewEventsContainer';
 import { EditEventContainer } from 'src/components/EditEvent/EditEventContainer';
 import { CancelParticipant } from 'src/components/CancelParticipant/CancelParticipant';
 import { createBrowserHistory } from 'history';
