@@ -1,0 +1,41 @@
+@import 'src/style/constants';
+
+.linkButton {
+  @include buttonText;
+  margin-top: 10px;
+  display: block;
+  height: 39px;
+  padding: 10px 20px;
+  min-width: 140px;
+  text-decoration: none;
+  border: 1px solid white;
+  border-radius: 20px;
+  color: var(--lightTextColor);
+  background-color: black;
+  @media #{$desktop} {
+    min-width: 200px;
+    max-width: 300px;
+  }
+  &:hover {
+    background-color: var(--nattKontrast);
+    border: 1px solid var(--nattKontrast);
+    color: var(--lightTextColor);
+    cursor: pointer;
+  }
+  &:focus {
+    background-color: var(--nattKontrast);
+    color: var(--lightTextColor);
+    border: 1px solid var(--gulKontrast);
+  }
+  &:active  {
+    background-color: var(--natt);
+    color: var(--lightTextColor);
+    border: 1px solid var(--natt);
+  }
+  &:disabled {
+    background-color: var(--overskyetKontrast);
+    border: 1px solid var(--overskyetKontrast);
+    color: var(--svart70);
+    cursor: initial;
+  }
+}

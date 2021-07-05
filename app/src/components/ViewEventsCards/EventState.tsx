@@ -1,13 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { capitalize } from 'src/components/ViewEvent/ViewEvent';
 import { editEventRoute, viewEventRoute } from 'src/routing';
 import { IEvent } from 'src/types/event';
 import { dateToITime, stringifyTime } from 'src/types/time';
 import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
 import style from './EventCardElement.module.scss';
-import { ReactChild } from 'src/types';
 import { SmileIcon } from 'src/components/Common/Icons/SmileIcon';
+import { LinkButton } from 'src/components/Common/LinkButton/LinkButton';
 
 export type eventState =
   | 'Rediger'
@@ -100,12 +99,4 @@ export const EventState = ({
     case undefined:
       return null;
   }
-};
-
-const LinkButton = (props: { to: string; children: ReactChild }) => {
-  return (
-    <Link to={props.to} className={style.linkButton}>
-      {props.children}
-    </Link>
-  );
 };
