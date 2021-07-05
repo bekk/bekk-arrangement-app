@@ -6,6 +6,7 @@ import { dateToITime, stringifyTime } from 'src/types/time';
 import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
 import style from './EventCardElement.module.scss';
 import { SmileIcon } from 'src/components/Common/Icons/SmileIcon';
+import { FrownyFaceIcon } from 'src/components/Common/Icons/FrownyFaceIcon';
 import { LinkButton } from 'src/components/Common/LinkButton/LinkButton';
 
 export type eventState =
@@ -18,6 +19,7 @@ export type eventState =
   | 'Plass på venteliste'
   | 'Fullt'
   | 'Laster'
+  | 'Avlyst'
   | undefined;
 interface IProps {
   eventId: string;
@@ -95,6 +97,14 @@ export const EventState = ({
 
     case 'Laster':
       return <div className={style.stateText}>Laster...</div>;
+
+    case 'Avlyst':
+      return (
+        <div className={style.stateIconContainer}>
+          <FrownyFaceIcon className={style.stateIcon}/>
+          Avlyst
+        </div>
+      );
 
     case undefined:
       return null;

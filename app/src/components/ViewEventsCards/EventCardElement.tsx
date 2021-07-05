@@ -9,7 +9,7 @@ import { hasLoaded } from 'src/remote-data';
 import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
 import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import classNames from 'classnames';
-import { EventState } from 'src/components/ViewEventsCards/EventState';
+import { EventState,eventState } from 'src/components/ViewEventsCards/EventState';
 import { isInThePast } from 'src/types/date-time';
 import { isNumber } from 'lodash';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
@@ -141,8 +141,10 @@ const useGetState = ({
   editToken,
   waitingListSpot,
   registrationState,
-}: EventStateProps) => {
+}: EventStateProps):eventState => {
   if (editToken) return 'Rediger';
+  
+  if (event.isCancelled) return 'Avlyst'
 
   if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
 
