@@ -14,11 +14,48 @@
     min-height: 300px;
   }
   &:hover {
-    background-color: var(--solnedgang);
     color: black;
   }
   &:hover path {
     fill: black;
+  }
+}
+
+.cardColorHav {
+  &:hover {
+    background-color: var(--hav);
+  }
+}
+.cardColorKveld {
+  &:hover {
+    background-color: var(--kveld);
+  }
+}
+
+.cardColorRegn {
+  &:hover {
+    background-color: var(--regn);
+  }
+}
+
+.cardColorSkyfritt {
+  &:hover {
+    background-color: var(--skyfritt);
+  }
+}
+.cardColorSol {
+  &:hover {
+    background-color: var(--sol);
+  }
+}
+.cardColorSolnedgang {
+  &:hover {
+    background-color: var(--solnedgang);
+  }
+}
+.cardColorSoloppgang {
+  &:hover {
+    background-color: var(--soloppgang);
   }
 }
 

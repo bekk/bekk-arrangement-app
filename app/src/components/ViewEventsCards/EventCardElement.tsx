@@ -79,7 +79,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     editToken,
   });
 
-  const cardStyle = classNames(style.card, {
+  const cardStyle = classNames(style.card, getColor(eventId), {
     [style.cardActive]: eventState !== 'Avsluttet',
     [style.cardFaded]: eventState === 'Avsluttet', //TODO: legg til faded på avlyst også (|| eventState === 'Avlyst')
   });
@@ -120,6 +120,20 @@ interface EventStateProps {
   waitingListSpot: number | 'ikke-påmeldt' | 'Laster';
   registrationState?: 'Plass' | 'Plass på venteliste' | 'Laster' | 'Fullt';
 }
+
+const colors = [
+  style.cardColorHav,
+  style.cardColorKveld,
+  style.cardColorRegn,
+  style.cardColorSkyfritt,
+  style.cardColorSol,
+  style.cardColorSolnedgang,
+  style.cardColorSoloppgang,
+];
+const getEventHash = (eventId: string): number =>
+  [...eventId].map((char) => char.charCodeAt(0)).reduce((a, x) => a + x, 0);
+const getColor = (eventId: string) =>
+  colors[getEventHash(eventId) % colors.length];
 
 const useGetState = ({
   eventId,
