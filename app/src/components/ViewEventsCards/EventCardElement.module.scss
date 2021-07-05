@@ -17,6 +17,9 @@
     background-color: var(--solnedgang);
     color: black;
   }
+  &:hover .locationIcon path {
+    fill: black;
+  }
 }
 
 .link {
@@ -34,7 +37,7 @@
 
 .title {
   font-family: $serifFontRegular;
-  margin: 10px 0 10px 0;
+  margin: 10px 0;
 }
 
 .shortTitle {
