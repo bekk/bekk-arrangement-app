@@ -20,7 +20,8 @@ export const ConfirmParticipant = () => {
   }
 
   const event = remoteEvent.data;
-  const isWaitlisted = remoteWaitinglistSpot.data >= 1;
+  const isWaitlisted =
+    remoteWaitinglistSpot.data !== undefined && remoteWaitinglistSpot.data >= 1;
 
   return isWaitlisted ? (
     <Page>

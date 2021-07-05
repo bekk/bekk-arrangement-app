@@ -51,6 +51,7 @@ export interface IEventViewModel {
   maxParticipants: number;
   participantQuestion: string;
   hasWaitingList: boolean;
+  isCancelled: boolean;
 }
 
 export interface IEventWriteModel {
@@ -80,6 +81,7 @@ export interface IEvent {
   maxParticipants: number;
   participantQuestion: string;
   hasWaitingList: boolean;
+  isCancelled: boolean;
 }
 
 export interface IEditEvent {
@@ -94,6 +96,7 @@ export interface IEditEvent {
   maxParticipants: string;
   participantQuestion: string;
   hasWaitingList: boolean;
+  isCancelled:boolean;
 }
 
 export const parseEditEvent = ({
@@ -108,6 +111,7 @@ export const parseEditEvent = ({
   maxParticipants,
   participantQuestion,
   hasWaitingList,
+  isCancelled,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -121,6 +125,7 @@ export const parseEditEvent = ({
     maxParticipants: parseMaxAttendees(maxParticipants),
     participantQuestion: parseQuestion(participantQuestion),
     hasWaitingList: hasWaitingList,
+    isCancelled: isCancelled,
   };
 
   try {
@@ -162,6 +167,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const maxParticipants = eventView.maxParticipants;
   const participantQuestion = parseQuestion(eventView.participantQuestion);
   const hasWaitingList = eventView.hasWaitingList;
+  const isCancelled = eventView.isCancelled
 
   const event = {
     title,
@@ -175,6 +181,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     maxParticipants,
     participantQuestion,
     hasWaitingList,
+    isCancelled
   };
 
   assertIsValid(event);
@@ -194,6 +201,7 @@ export const toEditEvent = ({
   maxParticipants,
   participantQuestion,
   hasWaitingList,
+  isCancelled,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -206,6 +214,7 @@ export const toEditEvent = ({
   maxParticipants: toEditMaxAttendees(maxParticipants),
   participantQuestion,
   hasWaitingList,
+  isCancelled,
 });
 
 export const initialEvent = (): IEvent => {
@@ -229,5 +238,6 @@ export const initialEvent = (): IEvent => {
     maxParticipants: 0,
     participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
     hasWaitingList: false,
+    isCancelled: false,
   };
 };

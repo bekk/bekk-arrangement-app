@@ -17,7 +17,6 @@ import {
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
-import { ViewEventsContainer } from 'src/components/ViewEvents/ViewEventsContainer';
 import { EditEventContainer } from 'src/components/EditEvent/EditEventContainer';
 import { CancelParticipant } from 'src/components/CancelParticipant/CancelParticipant';
 import { createBrowserHistory } from 'history';
@@ -25,6 +24,7 @@ import style from './App.module.scss';
 import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
 import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
+import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
 
 const history = createBrowserHistory();
 
@@ -48,7 +48,7 @@ export const App = () => {
             <ViewEventContainer />
           </Route>
           <Route exact path={eventsRoute}>
-            <ViewEventsContainer />
+            <ViewEventsCardsContainer />
           </Route>
           <Route path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />

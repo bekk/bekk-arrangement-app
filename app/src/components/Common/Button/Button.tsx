@@ -6,20 +6,21 @@ import { ReactChild } from 'src/types';
 interface IProps {
   onClick: () => void;
   disabled?: boolean;
-  color?: 'White' | 'Black';
+  color?: 'Primary' | 'Secondary';
   displayAsLink?: boolean;
   children?: ReactChild;
 }
 export const Button = ({
   onClick,
-  color = 'Black',
+  color = 'Primary',
   disabled = false,
   displayAsLink = false,
   children,
 }: IProps) => {
   const buttonStyle = classNames({
     [style.button]: !displayAsLink,
-    [style.whiteButton]: color === 'White' && !displayAsLink,
+    [style.secondaryButton]: color === 'Secondary' && !displayAsLink,
+    [style.primaryButton]: color === 'Primary' && !displayAsLink,
     [style.link]: displayAsLink,
   });
   return (

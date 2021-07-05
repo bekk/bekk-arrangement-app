@@ -1,0 +1,150 @@
+@import 'src/style/constants';
+@import 'src/style/fonts';
+
+.card {
+  border: solid 1px white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 340px;
+  justify-content: space-between;
+  color: var(--lightTextColor);
+  @media #{$desktop} {
+    min-height: 300px;
+  }
+  &:hover {
+    color: black;
+  }
+  &:hover path {
+    fill: black;
+  }
+}
+
+.cardColorHav {
+  &:hover {
+    background-color: var(--hav);
+  }
+}
+.cardColorKveld {
+  &:hover {
+    background-color: var(--kveld);
+  }
+}
+
+.cardColorRegn {
+  &:hover {
+    background-color: var(--regn);
+  }
+}
+
+.cardColorSkyfritt {
+  &:hover {
+    background-color: var(--skyfritt);
+  }
+}
+.cardColorSol {
+  &:hover {
+    background-color: var(--sol);
+  }
+}
+.cardColorSolnedgang {
+  &:hover {
+    background-color: var(--solnedgang);
+  }
+}
+.cardColorSoloppgang {
+  &:hover {
+    background-color: var(--soloppgang);
+  }
+}
+
+.cardFaded {
+  border-color: var(--svart20);
+  color: var(--svart20);
+}
+
+.link {
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardContent  {
+  justify-content: space-between;
+}
+
+.title {
+  font-family: $serifFontRegular;
+  margin: 10px 0;
+  word-wrap: break-word;
+}
+
+.shortTitle {
+  font-size: 35px;
+  @media #{$desktop} {
+    font-size: 30;
+  }
+}
+
+.longTitle {
+  font-size: 30px;
+  @media #{$desktop} {
+    font-size: 26;
+  }
+}
+
+.date {
+  font-size: 16px;
+}
+
+.location {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.locationText {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.locationIcon {
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.button {
+  align-self: center;
+  margin-top: auto;
+  padding: 10px;
+}
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stateText {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.stateIconContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}
+
+.stateIcon {
+  min-width: 25px;
+  min-height: 25px;
+  margin-right: 8px;
+}

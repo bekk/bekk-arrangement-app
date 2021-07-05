@@ -40,8 +40,10 @@ export const useEvents = () => {
 
 //**  Participant  **//
 
-const participantsCache =
-  cachedRemoteData<string, IParticipantsWithWaitingList>();
+const participantsCache = cachedRemoteData<
+  string,
+  IParticipantsWithWaitingList
+>();
 
 export const useParticipants = (eventId: string, editToken?: string) => {
   return participantsCache.useOne({
@@ -73,12 +75,18 @@ export const useNumberOfParticipants = (eventId: string) => {
   });
 };
 
-const waitinglistSpotCache = cachedRemoteData<string, number>();
+const waitinglistSpotCache = cachedRemoteData<
+  string,
+  number | 'ikke-påmeldt'
+>();
 
-export const useWaitinglistSpot = (eventId: string, email: string) => {
+export const useWaitinglistSpot = (eventId: string, email?: string) => {
   return waitinglistSpotCache.useOne({
     key: `${eventId}:${email}`,
     fetcher: useCallback(async () => {
+      if (email === undefined) {
+        return 'ikke-påmeldt';
+      }
       const waitinglistSpot = await getWaitinglistSpot(eventId, email);
       return waitinglistSpot;
     }, [eventId, email]),
