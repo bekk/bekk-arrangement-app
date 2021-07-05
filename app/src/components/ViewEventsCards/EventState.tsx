@@ -7,7 +7,8 @@ import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
 import style from './EventCardElement.module.scss';
 import { SmileIcon } from 'src/components/Common/Icons/SmileIcon';
 import { FrownyFaceIcon } from 'src/components/Common/Icons/FrownyFaceIcon';
-import { LinkButton } from 'src/components/Common/LinkButton/LinkButton';
+import { useHistory } from 'react-router';
+import { Button } from 'src/components/Common/Button/Button';
 
 export type eventState =
   | 'Rediger'
@@ -36,9 +37,17 @@ export const EventState = ({
   numberOfAvailableSpots,
   waitingListSpot,
 }: IProps) => {
+  const history = useHistory();
+  const route = (path: string) => {
+    history.push(path);
+  };
   switch (eventState) {
     case 'Rediger':
-      return <LinkButton to={editEventRoute(eventId)}>Rediger</LinkButton>;
+      return (
+        <Button onClick={() => route(editEventRoute(editEventRoute(eventId)))}>
+          Rediger
+        </Button>
+      );
 
     case 'Ikke åpnet':
       const openForRegistrationTime = event.openForRegistrationTime;
@@ -72,23 +81,29 @@ export const EventState = ({
     case 'Plass':
       if (numberOfAvailableSpots !== undefined && numberOfAvailableSpots <= 5) {
         return (
-          <div>
+          <div className={style.stateContainer}>
             <div className={style.stateText}>
               {numberOfAvailableSpots} plasser igjen!
             </div>
-            <LinkButton to={viewEventRoute(eventId)}>Meld deg på</LinkButton>
+            <Button onClick={() => route(viewEventRoute(eventId))}>
+              Meld deg på
+            </Button>
           </div>
         );
       }
-      return <LinkButton to={viewEventRoute(eventId)}>Meld deg på</LinkButton>;
+      return (
+        <Button onClick={() => route(viewEventRoute(eventId))}>
+          Meld deg på
+        </Button>
+      );
 
     case 'Plass på venteliste':
       return (
-        <div>
+        <div className={style.stateContainer}>
           <div className={style.stateText}>Arrangementet er fullt.</div>
-          <LinkButton to={viewEventRoute(eventId)}>
+          <Button onClick={() => route(`${viewEventRoute(eventId)}#idtest`)}>
             Sett deg på venteliste
-          </LinkButton>
+          </Button>
         </div>
       );
 
@@ -101,7 +116,7 @@ export const EventState = ({
     case 'Avlyst':
       return (
         <div className={style.stateIconContainer}>
-          <FrownyFaceIcon className={style.stateIcon}/>
+          <FrownyFaceIcon className={style.stateIcon} />
           Avlyst
         </div>
       );

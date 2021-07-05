@@ -9,7 +9,10 @@ import { hasLoaded } from 'src/remote-data';
 import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
 import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import classNames from 'classnames';
-import { EventState,eventState } from 'src/components/ViewEventsCards/EventState';
+import {
+  EventState,
+  eventState,
+} from 'src/components/ViewEventsCards/EventState';
 import { isInThePast } from 'src/types/date-time';
 import { isNumber } from 'lodash';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
@@ -80,8 +83,8 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
   });
 
   const cardStyle = classNames(style.card, getColor(eventId), {
-    [style.cardActive]: eventState !== 'Avsluttet',
-    [style.cardFaded]: eventState === 'Avsluttet', //TODO: legg til faded på avlyst også (|| eventState === 'Avlyst')
+    [style.cardActive]: eventState !== 'Avsluttet' && eventState !== 'Avlyst',
+    [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
   });
 
   return (
@@ -141,10 +144,10 @@ const useGetState = ({
   editToken,
   waitingListSpot,
   registrationState,
-}: EventStateProps):eventState => {
+}: EventStateProps): eventState => {
   if (editToken) return 'Rediger';
-  
-  if (event.isCancelled) return 'Avlyst'
+
+  if (event.isCancelled) return 'Avlyst';
 
   if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
 

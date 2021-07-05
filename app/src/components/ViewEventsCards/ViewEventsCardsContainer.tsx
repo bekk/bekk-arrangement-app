@@ -5,7 +5,8 @@ import { hasLoaded } from 'src/remote-data';
 import { Page } from 'src/components/Page/Page';
 import { useEvents } from 'src/hooks/cache';
 import { EventCardElement } from 'src/components/ViewEventsCards/EventCardElement';
-import { LinkButton } from 'src/components/Common/LinkButton/LinkButton';
+import { Button } from 'src/components/Common/Button/Button';
+import { useHistory } from 'react-router';
 
 export const ViewEventsCardsContainer = () => {
   const events = useEvents();
@@ -28,5 +29,10 @@ export const ViewEventsCardsContainer = () => {
 };
 
 const AddEventButton = () => {
-  return <LinkButton to={createRoute}>Opprett et arrangement</LinkButton>;
+  const history = useHistory();
+  return (
+    <Button onClick={() => history.push(createRoute)}>
+      Opprett et arrangement
+    </Button>
+  );
 };
