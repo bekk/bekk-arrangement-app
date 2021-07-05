@@ -48,11 +48,8 @@ export const App = () => {
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
           </Route>
-          <Route exact path={'/events2'}>
-            <ViewEventsCardsContainer />
-          </Route>
           <Route exact path={eventsRoute}>
-            <ViewEventsContainer />
+            <ViewEventsCardsContainer />
           </Route>
           <Route path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />
