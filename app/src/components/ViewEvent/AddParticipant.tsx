@@ -87,18 +87,20 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           })
         }
       />
-      <ValidatedTextInput
-        label={participantQuestion}
-        placeholder={'Kommentar til arrangør'}
-        value={participant.comment}
-        validation={parseComment}
-        onChange={(comment: string) =>
-          setParticipant({
-            ...participant,
-            comment,
-          })
-        }
-      />
+      {participantQuestion !== undefined && (
+        <ValidatedTextInput
+          label={participantQuestion}
+          placeholder={'Kommentar til arrangør'}
+          value={participant.comment}
+          validation={parseComment}
+          onChange={(comment: string) =>
+            setParticipant({
+              ...participant,
+              comment,
+            })
+          }
+        />
+      )}
       <br />
       <Button onClick={participate}>Meld meg på</Button>
     </>

@@ -20,6 +20,7 @@ import {
 import { isValid } from 'src/types/validation';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 import { Checkbox } from '@bekk/storybook';
+import { Button } from 'src/components/Common/Button/Button';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -33,21 +34,20 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
       placeholder="Fest på Skuret"
       value={event.title}
       validation={parseTitle}
-      onChange={title =>
+      onChange={(title) =>
         updateEvent({
           ...event,
           title,
         })
       }
     />
-
     <div>
       <ValidatedTextInput
         label="Navn på arrangør"
         placeholder="Ola Nordmann"
         value={event.organizerName}
         validation={parseHost}
-        onChange={organizerName =>
+        onChange={(organizerName) =>
           updateEvent({
             ...event,
             organizerName,
@@ -55,14 +55,13 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
         }
       />
     </div>
-
     <div>
       <ValidatedTextInput
         label="E-post arrangør"
         placeholder="ola.nordmann@bekk.no"
         value={event.organizerEmail}
         validation={parseEditEmail}
-        onChange={organizerEmail =>
+        onChange={(organizerEmail) =>
           updateEvent({
             ...event,
             organizerEmail,
@@ -70,73 +69,67 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
         }
       />
     </div>
-
     <ValidatedTextInput
       label={'Lokasjon'}
       placeholder="Vippetangen"
       value={event.location}
       validation={parseLocation}
-      onChange={location =>
+      onChange={(location) =>
         updateEvent({
           ...event,
           location,
         })
       }
     />
-
     <ValidatedTextArea
       label={'Beskrivelse'}
       placeholder={'Dette er en beskrivelse'}
       value={event.description}
       validation={parseDescription}
-      onChange={description =>
+      onChange={(description) =>
         updateEvent({
           ...event,
           description,
         })
       }
     />
-
     <DateTimeInput
       label={'Starter'}
       value={event.start}
-      onChange={start =>
+      onChange={(start) =>
         updateEvent({
           ...event,
           ...setStartEndDates(event, ['set-start', start]),
         })
       }
     />
-
     <DateTimeInput
       label={'Slutter'}
       value={event.end}
-      onChange={end =>
+      onChange={(end) =>
         updateEvent({
           ...event,
           ...setStartEndDates(event, ['set-end', end]),
         })
       }
     />
-
     <DateTimeInputWithTimezone
       label={'Påmelding åpner'}
       value={event.openForRegistrationTime}
-      onChange={openForRegistrationTime =>
+      onChange={(openForRegistrationTime) =>
         updateEvent({
           ...event,
           openForRegistrationTime,
         })
       }
     />
-
     <ValidatedTextInput
       label={'Maks antall'}
       placeholder="0 (ingen grense)"
       value={event.maxParticipants}
       isNumber={true}
       validation={parseMaxAttendees}
-      onChange={maxParticipants =>
+      onChange={(maxParticipants) =>
         updateEvent({
           ...event,
           maxParticipants,
@@ -145,23 +138,35 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
     />
     <Checkbox
       label="Venteliste"
-      onChange={hasWaitingList => updateEvent({ ...event, hasWaitingList })}
+      onChange={(hasWaitingList) => updateEvent({ ...event, hasWaitingList })}
       isChecked={event.hasWaitingList}
       onDarkBackground={true}
     />
-
-    <ValidatedTextInput
-      label={'Spørsmål til deltakere'}
-      placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
-      value={event.participantQuestion}
-      validation={parseQuestion}
-      onChange={participantQuestion =>
-        updateEvent({
-          ...event,
-          participantQuestion,
-        })
-      }
-    />
+    {event.participantQuestion !== undefined ? (
+      <ValidatedTextInput
+        label={'Spørsmål til deltakere'}
+        placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+        value={event.participantQuestion}
+        validation={parseQuestion}
+        onChange={(participantQuestion) =>
+          updateEvent({
+            ...event,
+            participantQuestion,
+          })
+        }
+      />
+    ) : (
+      <Button
+        onClick={() =>
+          updateEvent({
+            ...event,
+            participantQuestion: '',
+          })
+        }
+      >
+        + Legg til spørsmål til deltaker
+      </Button>
+    )}
   </>
 );
 

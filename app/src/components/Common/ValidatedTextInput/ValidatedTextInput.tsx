@@ -8,7 +8,7 @@ interface ValidTextInputProps {
   label: string;
   placeholder?: string;
   value: string;
-  isNumber?: boolean; 
+  isNumber?: boolean;
   validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
 }

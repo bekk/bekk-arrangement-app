@@ -49,7 +49,7 @@ export interface IEventViewModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
 }
@@ -65,7 +65,7 @@ export interface IEventWriteModel {
   organizerEmail: string;
   maxParticipants: number;
   editUrlTemplate: string;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
 }
 
@@ -79,7 +79,7 @@ export interface IEvent {
   organizerName: string;
   organizerEmail: Email;
   maxParticipants: number;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
 }
@@ -94,9 +94,9 @@ export interface IEditEvent {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: string;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
-  isCancelled:boolean;
+  isCancelled: boolean;
 }
 
 export const parseEditEvent = ({
@@ -167,7 +167,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const maxParticipants = eventView.maxParticipants;
   const participantQuestion = parseQuestion(eventView.participantQuestion);
   const hasWaitingList = eventView.hasWaitingList;
-  const isCancelled = eventView.isCancelled
+  const isCancelled = eventView.isCancelled;
 
   const event = {
     title,
@@ -181,7 +181,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     maxParticipants,
     participantQuestion,
     hasWaitingList,
-    isCancelled
+    isCancelled,
   };
 
   assertIsValid(event);
@@ -236,7 +236,7 @@ export const initialEvent = (): IEvent => {
     organizerName: '',
     organizerEmail: { email: '' },
     maxParticipants: 0,
-    participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
+    participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,
   };

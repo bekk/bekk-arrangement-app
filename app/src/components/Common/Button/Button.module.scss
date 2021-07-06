@@ -5,8 +5,8 @@
   border-radius: 20px;
   height: 39px;
   min-width: 100px;
-  max-width: 140px;
   padding: 0 10px;
+  margin-top: 20px;
   transition: background-color $transitionLength, color $transitionLength,
     border $transitionLength;
   @media #{$desktop} {
