@@ -17,7 +17,6 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { isValid } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
-import { getIdToken } from 'src/auth';
 
 interface Props {
   eventId: string;
