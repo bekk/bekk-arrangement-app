@@ -58,7 +58,9 @@ export function getEmailAndNameFromToken(jwt: string): {
   email: string;
   name: string;
 } {
-  const { email, name } = getClaimsFromToken(jwt);
+  const { email, name } = jwt 
+    ? getClaimsFromToken(jwt)
+    : { email: '', name: '' };
   return {
     email: email ?? '',
     name: name ?? '',
