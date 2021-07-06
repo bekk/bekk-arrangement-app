@@ -35,7 +35,7 @@ app.get('/config', (request, response) =>
       'https://api.dev.bekk.no/arrangement-svc',
     audience: process.env.AUTH0_AUDIENCE || 'QHQy75S7tmnhDdBGYSnszzlhMPul0fAE',
     issuerDomain: process.env.AUTH0_ISSUER_DOMAIN || 'bekk-dev.eu.auth0.com',
-    scopes: process.env.SCOPES || 'openid name groups',
+    scopes: process.env.SCOPES || 'openid name groups email',
   })
 );
 
