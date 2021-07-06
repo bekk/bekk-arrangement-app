@@ -72,8 +72,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     [style.shortTitle]: event.title.length < 25,
   });
 
-  const eventState = useGetState({
-    eventId,
+  const eventState = getEventState({
     event,
     waitingListSpot: hasLoaded(waitingListSpot)
       ? waitingListSpot.data
@@ -116,14 +115,6 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
   );
 };
 
-interface EventStateProps {
-  eventId: string;
-  event: IEvent;
-  editToken?: string;
-  waitingListSpot: number | 'ikke-påmeldt' | 'Laster';
-  registrationState?: 'Plass' | 'Plass på venteliste' | 'Laster' | 'Fullt';
-}
-
 const colors = [
   style.cardColorHav,
   style.cardColorKveld,
@@ -138,8 +129,14 @@ const getEventHash = (eventId: string): number =>
 const getColor = (eventId: string) =>
   colors[getEventHash(eventId) % colors.length];
 
-const useGetState = ({
-  eventId,
+interface EventStateProps {
+  event: IEvent;
+  editToken?: string;
+  waitingListSpot: number | 'ikke-påmeldt' | 'Laster';
+  registrationState: 'Plass' | 'Plass på venteliste' | 'Laster' | 'Fullt';
+}
+
+const getEventState = ({
   event,
   editToken,
   waitingListSpot,
@@ -158,8 +155,5 @@ const useGetState = ({
     else return 'Påmeldt';
   }
 
-  if (registrationState) {
-    return registrationState;
-  }
-  return undefined;
+  return registrationState;
 };
