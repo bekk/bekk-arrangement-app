@@ -5,6 +5,7 @@ import {
   toEditEmail,
   parseEditEmail,
 } from './email';
+import { getEmailAndNameFromToken } from 'src/auth';
 
 export interface IParticipantWriteModel {
   name: string;
@@ -121,8 +122,11 @@ export const parseComment = (value: string): string | IError[] => {
   return validator.resolve(value);
 };
 
-export const initalParticipant: IParticipant = {
-  email: { email: '' },
-  name: '',
-  comment: '',
-};
+export function initalParticipant(jwt: string): IParticipant {
+  const { name, email } = getEmailAndNameFromToken(jwt);
+  return {
+    email: { email },
+    name,
+    comment: '',
+  };
+}
