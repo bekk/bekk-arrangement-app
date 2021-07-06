@@ -22,8 +22,7 @@ export const toEditEmail = ({ email }: Email): EditEmail => email;
 export const parseEmailViewModel = (email: EmailViewModel): Email => ({
   email,
 });
-export const toEmailWriteModel = ({ email }: Email): EmailWriteModel =>
-  encodeURIComponent(email);
+export const toEmailWriteModel = ({ email }: Email): EmailWriteModel => email;
 
 // Utils functions
 

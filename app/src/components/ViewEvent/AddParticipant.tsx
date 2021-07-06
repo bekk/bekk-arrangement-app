@@ -53,7 +53,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
       history.push(
         confirmParticipantRoute({
           eventId,
-          email: toEmailWriteModel({ email }),
+          email: encodeURIComponent(email),
         })
       );
     }

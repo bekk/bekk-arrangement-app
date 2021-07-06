@@ -104,7 +104,10 @@ export const ViewEventContainer = () => {
       {participationsForThisEvent.map((p) => (
         <BlockLink
           key={p.email}
-          to={cancelParticipantRoute({ ...p, email: toEmailWriteModel(p) })}
+          to={cancelParticipantRoute({
+            ...p,
+            email: encodeURIComponent(toEmailWriteModel(p)),
+          })}
         >
           Meld {p.email} av arrangementet
         </BlockLink>
