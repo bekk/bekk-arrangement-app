@@ -11,7 +11,7 @@ export const useTimeLeft = (time: Date | false) => {
       setTimeLeft(calculateTimeLeft(time));
       const interval = setInterval(() => {
         setTimeLeft(calculateTimeLeft(time));
-      }, 1000);
+      }, 500);
       return () => clearInterval(interval);
     }
   }, [time]);

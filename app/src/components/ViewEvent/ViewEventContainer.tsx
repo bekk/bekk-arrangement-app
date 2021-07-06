@@ -115,6 +115,9 @@ export const ViewEventContainer = () => {
       <ViewEvent event={event} participantsText={participantsText} />
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
+        {(!closedEventText || timeLeft.difference < 60000) && (
+          <AddParticipant eventId={eventId} event={event} />
+        )}
         {closedEventText ? (
           <div>
             <p>{numberOfPossibleParticipantsText}</p>
@@ -125,7 +128,6 @@ export const ViewEventContainer = () => {
         ) : waitlistText ? (
           <p className={style.text}>{waitlistText}</p>
         ) : null}
-        {!closedEventText && <AddParticipant eventId={eventId} event={event} />}
         {(editTokenFound || userIsAdmin()) && (
           <ViewParticipants eventId={eventId} editToken={editTokenFound} />
         )}

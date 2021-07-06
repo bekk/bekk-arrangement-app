@@ -16,21 +16,21 @@ export const asString = ({ days, hours, minutes, seconds }: ITimeLeft) => {
   if (minutes > 0) {
     return `${minutes} minutter og ${seconds} sekunder`;
   }
-  if (seconds > 0) {
+  if (seconds >= 0) {
     return ` ${seconds} sekunder`;
   }
 };
 
 export const calculateTimeLeft = (date: Date): ITimeLeft => {
-  const difference = date.valueOf() - new Date().valueOf();
+  const differenceInMs = date.valueOf() - new Date().valueOf();
 
-  if (difference > 0) {
+  if (differenceInMs > 0) {
     return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-      difference: difference,
+      days: Math.floor(differenceInMs / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((differenceInMs / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((differenceInMs / 1000 / 60) % 60),
+      seconds: Math.ceil((differenceInMs / 1000) % 60),
+      difference: differenceInMs,
     };
   }
 
