@@ -17,6 +17,7 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { isValid } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
+import { getIdToken } from 'src/auth';
 
 interface Props {
   eventId: string;
@@ -28,7 +29,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
   const history = useHistory();
 
   const [participant, setParticipant] = useState<IEditParticipant>(
-    toEditParticipant(initalParticipant)
+    toEditParticipant(initalParticipant(getIdToken()))
   );
 
   const validParticipant = validateParticipation(participant);
