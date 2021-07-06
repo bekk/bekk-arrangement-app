@@ -54,16 +54,17 @@ function getClaimsFromToken(jwt: string): any {
   return JSON.parse(jsonString);
 }
 
-export function getEmailAndNameFromToken(jwt: string): {
-  email: string;
-  name: string;
+export function getEmailAndNameFromJWT(): {
+  email: string | undefined;
+  name: string | undefined;
 } {
-  const { email, name } = jwt 
-    ? getClaimsFromToken(jwt)
-    : { email: '', name: '' };
+  const token = getIdToken();
+  const { email, name } = token
+    ? getClaimsFromToken(token) 
+    : { email: undefined, name: undefined }; // getIdToken returns '' when there is no token
   return {
-    email: email ?? '',
-    name: name ?? '',
+    email,
+    name,
   };
 }
 
