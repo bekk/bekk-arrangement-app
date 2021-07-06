@@ -54,6 +54,17 @@ function getClaimsFromToken(jwt: string): any {
   return JSON.parse(jsonString);
 }
 
+export function getEmailAndNameFromToken(jwt: string): {
+  email: string;
+  name: string;
+} {
+  const { email, name } = getClaimsFromToken(jwt);
+  return {
+    email: email ?? '',
+    name: name ?? '',
+  };
+}
+
 function getApplicationRoot(): string {
   return window.location.origin;
 }

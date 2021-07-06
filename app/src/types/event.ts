@@ -34,6 +34,8 @@ import { addWeeks } from 'date-fns/esm/fp';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
+import {getEmailAndNameFromToken} from 'src/auth'
+
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
   editToken: string;
@@ -217,9 +219,10 @@ export const toEditEvent = ({
   isCancelled,
 });
 
-export const initialEvent = (): IEvent => {
+export const initialEvent = (jwt:string): IEvent => {
   const eventStartDate = addWeeks(2, new Date());
   const openForRegistrationTime = addWeeks(-1, eventStartDate);
+  const {email, name} = getEmailAndNameFromToken(jwt)
   return {
     title: '',
     description: '',
@@ -233,8 +236,8 @@ export const initialEvent = (): IEvent => {
       time: { hour: 20, minute: 0 },
     },
     openForRegistrationTime,
-    organizerName: '',
-    organizerEmail: { email: '' },
+    organizerName: name,
+    organizerEmail: { email },
     maxParticipants: 0,
     participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
     hasWaitingList: false,
