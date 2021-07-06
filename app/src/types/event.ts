@@ -34,7 +34,7 @@ import { addWeeks } from 'date-fns/esm/fp';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
-import {getEmailAndNameFromJWT} from 'src/auth'
+import { getEmailAndNameFromJWT } from 'src/auth';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -54,6 +54,7 @@ export interface IEventViewModel {
   participantQuestion: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
+  isExternal: boolean;
 }
 
 export interface IEventWriteModel {
@@ -69,6 +70,7 @@ export interface IEventWriteModel {
   editUrlTemplate: string;
   participantQuestion: string;
   hasWaitingList: boolean;
+  isExternal: boolean;
 }
 
 export interface IEvent {
@@ -84,6 +86,7 @@ export interface IEvent {
   participantQuestion: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
+  isExternal: boolean;
 }
 
 export interface IEditEvent {
@@ -98,7 +101,8 @@ export interface IEditEvent {
   maxParticipants: string;
   participantQuestion: string;
   hasWaitingList: boolean;
-  isCancelled:boolean;
+  isCancelled: boolean;
+  isExternal: boolean;
 }
 
 export const parseEditEvent = ({
@@ -114,6 +118,7 @@ export const parseEditEvent = ({
   participantQuestion,
   hasWaitingList,
   isCancelled,
+  isExternal,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -128,6 +133,7 @@ export const parseEditEvent = ({
     participantQuestion: parseQuestion(participantQuestion),
     hasWaitingList: hasWaitingList,
     isCancelled: isCancelled,
+    isExternal: isExternal,
   };
 
   try {
@@ -169,7 +175,8 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const maxParticipants = eventView.maxParticipants;
   const participantQuestion = parseQuestion(eventView.participantQuestion);
   const hasWaitingList = eventView.hasWaitingList;
-  const isCancelled = eventView.isCancelled
+  const isCancelled = eventView.isCancelled;
+  const isExternal = eventView.isExternal;
 
   const event = {
     title,
@@ -183,7 +190,8 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     maxParticipants,
     participantQuestion,
     hasWaitingList,
-    isCancelled
+    isCancelled,
+    isExternal,
   };
 
   assertIsValid(event);
@@ -204,6 +212,7 @@ export const toEditEvent = ({
   participantQuestion,
   hasWaitingList,
   isCancelled,
+  isExternal,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -217,12 +226,13 @@ export const toEditEvent = ({
   participantQuestion,
   hasWaitingList,
   isCancelled,
+  isExternal,
 });
 
 export const initialEvent = (): IEvent => {
   const eventStartDate = addWeeks(2, new Date());
   const openForRegistrationTime = addWeeks(-1, eventStartDate);
-  const {email, name} = getEmailAndNameFromJWT()
+  const { email, name } = getEmailAndNameFromJWT();
   return {
     title: '',
     description: '',
@@ -242,5 +252,6 @@ export const initialEvent = (): IEvent => {
     participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
     hasWaitingList: false,
     isCancelled: false,
+    isExternal: false,
   };
 };

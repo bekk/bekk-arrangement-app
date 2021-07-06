@@ -150,6 +150,13 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
       onDarkBackground={true}
     />
 
+    <Checkbox
+      label="Eksternt arrangement"
+      onChange={isExternal => updateEvent({ ...event, isExternal })}
+      isChecked={event.isExternal}
+      onDarkBackground={true}
+    />
+
     <ValidatedTextInput
       label={'Spørsmål til deltakere'}
       placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
