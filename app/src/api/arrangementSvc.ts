@@ -85,7 +85,9 @@ export const getWaitinglistSpot = (
 ): Promise<number> =>
   get({
     host: getArrangementSvcUrl(),
-    path: `/events/${eventId}/participants/${email}/waitinglist-spot`,
+    path: `/events/${eventId}/participants/${toEmailWriteModel({
+      email,
+    })}/waitinglist-spot`,
   });
 
 export const postParticipant = (
@@ -112,7 +114,7 @@ export const deleteParticipant = ({
 }) =>
   del({
     host: getArrangementSvcUrl(),
-    path: `/events/${eventId}/participants/${participantEmail}${queryStringStringify(
-      { cancellationToken }
-    )}`,
+    path: `/events/${eventId}/participants/${toEmailWriteModel({
+      email: participantEmail,
+    })}${queryStringStringify({ cancellationToken })}`,
   });

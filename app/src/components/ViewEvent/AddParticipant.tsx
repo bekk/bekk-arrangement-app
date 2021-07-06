@@ -8,7 +8,7 @@ import {
   parseComment,
 } from 'src/types/participant';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
-import { parseEditEmail } from 'src/types/email';
+import { parseEditEmail, toEmailWriteModel } from 'src/types/email';
 import { Button } from 'src/components/Common/Button/Button';
 import { IEvent } from 'src/types/event';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
@@ -53,7 +53,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
       history.push(
         confirmParticipantRoute({
           eventId,
-          email,
+          email: toEmailWriteModel({ email }),
         })
       );
     }
