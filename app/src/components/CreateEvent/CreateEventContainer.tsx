@@ -6,7 +6,7 @@ import {
   parseEditEvent,
 } from 'src/types/event';
 import { eventsRoute, previewNewEventRoute } from 'src/routing';
-import { getIdToken, useAuthentication } from 'src/auth';
+import { useAuthentication } from 'src/auth';
 import { Page } from 'src/components/Page/Page';
 import { Button } from 'src/components/Common/Button/Button';
 import { EditEvent } from 'src/components/EditEvent/EditEvent/EditEvent';
@@ -20,7 +20,7 @@ export const CreateEventContainer = () => {
   useAuthentication();
 
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
-    toEditEvent(initialEvent(getIdToken()))
+    toEditEvent(initialEvent())
   );
   const validEvent = validateEvent(event);
 
