@@ -86,7 +86,7 @@ function getAuth0Url(): string {
   return `https://${getIssuerDomain()}/authorize?client_id=${getAudience()}&response_type=token&redirect_uri=${encodedCallback}&scope=${encodedScopes}&state=${state}`;
 }
 
-function redirectToAuth0(): void {
+export function redirectToAuth0(): void {
   const url = getAuth0Url();
   window.location.replace(url);
 }

@@ -1,7 +1,8 @@
-import { useAuth0Redirect } from 'src/auth';
-import { Router, Switch, Route, Redirect } from 'react-router';
+import { authenticateUser, isAuthenticated, redirectToAuth0, useAuth0Redirect } from 'src/auth';
+import { Router, Switch, Route, Redirect, RouteProps } from 'react-router';
 import React from 'react';
 import { Header } from 'src/components/Common/Header/Header';
+import { ReactChild } from 'src/types';
 import {
   createRoute,
   viewEventRoute,
@@ -41,14 +42,14 @@ export const App = () => {
       <div className={style.container}>
         <Header />
         <Switch>
-          <Route exact path={createRoute}>
-            <CreateEventContainer />
-          </Route>
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
           </Route>
-          <Route exact path={eventsRoute}>
+          <PrivateRoute exact path={eventsRoute}>
             <ViewEventsCardsContainer />
+          </PrivateRoute>
+          <Route exact path={createRoute}>
+              <CreateEventContainer />
           </Route>
           <Route path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />
@@ -82,3 +83,22 @@ export const App = () => {
     </Router>
   );
 };
+export type ProtectedRouteProps = {
+  children: ReactChild;
+} & RouteProps
+
+
+const PrivateRoute = ({children, ...routeProps}:ProtectedRouteProps) => {
+  return (
+    <Route
+      {...routeProps}
+      render={({ location }) =>
+        isAuthenticated() ? (
+          children
+        ) : (
+          <> {redirectToAuth0()} </>
+        )
+      }
+    />
+  );
+}
