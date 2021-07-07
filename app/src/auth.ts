@@ -35,14 +35,37 @@ export function getIdToken(): string {
   }
 }
 
-function base64ToUtf8(str: string): string {
-  return decodeURIComponent(window.atob(str));
+function base64ToUtf8(str: string) {
+  // https://stackblitz.com/edit/typescript-encode-decode-base64
+  // atob alone has unicode issues: https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
+  return decodeURIComponent(
+    atob(str)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join('')
+  );
 }
 
 function getClaimsFromToken(jwt: string): any {
   const encoded = jwt && jwt.split('.')[1];
   const jsonString = base64ToUtf8(encoded);
   return JSON.parse(jsonString);
+}
+
+export function getEmailAndNameFromJWT(): {
+  email: string | undefined;
+  name: string | undefined;
+} {
+  const token = getIdToken();
+  const { email, name } = token
+    ? getClaimsFromToken(token) 
+    : { email: undefined, name: undefined }; // getIdToken returns '' when there is no token
+  return {
+    email,
+    name,
+  };
 }
 
 function getApplicationRoot(): string {
@@ -157,9 +180,8 @@ function hasPermission(permission: string): boolean {
   if (!token) {
     return false;
   }
-  const permissions: string[] = getClaimsFromToken(token)[
-    'https://api.bekk.no/claims/permission'
-  ];
+  const permissions: string[] =
+    getClaimsFromToken(token)['https://api.bekk.no/claims/permission'];
   return permissions.includes(permission);
 }
 

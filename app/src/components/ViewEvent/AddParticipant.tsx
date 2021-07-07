@@ -28,7 +28,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
   const history = useHistory();
 
   const [participant, setParticipant] = useState<IEditParticipant>(
-    toEditParticipant(initalParticipant)
+    toEditParticipant(initalParticipant())
   );
 
   const validParticipant = validateParticipation(participant);

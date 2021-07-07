@@ -20,8 +20,7 @@ export type eventState =
   | 'Plass på venteliste'
   | 'Fullt'
   | 'Laster'
-  | 'Avlyst'
-  | undefined;
+  | 'Avlyst';
 interface IProps {
   eventId: string;
   eventState: eventState;
@@ -120,8 +119,5 @@ export const EventState = ({
           Avlyst
         </div>
       );
-
-    case undefined:
-      return null;
   }
 };

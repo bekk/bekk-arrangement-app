@@ -7,6 +7,7 @@ import { useEvents } from 'src/hooks/cache';
 import { EventCardElement } from 'src/components/ViewEventsCards/EventCardElement';
 import { Button } from 'src/components/Common/Button/Button';
 import { useHistory } from 'react-router';
+import { authenticateUser, isAuthenticated } from 'src/auth';
 
 export const ViewEventsCardsContainer = () => {
   const events = useEvents();
@@ -30,9 +31,12 @@ export const ViewEventsCardsContainer = () => {
 
 const AddEventButton = () => {
   const history = useHistory();
-  return (
-    <Button onClick={() => history.push(createRoute)}>
-      Opprett et arrangement
-    </Button>
-  );
+  if (isAuthenticated()) {
+    return (
+      <Button onClick={() => history.push(createRoute)}>
+        Opprett et arrangement
+      </Button>
+    );
+  }
+  return <Button onClick={authenticateUser}>Logg inn</Button>;
 };
