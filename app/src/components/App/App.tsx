@@ -42,14 +42,14 @@ export const App = () => {
       <div className={style.container}>
         <Header />
         <Switch>
+          <PrivateRoute exact path={createRoute}>
+            <CreateEventContainer />
+          </PrivateRoute>
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
           </Route>
           <PrivateRoute exact path={eventsRoute}>
             <ViewEventsCardsContainer />
-          </PrivateRoute>
-          <PrivateRoute exact path={createRoute}>
-            <CreateEventContainer />
           </PrivateRoute>
           <PrivateRoute path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />
