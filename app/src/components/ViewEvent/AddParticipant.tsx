@@ -8,7 +8,7 @@ import {
   parseComment,
 } from 'src/types/participant';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
-import { parseEditEmail, toEmailWriteModel } from 'src/types/email';
+import { parseEditEmail } from 'src/types/email';
 import { Button } from 'src/components/Common/Button/Button';
 import { IEvent } from 'src/types/event';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
@@ -17,6 +17,7 @@ import { postParticipant } from 'src/api/arrangementSvc';
 import { isValid } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
+import { useTimeLeft } from 'src/hooks/timeleftHooks';
 
 interface Props {
   eventId: string;
@@ -32,6 +33,8 @@ export const AddParticipant = ({ eventId, event }: Props) => {
   );
 
   const validParticipant = validateParticipation(participant);
+
+  const timeLeft = useTimeLeft(event.openForRegistrationTime);
 
   const { saveParticipation } = useSavedParticipations();
   const participate = catchAndNotify(async () => {
@@ -102,7 +105,9 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         />
       )}
       <br />
-      <Button onClick={participate}>Meld meg på</Button>
+      <Button onClick={participate} disabled={timeLeft.difference > 0}>
+        Meld meg på
+      </Button>
     </>
   );
 };
