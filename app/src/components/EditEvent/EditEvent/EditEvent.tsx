@@ -25,6 +25,7 @@ import style from '../EditEventContainer.module.scss';
 import dateTimeStyle from 'src/components/Common/DateTimeInput/DateTimeInput.module.scss';
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
+import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -34,6 +35,8 @@ interface IProps {
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   const [hasLimitedSpots, setHasLimitedSpots] = useState(false);
   const [isMultiDayEvent, setMultiDay] = useState(false);
+  const validatedStarTime = parseEditDateTime(event.start);
+  const validateEndTime = parseEditDateTime(event.end);
   return (
     <>
       <ValidatedTextInput
@@ -151,6 +154,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               />
             </div>
           </div>
+          {!isValid(validatedStarTime) && (
+            <ValidationResult validationResult={validatedStarTime} />
+          )}
+          {!isValid(validateEndTime) && (
+            <ValidationResult validationResult={validateEndTime} />
+          )}
           <Checkbox
             onDarkBackground
             label="Arrangementet går over flere dager"
@@ -189,6 +198,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               />
             </div>
           </div>
+          {!isValid(validatedStarTime) && (
+            <ValidationResult validationResult={validatedStarTime} />
+          )}
           <Checkbox
             onDarkBackground
             label="Arrangementet går over flere dager"
@@ -236,6 +248,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               />
             </div>
           </div>
+          {!isValid(validateEndTime) && (
+            <ValidationResult validationResult={validateEndTime} />
+          )}
         </>
       )}
       <DateTimeInputWithTimezone
