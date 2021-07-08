@@ -19,6 +19,13 @@
   &:hover path {
     fill: black;
   }
+  &:hover rect {
+    fill: black;
+  }
+
+  &:hover circle {
+    fill: black;
+  }
 }
 
 .cardColorHav {
@@ -115,6 +122,11 @@
 .locationIcon {
   min-width: 20px;
   min-height: 20px;
+}
+
+.externalIcon {
+  width: 18px;
+  height: 24px;
 }
 
 .button {
