@@ -19,19 +19,20 @@ export const DateTimeInput = ({ label, value, onChange }: IProps) => {
   const containerStyle = classNames(style.container, {
     [style.error]: !isValid(dateTime),
   });
+
   return (
     <section className={style.grid}>
       <label className={style.label}>{label}</label>
       <div className={containerStyle}>
         <DateInput
           value={value.date}
-          onChange={date => {
+          onChange={(date) => {
             onChange({ ...value, date });
           }}
         />
         <TimeInput
           value={value.time}
-          onChange={time => onChange({ ...value, time })}
+          onChange={(time) => onChange({ ...value, time })}
         />
       </div>
       {!isValid(dateTime) && <ValidationResult validationResult={dateTime} />}

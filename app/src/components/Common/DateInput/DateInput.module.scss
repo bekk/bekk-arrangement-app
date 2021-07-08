@@ -2,11 +2,10 @@
 @import 'src/style/fonts';
 
 .dateInput {
-  border: none;
   outline: none;
   background-color: var(--backgroundColor);
   display: block;
-  width: 60%;
+  width: fit-content;
   text-align: left;
   align-self: center;
   @include regularText;
@@ -17,6 +16,11 @@
   &::-webkit-calendar-picker-indicator {
     filter: invert(1);
   }
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px var(--textColor);
+  padding-bottom: 10px;
 }
 
 .iOS {

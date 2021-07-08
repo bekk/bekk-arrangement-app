@@ -1,7 +1,6 @@
 @import 'src/style/constants';
 
 .timeInput {
-  border: none;
   outline: 0;
   background-color: var(--backgroundColor);
   text-align: center;
@@ -14,6 +13,11 @@
     width: 50px;
     margin: 10px;
   }
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px var(--textColor);
+  -moz-appearance: textfield;
 }
 
 .dropdown {
@@ -28,7 +32,7 @@
   display: flex;
   border: none;
   flex-direction: row;
-  width: 40%;
+  width: 100px;
   justify-content: flex-end;
 }
 

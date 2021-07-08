@@ -22,41 +22,46 @@ export const DateTimeInputWithTimezone = ({
   onChange,
 }: IProps) => {
   const timeInstance = parseEditTimeInstance(value);
-  const timezoneOffsetUTC = new Date().getTimezoneOffset()/(-60)
+  const timezoneOffsetUTC = new Date().getTimezoneOffset() / -60;
 
   const containerStyle = classNames(style.container, {
     [style.error]: !isValid(timeInstance),
   });
 
   return (
-    <section className={style.grid}>
+    <>
       <label className={style.label}>{label}</label>
-      <div className={containerStyle}>
-        <DateInput
-          value={value.date}
-          onChange={date => {
-            onChange({
-              ...value,
-              date,
-            });
-          }}
-        />
+      <div className={style.flex}>
+        <div>
+          <DateInput
+            value={value.date}
+            onChange={(date) => {
+              onChange({
+                ...value,
+                date,
+              });
+            }}
+          />
+        </div>
 
-        <TimeInput
-          value={value.time}
-          onChange={time => {
-            onChange({
-              ...value,
-              time,
-              timezone: timezoneOffsetUTC,
-            });
-          }}
-        />
+        <div className={style.timeFlex}>
+          <div className={style.kl}>Kl.</div>
+          <TimeInput
+            value={value.time}
+            onChange={(time) => {
+              onChange({
+                ...value,
+                time,
+                timezone: timezoneOffsetUTC,
+              });
+            }}
+          />
+        </div>
       </div>
 
       {!isValid(timeInstance) && (
         <ValidationResult validationResult={timeInstance} />
       )}
-    </section>
+    </>
   );
 };

@@ -34,7 +34,7 @@ import { addWeeks } from 'date-fns/esm/fp';
 import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
-import {getEmailAndNameFromJWT} from 'src/auth'
+import { getEmailAndNameFromJWT } from 'src/auth';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -220,9 +220,9 @@ export const toEditEvent = ({
 });
 
 export const initialEvent = (): IEvent => {
-  const eventStartDate = addWeeks(2, new Date());
-  const openForRegistrationTime = addWeeks(-1, eventStartDate);
-  const {email, name} = getEmailAndNameFromJWT()
+  const eventStartDate = addWeeks(1, new Date());
+  const openForRegistrationTime = new Date();
+  const { email, name } = getEmailAndNameFromJWT();
   return {
     title: '',
     description: '',

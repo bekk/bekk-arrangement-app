@@ -22,6 +22,9 @@ import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/Valid
 import { Checkbox } from '@bekk/storybook';
 import { Button } from 'src/components/Common/Button/Button';
 import style from '../EditEventContainer.module.scss';
+import dateTimeStyle from 'src/components/Common/DateTimeInput/DateTimeInput.module.scss';
+import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
+import { DateInput } from 'src/components/Common/DateInput/DateInput';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -30,6 +33,7 @@ interface IProps {
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   const [hasLimitedSpots, setHasLimitedSpots] = useState(false);
+  const [isMultiDayEvent, setMultiDay] = useState(false);
   return (
     <>
       <ValidatedTextInput
@@ -73,7 +77,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         />
       </div>
       <ValidatedTextInput
-        label={'Lokasjon'}
+        label={'Hvor finner arrangementet sted?'}
         placeholder="Vippetangen"
         value={event.location}
         validation={parseLocation}
@@ -96,26 +100,144 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <DateTimeInput
-        label={'Starter'}
-        value={event.start}
-        onChange={(start) =>
-          updateEvent({
-            ...event,
-            ...setStartEndDates(event, ['set-start', start]),
-          })
-        }
-      />
-      <DateTimeInput
-        label={'Slutter'}
-        value={event.end}
-        onChange={(end) =>
-          updateEvent({
-            ...event,
-            ...setStartEndDates(event, ['set-end', end]),
-          })
-        }
-      />
+      <label className={dateTimeStyle.label}>
+        Når finner arrangementet sted?
+      </label>
+      {!isMultiDayEvent ? (
+        <>
+          <div className={dateTimeStyle.flex}>
+            <div>
+              <DateInput
+                value={event.start.date}
+                onChange={(date) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-start',
+                      { ...event.start, date },
+                    ]),
+                  })
+                }
+              />
+            </div>
+            <div className={dateTimeStyle.timeFlex}>
+              <div className={dateTimeStyle.kl}>Fra kl.</div>
+              <TimeInput
+                value={event.start.time}
+                onChange={(time) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-start',
+                      { ...event.start, time },
+                    ]),
+                  })
+                }
+              />
+            </div>
+            <div className={dateTimeStyle.timeFlex}>
+              <div className={dateTimeStyle.kl}>Til kl.</div>
+              <TimeInput
+                value={event.end.time}
+                onChange={(time) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-end',
+                      { ...event.end, time },
+                    ]),
+                  })
+                }
+              />
+            </div>
+          </div>
+          <Checkbox
+            onDarkBackground
+            label="Arrangementet går over flere dager"
+            isChecked={isMultiDayEvent}
+            onChange={setMultiDay}
+          />
+        </>
+      ) : (
+        <>
+          <div className={dateTimeStyle.flex}>
+            <DateInput
+              value={event.start.date}
+              onChange={(date) =>
+                updateEvent({
+                  ...event,
+                  ...setStartEndDates(event, [
+                    'set-start',
+                    { ...event.start, date },
+                  ]),
+                })
+              }
+            />
+            <div className={dateTimeStyle.timeFlex}>
+              <div className={dateTimeStyle.kl}>Fra kl.</div>
+              <TimeInput
+                value={event.start.time}
+                onChange={(time) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-start',
+                      { ...event.start, time },
+                    ]),
+                  })
+                }
+              />
+            </div>
+          </div>
+          <Checkbox
+            onDarkBackground
+            label="Arrangementet går over flere dager"
+            isChecked={isMultiDayEvent}
+            onChange={(isMulti) => {
+              if (!isMulti) {
+                updateEvent({
+                  ...event,
+                  ...setStartEndDates(event, [
+                    'set-end',
+                    { ...event.end, date: event.start.date },
+                  ]),
+                });
+              }
+              setMultiDay(isMulti);
+            }}
+          />
+          <label className={dateTimeStyle.label}>Arrangementet varer til</label>
+          <div className={dateTimeStyle.flex}>
+            <DateInput
+              value={event.end.date}
+              onChange={(date) =>
+                updateEvent({
+                  ...event,
+                  ...setStartEndDates(event, [
+                    'set-end',
+                    { ...event.end, date },
+                  ]),
+                })
+              }
+            />
+            <div className={dateTimeStyle.timeFlex}>
+              <div className={dateTimeStyle.kl}>Til kl.</div>
+              <TimeInput
+                value={event.end.time}
+                onChange={(time) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-end',
+                      { ...event.end, time },
+                    ]),
+                  })
+                }
+              />
+            </div>
+          </div>
+        </>
+      )}
       <DateTimeInputWithTimezone
         label={'Påmelding åpner'}
         value={event.openForRegistrationTime}
@@ -140,7 +262,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           setHasLimitedSpots(limited);
         }}
         onDarkBackground={true}
-      ></Checkbox>
+      />
       {hasLimitedSpots && (
         <div className={style.flex}>
           <div>
