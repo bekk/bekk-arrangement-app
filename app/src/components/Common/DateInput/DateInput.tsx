@@ -16,6 +16,7 @@ import {
 } from 'typescript-calendar-date';
 import classNames from 'classnames';
 import { useOnClickOutside } from 'src/hooks/navigation';
+import { Arrow } from 'src/components/Common/Arrow/Arrow';
 
 interface IProps {
   value: EditDate;
@@ -64,13 +65,13 @@ export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
         <div ref={ref} className={style.datepicker}>
           <div className={style.header}>
             <div className={style.button} onClick={decDisplayMonth}>
-              -
+              <Arrow direction="left" noCircle />
             </div>
             <div className={style.displayMonth}>
               {formatMonthYear(displayMonth)}
             </div>
             <div className={style.button} onClick={incDisplayMonth}>
-              +
+              <Arrow direction="right" noCircle />
             </div>
           </div>
           <div className={style.grid}>
