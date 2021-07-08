@@ -96,6 +96,16 @@
   }
 }
 
+.externalContainer {
+  @extend .text;
+  grid-row: 7;
+  grid-column: 1 / 4;
+  @media #{$desktop} {
+    grid-row: 3;
+    grid-column: 2;
+  }
+}
+
 .emailLink {
   @extend .text;
   display: block;
