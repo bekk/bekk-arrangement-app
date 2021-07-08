@@ -20,7 +20,7 @@ import { useSavedParticipations } from 'src/hooks/saved-tokens';
 
 export const CancelParticipant = () => {
   const eventId = useParam(eventIdKey);
-  const participantEmail = useParam(emailKey);
+  const participantEmail = decodeURIComponent(useParam(emailKey));
   const cancellationToken = useQuery(cancellationTokenKey);
 
   const remoteEvent = useEvent(eventId);

@@ -10,7 +10,7 @@ import { useEvent, useWaitinglistSpot } from 'src/hooks/cache';
 import { Page } from 'src/components/Page/Page';
 export const ConfirmParticipant = () => {
   const eventId = useParam(eventIdKey);
-  const participantEmail = useParam(emailKey);
+  const participantEmail = decodeURIComponent(useParam(emailKey));
 
   const remoteEvent = useEvent(eventId);
   const remoteWaitinglistSpot = useWaitinglistSpot(eventId, participantEmail);
