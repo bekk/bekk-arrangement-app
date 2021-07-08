@@ -51,7 +51,7 @@ export interface IEventViewModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
@@ -68,7 +68,7 @@ export interface IEventWriteModel {
   organizerEmail: string;
   maxParticipants: number;
   editUrlTemplate: string;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
   isExternal: boolean;
 }
@@ -83,7 +83,7 @@ export interface IEvent {
   organizerName: string;
   organizerEmail: Email;
   maxParticipants: number;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
@@ -99,7 +99,7 @@ export interface IEditEvent {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: string;
-  participantQuestion: string;
+  participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
@@ -249,7 +249,7 @@ export const initialEvent = (): IEvent => {
     organizerName: name ?? '',
     organizerEmail: { email: email ?? '' },
     maxParticipants: 0,
-    participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
+    participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,
     isExternal: false,

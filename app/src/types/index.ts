@@ -41,16 +41,23 @@ export const parseMaxAttendees = (value: string): number | IError[] => {
   const validator = validate<number>({
     'Verdien må være et tall': Number.isNaN(number),
     'Du kan kun invitere et helt antall mennesker😎': !Number.isInteger(number),
-    'Antallet kan ikke være over 5000, sett 0 hvis uendelig er ønsket': number > 5000, 
-    'Verdien må være positiv': number < 0
+    'Antallet kan ikke være over 5000, sett 0 hvis uendelig er ønsket':
+      number > 5000,
+    'Verdien må være positiv': number < 0,
   });
   return validator.resolve(number);
 };
 export const toEditMaxAttendees = (value: number): string =>
   value !== 0 ? value.toString() : '';
 
-export const parseQuestion = (value: string): string | IError[] => {
+export const parseQuestion = (
+  value?: string
+): string | undefined | IError[] => {
+  if (value === undefined) {
+    return undefined;
+  }
   const validator = validate<string>({
+    'Spørsmål til deltaker må ha minst 5 tegn': value.length < 5,
     'Spørsmål til deltaker kan ha maks 500 tegn': value.length > 500,
   });
   return validator.resolve(value);

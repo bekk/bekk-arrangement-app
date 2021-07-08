@@ -1,0 +1,44 @@
+@import 'src/style/colors.scss';
+
+.arrow {
+  cursor: pointer;
+  * {
+    stroke: white;
+    ellipse:hover {
+      fill: white;
+    }
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  z-index: 2;
+}
+
+.left {
+  left: 0;
+  svg {
+    transform: rotate(90deg);
+  }
+}
+
+.right {
+  right: 0;
+  svg {
+    transform: rotate(-90deg);
+  }
+}
+
+.down {
+  bottom: 0;
+}
+
+.up {
+  top: 0;
+  svg {
+    transform: rotate(180deg);
+  }
+}

@@ -13,7 +13,7 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
   const remoteParticipants = useParticipants(eventId, editToken);
 
   if (isBad(remoteParticipants)) {
-    return <div>Det er noe galt med dataen</div>
+    return <div>Det er noe galt med dataen</div>;
   }
 
   if (!hasLoaded(remoteParticipants)) {
@@ -28,28 +28,29 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
           remoteParticipants.data.attendees.map((attendee) => {
             return (
               <div key={stringifyEmail(attendee.email)} className={style.text}>
-                {attendee.name}, {stringifyEmail(attendee.email)}, Kommentar:{' '}
-                {attendee.comment}
+                {attendee.name}, {stringifyEmail(attendee.email)}
+                {attendee.comment && <>, Kommentar: {attendee.comment}</>}
               </div>
             );
           })
         ) : (
           <div className={style.text}>Ingen påmeldte</div>
         )}
-        {remoteParticipants.data.waitingList && remoteParticipants.data.waitingList.length > 0 && (
-          <>
-            <h3>På venteliste</h3>
-            {remoteParticipants.data.waitingList.map((waitlisted) => (
-              <div
-                key={stringifyEmail(waitlisted.email)}
-                className={style.text}
-              >
-                {waitlisted.name}, {stringifyEmail(waitlisted.email)},
-                Kommentar: {waitlisted.comment}
-              </div>
-            ))}
-          </>
-        )}
+        {remoteParticipants.data.waitingList &&
+          remoteParticipants.data.waitingList.length > 0 && (
+            <>
+              <h3>På venteliste</h3>
+              {remoteParticipants.data.waitingList.map((waitlisted) => (
+                <div
+                  key={stringifyEmail(waitlisted.email)}
+                  className={style.text}
+                >
+                  {waitlisted.name}, {stringifyEmail(waitlisted.email)},
+                  Kommentar: {waitlisted.comment}
+                </div>
+              ))}
+            </>
+          )}
       </div>
     </div>
   );

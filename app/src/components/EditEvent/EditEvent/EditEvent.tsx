@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IEditEvent } from 'src/types/event';
 import { DateTimeInput } from 'src/components/Common/DateTimeInput/DateTimeInput';
 import {
@@ -20,157 +20,190 @@ import {
 import { isValid } from 'src/types/validation';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 import { Checkbox } from '@bekk/storybook';
+import { Button } from 'src/components/Common/Button/Button';
+import style from '../EditEventContainer.module.scss';
 
 interface IProps {
   eventResult: IEditEvent;
   updateEvent: (event: IEditEvent) => void;
 }
 
-export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => (
-  <>
-    <ValidatedTextInput
-      label={'Tittel'}
-      placeholder="Fest på Skuret"
-      value={event.title}
-      validation={parseTitle}
-      onChange={title =>
-        updateEvent({
-          ...event,
-          title,
-        })
-      }
-    />
-
-    <div>
+export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
+  const [hasLimitedSpots, setHasLimitedSpots] = useState(false);
+  return (
+    <>
       <ValidatedTextInput
-        label="Navn på arrangør"
-        placeholder="Ola Nordmann"
-        value={event.organizerName}
-        validation={parseHost}
-        onChange={organizerName =>
+        label={'Tittel'}
+        placeholder="Fest på Skuret"
+        value={event.title}
+        validation={parseTitle}
+        onChange={(title) =>
           updateEvent({
             ...event,
-            organizerName,
+            title,
           })
         }
       />
-    </div>
-
-    <div>
+      <div>
+        <ValidatedTextInput
+          label="Navn på arrangør"
+          placeholder="Ola Nordmann"
+          value={event.organizerName}
+          validation={parseHost}
+          onChange={(organizerName) =>
+            updateEvent({
+              ...event,
+              organizerName,
+            })
+          }
+        />
+      </div>
+      <div>
+        <ValidatedTextInput
+          label="E-post arrangør"
+          placeholder="ola.nordmann@bekk.no"
+          value={event.organizerEmail}
+          validation={parseEditEmail}
+          onChange={(organizerEmail) =>
+            updateEvent({
+              ...event,
+              organizerEmail,
+            })
+          }
+        />
+      </div>
       <ValidatedTextInput
-        label="E-post arrangør"
-        placeholder="ola.nordmann@bekk.no"
-        value={event.organizerEmail}
-        validation={parseEditEmail}
-        onChange={organizerEmail =>
+        label={'Lokasjon'}
+        placeholder="Vippetangen"
+        value={event.location}
+        validation={parseLocation}
+        onChange={(location) =>
           updateEvent({
             ...event,
-            organizerEmail,
+            location,
           })
         }
       />
-    </div>
-
-    <ValidatedTextInput
-      label={'Lokasjon'}
-      placeholder="Vippetangen"
-      value={event.location}
-      validation={parseLocation}
-      onChange={location =>
-        updateEvent({
-          ...event,
-          location,
-        })
-      }
-    />
-
-    <ValidatedTextArea
-      label={'Beskrivelse'}
-      placeholder={'Dette er en beskrivelse'}
-      value={event.description}
-      validation={parseDescription}
-      onChange={description =>
-        updateEvent({
-          ...event,
-          description,
-        })
-      }
-    />
-
-    <DateTimeInput
-      label={'Starter'}
-      value={event.start}
-      onChange={start =>
-        updateEvent({
-          ...event,
-          ...setStartEndDates(event, ['set-start', start]),
-        })
-      }
-    />
-
-    <DateTimeInput
-      label={'Slutter'}
-      value={event.end}
-      onChange={end =>
-        updateEvent({
-          ...event,
-          ...setStartEndDates(event, ['set-end', end]),
-        })
-      }
-    />
-
-    <DateTimeInputWithTimezone
-      label={'Påmelding åpner'}
-      value={event.openForRegistrationTime}
-      onChange={openForRegistrationTime =>
-        updateEvent({
-          ...event,
-          openForRegistrationTime,
-        })
-      }
-    />
-
-    <ValidatedTextInput
-      label={'Maks antall'}
-      placeholder="0 (ingen grense)"
-      value={event.maxParticipants}
-      isNumber={true}
-      validation={parseMaxAttendees}
-      onChange={maxParticipants =>
-        updateEvent({
-          ...event,
-          maxParticipants,
-        })
-      }
-    />
-    <Checkbox
-      label="Venteliste"
-      onChange={hasWaitingList => updateEvent({ ...event, hasWaitingList })}
-      isChecked={event.hasWaitingList}
-      onDarkBackground={true}
-    />
-
-    <Checkbox
-      label="Eksternt arrangement"
-      onChange={isExternal => updateEvent({ ...event, isExternal })}
-      isChecked={event.isExternal}
-      onDarkBackground={true}
-    />
-
-    <ValidatedTextInput
-      label={'Spørsmål til deltakere'}
-      placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
-      value={event.participantQuestion}
-      validation={parseQuestion}
-      onChange={participantQuestion =>
-        updateEvent({
-          ...event,
-          participantQuestion,
-        })
-      }
-    />
-  </>
-);
+      <ValidatedTextArea
+        label={'Beskrivelse'}
+        placeholder={'Dette er en beskrivelse'}
+        value={event.description}
+        validation={parseDescription}
+        onChange={(description) =>
+          updateEvent({
+            ...event,
+            description,
+          })
+        }
+      />
+      <DateTimeInput
+        label={'Starter'}
+        value={event.start}
+        onChange={(start) =>
+          updateEvent({
+            ...event,
+            ...setStartEndDates(event, ['set-start', start]),
+          })
+        }
+      />
+      <DateTimeInput
+        label={'Slutter'}
+        value={event.end}
+        onChange={(end) =>
+          updateEvent({
+            ...event,
+            ...setStartEndDates(event, ['set-end', end]),
+          })
+        }
+      />
+      <DateTimeInputWithTimezone
+        label={'Påmelding åpner'}
+        value={event.openForRegistrationTime}
+        onChange={(openForRegistrationTime) =>
+          updateEvent({
+            ...event,
+            openForRegistrationTime,
+          })
+        }
+      />
+      <Checkbox
+        label="Eksternt arrangement"
+        onChange={(isExternal) => updateEvent({ ...event, isExternal })}
+        isChecked={event.isExternal}
+        onDarkBackground={true}
+      />
+      <Checkbox
+        label="Begrens plasser"
+        isChecked={hasLimitedSpots}
+        onChange={(limited) => {
+          if (limited) {
+            updateEvent({
+              ...event,
+              maxParticipants: '',
+              hasWaitingList: false,
+            });
+          }
+          setHasLimitedSpots(limited);
+        }}
+        onDarkBackground={true}
+      ></Checkbox>
+      {hasLimitedSpots && (
+        <div className={style.flex}>
+          <div>
+            <ValidatedTextInput
+              label={'Maks antall'}
+              placeholder="∞"
+              value={event.maxParticipants}
+              isNumber={true}
+              validation={parseMaxAttendees}
+              onChange={(maxParticipants) =>
+                updateEvent({
+                  ...event,
+                  maxParticipants,
+                })
+              }
+            />
+          </div>
+          <div>
+            <Checkbox
+              label="Venteliste"
+              onChange={(hasWaitingList) =>
+                updateEvent({ ...event, hasWaitingList })
+              }
+              isChecked={event.hasWaitingList}
+              onDarkBackground={true}
+            />
+          </div>
+        </div>
+      )}
+      {event.participantQuestion !== undefined ? (
+        <ValidatedTextInput
+          label={'Spørsmål til deltakere'}
+          placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+          value={event.participantQuestion}
+          validation={parseQuestion}
+          onChange={(participantQuestion) =>
+            updateEvent({
+              ...event,
+              participantQuestion,
+            })
+          }
+        />
+      ) : (
+        <Button
+          onClick={() =>
+            updateEvent({
+              ...event,
+              participantQuestion: '',
+            })
+          }
+        >
+          + Legg til spørsmål til deltaker
+        </Button>
+      )}
+    </>
+  );
+};
 
 type Action = ['set-start', EditDateTime] | ['set-end', EditDateTime];
 

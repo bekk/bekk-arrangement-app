@@ -37,11 +37,12 @@ export const CreateEventContainer = () => {
       <h1 className={style.header}>Opprett arrangement</h1>
       <EditEvent eventResult={event} updateEvent={setEvent} />
       <div className={style.buttonContainer}>
-        {redirectToPreview && (
-          <Button onClick={redirectToPreview} disabled={false}>
-            Forhåndsvisning
-          </Button>
-        )}
+        <Button
+          onClick={redirectToPreview || (() => {})}
+          disabled={!redirectToPreview}
+        >
+          Forhåndsvisning
+        </Button>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>
       </div>
     </Page>
