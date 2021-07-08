@@ -10,8 +10,7 @@ interface IProps {
 }
 
 export const Arrow = ({ direction, noCircle }: IProps) => {
-  const arrowStyle = classNames({
-    [style.arrow]: true,
+  const arrowStyle = classNames(style.arrow, {
     [style.left]: direction === 'left',
     [style.right]: direction === 'right',
     [style.up]: direction === 'up',
