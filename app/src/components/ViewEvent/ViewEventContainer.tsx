@@ -19,6 +19,7 @@ import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
 import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
+import { toEmailWriteModel } from 'src/types/email';
 
 export const ViewEventContainer = () => {
   const eventId = useParam(eventIdKey);
@@ -101,7 +102,13 @@ export const ViewEventContainer = () => {
         </BlockLink>
       ) : null}
       {participationsForThisEvent.map((p) => (
-        <BlockLink key={p.email} to={cancelParticipantRoute(p)}>
+        <BlockLink
+          key={p.email}
+          to={cancelParticipantRoute({
+            ...p,
+            email: encodeURIComponent(toEmailWriteModel(p)),
+          })}
+        >
           Meld {p.email} av arrangementet
         </BlockLink>
       ))}
