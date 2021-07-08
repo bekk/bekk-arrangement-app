@@ -2,8 +2,8 @@ import React from 'react';
 export const ExternalIcon = () => {
   return (
     <svg
-      // width="18"
-      // height="24"
+      width="14"
+      height="18"
       viewBox="0 0 50 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

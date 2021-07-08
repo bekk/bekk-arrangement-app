@@ -86,7 +86,7 @@
 
 .title {
   font-family: $serifFontRegular;
-  margin: 10px 0;
+  margin: 8px 0 13px 0;
   word-wrap: break-word;
 }
 
@@ -114,7 +114,7 @@
   align-items: flex-start;
 }
 
-.locationText {
+.iconText {
   margin-right: 10px;
   font-size: 16px;
 }
@@ -122,37 +122,43 @@
 .locationIcon {
   min-width: 20px;
   min-height: 20px;
+  padding-left: 1px;
+}
+
+.external {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 10px;
 }
 
 .externalIcon {
-  width: 18px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
-.button {
+.cardFooter {
   align-self: center;
   margin-top: auto;
-  padding: 10px;
+  padding-top: 67px;
 }
 
 .stateContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .stateText {
-  margin-top: 30px;
-  text-align: center;
+  margin-bottom: 8px;
   font-size: 16px;
-  margin-bottom: 5px;
+  text-align: center;
 }
 
 .stateIconContainer {
   display: flex;
   flex-direction: row;
+  margin-bottom: 8px;
   align-items: center;
-  text-align: center;
 }
 
 .stateIcon {
