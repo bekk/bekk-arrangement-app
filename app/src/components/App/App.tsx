@@ -1,7 +1,8 @@
-import { useAuth0Redirect } from 'src/auth';
-import { Router, Switch, Route, Redirect } from 'react-router';
+import { isAuthenticated, redirectToAuth0, useAuth0Redirect } from 'src/auth';
+import { Router, Switch, Route, Redirect, RouteProps } from 'react-router';
 import React from 'react';
 import { Header } from 'src/components/Common/Header/Header';
+import { ReactChild } from 'src/types';
 import {
   createRoute,
   viewEventRoute,
@@ -41,33 +42,33 @@ export const App = () => {
       <div className={style.container}>
         <Header />
         <Switch>
-          <Route exact path={createRoute}>
+          <PrivateRoute exact path={createRoute}>
             <CreateEventContainer />
-          </Route>
+          </PrivateRoute>
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainer />
           </Route>
-          <Route exact path={eventsRoute}>
+          <PrivateRoute exact path={eventsRoute}>
             <ViewEventsCardsContainer />
-          </Route>
-          <Route path={editEventRoute(':' + eventIdKey)}>
+          </PrivateRoute>
+          <PrivateRoute path={editEventRoute(':' + eventIdKey)}>
             <EditEventContainer />
-          </Route>
-          <Route exact path={previewNewEventRoute}>
+          </PrivateRoute>
+          <PrivateRoute exact path={previewNewEventRoute}>
             <PreviewNewEventContainer />
-          </Route>
-          <Route exact path={previewEventRoute(':' + eventIdKey)}>
+          </PrivateRoute>
+          <PrivateRoute exact path={previewEventRoute(':' + eventIdKey)}>
             <PreviewEventContainer />
-          </Route>
-          <Route
+          </PrivateRoute>
+          <PrivateRoute
             path={cancelParticipantRoute({
               eventId: ':' + eventIdKey,
               email: ':' + emailKey,
             })}
           >
             <CancelParticipant />
-          </Route>
-          <Route
+          </PrivateRoute>
+          <PrivateRoute
             exact
             path={confirmParticipantRoute({
               eventId: ':' + eventIdKey,
@@ -75,10 +76,19 @@ export const App = () => {
             })}
           >
             <ConfirmParticipant />
-          </Route>
+          </PrivateRoute>
           <Redirect exact from={rootRoute} to={eventsRoute} />
         </Switch>
       </div>
     </Router>
   );
+};
+export type ProtectedRouteProps = {
+  children: ReactChild;
+} & RouteProps;
+
+const PrivateRoute = ({ children, ...routeProps }: ProtectedRouteProps) => {
+  if (!isAuthenticated()) redirectToAuth0();
+
+  return <Route {...routeProps} render={() => children} />;
 };

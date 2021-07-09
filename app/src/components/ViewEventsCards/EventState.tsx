@@ -101,7 +101,7 @@ export const EventState = ({
         <div className={style.stateContainer}>
           <div className={style.stateText}>Arrangementet er fullt.</div>
           <Button onClick={() => route(`${viewEventRoute(eventId)}#idtest`)}>
-            Sett deg på venteliste
+            Sett på venteliste
           </Button>
         </div>
       );

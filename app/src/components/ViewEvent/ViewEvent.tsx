@@ -63,6 +63,11 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
           {stringifyEmail(event.organizerEmail)}
         </a>
       </div>
+      {event.isExternal && ( //TODO: make this beautiful🥳
+        <div className={style.externalContainer}>
+          Dette er et eksternt arrangement.
+        </div>
+      )}
       <div className={style.locationContainer}>
         <p className={style.infoHeader}>Hvor</p>
         <p className={style.text}>{event.location}</p>

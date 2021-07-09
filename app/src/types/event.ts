@@ -54,6 +54,7 @@ export interface IEventViewModel {
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
+  isExternal: boolean;
 }
 
 export interface IEventWriteModel {
@@ -69,6 +70,7 @@ export interface IEventWriteModel {
   editUrlTemplate: string;
   participantQuestion?: string;
   hasWaitingList: boolean;
+  isExternal: boolean;
 }
 
 export interface IEvent {
@@ -84,6 +86,7 @@ export interface IEvent {
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
+  isExternal: boolean;
 }
 
 export interface IEditEvent {
@@ -99,6 +102,7 @@ export interface IEditEvent {
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
+  isExternal: boolean;
 }
 
 export const parseEditEvent = ({
@@ -114,6 +118,7 @@ export const parseEditEvent = ({
   participantQuestion,
   hasWaitingList,
   isCancelled,
+  isExternal,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -128,6 +133,7 @@ export const parseEditEvent = ({
     participantQuestion: parseQuestion(participantQuestion),
     hasWaitingList: hasWaitingList,
     isCancelled: isCancelled,
+    isExternal: isExternal,
   };
 
   try {
@@ -170,6 +176,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const participantQuestion = parseQuestion(eventView.participantQuestion);
   const hasWaitingList = eventView.hasWaitingList;
   const isCancelled = eventView.isCancelled;
+  const isExternal = eventView.isExternal;
 
   const event = {
     title,
@@ -184,6 +191,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     participantQuestion,
     hasWaitingList,
     isCancelled,
+    isExternal,
   };
 
   assertIsValid(event);
@@ -204,6 +212,7 @@ export const toEditEvent = ({
   participantQuestion,
   hasWaitingList,
   isCancelled,
+  isExternal,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -217,6 +226,7 @@ export const toEditEvent = ({
   participantQuestion,
   hasWaitingList,
   isCancelled,
+  isExternal,
 });
 
 export const initialEvent = (): IEvent => {
@@ -242,5 +252,6 @@ export const initialEvent = (): IEvent => {
     participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,
+    isExternal: false,
   };
 };

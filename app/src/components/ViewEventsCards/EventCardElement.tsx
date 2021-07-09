@@ -16,6 +16,7 @@ import {
 import { isInThePast } from 'src/types/date-time';
 import { isNumber } from 'lodash';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
+import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 
 interface IProps {
   eventId: string;
@@ -95,9 +96,17 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
           <div className={style.locationIcon}>
             <LocationIcon />
           </div>
-          <div className={style.locationText}>{event.location}</div>
+          <div className={style.iconText}>{event.location}</div>
         </div>
-        <div className={style.button}>
+        {event.isExternal && (
+          <div className={style.external}>
+            <div className={style.externalIcon}>
+              <ExternalIcon />
+            </div>
+            <div className={style.iconText}> Eksternt arrangementet </div>
+          </div>
+        )}
+        <div className={style.cardFooter}>
           <EventState
             eventId={eventId}
             eventState={eventState}
