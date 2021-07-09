@@ -24,6 +24,8 @@
   grid-row: 1;
   white-space: pre-wrap;
   align-self: center;
+  display: block;
+  margin-top: 50px;
   @include boldText;
 }
 
@@ -40,4 +42,22 @@
 
 .error {
   border-color: var(--error);
+}
+
+.flex {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.timeFlex {
+  display: flex;
+  align-items: center;
+  margin-left: 50px;
+  width: fit-content;
+}
+
+.kl {
+  min-width: 4em;
 }
