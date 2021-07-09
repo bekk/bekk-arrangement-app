@@ -1,7 +1,6 @@
 import React from 'react';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import style from './DateTimeInput.module.scss';
-import classNames from 'classnames';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import {
   TimeInstanceEdit,
@@ -23,10 +22,6 @@ export const DateTimeInputWithTimezone = ({
 }: IProps) => {
   const timeInstance = parseEditTimeInstance(value);
   const timezoneOffsetUTC = new Date().getTimezoneOffset() / -60;
-
-  const containerStyle = classNames(style.container, {
-    [style.error]: !isValid(timeInstance),
-  });
 
   return (
     <>
