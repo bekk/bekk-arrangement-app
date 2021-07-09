@@ -230,8 +230,8 @@ export const toEditEvent = ({
 });
 
 export const initialEvent = (): IEvent => {
-  const eventStartDate = addWeeks(2, new Date());
-  const openForRegistrationTime = addWeeks(-1, eventStartDate);
+  const eventStartDate = addWeeks(1, new Date());
+  const openForRegistrationTime = new Date();
   const { email, name } = getEmailAndNameFromJWT();
   return {
     title: '',

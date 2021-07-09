@@ -1,6 +1,26 @@
 @import 'src/style/constants';
 @import 'src/style/fonts';
 
+.dateInput {
+  outline: none;
+  background-color: var(--backgroundColor);
+  display: block;
+  width: fit-content;
+  text-align: left;
+  align-self: center;
+  @include regularText;
+  @media #{$desktop} {
+    width: 160px;
+    text-align: center;
+  }
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px var(--textColor);
+  padding-bottom: 10px;
+  margin-top: 20px;
+}
+
 .datePickerContainer {
   position: relative;
   display: flex;

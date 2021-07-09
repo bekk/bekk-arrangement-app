@@ -58,7 +58,7 @@ export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
 
   return (
     <div className={style.datePickerContainer}>
-      <div onClick={() => setIsOpen(true)}>
+      <div className={style.dateInput} onClick={() => setIsOpen(true)}>
         {date.day}. {formatMonthYear(date)}
       </div>
       {isOpen && (
