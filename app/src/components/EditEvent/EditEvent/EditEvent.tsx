@@ -130,7 +130,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         label="Eksternt arrangement"
         onChange={(isExternal) => updateEvent({ ...event, isExternal })}
         isChecked={event.isExternal}
-        onDarkBackground={true}
+        onDarkBackground
       />
       <Checkbox
         label="Begrens plasser"

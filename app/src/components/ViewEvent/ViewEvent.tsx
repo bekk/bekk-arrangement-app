@@ -65,7 +65,7 @@ export const ViewEvent = ({ event, participantsText }: IProps) => {
       </div>
       {event.isExternal && ( //TODO: make this beautiful🥳
         <div className={style.externalContainer}>
-          Dette arrangementet er eksternt
+          Dette er et eksternt arrangement.
         </div>
       )}
       <div className={style.locationContainer}>

@@ -88,12 +88,7 @@ export type ProtectedRouteProps = {
 } & RouteProps;
 
 const PrivateRoute = ({ children, ...routeProps }: ProtectedRouteProps) => {
-  return (
-    <Route
-      {...routeProps}
-      render={({ location }) =>
-        isAuthenticated() ? children : <> {redirectToAuth0()} </>
-      }
-    />
-  );
+  if (!isAuthenticated()) redirectToAuth0();
+
+  return <Route {...routeProps} render={() => children} />;
 };
