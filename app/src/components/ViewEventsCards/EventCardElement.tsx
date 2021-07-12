@@ -94,14 +94,14 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         <div className={titleStyle}>{event.title}</div>
         <div className={style.location}>
           <div className={style.locationIcon}>
-            <LocationIcon />
+            <LocationIcon color="white" />
           </div>
           <div className={style.iconText}>{event.location}</div>
         </div>
         {event.isExternal && (
           <div className={style.external}>
             <div className={style.externalIcon}>
-              <ExternalIcon />
+              <ExternalIcon color="white" />
             </div>
             <div className={style.iconText}> Eksternt arrangementet </div>
           </div>
