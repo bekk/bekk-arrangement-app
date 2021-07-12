@@ -26,6 +26,7 @@ import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
 import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
 import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
+import { usePopulateTokensInLocalStorage } from 'src/hooks/saved-tokens';
 
 const history = createBrowserHistory();
 
@@ -37,6 +38,7 @@ history.listen((location, action) => {
 
 export const App = () => {
   useAuth0Redirect();
+  usePopulateTokensInLocalStorage();
   return (
     <Router history={history}>
       <div className={style.container}>

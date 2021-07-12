@@ -46,12 +46,12 @@ const useSaveThisEditToken = ({
   editToken?: string;
   eventId: string;
 }) => {
-  const { saveEditableEvents } = useSavedEditableEvents();
+  const { saveEditableEvent } = useSavedEditableEvents();
   useEffect(() => {
     if (editToken) {
-      saveEditableEvents({ eventId, editToken });
+      saveEditableEvent({ eventId, editToken });
     }
-  }, [eventId, editToken, saveEditableEvents]);
+  }, [eventId, editToken, saveEditableEvent]);
 };
 
 export const EditEventContainer = () => {
