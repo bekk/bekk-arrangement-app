@@ -116,7 +116,7 @@ export const ViewEventContainer = () => {
       <section>
         <h1 className={style.subHeader}>Påmelding</h1>
         {(!closedEventText || timeLeft.difference < 60000) && (
-          <AddParticipant eventId={eventId} event={event} />
+          <AddParticipant eventId={eventId} event={event}/>
         )}
         {closedEventText ? (
           <div>
