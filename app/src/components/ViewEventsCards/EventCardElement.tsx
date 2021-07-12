@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
@@ -87,9 +87,10 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
   });
 
+  const history = useHistory();
+
   return (
-    <Link to={viewRoute} className={style.link}>
-      <div className={cardStyle}>
+      <div className={cardStyle} onClick={() => history.push(viewRoute)}>
         <div className={style.date}>{dateTimeText}</div>
         <div className={titleStyle}>{event.title}</div>
         <div className={style.location}>
@@ -120,7 +121,6 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
           />
         </div>
       </div>
-    </Link>
   );
 };
 

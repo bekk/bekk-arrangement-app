@@ -68,7 +68,7 @@ export const App = () => {
           >
             <CancelParticipant />
           </PrivateRoute>
-          <PrivateRoute
+          <Route
             exact
             path={confirmParticipantRoute({
               eventId: ':' + eventIdKey,
@@ -76,7 +76,7 @@ export const App = () => {
             })}
           >
             <ConfirmParticipant />
-          </PrivateRoute>
+          </Route>
           <Redirect exact from={rootRoute} to={eventsRoute} />
         </Switch>
       </div>
