@@ -2,9 +2,9 @@
 
 .textLabel {
   display: block;
-  margin-top: 50px;
+  margin-top: 30px;
   padding-bottom: 5px;
-  @include boldText;
+  @include labelText;
 }
 
 .textArea {
@@ -13,14 +13,12 @@
   outline: none;
   border: none;
   border-radius: 0;
-  border-bottom: solid 1px;
-  border-left: solid 1px;
-  border-color: var(--disabled);
+  border-bottom: solid 2px;
+  border-color: var(--svart20);
   display: block;
-  padding: 0px 10px 0 10px;
+  padding: 10px 10px 0 10px;
   @include regularText;
   resize: vertical;
-  margin-top: 10px;
 }
 
 .darkTextArea {
