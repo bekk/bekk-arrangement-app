@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
@@ -90,37 +90,37 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
   const history = useHistory();
 
   return (
-      <div className={cardStyle} onClick={() => history.push(viewRoute)}>
-        <div className={style.date}>{dateTimeText}</div>
-        <div className={titleStyle}>{event.title}</div>
-        <div className={style.location}>
-          <div className={style.locationIcon}>
-            <LocationIcon />
-          </div>
-          <div className={style.iconText}>{event.location}</div>
+    <div className={cardStyle} onClick={() => history.push(viewRoute)}>
+      <div className={style.date}>{dateTimeText}</div>
+      <div className={titleStyle}>{event.title}</div>
+      <div className={style.location}>
+        <div className={style.locationIcon}>
+          <LocationIcon />
         </div>
-        {event.isExternal && (
-          <div className={style.external}>
-            <div className={style.externalIcon}>
-              <ExternalIcon />
-            </div>
-            <div className={style.iconText}> Eksternt arrangementet </div>
-          </div>
-        )}
-        <div className={style.cardFooter}>
-          <EventState
-            eventId={eventId}
-            eventState={eventState}
-            event={event}
-            numberOfAvailableSpots={numberOfAvailableSpot}
-            waitingListSpot={
-              hasLoaded(waitingListSpot) && isNumber(waitingListSpot.data)
-                ? waitingListSpot.data
-                : undefined
-            }
-          />
-        </div>
+        <div className={style.iconText}>{event.location}</div>
       </div>
+      {event.isExternal && (
+        <div className={style.external}>
+          <div className={style.externalIcon}>
+            <ExternalIcon />
+          </div>
+          <div className={style.iconText}> Eksternt arrangementet </div>
+        </div>
+      )}
+      <div className={style.cardFooter}>
+        <EventState
+          eventId={eventId}
+          eventState={eventState}
+          event={event}
+          numberOfAvailableSpots={numberOfAvailableSpot}
+          waitingListSpot={
+            hasLoaded(waitingListSpot) && isNumber(waitingListSpot.data)
+              ? waitingListSpot.data
+              : undefined
+          }
+        />
+      </div>
+    </div>
   );
 };
 

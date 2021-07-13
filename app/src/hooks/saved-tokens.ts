@@ -1,8 +1,11 @@
 //**  Event  **//
 
+import { useEffect, useState } from 'react';
+import { getEventsAndParticipationsForEmployee } from 'src/api/arrangementSvc';
+import { getEmployeeId } from 'src/auth';
 import { useLocalStorage } from 'src/hooks/localStorage';
 
-type EditEventToken = {
+export type EditEventToken = {
   eventId: string;
   editToken: string;
 };
@@ -14,26 +17,30 @@ const isEditEventTokenType = (x: any): x is EditEventToken =>
 
 export const useSavedEditableEvents = (): {
   savedEvents: EditEventToken[];
-  saveEditableEvents: (event: EditEventToken) => void;
+  saveEditableEvent: (event: EditEventToken) => void;
 } => {
-  const [storage, setStorage] = useLocalStorage({
-    key: 'editable-events',
+  const [readStorage, setStorage] = useLocalStorage({
+    localStorageKey: 'editable-events',
   });
 
-  const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
-  const validatedStorage = Array.isArray(parsedStorage)
-    ? parsedStorage.filter(isEditEventTokenType)
-    : [];
+  const readValidatedStorage = () => {
+    const storageContent = readStorage();
+    const parsedStorage: unknown[] =
+      storageContent !== undefined ? JSON.parse(storageContent) : [];
+    return Array.isArray(parsedStorage)
+      ? parsedStorage.filter(isEditEventTokenType)
+      : [];
+  };
 
   const updateStorage = (event: EditEventToken) =>
     JSON.stringify([
-      ...validatedStorage.filter((x) => x.eventId !== event.eventId),
+      ...readValidatedStorage().filter((x) => x.eventId !== event.eventId),
       event,
     ]);
 
   return {
-    savedEvents: validatedStorage,
-    saveEditableEvents: (event: EditEventToken) =>
+    savedEvents: readValidatedStorage(),
+    saveEditableEvent: (event: EditEventToken) =>
       setStorage(updateStorage(event)),
   };
 };
@@ -44,9 +51,10 @@ export const useEditToken = (eventId: string) => {
 
   return event?.editToken;
 };
+
 //**  Participant  **//
 
-type Participation = {
+export type Participation = {
   eventId: string;
   email: string;
   cancellationToken: string;
@@ -60,18 +68,22 @@ const isParticipationAndHasCancellationToken = (x: any): x is Participation =>
   typeof x.cancellationToken === 'string';
 
 export const useSavedParticipations = () => {
-  const [storage, setStorage] = useLocalStorage({
-    key: 'participations',
+  const [readStorage, setStorage] = useLocalStorage({
+    localStorageKey: 'participations',
   });
 
-  const parsedStorage: unknown[] = storage ? JSON.parse(storage) : [];
-  const validatedStorage = Array.isArray(parsedStorage)
-    ? parsedStorage.filter(isParticipationAndHasCancellationToken)
-    : [];
+  const readValidatedStorage = () => {
+    const storageContent = readStorage();
+    const parsedStorage: unknown[] =
+      storageContent !== undefined ? JSON.parse(storageContent) : [];
+    return Array.isArray(parsedStorage)
+      ? parsedStorage.filter(isParticipationAndHasCancellationToken)
+      : [];
+  };
 
   const updateStorage = (participant: Participation) =>
     JSON.stringify([
-      ...validatedStorage.filter(
+      ...readValidatedStorage().filter(
         (x) =>
           !(participant.eventId === x.eventId && participant.email === x.email)
       ),
@@ -80,16 +92,61 @@ export const useSavedParticipations = () => {
 
   const removeFromStorage = (p: { eventId: string; email: string }) =>
     JSON.stringify(
-      validatedStorage.filter(
+      readValidatedStorage().filter(
         (x) => !(x.eventId === p.eventId && x.email === p.email)
       )
     );
 
   return {
-    savedParticipations: validatedStorage,
-    saveParticipation: (participant: Participation) =>
-      setStorage(updateStorage(participant)),
+    savedParticipations: readValidatedStorage(),
+    saveParticipation: (participant: Participation) => {
+      console.log('Add:');
+      console.log(participant);
+      setStorage(updateStorage(participant));
+    },
     removeSavedParticipant: (participant: { eventId: string; email: string }) =>
       setStorage(removeFromStorage(participant)),
   };
+};
+
+//** On page load **//
+
+export const usePopulateTokensInLocalStorage = () => {
+  const { savedEvents, saveEditableEvent } = useSavedEditableEvents();
+  const { savedParticipations, saveParticipation } = useSavedParticipations();
+
+  useEffectOnce(async () => {
+    const employeeId = getEmployeeId();
+    if (employeeId) {
+      const { editableEvents, participations } =
+        await getEventsAndParticipationsForEmployee(employeeId);
+
+      const eventKey = ({ eventId }: EditEventToken) => eventId;
+      const participationKey = ({ eventId, email }: Participation) =>
+        `${eventId}:${email}`;
+
+      const newEvents = editableEvents.filter(
+        (x) => !savedEvents.map(eventKey).includes(eventKey(x))
+      );
+      const newParticipations = participations.filter(
+        (x) =>
+          !savedParticipations
+            .map(participationKey)
+            .includes(participationKey(x))
+      );
+
+      newEvents.forEach(saveEditableEvent);
+      newParticipations.forEach(saveParticipation);
+    }
+  });
+};
+
+const useEffectOnce = (effect: () => void) => {
+  const [hasRun, setHasRun] = useState(false);
+  useEffect(() => {
+    if (!hasRun) {
+      effect();
+      setHasRun(true);
+    }
+  }, [hasRun, effect]);
 };
