@@ -32,7 +32,9 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
-  const [hasLimitedSpots, setHasLimitedSpots] = useState(false);
+  const [hasLimitedSpots, setHasLimitedSpots] = useState(
+    event.maxParticipants !== '0' && event.maxParticipants !== ''
+  );
   const [isMultiDayEvent, setMultiDay] = useState(false);
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
