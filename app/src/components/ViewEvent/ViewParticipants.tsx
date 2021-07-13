@@ -25,36 +25,29 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
     return <div>Laster...</div>;
   }
 
+  const { attendees, waitingList } = remoteParticipants.data;
+
   return (
     <div>
       {remoteParticipants.data.attendees.length > 0 ? (
         screenIsMobileSize ? (
-          <ParticipantTableMobile
-            participants={remoteParticipants.data.attendees}
-          />
+          <ParticipantTableMobile participants={attendees} />
         ) : (
-          <ParticipantTableDesktop
-            participants={remoteParticipants.data.attendees}
-          />
+          <ParticipantTableDesktop participants={attendees} />
         )
       ) : (
         <div>Ingen påmeldte</div>
       )}
-      {remoteParticipants.data.waitingList &&
-        remoteParticipants.data.waitingList.length > 0 && (
-          <>
-            <h3 className={style.subSubHeader}>På venteliste</h3>
-            {screenIsMobileSize ? (
-              <ParticipantTableMobile
-                participants={remoteParticipants.data.waitingList}
-              />
-            ) : (
-              <ParticipantTableDesktop
-                participants={remoteParticipants.data.waitingList}
-              />
-            )}
-          </>
-        )}
+      {waitingList && waitingList.length > 0 && (
+        <>
+          <h3 className={style.subSubHeader}>På venteliste</h3>
+          {screenIsMobileSize ? (
+            <ParticipantTableMobile participants={waitingList} />
+          ) : (
+            <ParticipantTableDesktop participants={waitingList} />
+          )}
+        </>
+      )}
     </div>
   );
 };
