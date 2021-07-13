@@ -73,6 +73,7 @@
 .description {
   @include regularText;
   margin-top: 40px;
+  white-space: pre-wrap;
   @media #{$desktop} {
     margin-top: 90px;
   }
