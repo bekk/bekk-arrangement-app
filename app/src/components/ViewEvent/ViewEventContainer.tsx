@@ -44,6 +44,8 @@ export const ViewEventContainer = () => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
 
+  const oneMinute = 60000;
+
   if (isBad(remoteEvent)) {
     return <div>{remoteEvent.userMessage}</div>;
   }
@@ -154,7 +156,7 @@ export const ViewEventContainer = () => {
             ) : waitlistText ? (
               <p>{waitlistText}</p>
             ) : null}
-            {!isInThePast(event.end) && timeLeft.difference < 60000 && (
+            {!isInThePast(event.end) && timeLeft.difference < oneMinute && (
               <AddParticipant eventId={eventId} event={event} />
             )}
           </div>
