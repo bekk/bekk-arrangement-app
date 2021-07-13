@@ -21,9 +21,11 @@ interface IProps {
   userCanEdit: boolean;
 }
 
-export const ViewEvent = ({ event, userCanEdit }: IProps) => {
+export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
   const eventId = useParam(eventIdKey);
+
+  const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
   const copyLink = async () => {
     const url = document.location.origin + viewEventRoute(eventId);
@@ -55,7 +57,14 @@ export const ViewEvent = ({ event, userCanEdit }: IProps) => {
         </div>
         <div className={style.iconTextContainer}>
           <GentlemanIcon color="white" className={style.icon} />
-          <p className={style.regularText}>{event.maxParticipants} plasser</p>
+          {hasOpenedForRegistration ? (
+            <p className={style.regularText}>{participantsText}</p>
+          ) : (
+            <p className={style.regularText}>
+              {event.maxParticipants === 0 ? ' ∞' : event.maxParticipants}{' '}
+              plasser
+            </p>
+          )}
         </div>
         {event.isExternal && userIsLoggedIn() && (
           <div className={style.iconTextContainer}>

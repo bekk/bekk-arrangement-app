@@ -63,6 +63,14 @@ export const ViewEventContainer = () => {
       ? remoteNumberOfParticipants.data - event.maxParticipants
       : '-';
 
+  const shortParticipantsText = `${
+    eventIsFull ? event.maxParticipants : numberOfParticipants
+  }${
+    event.maxParticipants === 0
+      ? ' av ∞ påmeldte'
+      : ' av ' + event.maxParticipants + ' påmeldte'
+  }`;
+
   const participantsText = `${
     eventIsFull
       ? event.maxParticipants + ' påmeldte'
@@ -107,7 +115,7 @@ export const ViewEventContainer = () => {
     <Page>
       <ViewEvent
         event={event}
-        participantsText={participantsText}
+        participantsText={shortParticipantsText}
         userCanEdit={editTokenFound || userIsAdmin() ? true : false}
       />
       <section>
