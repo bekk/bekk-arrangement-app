@@ -120,7 +120,7 @@ export const deleteParticipant = ({
     )}${queryStringStringify({ cancellationToken })}`,
   });
 
-export const getLocalStorageStuff = (
+export const getEventsAndParticipationsForEmployee = (
   employeeId: number
 ): Promise<{
   editableEvents: EditEventToken[];
@@ -128,5 +128,5 @@ export const getLocalStorageStuff = (
 }> =>
   get({
     host: getArrangementSvcUrl(),
-    path: `/localstorage/${employeeId}`,
+    path: `/events-and-participations/${employeeId}`,
   });

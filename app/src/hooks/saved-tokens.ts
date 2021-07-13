@@ -1,7 +1,7 @@
 //**  Event  **//
 
 import { useEffect, useState } from 'react';
-import { getLocalStorageStuff } from 'src/api/arrangementSvc';
+import { getEventsAndParticipationsForEmployee } from 'src/api/arrangementSvc';
 import { getEmployeeId } from 'src/auth';
 import { useLocalStorage } from 'src/hooks/localStorage';
 
@@ -118,9 +118,8 @@ export const usePopulateTokensInLocalStorage = () => {
   useEffectOnce(async () => {
     const employeeId = getEmployeeId();
     if (employeeId) {
-      const { editableEvents, participations } = await getLocalStorageStuff(
-        employeeId
-      );
+      const { editableEvents, participations } =
+        await getEventsAndParticipationsForEmployee(employeeId);
 
       const eventKey = ({ eventId }: EditEventToken) => eventId;
       const participationKey = ({ eventId, email }: Participation) =>
