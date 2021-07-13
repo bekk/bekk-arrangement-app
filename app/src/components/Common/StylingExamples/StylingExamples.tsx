@@ -1,7 +1,11 @@
 import React from 'react';
 import { Page } from 'src/components/Page/Page';
 import style from './StylingExamples.module.scss';
-
+/**
+ * This component is used to display examples of common components, to show how they work.
+ * Hopefully this will make it easier to see how changes affect components and know what to use.
+ * @returns Page with styling examples
+ */
 export const StylingExamples = () => {
   return (
     <Page>
