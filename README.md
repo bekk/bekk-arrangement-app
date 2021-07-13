@@ -4,8 +4,7 @@ Administrere og delta på arrangementer i Bekk.
 Kun interne kan opprette og endre, alle (eksterne og interne) kan melde seg på.
 
 Dev: https://skjer-dev.bekk.no
-
-Prod: TBD
+Prod: https://skjer.bekk.no
 
 ## Oppstart
 
