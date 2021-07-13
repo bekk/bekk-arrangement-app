@@ -3,7 +3,7 @@ import style from './ViewEvent.module.scss';
 import { IEvent } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
-import { dateAsText, isSameDate, stringifyDate } from 'src/types/date';
+import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { useParam } from 'src/utils/browser-state';
