@@ -3,7 +3,7 @@ import style from './ViewEvent.module.scss';
 import { IEvent } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
-import { isSameDate, stringifyDate } from 'src/types/date';
+import { dateAsText, isSameDate, stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { useParam } from 'src/utils/browser-state';
@@ -99,15 +99,15 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
   if (isSameDate(startDate.date, endDate.date)) {
     return (
       <p className={style.text}>
-        {stringifyDate(startDate.date)}, {stringifyTime(startDate.time)} -{' '}
+        {dateAsText(startDate.date)}, {stringifyTime(startDate.time)} -{' '}
         {stringifyTime(endDate.time)}
       </p>
     );
   }
   return (
     <p className={style.text}>
-      {stringifyDate(startDate.date)}, {stringifyTime(startDate.time)} -
-      {stringifyDate(endDate.date)}, {stringifyTime(endDate.time)}
+      {dateAsText(startDate.date)}, {stringifyTime(startDate.time)} -
+      {dateAsText(endDate.date)}, {stringifyTime(endDate.time)}
     </p>
   );
 };
