@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getEventsAndParticipationsForEmployee } from 'src/api/arrangementSvc';
-import { getEmployeeId } from 'src/auth';
+import { getEmployeeId, isAuthenticated } from 'src/auth';
 import { useLocalStorage } from 'src/hooks/localStorage';
 
 export type EditEventToken = {
@@ -100,8 +100,6 @@ export const useSavedParticipations = () => {
   return {
     savedParticipations: readValidatedStorage(),
     saveParticipation: (participant: Participation) => {
-      console.log('Add:');
-      console.log(participant);
       setStorage(updateStorage(participant));
     },
     removeSavedParticipant: (participant: { eventId: string; email: string }) =>
@@ -116,8 +114,8 @@ export const usePopulateTokensInLocalStorage = () => {
   const { savedParticipations, saveParticipation } = useSavedParticipations();
 
   useEffectOnce(async () => {
-    const employeeId = getEmployeeId();
-    if (employeeId) {
+    if (isAuthenticated()) {
+      const employeeId = getEmployeeId();
       const { editableEvents, participations } =
         await getEventsAndParticipationsForEmployee(employeeId);
 
