@@ -21,7 +21,6 @@ import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
 import { useHistory } from 'react-router';
 import { Button } from 'src/components/Common/Button/Button';
-import { EventEmitter } from 'stream';
 
 export const ViewEventContainer = () => {
   const history = useHistory();
@@ -103,7 +102,7 @@ export const ViewEventContainer = () => {
       ? 'Ubegrenset antall plasser'
       : event.maxParticipants + ' plasser';
 
-  const removeParticipant = (participation: Participation) => {
+  const goToRemoveParticipantRoute = (participation: Participation) => {
     history.push(
       cancelParticipantRoute({
         eventId: participation.eventId,
@@ -135,7 +134,9 @@ export const ViewEventContainer = () => {
             </p>
             <h2 className={style.subHeader}>Kan du ikke likevel?</h2>
             <Button
-              onClick={() => removeParticipant(participationsForThisEvent[0])}
+              onClick={() =>
+                goToRemoveParticipantRoute(participationsForThisEvent[0])
+              }
             >
               Meld deg av
             </Button>

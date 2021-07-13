@@ -74,7 +74,7 @@ export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
         )}
       </div>
       <p className={style.description}>{event.description}</p>
-      <p className={style.orgainzier}>
+      <p className={style.organizer}>
         Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
         kontakt på {stringifyEmail(event.organizerEmail)}
       </p>
