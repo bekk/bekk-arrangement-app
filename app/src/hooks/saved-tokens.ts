@@ -46,7 +46,7 @@ export const useEditToken = (eventId: string) => {
 };
 //**  Participant  **//
 
-type Participation = {
+export type Participation = {
   eventId: string;
   email: string;
   cancellationToken: string;
