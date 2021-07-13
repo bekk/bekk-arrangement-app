@@ -5,17 +5,22 @@ $mobileMinWidth: 321px;
 $smallMobileWidth: 375px;
 $tabletMinWidth: 768px;
 $tabletMaxWidth: 1024px;
-$desktopMinWidth: 10025px;
+$desktopMinWidth: 1025px;
 
-$headerDesktop: 50px;
-$headerMobile: 35px;
+$titleMobile: 48px;
+$titleDesktop: 58px;
+$headerDesktop: 48px;
+$headerMobile: 37px;
 $subHeaderDesktop: 37px;
 $subHeaderMobile: 25px;
+$subSubHeaderDesktop: 32px;
+$subSubHeaderMobile: 25px;
 $textDesktop: 20px;
-$textMobile: 16px;
+$textMobile: 18px;
 $smallDesktop: 16px;
 $smallMobile: 12px;
 $buttonMobile: 18px;
+$label: 16px;
 
 $desktop: 'only screen and (min-width: #{$desktopMinWidth})';
 $mobile: 'screen and (max-width: #{$mobileMaxWidth})';
@@ -41,8 +46,18 @@ $transitionLength: 0.2s;
   color: var(--lightTextColor);
   font-size: $textMobile;
   font-family: $fontLight;
+  line-height: 23px;
   @media #{$desktop} {
     font-size: $textDesktop;
+  }
+}
+
+@mixin titleText {
+  color: var(--lightTextColor);
+  font-size: $textMobile;
+  font-family: $serifFontRegular;
+  @media #{$desktop} {
+    font-size: $titleDesktop;
   }
 }
 
@@ -53,6 +68,30 @@ $transitionLength: 0.2s;
   @media #{$desktop} {
     font-size: $headerDesktop;
   }
+}
+
+@mixin subHeaderText {
+  color: var(--lightTextColor);
+  font-size: $subHeaderMobile;
+  font-family: $serifFontRegular;
+  @media #{$desktop} {
+    font-size: $subHeaderDesktop;
+  }
+}
+
+@mixin subSubHeaderText {
+  color: var(--lightTextColor);
+  font-size: $subSubHeaderMobile;
+  font-family: $serifFontRegular;
+  @media #{$desktop} {
+    font-size: $subSubHeaderDesktop;
+  }
+}
+
+@mixin labelText {
+  color: var(--lightTextColor);
+  font-size: $label;
+  font-family: $fontLight;
 }
 
 @mixin smallText {
@@ -70,13 +109,4 @@ $transitionLength: 0.2s;
   font-size: $buttonMobile;
   text-align: center;
   overflow-wrap: break-word;
-}
-
-@mixin subHeaderText {
-  color: var(--lightTextColor);
-  font-size: $subHeaderMobile;
-  font-family: $serifFontRegular;
-  @media #{$desktop} {
-    font-size: $subHeaderDesktop;
-  }
 }
