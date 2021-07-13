@@ -14,7 +14,7 @@ export const PreviewNewEventContainer = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
-  const { saveEditableEvents } = useSavedEditableEvents();
+  const { saveEditableEvent } = useSavedEditableEvents();
 
   const event = usePreviewEvent();
   if (!event) {
@@ -40,7 +40,7 @@ export const PreviewNewEventContainer = () => {
       event: { id },
       editToken,
     } = await postEvent(event, editUrlTemplate);
-    saveEditableEvents({ eventId: id, editToken });
+    saveEditableEvent({ eventId: id, editToken });
     history.push(viewEventRoute(id));
   });
 

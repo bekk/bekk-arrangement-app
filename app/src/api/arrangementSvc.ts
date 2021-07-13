@@ -15,6 +15,7 @@ import {
 import { getArrangementSvcUrl } from 'src/config';
 import { queryStringStringify } from 'src/utils/browser-state';
 import { toEmailWriteModel } from 'src/types/email';
+import { EditEventToken, Participation } from 'src/hooks/saved-tokens';
 
 export const postEvent = (
   event: IEvent,
@@ -117,4 +118,15 @@ export const deleteParticipant = ({
     path: `/events/${eventId}/participants/${encodeURIComponent(
       participantEmail
     )}${queryStringStringify({ cancellationToken })}`,
+  });
+
+export const getEventsAndParticipationsForEmployee = (
+  employeeId: number
+): Promise<{
+  editableEvents: EditEventToken[];
+  participations: Participation[];
+}> =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events-and-participations/${employeeId}`,
   });

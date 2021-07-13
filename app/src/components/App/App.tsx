@@ -27,6 +27,7 @@ import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventC
 import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
 import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
 import { StylingExamples } from 'src/components/Common/StylingExamples/StylingExamples';
+import { usePopulateTokensInLocalStorage } from 'src/hooks/saved-tokens';
 
 const history = createBrowserHistory();
 
@@ -38,6 +39,7 @@ history.listen((location, action) => {
 
 export const App = () => {
   useAuth0Redirect();
+  usePopulateTokensInLocalStorage();
   return (
     <Router history={history}>
       <div className={style.container}>
@@ -72,7 +74,7 @@ export const App = () => {
           >
             <CancelParticipant />
           </PrivateRoute>
-          <PrivateRoute
+          <Route
             exact
             path={confirmParticipantRoute({
               eventId: ':' + eventIdKey,
@@ -80,7 +82,7 @@ export const App = () => {
             })}
           >
             <ConfirmParticipant />
-          </PrivateRoute>
+          </Route>
           <Redirect exact from={rootRoute} to={eventsRoute} />
         </Switch>
       </div>

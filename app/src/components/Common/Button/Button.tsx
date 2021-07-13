@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import style from './Button.module.scss';
 import classNames from 'classnames';
 import { ReactChild } from 'src/types';
 
 interface IProps {
-  onClick: () => void;
+  onClick: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   color?: 'Primary' | 'Secondary';
   displayAsLink?: boolean;

@@ -1,37 +1,28 @@
-import { useState, useLayoutEffect, useCallback } from 'react';
+import { useState, useLayoutEffect, useCallback, useEffect } from 'react';
 
 type Option<T> = T | undefined;
 
 export const useLocalStorage = ({
-  key,
+  localStorageKey,
 }: {
-  key: string;
-}): [Option<string>, (str: string) => void] => {
-  const readLocalStorage = useCallback((): Option<string> => {
-    const inStorage = localStorage.getItem(key);
+  localStorageKey: string;
+}): [() => Option<string>, (str: string) => void] => {
+  const readLocalStorage = (): Option<string> => {
+    const inStorage = localStorage.getItem(localStorageKey);
     if (inStorage !== null) {
       return inStorage;
     }
-  }, [key]);
-
-  const [cache, setCache] = useState<Option<string>>(readLocalStorage());
+  };
 
   const setLocalStorage = (value: string) => {
-    localStorage.setItem(key, value);
+    localStorage.setItem(localStorageKey, value);
     return readLocalStorage();
   };
 
-  useLayoutEffect(() => {
-    // Initially read from local storage
-    const inStorage = readLocalStorage();
-    setCache(inStorage);
-  }, [key, readLocalStorage]);
-
   return [
-    cache,
+    readLocalStorage,
     (valueToStore: string) => {
-      const storedValue = setLocalStorage(valueToStore);
-      setCache(storedValue);
+      setLocalStorage(valueToStore);
     },
   ];
 };
