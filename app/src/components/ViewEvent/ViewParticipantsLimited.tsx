@@ -1,13 +1,8 @@
 import React from 'react';
 import style from './ViewParticipants.module.scss';
-import { stringifyEmail } from 'src/types/email';
 import { useParticipants } from 'src/hooks/cache';
 import { hasLoaded, isBad } from 'src/remote-data';
-import { useMediaQuery } from 'react-responsive';
-import {
-  IParticipant,
-  IParticipantsWithWaitingList,
-} from 'src/types/participant';
+import { IParticipant } from 'src/types/participant';
 
 interface IProps {
   eventId: string;
@@ -16,9 +11,6 @@ interface IProps {
 
 export const ViewParticipantsLimited = ({ eventId, editToken }: IProps) => {
   const remoteParticipants = useParticipants(eventId, editToken);
-  const screenIsMobileSize = useMediaQuery({
-    query: `(max-width: ${540}px)`,
-  });
 
   if (isBad(remoteParticipants)) {
     return <div>Det er noe galt med dataen</div>;
@@ -55,16 +47,20 @@ export const ViewParticipantsLimited = ({ eventId, editToken }: IProps) => {
 const ParticipantTableLimited = (props: { participants: IParticipant[] }) => {
   return (
     <table className={style.table}>
-      <tr>
-        <th className={style.desktopHeaderCell}>Navn</th>
-      </tr>
-      {props.participants.map((attendee) => {
-        return (
-          <tr>
-            <td className={style.desktopCell}>{attendee.name}</td>
-          </tr>
-        );
-      })}
+      <thead>
+        <tr>
+          <th className={style.desktopHeaderCell}>Navn</th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.participants.map((attendee) => {
+          return (
+            <tr>
+              <td className={style.desktopCell}>{attendee.name}</td>
+            </tr>
+          );
+        })}
+      </tbody>
     </table>
   );
 };

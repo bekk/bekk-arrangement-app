@@ -62,23 +62,25 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
 const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
   return (
     <table className={style.table}>
-      {props.participants.map((attendee) => {
-        return (
-          <>
-            <tr>
-              <td className={style.mobileNameCell}>{attendee.name}</td>
-              <td className={style.mobileEmailCell}>
-                {stringifyEmail(attendee.email)}
-              </td>
-            </tr>
-            <tr>
-              <td colSpan={2} className={style.mobileCommentCell}>
-                {attendee.comment}
-              </td>
-            </tr>
-          </>
-        );
-      })}
+      <tbody>
+        {props.participants.map((attendee) => {
+          return (
+            <React.Fragment key={attendee.name}>
+              <tr>
+                <td className={style.mobileNameCell}>{attendee.name}</td>
+                <td className={style.mobileEmailCell}>
+                  {stringifyEmail(attendee.email)}
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2} className={style.mobileCommentCell}>
+                  {attendee.comment}
+                </td>
+              </tr>
+            </React.Fragment>
+          );
+        })}
+      </tbody>
     </table>
   );
 };
@@ -86,22 +88,26 @@ const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
 const ParticipantTableDesktop = (props: { participants: IParticipant[] }) => {
   return (
     <table className={style.table}>
-      <tr>
-        <th className={style.desktopHeaderCell}>Navn</th>
-        <th className={style.desktopHeaderCell}>E-post</th>
-        <th className={style.desktopHeaderCell}>Kommentar</th>
-      </tr>
-      {props.participants.map((attendee) => {
-        return (
-          <tr>
-            <td className={style.desktopCell}>{attendee.name}</td>
-            <td className={style.desktopCell}>
-              {stringifyEmail(attendee.email)}
-            </td>
-            <td className={style.desktopCell}>{attendee.comment}</td>
-          </tr>
-        );
-      })}
+      <thead>
+        <tr>
+          <th className={style.desktopHeaderCell}>Navn</th>
+          <th className={style.desktopHeaderCell}>E-post</th>
+          <th className={style.desktopHeaderCell}>Kommentar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.participants.map((attendee) => {
+          return (
+            <tr key={attendee.name}>
+              <td className={style.desktopCell}>{attendee.name}</td>
+              <td className={style.desktopCell}>
+                {stringifyEmail(attendee.email)}
+              </td>
+              <td className={style.desktopCell}>{attendee.comment}</td>
+            </tr>
+          );
+        })}
+      </tbody>
     </table>
   );
 };
