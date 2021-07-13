@@ -13,6 +13,7 @@ import { GentlemanIcon } from 'src/components/Common/Icons/GentlemanIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { useHistory } from 'react-router';
+import { userIsLoggedIn } from 'src/auth';
 
 interface IProps {
   event: IEvent;
@@ -56,7 +57,7 @@ export const ViewEvent = ({ event, userCanEdit }: IProps) => {
           <GentlemanIcon color="white" className={style.icon} />
           <p className={style.regularText}>{event.maxParticipants} plasser</p>
         </div>
-        {event.isExternal && (
+        {event.isExternal && userIsLoggedIn() && (
           <div className={style.iconTextContainer}>
             <ExternalIcon color="white" className={style.externalIcon} />
             <p className={style.regularText}>Eksternt arrangement</p>
