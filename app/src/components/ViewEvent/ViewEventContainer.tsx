@@ -21,6 +21,7 @@ import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
 import { useHistory } from 'react-router';
 import { Button } from 'src/components/Common/Button/Button';
+import { EventEmitter } from 'stream';
 
 export const ViewEventContainer = () => {
   const history = useHistory();
@@ -152,7 +153,7 @@ export const ViewEventContainer = () => {
             ) : waitlistText ? (
               <p>{waitlistText}</p>
             ) : null}
-            {(!closedEventText || timeLeft.difference < 60000) && (
+            {!isInThePast(event.end) && timeLeft.difference < 60000 && (
               <AddParticipant eventId={eventId} event={event} />
             )}
           </div>
