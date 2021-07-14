@@ -12,7 +12,6 @@ interface ValidTextInputProps {
   validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
   color?: 'White' | 'Gray' | 'Black';
-  id?: string;
 }
 
 export const ValidatedTextInput = ({
