@@ -2,9 +2,9 @@
 
 .content {
   margin-bottom: 50px;
-  width: 75%;
+  width: $pageMobileWidth;
   @media #{$desktop} {
-    width: 70%;
+    width: $pageDesktopWidth;
     max-width: 2000px;
   }
 }

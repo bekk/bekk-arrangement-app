@@ -25,13 +25,7 @@ export const PreviewNewEventContainer = () => {
     history.goBack();
   };
 
-  const participantsText = `0 av ${
-    event.maxParticipants === 0 ? '∞' : event.maxParticipants
-  }${
-    event.hasWaitingList && event.maxParticipants !== 0
-      ? ' og 0 på venteliste'
-      : ''
-  }`;
+  const participantsText = `${event.maxParticipants} plasser`;
 
   const postNewEvent = catchAndNotify(async () => {
     const editUrlTemplate =

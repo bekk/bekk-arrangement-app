@@ -14,6 +14,7 @@ import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { useHistory } from 'react-router';
 import { userIsLoggedIn } from 'src/auth';
+import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 
 interface IProps {
   event: IEvent;
@@ -38,53 +39,60 @@ export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
 
   return (
     <section className={style.container}>
-      <div className={style.headerContainer}>
-        <h1 className={style.header}>{event.title}</h1>
-        {userCanEdit && (
-          <Button onClick={() => history.push(editEventRoute(eventId))}>
-            Rediger
-          </Button>
-        )}
-      </div>
-      <div className={style.generalInfoContainer}>
-        <div className={style.iconTextContainer}>
-          <ClockIcon color="white" className={style.clockIcon} />
-          <DateSection startDate={event.start} endDate={event.end} />
-        </div>
-        <div className={style.iconTextContainer}>
-          <LocationIcon color="white" className={style.icon} />
-          <p className={style.regularText}>{event.location}</p>
-        </div>
-        <div className={style.iconTextContainer}>
-          <GentlemanIcon color="white" className={style.icon} />
-          {hasOpenedForRegistration ? (
-            <p className={style.regularText}>{participantsText}</p>
-          ) : (
-            <p className={style.regularText}>
-              {event.maxParticipants === 0 ? ' ∞' : event.maxParticipants}{' '}
-              plasser
-            </p>
+      <WavySubHeader eventId={eventId}>
+        <div className={style.headerContainer}>
+          <h1 className={style.header}>{event.title}</h1>
+          {userCanEdit && (
+            <Button
+              onClick={() => history.push(editEventRoute(eventId))}
+              color={'Secondary'}
+            >
+              Rediger
+            </Button>
           )}
         </div>
-        {event.isExternal && userIsLoggedIn() && (
+        <div className={style.generalInfoContainer}>
           <div className={style.iconTextContainer}>
-            <ExternalIcon color="white" className={style.externalIcon} />
-            <p className={style.regularText}>Eksternt arrangement</p>
+            <ClockIcon color="black" className={style.clockIcon} />
+            <DateSection startDate={event.start} endDate={event.end} />
           </div>
-        )}
-      </div>
-      <p className={style.description}>{event.description}</p>
-      <p className={style.organizer}>
-        Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
-        kontakt på {stringifyEmail(event.organizerEmail)}
-      </p>
-      <div className={style.buttonGroup}>
-        <Button color="Primary" onClick={copyLink}>
-          {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
-        </Button>
-        {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
+          <div className={style.iconTextContainer}>
+            <LocationIcon color="black" className={style.icon} />
+            <p>{event.location}</p>
+          </div>
+          <div className={style.iconTextContainer}>
+            <GentlemanIcon color="black" className={style.icon} />
+            {hasOpenedForRegistration ? (
+              <p>{participantsText}</p>
+            ) : (
+              <p>
+                {event.maxParticipants === 0 ? ' ∞' : event.maxParticipants}{' '}
+                plasser
+              </p>
+            )}
+          </div>
+          {event.isExternal && userIsLoggedIn() && (
+            <div className={style.iconTextContainer}>
+              <ExternalIcon color="black" className={style.externalIcon} />
+              <p>Eksternt arrangement</p>
+            </div>
+          )}
+        </div>
+      </WavySubHeader>
+      <div className={style.contentContainer}>
+        <p className={style.description}>{event.description}</p>
+        <p className={style.organizer}>
+          Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
+          kontakt på {stringifyEmail(event.organizerEmail)}
+        </p>
+        <div className={style.buttonGroup}>
+          <Button color="Primary" onClick={copyLink}>
+            {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
+          </Button>
+          {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
           Dupliser arrangement
         </Button> */}
+        </div>
       </div>
     </section>
   );
