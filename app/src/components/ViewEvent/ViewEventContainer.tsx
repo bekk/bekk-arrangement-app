@@ -16,7 +16,6 @@ import {
 } from 'src/hooks/saved-tokens';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
-import { toEmailWriteModel } from 'src/types/email';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
 import { useHistory } from 'react-router';
