@@ -3,31 +3,39 @@
 .container {
   display: flex;
   flex-direction: column;
+  width: stretch;
 }
 
 .headerContainer {
+  margin: auto;
   display: flex;
   flex-direction: column;
+  width: $pageMobileWidth;
   @media #{$desktop} {
     flex-direction: row;
     align-items: center;
+    width: $pageDesktopWidth;
   }
 }
 
 .header {
   @include headerText;
+  color: black;
   @media #{$desktop} {
     margin-right: 40px;
   }
 }
 
 .generalInfoContainer {
+  margin: auto;
   display: flex;
   flex-direction: column;
   margin-top: 40px;
+  width: $pageMobileWidth;
   @media #{$desktop} {
     margin-top: 0;
     flex-direction: row;
+    width: $pageDesktopWidth;
   }
 }
 
@@ -36,9 +44,11 @@
 }
 
 .iconTextContainer {
+  @include regularText;
   display: flex;
   flex-direction: row;
   align-items: center;
+  color: black;
 }
 
 .icon {
@@ -67,6 +77,14 @@
   @media #{$desktop} {
     margin-right: 8px;
     margin-left: 30px;
+  }
+}
+
+.contentContainer {
+  margin: auto;
+  width: $pageMobileWidth;
+  @media #{$desktop} {
+    width: $pageDesktopWidth;
   }
 }
 
