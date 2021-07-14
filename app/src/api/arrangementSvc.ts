@@ -50,6 +50,12 @@ export const getEvents = (): Promise<WithId<IEventViewModel>[]> =>
     path: `/events`,
   });
 
+export const getPastEvents = (): Promise<WithId<IEventViewModel>[]> =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events/previous`,
+  });
+
 export const deleteEvent = (
   eventId: string,
   cancellationMessage: string,
