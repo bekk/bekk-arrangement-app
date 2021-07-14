@@ -15,6 +15,7 @@
     flex-direction: row;
     align-items: center;
     width: $pageDesktopWidth;
+    max-width: 2000px;
   }
 }
 
@@ -36,6 +37,7 @@
     margin-top: 0;
     flex-direction: row;
     width: $pageDesktopWidth;
+    max-width: 2000px;
   }
 }
 
@@ -85,6 +87,7 @@
   width: $pageMobileWidth;
   @media #{$desktop} {
     width: $pageDesktopWidth;
+    max-width: 2000px;
   }
 }
 
