@@ -57,21 +57,19 @@ const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
     <table className={style.table}>
       <tbody>
         {props.participants.map((attendee) => {
-          return (
-            <React.Fragment key={attendee.name + attendee.email}>
-              <tr>
-                <td className={style.mobileNameCell}>{attendee.name}</td>
-                <td className={style.mobileEmailCell}>
-                  {stringifyEmail(attendee.email)}
-                </td>
-              </tr>
-              <tr>
-                <td colSpan={2} className={style.mobileCommentCell}>
-                  {attendee.comment}
-                </td>
-              </tr>
-            </React.Fragment>
-          );
+          <React.Fragment key={attendee.name + attendee.email}>
+            <tr>
+              <td className={style.mobileNameCell}>{attendee.name}</td>
+              <td className={style.mobileEmailCell}>
+                {stringifyEmail(attendee.email)}
+              </td>
+            </tr>
+            <tr>
+              <td colSpan={2} className={style.mobileCommentCell}>
+                {attendee.comment}
+              </td>
+            </tr>
+          </React.Fragment>;
         })}
       </tbody>
     </table>
@@ -90,15 +88,13 @@ const ParticipantTableDesktop = (props: { participants: IParticipant[] }) => {
       </thead>
       <tbody>
         {props.participants.map((attendee) => {
-          return (
-            <tr key={attendee.name + attendee.email}>
-              <td className={style.desktopCell}>{attendee.name}</td>
-              <td className={style.desktopCell}>
-                {stringifyEmail(attendee.email)}
-              </td>
-              <td className={style.desktopCell}>{attendee.comment}</td>
-            </tr>
-          );
+          <tr key={attendee.name + attendee.email}>
+            <td className={style.desktopCell}>{attendee.name}</td>
+            <td className={style.desktopCell}>
+              {stringifyEmail(attendee.email)}
+            </td>
+            <td className={style.desktopCell}>{attendee.comment}</td>
+          </tr>;
         })}
       </tbody>
     </table>
