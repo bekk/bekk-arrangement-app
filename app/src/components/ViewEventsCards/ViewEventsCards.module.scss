@@ -20,3 +20,11 @@
 .headerText {
   @include titleText;
 }
+
+.pastEventsContainer {
+  margin-top: 60px;
+}
+
+.subHeaderText {
+  @include subHeaderText;
+}
