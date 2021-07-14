@@ -11,6 +11,7 @@ interface ValidTextInputProps {
   isNumber?: boolean;
   validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
+  color?: 'White' | 'Gray' | 'Black';
 }
 
 export const ValidatedTextInput = ({
@@ -20,6 +21,7 @@ export const ValidatedTextInput = ({
   isNumber,
   validation,
   onChange,
+  color,
 }: ValidTextInputProps) => {
   const errors = validation(value);
 
@@ -35,6 +37,7 @@ export const ValidatedTextInput = ({
         onChange={onChange}
         isError={shouldShowErrors && isIErrorList(errors)}
         onBlur={() => setShouldShowErrors(true)}
+        color={color}
       />
       {shouldShowErrors && isIErrorList(errors) && (
         <ValidationResult validationResult={errors} />

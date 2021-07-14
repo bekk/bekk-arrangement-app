@@ -1,6 +1,6 @@
 @import 'src/style/constants';
 
-.text {
+.p {
   @include regularText;
   line-height: 1.5;
   margin: 0;
@@ -9,4 +9,10 @@
 .subHeader {
   @include subHeaderText;
   margin-top: 50px;
+}
+
+.registrationContainer {
+  @media #{$desktop} {
+    width: 50%;
+  }
 }

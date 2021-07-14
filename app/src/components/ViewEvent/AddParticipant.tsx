@@ -18,6 +18,7 @@ import { isValid } from 'src/types/validation';
 import { useHistory } from 'react-router';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
+import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 
 interface Props {
   eventId: string;
@@ -71,6 +72,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         placeholder={'Ola Nordmann'}
         value={participant.name}
         validation={parseName}
+        color="White"
         onChange={(name: string) =>
           setParticipant({
             ...participant,
@@ -83,6 +85,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         placeholder={'ola.nordmann@bekk.no'}
         value={participant.email}
         validation={parseEditEmail}
+        color="White"
         onChange={(email: string) =>
           setParticipant({
             ...participant,
@@ -91,11 +94,13 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         }
       />
       {participantQuestion !== undefined && (
-        <ValidatedTextInput
+        <ValidatedTextArea
           label={participantQuestion}
           placeholder={'Kommentar til arrangør'}
           value={participant.comment}
           validation={parseComment}
+          backgroundColor="White"
+          minRow={3}
           onChange={(comment: string) =>
             setParticipant({
               ...participant,

@@ -48,7 +48,11 @@ export const PreviewNewEventContainer = () => {
     <Page>
       <h1 className={style.header}>Forhåndsvisning</h1>
       <div className={style.previewContainer}>
-        <ViewEvent event={event} participantsText={participantsText} />
+        <ViewEvent
+          event={event}
+          participantsText={participantsText}
+          userCanEdit={false}
+        />
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={returnToCreate} color="Primary">

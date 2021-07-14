@@ -19,6 +19,11 @@
   &:hover .locationIcon path {
     fill: black;
   }
+
+  &:hover .stateIcon path {
+    fill: black;
+  }
+
   &:hover .externalIcon path:first-child {
     stroke: black;
   }

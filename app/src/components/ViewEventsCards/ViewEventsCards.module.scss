@@ -16,3 +16,7 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.headerText {
+  @include titleText;
+}
