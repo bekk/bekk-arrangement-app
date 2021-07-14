@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, useEffect } from 'react';
 
 export const useUpdateableInitialValue = <T extends string | number>(
   initialValue: T
@@ -9,4 +9,14 @@ export const useUpdateableInitialValue = <T extends string | number>(
   }, [initialValue]);
 
   return [value, setValue];
+};
+
+export const useEffectOnce = (effect: () => void) => {
+  const [hasRun, setHasRun] = useState(false);
+  useEffect(() => {
+    if (!hasRun) {
+      effect();
+      setHasRun(true);
+    }
+  }, [effect, hasRun]);
 };

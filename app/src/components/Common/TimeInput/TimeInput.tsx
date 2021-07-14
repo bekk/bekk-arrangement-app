@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { EditTime } from 'src/types/time';
 import style from './TimeInput.module.scss';
-import { useUpdateableInitialValue } from 'src/hooks/useInitialValue';
+import { useUpdateableInitialValue } from 'src/hooks/utils';
 
 interface IProps {
   value: EditTime;
@@ -32,7 +32,7 @@ export const TimeInput = ({
         type="number"
         inputMode="numeric"
         value={hour}
-        onChange={v => setHour(v.target.value)}
+        onChange={(v) => setHour(v.target.value)}
         onBlur={updateTime}
         onKeyDown={focusMinuteRefWhenHourFull}
         onFocus={selectText}
@@ -45,7 +45,7 @@ export const TimeInput = ({
         inputMode="numeric"
         onBlur={updateTime}
         value={minute}
-        onChange={v => setMinute(v.target.value)}
+        onChange={(v) => setMinute(v.target.value)}
         onFocus={selectText}
       />
     </div>

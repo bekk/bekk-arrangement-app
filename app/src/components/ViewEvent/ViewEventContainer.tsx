@@ -7,22 +7,24 @@ import {
   cancelParticipantRoute,
   eventsRoute,
   editEventRoute,
-  eventIdKey,
 } from 'src/routing';
 import { userIsLoggedIn, userIsAdmin } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { Page } from 'src/components/Page/Page';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
-import { useParam } from 'src/utils/browser-state';
 import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
 import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
 import { toEmailWriteModel } from 'src/types/email';
 
-export const ViewEventContainer = () => {
-  const eventId = useParam(eventIdKey);
+interface IProps {
+  eventId: string;
+}
+
+export const ViewEventContainer = ({ eventId }: IProps) => {
+  // const eventId = useParam(eventIdKey);
   const remoteEvent = useEvent(eventId);
 
   const editTokenFound = useEditToken(eventId);

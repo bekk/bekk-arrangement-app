@@ -130,3 +130,11 @@ export const getEventsAndParticipationsForEmployee = (
     host: getArrangementSvcUrl(),
     path: `/events-and-participations/${employeeId}`,
   });
+
+export const getEventIdByShortname = (shortname: string): Promise<string> =>
+  get({
+    host: getArrangementSvcUrl(),
+    path: `/events/id${queryStringStringify({
+      shortname: encodeURIComponent(shortname),
+    })}`,
+  });
