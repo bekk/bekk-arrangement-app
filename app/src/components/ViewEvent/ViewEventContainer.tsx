@@ -104,15 +104,20 @@ export const ViewEventContainer = () => {
       ? 'Ubegrenset antall plasser'
       : event.maxParticipants + ' plasser';
 
-  const goToRemoveParticipantRoute = (participation: Participation) => {
+  const goToRemoveParticipantRoute = ({
+    eventId,
+    cancellationToken,
+    email,
+  }: Participation) => {
     history.push(
       cancelParticipantRoute({
-        eventId: participation.eventId,
-        cancellationToken: participation.cancellationToken,
-        email: encodeURIComponent(toEmailWriteModel(participation)),
+        eventId,
+        cancellationToken,
+        email: encodeURIComponent(email),
       })
     );
   };
+
   return (
     <Page>
       <ViewEvent
