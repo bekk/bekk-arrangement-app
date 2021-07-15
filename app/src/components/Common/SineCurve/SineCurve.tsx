@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 
+/**
+ *  Hentet fra Bekk-forside-app
+ *  https://github.com/bekk/bekk-forside-app/blob/8c3451f88adca6c1b8b0f90b0c1786dea5f72cbb/app/src/components/KeyfigureView/SineCurve/SineCurve.tsx
+ *  Credit går til oleast og selbekk
+ */
+
 interface IProps {
   /**
    * Width and height define the size of the canvas, not the size in the DOM.
