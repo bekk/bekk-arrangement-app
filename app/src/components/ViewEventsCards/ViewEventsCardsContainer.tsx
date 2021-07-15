@@ -16,7 +16,7 @@ export const ViewEventsCardsContainer = () => {
   return (
     <>
       <WavySubHeader>
-        <div className={style.header}>
+        <div role="heading" className={style.header}>
           <h1 className={style.headerText}>Arrangementer</h1>
           <AddEventButton />
         </div>
