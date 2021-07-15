@@ -28,6 +28,7 @@ import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNew
 import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
 import { StylingExamples } from 'src/components/Common/StylingExamples/StylingExamples';
 import { usePopulateTokensInLocalStorage } from 'src/hooks/saved-tokens';
+import classNames from 'classnames';
 
 const history = createBrowserHistory();
 
@@ -42,50 +43,66 @@ export const App = () => {
   usePopulateTokensInLocalStorage();
   return (
     <Router history={history}>
-      <div className={style.container}>
-        <Header />
-        <Switch>
-          <PrivateRoute exact path={createRoute}>
+      <Header />
+      <Switch>
+        <PrivateRoute exact path={createRoute}>
+          <div className={classNames(style.container, style.lightBackground)}>
             <CreateEventContainer />
-          </PrivateRoute>
-          <PrivateRoute exact path={'/styling'}>
+          </div>
+        </PrivateRoute>
+        <PrivateRoute exact path={'/styling'}>
+          <div className={classNames(style.container, style.darkBackground)}>
             <StylingExamples />
-          </PrivateRoute>
-          <Route exact path={viewEventRoute(':' + eventIdKey)}>
+          </div>
+        </PrivateRoute>
+        <Route exact path={viewEventRoute(':' + eventIdKey)}>
+          <div className={classNames(style.container, style.darkBackground)}>
             <ViewEventContainer />
-          </Route>
-          <PrivateRoute exact path={eventsRoute}>
+          </div>
+        </Route>
+        <PrivateRoute exact path={eventsRoute}>
+          <div className={classNames(style.container, style.darkBackground)}>
             <ViewEventsCardsContainer />
-          </PrivateRoute>
-          <PrivateRoute path={editEventRoute(':' + eventIdKey)}>
+          </div>
+        </PrivateRoute>
+        <PrivateRoute path={editEventRoute(':' + eventIdKey)}>
+          <div className={classNames(style.container, style.lightBackground)}>
             <EditEventContainer />
-          </PrivateRoute>
-          <PrivateRoute exact path={previewNewEventRoute}>
+          </div>
+        </PrivateRoute>
+        <PrivateRoute exact path={previewNewEventRoute}>
+          <div className={classNames(style.container, style.lightBackground)}>
             <PreviewNewEventContainer />
-          </PrivateRoute>
-          <PrivateRoute exact path={previewEventRoute(':' + eventIdKey)}>
+          </div>
+        </PrivateRoute>
+        <PrivateRoute exact path={previewEventRoute(':' + eventIdKey)}>
+          <div className={classNames(style.container, style.lightBackground)}>
             <PreviewEventContainer />
-          </PrivateRoute>
-          <PrivateRoute
-            path={cancelParticipantRoute({
-              eventId: ':' + eventIdKey,
-              email: ':' + emailKey,
-            })}
-          >
+          </div>
+        </PrivateRoute>
+        <PrivateRoute
+          path={cancelParticipantRoute({
+            eventId: ':' + eventIdKey,
+            email: ':' + emailKey,
+          })}
+        >
+          <div className={classNames(style.container, style.darkBackground)}>
             <CancelParticipant />
-          </PrivateRoute>
-          <Route
-            exact
-            path={confirmParticipantRoute({
-              eventId: ':' + eventIdKey,
-              email: ':' + emailKey,
-            })}
-          >
+          </div>
+        </PrivateRoute>
+        <Route
+          exact
+          path={confirmParticipantRoute({
+            eventId: ':' + eventIdKey,
+            email: ':' + emailKey,
+          })}
+        >
+          <div className={classNames(style.container, style.darkBackground)}>
             <ConfirmParticipant />
-          </Route>
-          <Redirect exact from={rootRoute} to={eventsRoute} />
-        </Switch>
-      </div>
+          </div>
+        </Route>
+        <Redirect exact from={rootRoute} to={eventsRoute} />
+      </Switch>
     </Router>
   );
 };
@@ -95,8 +112,8 @@ export type ProtectedRouteProps = {
 
 const PrivateRoute = ({ children, ...routeProps }: ProtectedRouteProps) => {
   if (!isAuthenticated()) {
-    redirectToAuth0()
-    return null 
+    redirectToAuth0();
+    return null;
   } else {
     return <Route {...routeProps} render={() => children} />;
   }
