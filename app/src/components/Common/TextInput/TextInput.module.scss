@@ -19,29 +19,13 @@
   display: block;
   padding: 10px 10px 0 10px;
   color: black;
+  &:focus {
+    border-color: var(--nattKontrast);
+  }
 }
 
 input::-webkit-input-placeholder {
   line-height: 1.5;
-}
-
-.visited {
-  border-color: var(--textColor);
-}
-
-.error {
-  border-color: var(--error);
-}
-
-.blackTextInput {
-  background-color: var(--backgroundColor);
-  border-color: var(--disabled);
-}
-
-.whiteTextInput {
-  background-color: white;
-  border-color: var(--svart20);
-  color: black;
 }
 
 .onDarkBackground {
@@ -52,4 +36,12 @@ input::-webkit-input-placeholder {
 .onLightBackground {
   background-color: var(--svart);
   border-color: var(--svart60);
+}
+
+.visited {
+  border-color: var(--textColor);
+}
+
+.error {
+  border-color: var(--error);
 }

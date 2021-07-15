@@ -30,6 +30,12 @@ export const TextInput = ({
     [style.onLightBackground]: onLightBackground,
     [style.onDarkBackground]: !onLightBackground,
   });
+
+  const blur = () => {
+    onBlur();
+    setVisited(true);
+  };
+
   return (
     <>
       <label className={style.textLabel} htmlFor={label}>
@@ -41,8 +47,7 @@ export const TextInput = ({
         placeholder={placeholder}
         value={value}
         onChange={(v) => onChange(v.target.value)}
-        onFocus={() => setVisited(true)}
-        onBlur={onBlur}
+        onBlur={blur}
       />
     </>
   );
