@@ -9,6 +9,7 @@
 }
 
 .textInput {
+  @include regularText;
   width: 100%;
   line-height: 1.5;
   outline: none;
@@ -17,7 +18,7 @@
   border-bottom: solid 2px;
   display: block;
   padding: 10px 10px 0 10px;
-  @include regularText;
+  color: black;
 }
 
 input::-webkit-input-placeholder {
@@ -41,4 +42,14 @@ input::-webkit-input-placeholder {
   background-color: white;
   border-color: var(--svart20);
   color: black;
+}
+
+.onDarkBackground {
+  background-color: white;
+  border-color: var(--svart20);
+}
+
+.onLightBackground {
+  background-color: var(--svart);
+  border-color: var(--svart60);
 }

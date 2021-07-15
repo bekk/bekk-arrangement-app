@@ -72,7 +72,6 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         placeholder={'Ola Nordmann'}
         value={participant.name}
         validation={parseName}
-        color="White"
         onChange={(name: string) =>
           setParticipant({
             ...participant,
@@ -85,7 +84,6 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         placeholder={'ola.nordmann@bekk.no'}
         value={participant.email}
         validation={parseEditEmail}
-        color="White"
         onChange={(email: string) =>
           setParticipant({
             ...participant,

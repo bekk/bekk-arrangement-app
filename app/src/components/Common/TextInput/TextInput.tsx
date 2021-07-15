@@ -10,7 +10,7 @@ interface IProps {
   onChange: (value: string) => void;
   isError?: boolean;
   onBlur?: () => void;
-  color?: 'White' | 'Gray' | 'Black';
+  onLightBackground?: boolean;
 }
 
 export const TextInput = ({
@@ -21,14 +21,14 @@ export const TextInput = ({
   isNumber = false,
   isError = false,
   onBlur = () => undefined,
-  color = 'Black',
+  onLightBackground = false,
 }: IProps): JSX.Element => {
   const [hasVisited, setVisited] = useState(false);
   const inputStyle = classNames(style.textInput, {
     [style.visited]: hasVisited,
     [style.error]: hasVisited && isError,
-    [style.blackTextInput]: color === 'Black',
-    [style.whiteTextInput]: color === 'White',
+    [style.onLightBackground]: onLightBackground,
+    [style.onDarkBackground]: !onLightBackground,
   });
   return (
     <>
