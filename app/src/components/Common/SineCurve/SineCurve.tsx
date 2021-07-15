@@ -56,6 +56,7 @@ export function SineCurve({
 
   return (
     <svg viewBox={`0 0 ${width} ${height + 1}`} className={className}>
+      <title> Lang bølge </title>
       <path strokeWidth="2.6" d={sinePath} fill={color} />
     </svg>
   );
