@@ -41,7 +41,7 @@ export function ButtonWithPromptModal({
                 placeholder={placeholder}
                 value={promptAnswer}
                 onChange={setPromptAnswer}
-                backgroundColor={'White'}
+                onLightBackground
                 minRow={5}
               />
             </div>

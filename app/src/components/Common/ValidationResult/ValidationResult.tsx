@@ -5,21 +5,21 @@ import { IError, ErrorType } from 'src/types/validation';
 
 interface IProps {
   validationResult?: IError[];
-  backgroundColor?: 'White' | 'Black';
+  onLightBackground?: boolean;
 }
 
 export const ValidationResult = ({
   validationResult,
-  backgroundColor = 'Black',
+  onLightBackground = false,
 }: IProps) => {
   const circleStyle = (type: ErrorType) =>
     classNames(style.circle, {
       [style.error]: type === 'Error',
       [style.warning]: type === 'Warning',
     });
-  const textStyle = (backgroundColor: string) =>
+  const textStyle = () =>
     classNames(style.message, {
-      [style.darkText]: backgroundColor === 'White',
+      [style.darkText]: onLightBackground,
     });
 
   return (
@@ -28,7 +28,7 @@ export const ValidationResult = ({
         validationResult.map((v) => (
           <div key={v.message} className={style.errorMessage}>
             <div className={circleStyle(v.type)}></div>
-            <span className={textStyle(backgroundColor)}>{v.message}</span>
+            <span className={textStyle()}>{v.message}</span>
           </div>
         ))}
     </div>

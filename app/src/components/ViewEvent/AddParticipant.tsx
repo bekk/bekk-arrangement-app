@@ -97,7 +97,6 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           placeholder={'Kommentar til arrangør'}
           value={participant.comment}
           validation={parseComment}
-          backgroundColor="White"
           minRow={3}
           onChange={(comment: string) =>
             setParticipant({
