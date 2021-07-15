@@ -42,7 +42,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     <div className={style.container}>
       <ValidatedTextInput
         label={'Tittel'}
-        placeholder="Fest på Skuret"
+        placeholder="Navn på arrangementet ditt"
         value={event.title}
         validation={parseTitle}
         onLightBackground
@@ -56,7 +56,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       <div>
         <ValidatedTextInput
           label="Navn på arrangør"
-          placeholder="Ola Nordmann"
+          placeholder="Kari Nordmann"
           value={event.organizerName}
           validation={parseHost}
           onLightBackground
@@ -70,8 +70,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       </div>
       <div>
         <ValidatedTextInput
-          label="E-post arrangør"
-          placeholder="ola.nordmann@bekk.no"
+          label="Arrangørens e-post"
+          placeholder="kari.nordmann@bekk.no"
           value={event.organizerEmail}
           validation={parseEditEmail}
           onLightBackground
@@ -84,8 +84,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         />
       </div>
       <ValidatedTextInput
-        label={'Hvor finner arrangementet sted?'}
-        placeholder="Vippetangen"
+        label={'Lokasjon'}
+        placeholder="Eventyrland"
         value={event.location}
         validation={parseLocation}
         onLightBackground
@@ -98,7 +98,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       />
       <ValidatedTextArea
         label={'Beskrivelse'}
-        placeholder={'Dette er en beskrivelse'}
+        placeholder={'Hva står på agendaen?'}
         value={event.description}
         validation={parseDescription}
         onLightBackground
