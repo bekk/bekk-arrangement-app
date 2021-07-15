@@ -20,7 +20,7 @@ import { isValid } from 'src/types/validation';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 import { Checkbox } from '@bekk/storybook';
 import { Button } from 'src/components/Common/Button/Button';
-import style from '../EditEventContainer.module.scss';
+import style from './EditEvent.module.scss';
 import dateTimeStyle from 'src/components/Common/DateTimeInput/DateTimeInput.module.scss';
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
@@ -39,12 +39,13 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
   return (
-    <>
+    <div className={style.container}>
       <ValidatedTextInput
         label={'Tittel'}
         placeholder="Fest på Skuret"
         value={event.title}
         validation={parseTitle}
+        onLightBackground
         onChange={(title) =>
           updateEvent({
             ...event,
@@ -58,6 +59,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           placeholder="Ola Nordmann"
           value={event.organizerName}
           validation={parseHost}
+          onLightBackground
           onChange={(organizerName) =>
             updateEvent({
               ...event,
@@ -72,6 +74,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           placeholder="ola.nordmann@bekk.no"
           value={event.organizerEmail}
           validation={parseEditEmail}
+          onLightBackground
           onChange={(organizerEmail) =>
             updateEvent({
               ...event,
@@ -85,6 +88,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         placeholder="Vippetangen"
         value={event.location}
         validation={parseLocation}
+        onLightBackground
         onChange={(location) =>
           updateEvent({
             ...event,
@@ -97,6 +101,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         placeholder={'Dette er en beskrivelse'}
         value={event.description}
         validation={parseDescription}
+        onLightBackground
         onChange={(description) =>
           updateEvent({
             ...event,
@@ -203,7 +208,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             <ValidationResult validationResult={validatedStarTime} />
           )}
           <Checkbox
-            onDarkBackground
             label="Arrangementet går over flere dager"
             isChecked={isMultiDayEvent}
             onChange={(isMulti) => {
@@ -294,6 +298,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               value={event.maxParticipants}
               isNumber={true}
               validation={parseMaxAttendees}
+              onLightBackground
               onChange={(maxParticipants) =>
                 updateEvent({
                   ...event,
@@ -309,7 +314,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 updateEvent({ ...event, hasWaitingList })
               }
               isChecked={event.hasWaitingList}
-              onDarkBackground={true}
             />
           </div>
         </div>
@@ -320,6 +324,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
           value={event.participantQuestion}
           validation={parseQuestion}
+          onLightBackground
           onChange={(participantQuestion) =>
             updateEvent({
               ...event,
@@ -339,7 +344,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           + Legg til spørsmål til deltaker
         </Button>
       )}
-    </>
+    </div>
   );
 };
 

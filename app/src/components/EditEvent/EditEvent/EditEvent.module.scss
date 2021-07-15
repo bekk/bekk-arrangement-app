@@ -1,0 +1,20 @@
+@import 'src/style/constants';
+
+.container {
+  @media #{$desktop} {
+    display: grid;
+  }
+}
+
+//Se på denne
+.flex {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  & > div {
+    flex-grow: 1;
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+  }
+}
