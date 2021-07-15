@@ -91,10 +91,14 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     editToken,
   });
 
-  const cardStyle = classNames(style.card, getColor(eventId, style).style, {
-    [style.cardActive]: eventState !== 'Avsluttet' && eventState !== 'Avlyst',
-    [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
-  });
+  const cardStyle = classNames(
+    style.card,
+    getEventColor(eventId, style).style,
+    {
+      [style.cardActive]: eventState !== 'Avsluttet' && eventState !== 'Avlyst',
+      [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
+    }
+  );
 
   const history = useHistory();
 
@@ -147,12 +151,20 @@ const colors = (style: any) =>
 const getEventHash = (eventId: string): number =>
   [...eventId].map((char) => char.charCodeAt(0)).reduce((a, x) => a + x, 0);
 
-export const getColor = (eventId: string, style: any) =>
-  colors(style).get(
-    [...colors(style).keys()][
-      getEventHash(eventId) % [...colors(style).keys()].length
-    ]
-  ) ?? { style: style.soloppgang, colorCode: soloppgang };
+export const getEventColor = (
+  eventId: string | undefined,
+  style: any
+): { style: string; colorCode: string } => {
+  const defaultStyle = { style: style.soloppgang, colorCode: soloppgang };
+  if (eventId === undefined) {
+    return defaultStyle;
+  }
+  return (
+    colors(style).get(
+      [...colors(style).keys()][getEventHash(eventId) % colors(style).size]
+    ) ?? defaultStyle
+  );
+};
 
 interface EventStateProps {
   event: IEvent;

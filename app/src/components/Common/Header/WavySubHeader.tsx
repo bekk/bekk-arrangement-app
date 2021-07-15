@@ -2,8 +2,7 @@ import React, { ReactChild, useState } from 'react';
 import style from './Header.module.scss';
 import { SineCurve } from 'src/components/Common/SineCurve/SineCurve';
 import classNames from 'classnames';
-import { getColor } from 'src/components/ViewEventsCards/EventCardElement';
-import { soloppgang } from 'src/style/colors';
+import { getEventColor } from 'src/components/ViewEventsCards/EventCardElement';
 
 interface IProps {
   children: ReactChild[] | ReactChild;
@@ -13,9 +12,7 @@ interface IProps {
 export const WavySubHeader = ({ children, eventId }: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const color = eventId && getColor(eventId, style);
-  const colorStyle = color ? color.style : style.soloppgang;
-  const colorCode = color ? color.colorCode : soloppgang;
+  const { style: colorStyle, colorCode } = getEventColor(eventId, style);
 
   return (
     <div
