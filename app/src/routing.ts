@@ -28,6 +28,7 @@ export const confirmParticipantRoute = ({
   email: string;
 }) => `/${eventId}/confirm/${email}`;
 
+
 export const cancelParticipantRoute = ({
   eventId,
   email,
@@ -40,3 +41,10 @@ export const cancelParticipantRoute = ({
   `/${eventId}/cancel/${email}${queryStringStringify({
     [cancellationTokenKey]: cancellationToken,
   })}`;
+
+// This function needs to be refactord if the routes above changes
+// location is a datastructure from react-router with PIA types
+export const shouldHaveBlackHeaderBackground = (location: any) =>
+  location.pathname === eventsRoute ||
+  location.pathname.split('/')[3] === 'edit' ||
+  location.pathname.split('/')[3] === 'preview';
