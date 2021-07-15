@@ -30,6 +30,9 @@ export const TextInput = ({
     [style.onLightBackground]: onLightBackground,
     [style.onDarkBackground]: !onLightBackground,
   });
+  const labelStyle = classNames(style.textLabel, {
+    [style.textLabelLightBackground]: onLightBackground,
+  });
 
   const blur = () => {
     onBlur();
@@ -38,7 +41,7 @@ export const TextInput = ({
 
   return (
     <>
-      <label className={style.textLabel} htmlFor={label}>
+      <label className={labelStyle} htmlFor={label}>
         {label}
       </label>
       <input

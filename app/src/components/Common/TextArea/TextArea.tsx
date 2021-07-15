@@ -31,6 +31,9 @@ export const TextArea = ({
     [style.onLightBackground]: onLightBackground,
     [style.onDarkBackground]: !onLightBackground,
   });
+  const labelStyle = classNames(style.textLabel, {
+    [style.textLabelLightBackground]: onLightBackground,
+  });
 
   const blur = () => {
     onBlur();
@@ -40,7 +43,7 @@ export const TextArea = ({
   return (
     <>
       {label && (
-        <label className={style.textLabel} htmlFor={label}>
+        <label className={labelStyle} htmlFor={label}>
           {label}
         </label>
       )}

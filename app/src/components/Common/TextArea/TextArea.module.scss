@@ -7,6 +7,10 @@
   @include labelText;
 }
 
+.textLabelLightBackground {
+  color: var(--svart60);
+}
+
 .textArea {
   width: 100%;
   line-height: 1.5;

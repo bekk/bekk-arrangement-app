@@ -8,6 +8,10 @@
   @include labelText;
 }
 
+.textLabelLightBackground {
+  color: var(--svart60);
+}
+
 .textInput {
   @include regularText;
   width: 100%;
@@ -34,7 +38,7 @@ input::-webkit-input-placeholder {
 }
 
 .onLightBackground {
-  background-color: var(--svart);
+  background-color: var(--overskyet50);
   border-color: var(--svart60);
 }
 
