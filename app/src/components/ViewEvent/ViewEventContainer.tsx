@@ -118,66 +118,68 @@ export const ViewEventContainer = () => {
   };
 
   return (
-    <Page>
+    <>
       <ViewEvent
         event={event}
         participantsText={shortParticipantsText}
         userCanEdit={editTokenFound || userIsAdmin() ? true : false}
       />
-      <section>
-        {participationsForThisEvent.length >= 1 ? (
-          <div>
-            <h2 className={style.subHeader}>
-              Du er påmeldt{' '}
-              <span role="img" aria-label="konfetti">
-                🎉
-              </span>
-            </h2>
-            <p>
-              Hurra, du er påmeldt {event.title}! Vi gleder oss til å se deg. En
-              bekreftelse er sendt på e-post til{' '}
-              {participationsForThisEvent[0].email}
-            </p>
-            <h2 className={style.subHeader}>Kan du ikke likevel?</h2>
-            <Button
-              onClick={() =>
-                goToRemoveParticipantRoute(participationsForThisEvent[0])
-              }
-            >
-              Meld deg av
-            </Button>
-          </div>
-        ) : (
-          <div className={style.registrationContainer}>
-            <h2 className={style.subHeader}>Meld deg på</h2>
-            {closedEventText ? (
-              <div>
-                <p>{numberOfPossibleParticipantsText}</p>
-                <p>
-                  Påmeldingen er stengt <br /> {closedEventText}
-                </p>
-              </div>
-            ) : waitlistText ? (
-              <p>{waitlistText}</p>
-            ) : null}
-            {!isInThePast(event.end) && timeLeft.difference < oneMinute && (
-              <AddParticipant eventId={eventId} event={event} />
-            )}
-          </div>
-        )}
-        <h2 className={style.subHeader}>Påmeldte</h2>
-        <p>{participantsText}</p>
-        {editTokenFound || userIsAdmin() ? (
-          <ViewParticipants eventId={eventId} editToken={editTokenFound} />
-        ) : (
-          userIsLoggedIn() && (
-            <ViewParticipantsLimited
-              eventId={eventId}
-              editToken={editTokenFound}
-            />
-          )
-        )}
-      </section>
-    </Page>
+      <Page>
+        <section>
+          {participationsForThisEvent.length >= 1 ? (
+            <div>
+              <h2 className={style.subHeader}>
+                Du er påmeldt{' '}
+                <span role="img" aria-label="konfetti">
+                  🎉
+                </span>
+              </h2>
+              <p>
+                Hurra, du er påmeldt {event.title}! Vi gleder oss til å se deg.
+                En bekreftelse er sendt på e-post til{' '}
+                {participationsForThisEvent[0].email}
+              </p>
+              <h2 className={style.subHeader}>Kan du ikke likevel?</h2>
+              <Button
+                onClick={() =>
+                  goToRemoveParticipantRoute(participationsForThisEvent[0])
+                }
+              >
+                Meld deg av
+              </Button>
+            </div>
+          ) : (
+            <div className={style.registrationContainer}>
+              <h2 className={style.subHeader}>Meld deg på</h2>
+              {closedEventText ? (
+                <div>
+                  <p>{numberOfPossibleParticipantsText}</p>
+                  <p>
+                    Påmeldingen er stengt <br /> {closedEventText}
+                  </p>
+                </div>
+              ) : waitlistText ? (
+                <p>{waitlistText}</p>
+              ) : null}
+              {!isInThePast(event.end) && timeLeft.difference < oneMinute && (
+                <AddParticipant eventId={eventId} event={event} />
+              )}
+            </div>
+          )}
+          <h2 className={style.subHeader}>Påmeldte</h2>
+          <p>{participantsText}</p>
+          {editTokenFound || userIsAdmin() ? (
+            <ViewParticipants eventId={eventId} editToken={editTokenFound} />
+          ) : (
+            userIsLoggedIn() && (
+              <ViewParticipantsLimited
+                eventId={eventId}
+                editToken={editTokenFound}
+              />
+            )
+          )}
+        </section>
+      </Page>
+    </>
   );
 };

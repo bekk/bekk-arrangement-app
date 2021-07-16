@@ -8,24 +8,29 @@ import { EventCardElement } from 'src/components/ViewEventsCards/EventCardElemen
 import { Button } from 'src/components/Common/Button/Button';
 import { useHistory } from 'react-router';
 import { authenticateUser, isAuthenticated } from 'src/auth';
+import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 
 export const ViewEventsCardsContainer = () => {
   const events = useEvents();
 
   return (
-    <Page>
-      <div className={style.header}>
-        <h1 className={style.headerText}>Arrangementer</h1>
-        <AddEventButton />
-      </div>
-      <div className={style.grid}>
-        {[...events].map(([id, event]) =>
-          hasLoaded(event) ? (
-            <EventCardElement key={id} eventId={id} event={event.data} />
-          ) : null
-        )}
-      </div>
-    </Page>
+    <>
+      <WavySubHeader>
+        <div className={style.header}>
+          <h1 className={style.headerText}>Arrangementer</h1>
+          <AddEventButton />
+        </div>
+      </WavySubHeader>
+      <Page>
+        <div className={style.grid}>
+          {[...events].map(([id, event]) =>
+            hasLoaded(event) ? (
+              <EventCardElement key={id} eventId={id} event={event.data} />
+            ) : null
+          )}
+        </div>
+      </Page>
+    </>
   );
 };
 
@@ -33,7 +38,7 @@ const AddEventButton = () => {
   const history = useHistory();
   if (isAuthenticated()) {
     return (
-      <Button onClick={() => history.push(createRoute)}>
+      <Button color={'Secondary'} onClick={() => history.push(createRoute)}>
         Opprett et arrangement
       </Button>
     );

@@ -1,9 +1,61 @@
+@import 'src/style/colors';
 .logoContainer {
   width: 100%;
   padding-top: 3em;
-  padding-left: 5%;
+  background-color: transparent;
+}
+
+.coloredHeader {
+  z-index: 1;
+  margin-bottom: -100px;
 }
 
 .logo {
   width: 98px;
+  margin-left: 5%;
+}
+
+.subHeaderContainer {
+  width: 100%;
+}
+
+.contentContainer {
+  padding-top: 120px;
+  padding-bottom: 40px;
+}
+
+.sineCurve {
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+  margin-top: -10px;
+}
+
+.sineCurveContent {
+  margin: 0 -2px;
+  display: block;
+}
+
+.hav {
+  background-color: var(--hav);
+}
+.kveld {
+  background-color: var(--kveld);
+}
+
+.regn {
+  background-color: var(--regn);
+}
+
+.skyfritt {
+  background-color: var(--skyfritt);
+}
+.sol {
+  background-color: var(--sol);
+}
+.solnedgang {
+  background-color: var(--solnedgang);
+}
+.soloppgang {
+  background-color: var(--soloppgang);
 }
