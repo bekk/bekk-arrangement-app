@@ -40,19 +40,21 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   const validateEndTime = parseEditDateTime(event.end);
   return (
     <div className={style.container}>
-      <ValidatedTextInput
-        label={'Tittel'}
-        placeholder="Navn på arrangementet ditt"
-        value={event.title}
-        validation={parseTitle}
-        onLightBackground
-        onChange={(title) =>
-          updateEvent({
-            ...event,
-            title,
-          })
-        }
-      />
+      <div>
+        <ValidatedTextInput
+          label={'Tittel'}
+          placeholder="Navn på arrangementet ditt"
+          value={event.title}
+          validation={parseTitle}
+          onLightBackground
+          onChange={(title) =>
+            updateEvent({
+              ...event,
+              title,
+            })
+          }
+        />
+      </div>
       <div>
         <ValidatedTextInput
           label="Navn på arrangør"
@@ -83,32 +85,36 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
-      <ValidatedTextInput
-        label={'Lokasjon'}
-        placeholder="Eventyrland"
-        value={event.location}
-        validation={parseLocation}
-        onLightBackground
-        onChange={(location) =>
-          updateEvent({
-            ...event,
-            location,
-          })
-        }
-      />
-      <ValidatedTextArea
-        label={'Beskrivelse'}
-        placeholder={'Hva står på agendaen?'}
-        value={event.description}
-        validation={parseDescription}
-        onLightBackground
-        onChange={(description) =>
-          updateEvent({
-            ...event,
-            description,
-          })
-        }
-      />
+      <div>
+        <ValidatedTextInput
+          label={'Lokasjon'}
+          placeholder="Eventyrland"
+          value={event.location}
+          validation={parseLocation}
+          onLightBackground
+          onChange={(location) =>
+            updateEvent({
+              ...event,
+              location,
+            })
+          }
+        />
+      </div>
+      <div>
+        <ValidatedTextArea
+          label={'Beskrivelse'}
+          placeholder={'Hva står på agendaen?'}
+          value={event.description}
+          validation={parseDescription}
+          onLightBackground
+          onChange={(description) =>
+            updateEvent({
+              ...event,
+              description,
+            })
+          }
+        />
+      </div>
       <div
         className={
           isMultiDayEvent
@@ -165,7 +171,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           <ValidationResult validationResult={validateEndTime} />
         )}
         {isMultiDayEvent && (
-          <div className={style.test}>
+          <div className={style.endDate}>
             <DateInput
               value={event.end.date}
               label={'Sluttdato:'}
@@ -202,12 +208,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         }
       />
       <Checkbox
-        label="Eksternt arrangement"
-        onChange={(isExternal) => updateEvent({ ...event, isExternal })}
-        isChecked={event.isExternal}
-        onDarkBackground
-      />
-      <Checkbox
         label="Begrens plasser"
         isChecked={hasLimitedSpots}
         onChange={(limited) => {
@@ -220,14 +220,13 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
           setHasLimitedSpots(limited);
         }}
-        onDarkBackground={true}
       />
       {hasLimitedSpots && (
         <div className={style.flex}>
           <div>
             <ValidatedTextInput
               label={'Maks antall'}
-              placeholder="∞"
+              placeholder="10"
               value={event.maxParticipants}
               isNumber={true}
               validation={parseMaxAttendees}
@@ -240,7 +239,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               }
             />
           </div>
-          <div>
+          <div className={style.waitListCB}>
             <Checkbox
               label="Venteliste"
               onChange={(hasWaitingList) =>
@@ -277,6 +276,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           + Legg til spørsmål til deltaker
         </Button>
       )}
+      <Checkbox
+        label="Eksternt arrangement"
+        onChange={(isExternal) => updateEvent({ ...event, isExternal })}
+        isChecked={event.isExternal}
+        onDarkBackground
+      />
     </div>
   );
 };
