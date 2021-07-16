@@ -1,3 +1,4 @@
+import { useRouteMatch } from 'react-router';
 import { queryStringStringify } from 'src/utils/browser-state';
 
 export const eventIdKey = 'eventId';
@@ -42,9 +43,22 @@ export const cancelParticipantRoute = ({
     [cancellationTokenKey]: cancellationToken,
   })}`;
 
-// This function needs to be refactord if the routes above changes
-// location is a datastructure from react-router with PIA types
-export const shouldHaveBlackHeaderBackground = (location: any) =>
-  location.pathname === eventsRoute ||
-  location.pathname.split('/')[3] === 'edit' ||
-  location.pathname.split('/')[3] === 'preview';
+export const useIsEditingRoute = () => {
+  let routematch = useRouteMatch(editEventRoute(":"+eventIdKey))
+  return routematch !== null
+}
+export const useIsPreviewRoute = () => {
+  let routematch = useRouteMatch(previewEventRoute(":"+eventIdKey))
+  return routematch !== null
+}
+
+export const useIsCreateRoute = () => {
+  let routematch = useRouteMatch(createRoute)
+  return routematch !== null
+}
+export const useShouldHaveBlackHeaderBackground = () => {
+  let isEditingRoute = useIsEditingRoute()
+  let isPreviewRoute = useIsPreviewRoute()
+  let isCreateRoute = useIsCreateRoute()
+  return (isEditingRoute || isPreviewRoute || isCreateRoute)
+}
