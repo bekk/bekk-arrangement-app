@@ -10,13 +10,15 @@ import { TimeInput } from '../TimeInput/TimeInput';
 import { isValid } from 'src/types/validation';
 
 interface IProps {
-  label: string;
+  labelDate?: string;
+  labelTime?: string;
   value: TimeInstanceEdit;
   onChange: (datetime: TimeInstanceEdit) => void;
 }
 
 export const DateTimeInputWithTimezone = ({
-  label,
+  labelDate,
+  labelTime,
   value,
   onChange,
 }: IProps) => {
@@ -25,10 +27,10 @@ export const DateTimeInputWithTimezone = ({
 
   return (
     <>
-      <label className={style.label}>{label}</label>
       <div className={style.flex}>
-        <div>
+        <div className={style.dateInput}>
           <DateInput
+            label={labelDate}
             value={value.date}
             onChange={(date) => {
               onChange({
@@ -39,10 +41,10 @@ export const DateTimeInputWithTimezone = ({
           />
         </div>
 
-        <div className={style.timeFlex}>
-          <div className={style.kl}>Kl.</div>
+        <div>
           <TimeInput
             value={value.time}
+            label={labelTime}
             onChange={(time) => {
               onChange({
                 ...value,
