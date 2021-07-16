@@ -110,3 +110,8 @@ $transitionLength: 0.2s;
   text-align: center;
   overflow-wrap: break-word;
 }
+
+@mixin inputText {
+  @include regularText();
+  color: black;
+}

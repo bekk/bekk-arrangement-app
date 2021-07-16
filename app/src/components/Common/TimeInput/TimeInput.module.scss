@@ -1,22 +1,17 @@
 @import 'src/style/constants';
 
 .timeInput {
-  outline: 0;
-  background-color: var(--backgroundColor);
+  @include inputText;
+  background-color: transparent;
   text-align: center;
   align-self: center;
-  width: 45%;
-  margin: 5px;
-  line-height: 2;
-  @include regularText;
+  width: 40px;
+  line-height: 1;
   @media #{$desktop} {
     width: 50px;
     margin: 10px;
   }
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: solid 1px var(--textColor);
+  border: none;
   -moz-appearance: textfield;
 }
 
@@ -25,20 +20,29 @@
   align-self: center;
   background-color: #222;
   border: none;
-  @include regularText;
+  @include inputText;
 }
 
 .timeInputContainer {
   display: flex;
-  border: none;
+  background-color: var(--overskyet50);
+  border-bottom: 2px solid var(--svart60);
   flex-direction: row;
-  width: 100px;
-  justify-content: flex-end;
+  height: 39px;
+  justify-content: center;
 }
 
 .text {
-  @include regularText;
+  @include inputText;
   text-align: center;
-  line-height: 2;
+  line-height: 1.2s;
   margin: 5px 0;
+}
+
+.textLabel {
+  display: block;
+  margin-top: 30px;
+  padding-bottom: 5px;
+  @include labelText;
+  color: var(--svart60);
 }

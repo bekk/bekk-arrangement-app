@@ -6,6 +6,54 @@
   }
 }
 
+.startDateContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    'sd sd sd sd'
+    'st st et et'
+    'cb cb cb cb';
+  gap: 5px;
+  @media #{$desktop} {
+    grid-template-areas: 'sd sd sd sd st et';
+  }
+}
+
+.startEndDateContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-areas:
+    'sd sd sd sd st'
+    'ed ed ed ed et'
+    'cb cb cb cb cb';
+  gap: 10px;
+  @media #{$desktop} {
+    grid-template-areas:
+      'sd sd sd sd st'
+      'ed ed ed ed et';
+  }
+}
+
+.startDate {
+  grid-area: sd;
+}
+
+.test {
+  grid-area: ed;
+}
+
+.startTime {
+  grid-area: st;
+  max-width: 100%;
+}
+
+.endTime {
+  grid-area: et;
+}
+.cb {
+  grid-area: cb;
+}
+
 //Se på denne
 .flex {
   display: flex;
