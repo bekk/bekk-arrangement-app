@@ -2,7 +2,12 @@ import React from 'react';
 import logo from 'src/images/logo.svg';
 import logoBlack from 'src/images/logoBlack.svg';
 import style from './Header.module.scss';
-import { eventsRoute, useShouldHaveBlackHeaderBackground } from 'src/routing';
+import {
+  eventsRoute,
+  useIsCreateRoute,
+  useIsEditingRoute,
+  useIsPreviewRoute,
+} from 'src/routing';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -21,4 +26,11 @@ export const Header = () => {
       </Link>
     </div>
   );
+};
+
+export const useShouldHaveBlackHeaderBackground = () => {
+  let isEditingRoute = useIsEditingRoute();
+  let isPreviewRoute = useIsPreviewRoute();
+  let isCreateRoute = useIsCreateRoute();
+  return isEditingRoute || isPreviewRoute || isCreateRoute;
 };
