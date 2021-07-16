@@ -37,14 +37,15 @@ export const EventState = ({
   waitingListSpot,
 }: IProps) => {
   const history = useHistory();
-  const route = (path: string, event: any) => {
-    event.stopPropagation()
+  const route = (path: string, htmlEvent: any) => {
+    htmlEvent.stopPropagation()
+    htmlEvent.preventDefault()
     history.push(path);
   };
   switch (eventState) {
     case 'Rediger':
       return (
-        <Button onClick={(event: any) => route(editEventRoute(eventId), event)}>
+        <Button onClick={(htmlEvent: any) => route(editEventRoute(eventId), htmlEvent)}>
           Rediger
         </Button>
       );
@@ -85,14 +86,14 @@ export const EventState = ({
             <div className={style.stateText}>
               {numberOfAvailableSpots} plasser igjen!
             </div>
-            <Button onClick={(event: any) => route(viewEventRoute(eventId), event)}>
+            <Button onClick={(htmlEvent: any) => route(viewEventRoute(eventId), htmlEvent)}>
               Meld deg på
             </Button>
           </div>
         );
       }
       return (
-        <Button onClick={(event: any) => route(viewEventRoute(eventId), event)}>
+        <Button onClick={(htmlEvent: any) => route(viewEventRoute(eventId), htmlEvent)}>
           Meld deg på
         </Button>
       );
@@ -101,7 +102,7 @@ export const EventState = ({
       return (
         <div className={style.stateContainer}>
           <div className={style.stateText}>Arrangementet er fullt.</div>
-          <Button onClick={(event: any) => route(viewEventRoute(eventId), event)}>
+          <Button onClick={(htmlEvent: any) => route(viewEventRoute(eventId), htmlEvent)}>
             Sett på venteliste
           </Button>
         </div>
