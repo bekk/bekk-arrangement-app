@@ -24,7 +24,10 @@ export const postEvent = (
   post({
     host: getArrangementSvcUrl(),
     path: '/events',
-    body: toEventWriteModel(event, editUrlTemplate),
+    body: {
+      ...toEventWriteModel(event, editUrlTemplate),
+      shortname: 'nytt-3',
+    },
   });
 
 export const putEvent = (

@@ -17,14 +17,19 @@ import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 
 interface IProps {
+  eventId: string;
   event: IEvent;
   participantsText: string;
   userCanEdit: boolean;
 }
 
-export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
+export const ViewEvent = ({
+  eventId,
+  event,
+  userCanEdit,
+  participantsText,
+}: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
-  const eventId = useParam(eventIdKey);
 
   const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
