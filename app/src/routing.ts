@@ -56,7 +56,7 @@ export const useIsCreateRoute = () => {
   let routematch = useRouteMatch(createRoute)
   return routematch !== null
 }
-export const useShouldHaveBlackHeaderBackground = () => {
+export const useShouldHaveWhiteHeaderBackground = () => {
   let isEditingRoute = useIsEditingRoute()
   let isPreviewRoute = useIsPreviewRoute()
   let isCreateRoute = useIsCreateRoute()

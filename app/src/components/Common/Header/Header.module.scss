@@ -1,12 +1,12 @@
 @import 'src/style/colors';
-.logoContainer {
+.header {
+  position: absolute;
   width: 100%;
   padding-top: 3em;
-  background-color: transparent;
+  z-index: 100;
 }
 
 .coloredHeader {
-  z-index: 1;
   margin-bottom: -100px;
 }
 
