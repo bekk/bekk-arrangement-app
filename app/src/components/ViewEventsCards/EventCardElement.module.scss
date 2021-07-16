@@ -19,6 +19,11 @@
   &:hover .locationIcon path {
     fill: black;
   }
+
+  &:hover .stateIcon path {
+    fill: black;
+  }
+
   &:hover .externalIcon path:first-child {
     stroke: black;
   }
@@ -30,39 +35,39 @@
   }
 }
 
-.cardColorHav {
+.hav {
   &:hover {
     background-color: var(--hav);
   }
 }
-.cardColorKveld {
+.kveld {
   &:hover {
     background-color: var(--kveld);
   }
 }
 
-.cardColorRegn {
+.regn {
   &:hover {
     background-color: var(--regn);
   }
 }
 
-.cardColorSkyfritt {
+.skyfritt {
   &:hover {
     background-color: var(--skyfritt);
   }
 }
-.cardColorSol {
+.sol {
   &:hover {
     background-color: var(--sol);
   }
 }
-.cardColorSolnedgang {
+.solnedgang {
   &:hover {
     background-color: var(--solnedgang);
   }
 }
-.cardColorSoloppgang {
+.soloppgang {
   &:hover {
     background-color: var(--soloppgang);
   }

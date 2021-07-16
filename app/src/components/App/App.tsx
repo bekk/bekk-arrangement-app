@@ -27,6 +27,7 @@ import { ConfirmParticipant } from '../ConfirmParticipant/ConfirmParticipant';
 import { PreviewEventContainer } from 'src/components/PreviewEvent/PreviewEventContainer';
 import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNewEventContainer';
 import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
+import { StylingExamples } from 'src/components/Common/StylingExamples/StylingExamples';
 import { usePopulateTokensInLocalStorage } from 'src/hooks/saved-tokens';
 import {
   ViewEventShortnameRoute,
@@ -51,6 +52,9 @@ export const App = () => {
         <Switch>
           <PrivateRoute exact path={createRoute}>
             <CreateEventContainer />
+          </PrivateRoute>
+          <PrivateRoute exact path={'/styling'}>
+            <StylingExamples />
           </PrivateRoute>
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
             <ViewEventContainerRegularRoute />

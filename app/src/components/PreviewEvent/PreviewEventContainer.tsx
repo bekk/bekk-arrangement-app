@@ -22,13 +22,7 @@ export const PreviewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `0 av ${
-    event.maxParticipants === 0 ? '∞' : event.maxParticipants
-  }${
-    event.hasWaitingList && event.maxParticipants !== 0
-      ? ' og 0 på venteliste'
-      : ''
-  }`;
+  const participantsText = `${event.maxParticipants} plasser`;
 
   const returnToEdit = () => {
     history.goBack();
@@ -43,7 +37,11 @@ export const PreviewEventContainer = () => {
     <Page>
       <h1 className={style.header}>Forhåndsvisning</h1>
       <div className={style.previewContainer}>
-        <ViewEvent event={event} participantsText={participantsText} />
+        <ViewEvent
+          event={event}
+          participantsText={participantsText}
+          userCanEdit={false}
+        />
       </div>
       <div className={style.buttonContainer}>
         <Button onClick={returnToEdit}>Rediger</Button>
