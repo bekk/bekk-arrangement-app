@@ -9,7 +9,6 @@
   line-height: 1;
   @media #{$desktop} {
     width: 50px;
-    margin: 10px;
   }
   border: none;
   -moz-appearance: textfield;
@@ -30,6 +29,9 @@
   flex-direction: row;
   height: 39px;
   justify-content: center;
+  @media #{$desktop} {
+    height: 42px;
+  }
 }
 
 .text {
