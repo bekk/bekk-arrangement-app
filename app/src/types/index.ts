@@ -62,3 +62,25 @@ export const parseQuestion = (
   });
   return validator.resolve(value);
 };
+
+export const parseShortname = (
+  value?: string
+): string | undefined | IError[] => {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const chars = value.split('');
+
+  const hasSlash = chars.includes('/');
+  const hasQuestionMark = chars.includes('?');
+  const hasHash = chars.includes('#');
+  const hasPercentSign = chars.includes('%');
+
+  const validator = validate<string>({
+    'Kortnavn kan ikke inneholde URL-reserverte tegn som /, ? og #':
+      hasSlash || hasQuestionMark || hasHash || hasPercentSign,
+    'Kortnavn kan ikke være over 100 tegn': value.length > 100,
+  });
+  return validator.resolve(value);
+};

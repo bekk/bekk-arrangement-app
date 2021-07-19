@@ -15,9 +15,10 @@ import {
   previewEventRoute,
   rootRoute,
   previewNewEventRoute,
+  viewEventShortnameRoute,
+  shortnameKey,
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
-import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
 import { EditEventContainer } from 'src/components/EditEvent/EditEventContainer';
 import { CancelParticipant } from 'src/components/CancelParticipant/CancelParticipant';
 import { createBrowserHistory } from 'history';
@@ -28,6 +29,10 @@ import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNew
 import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
 import { StylingExamples } from 'src/components/Common/StylingExamples/StylingExamples';
 import { usePopulateTokensInLocalStorage } from 'src/hooks/saved-tokens';
+import {
+  ViewEventShortnameRoute,
+  ViewEventContainerRegularRoute,
+} from 'src/components/ViewEvent/ViewEventRoutes';
 
 const history = createBrowserHistory();
 
@@ -52,7 +57,7 @@ export const App = () => {
             <StylingExamples />
           </PrivateRoute>
           <Route exact path={viewEventRoute(':' + eventIdKey)}>
-            <ViewEventContainer />
+            <ViewEventContainerRegularRoute />
           </Route>
           <PrivateRoute exact path={eventsRoute}>
             <ViewEventsCardsContainer />
@@ -84,6 +89,9 @@ export const App = () => {
             <ConfirmParticipant />
           </Route>
           <Redirect exact from={rootRoute} to={eventsRoute} />
+          <Route path={viewEventShortnameRoute(':' + shortnameKey)}>
+            <ViewEventShortnameRoute />
+          </Route>
         </Switch>
       </div>
     </Router>
@@ -95,8 +103,8 @@ export type ProtectedRouteProps = {
 
 const PrivateRoute = ({ children, ...routeProps }: ProtectedRouteProps) => {
   if (!isAuthenticated()) {
-    redirectToAuth0()
-    return null 
+    redirectToAuth0();
+    return null;
   } else {
     return <Route {...routeProps} render={() => children} />;
   }
