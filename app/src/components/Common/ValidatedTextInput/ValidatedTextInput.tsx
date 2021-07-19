@@ -40,7 +40,10 @@ export const ValidatedTextInput = ({
         onLightBackground={onLightBackground}
       />
       {shouldShowErrors && isIErrorList(errors) && (
-        <ValidationResult validationResult={errors} />
+        <ValidationResult
+          validationResult={errors}
+          onLightBackground={onLightBackground}
+        />
       )}
     </>
   );
