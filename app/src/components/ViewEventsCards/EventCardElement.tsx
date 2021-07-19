@@ -21,13 +21,11 @@ import {
   hav,
   hvit,
   kveld,
-  morgendis,
   regn,
   skyfritt,
   sol,
   solnedgang,
   soloppgang,
-  svart,
 } from 'src/style/colors';
 
 interface IProps {
