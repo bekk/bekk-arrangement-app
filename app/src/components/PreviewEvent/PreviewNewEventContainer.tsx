@@ -46,6 +46,7 @@ export const PreviewNewEventContainer = () => {
           event={event}
           participantsText={participantsText}
           userCanEdit={false}
+          isPreview
         />
       </div>
       <div className={style.buttonContainer}>

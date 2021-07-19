@@ -20,9 +20,15 @@ interface IProps {
   event: IEvent;
   participantsText: string;
   userCanEdit: boolean;
+  isPreview?: true;
 }
 
-export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
+export const ViewEvent = ({
+  event,
+  userCanEdit,
+  participantsText,
+  isPreview,
+}: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
   const eventId = useParam(eventIdKey);
 
@@ -86,9 +92,17 @@ export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
           kontakt på {stringifyEmail(event.organizerEmail)}
         </p>
         <div className={style.buttonGroup}>
-          <Button color="Primary" onClick={copyLink}>
-            {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
-          </Button>
+          {!isPreview && (
+            <Button color="Primary" onClick={copyLink}>
+              {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
+            </Button>
+          )}
+          {isPreview && (
+            <div>
+              <h3>Spørsmål til deltaker</h3>
+              <div>{event.participantQuestion}</div>
+            </div>
+          )}
           {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
           Dupliser arrangement
         </Button> */}
