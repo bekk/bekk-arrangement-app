@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { EditTime } from 'src/types/time';
 import style from './TimeInput.module.scss';
 import { useUpdateableInitialValue } from 'src/hooks/utils';
