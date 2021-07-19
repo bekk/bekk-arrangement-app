@@ -35,7 +35,7 @@ export const ViewEvent = ({
   const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
   const copyLink =
-    eventId &&
+    eventId !== undefined &&
     (async () => {
       const url = document.location.origin + viewEventRoute(eventId);
       await navigator.clipboard.writeText(url);
@@ -50,7 +50,7 @@ export const ViewEvent = ({
       <WavySubHeader eventId={eventId}>
         <div className={style.headerContainer}>
           <h1 className={style.header}>{event.title}</h1>
-          {userCanEdit && eventId && (
+          {userCanEdit && eventId !== undefined && (
             <Button
               onClick={() => history.push(editEventRoute(eventId))}
               color={'Secondary'}
@@ -94,7 +94,7 @@ export const ViewEvent = ({
           kontakt på {stringifyEmail(event.organizerEmail)}
         </p>
         <div className={style.buttonGroup}>
-          {!isPreview && copyLink && (
+          {!isPreview && copyLink !== false && (
             <Button color="Primary" onClick={copyLink}>
               {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
             </Button>
