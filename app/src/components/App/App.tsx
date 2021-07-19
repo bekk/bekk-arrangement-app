@@ -15,9 +15,10 @@ import {
   previewEventRoute,
   rootRoute,
   previewNewEventRoute,
+  viewEventShortnameRoute,
+  shortnameKey,
 } from 'src/routing';
 import { CreateEventContainer } from 'src/components/CreateEvent/CreateEventContainer';
-import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
 import { EditEventContainer } from 'src/components/EditEvent/EditEventContainer';
 import { CancelParticipant } from 'src/components/CancelParticipant/CancelParticipant';
 import { createBrowserHistory } from 'history';
@@ -28,6 +29,10 @@ import { PreviewNewEventContainer } from 'src/components/PreviewEvent/PreviewNew
 import { ViewEventsCardsContainer } from 'src/components/ViewEventsCards/ViewEventsCardsContainer';
 import { StylingExamples } from 'src/components/Common/StylingExamples/StylingExamples';
 import { usePopulateTokensInLocalStorage } from 'src/hooks/saved-tokens';
+import {
+  ViewEventShortnameRoute,
+  ViewEventContainerRegularRoute,
+} from 'src/components/ViewEvent/ViewEventRoutes';
 import classNames from 'classnames';
 
 const history = createBrowserHistory();
@@ -57,7 +62,7 @@ export const App = () => {
         </PrivateRoute>
         <Route exact path={viewEventRoute(':' + eventIdKey)}>
           <div className={classNames(style.container, style.darkBackground)}>
-            <ViewEventContainer />
+            <ViewEventContainerRegularRoute />
           </div>
         </Route>
         <PrivateRoute exact path={eventsRoute}>
@@ -102,6 +107,11 @@ export const App = () => {
           </div>
         </Route>
         <Redirect exact from={rootRoute} to={eventsRoute} />
+        <Route path={viewEventShortnameRoute(':' + shortnameKey)}>
+          <div className={classNames(style.container, style.darkBackground)}>
+            <ViewEventShortnameRoute />
+          </div>
+        </Route>
       </Switch>
     </Router>
   );

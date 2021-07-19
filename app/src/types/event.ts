@@ -8,6 +8,7 @@ import {
   WithId,
   parseQuestion,
   toEditMaxAttendees,
+  parseShortname,
 } from '.';
 import {
   IDateTime,
@@ -87,6 +88,7 @@ export interface IEvent {
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
+  shortname?: string;
 }
 
 export interface IEditEvent {
@@ -103,6 +105,7 @@ export interface IEditEvent {
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
+  shortname?: string;
 }
 
 export const parseEditEvent = ({
@@ -119,6 +122,7 @@ export const parseEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  shortname,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -131,9 +135,10 @@ export const parseEditEvent = ({
     organizerEmail: parseEditEmail(organizerEmail),
     maxParticipants: parseMaxAttendees(maxParticipants),
     participantQuestion: parseQuestion(participantQuestion),
-    hasWaitingList: hasWaitingList,
-    isCancelled: isCancelled,
-    isExternal: isExternal,
+    hasWaitingList,
+    isCancelled,
+    isExternal,
+    shortname: parseShortname(shortname),
   };
 
   try {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
@@ -100,10 +100,8 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     }
   );
 
-  const history = useHistory();
-
   return (
-    <div className={cardStyle} onClick={() => history.push(viewRoute)}>
+    <Link className={cardStyle} to={viewRoute}>
       <div className={style.date}>{dateTimeText}</div>
       <div className={titleStyle}>{event.title}</div>
       <div className={style.location}>
@@ -133,7 +131,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
           }
         />
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -179,9 +177,9 @@ const getEventState = ({
   waitingListSpot,
   registrationState,
 }: EventStateProps): eventState => {
-  if (editToken) return 'Rediger';
-
   if (event.isCancelled) return 'Avlyst';
+
+  if (editToken) return 'Rediger';
 
   if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
 

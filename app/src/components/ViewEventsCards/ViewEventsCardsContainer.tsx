@@ -17,18 +17,29 @@ export const ViewEventsCardsContainer = () => {
   return (
     <>
       <WavySubHeader>
-        <div className={style.header}>
+        <div role="heading" className={style.header}>
           <h1 className={style.headerText}>Arrangementer</h1>
           <AddEventButton />
         </div>
       </WavySubHeader>
       <Page>
+        <h2 className={style.subHeaderText}>Kommende arrangementer</h2>
         <div className={style.grid}>
           {[...events].map(([id, event]) =>
             hasLoaded(event) ? (
               <EventCardElement key={id} eventId={id} event={event.data} />
             ) : null
           )}
+        </div>
+        <div className={style.pastEventsContainer}>
+          <h2 className={style.subHeaderText}>Fullførte arrangementer</h2>
+          <div className={style.grid}>
+            {[...pastEvents].map(([id, event]) =>
+              hasLoaded(event) ? (
+                <EventCardElement key={id} eventId={id} event={event.data} />
+              ) : null
+            )}
+          </div>
         </div>
       </Page>
     </>

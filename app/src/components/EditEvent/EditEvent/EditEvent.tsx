@@ -7,6 +7,7 @@ import {
   parseMaxAttendees,
   parseLocation,
   parseQuestion,
+  parseShortname,
 } from 'src/types';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { DateTimeInputWithTimezone } from 'src/components/Common/DateTimeInput/DateTimeInputWithTimezone';
@@ -25,6 +26,7 @@ import dateTimeStyle from 'src/components/Common/DateTimeInput/DateTimeInput.mod
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
+import { useIsCreateRoute } from 'src/routing';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -32,12 +34,27 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
+  const [isMultiDayEvent, setMultiDay] = useState(
+    event.start.date !== event.end.date
+  );
+
+  const [hasShortname, _setHasShortname] = useState(false);
+  const setHasShortname = (hasShortname: boolean) => {
+    _setHasShortname(hasShortname);
+    if (!hasShortname) {
+      updateEvent({ ...event, shortname: undefined });
+    }
+  };
+
   const [hasLimitedSpots, setHasLimitedSpots] = useState(
     event.maxParticipants !== '0' && event.maxParticipants !== ''
   );
-  const [isMultiDayEvent, setMultiDay] = useState(false);
+
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
+
+  const isCreateView = useIsCreateRoute();
+
   return (
     <div className={style.container}>
       <div className={style.title}>
@@ -107,7 +124,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           value={event.description}
           validation={parseDescription}
           onLightBackground
-          minRow={10}
+          minRow={8}
           onChange={(description) =>
             updateEvent({
               ...event,
@@ -227,6 +244,32 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }}
         />
       </div>
+
+      {isCreateView && (
+        <div className={style.shortName}>
+          <Checkbox
+            label={'Legg til et kortnavn (pen URL)'}
+            isChecked={hasShortname}
+            onChange={setHasShortname}
+          />
+          {hasShortname && (
+            <div className={style.flex}>
+              <div style={{ maxWidth: 'min-content' }}>
+                {document.location.origin}/
+              </div>
+              <div>
+                <ValidatedTextInput
+                  label={''}
+                  value={event.shortname || ''}
+                  onChange={(shortname) => updateEvent({ ...event, shortname })}
+                  validation={parseShortname}
+                  onLightBackground
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {hasLimitedSpots && (
         <div className={style.limitSpots}>
           <div>

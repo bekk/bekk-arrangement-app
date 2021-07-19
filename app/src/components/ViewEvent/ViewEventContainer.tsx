@@ -3,11 +3,10 @@ import style from './ViewEventContainer.module.scss';
 import { isInThePast } from 'src/types/date-time';
 import { asString } from 'src/utils/timeleft';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
-import { cancelParticipantRoute, eventIdKey } from 'src/routing';
+import { cancelParticipantRoute } from 'src/routing';
 import { userIsAdmin, userIsLoggedIn } from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { Page } from 'src/components/Page/Page';
-import { useParam } from 'src/utils/browser-state';
 import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
 import {
   Participation,
@@ -21,9 +20,12 @@ import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipan
 import { useHistory } from 'react-router';
 import { Button } from 'src/components/Common/Button/Button';
 
-export const ViewEventContainer = () => {
+interface IProps {
+  eventId: string;
+}
+
+export const ViewEventContainer = ({ eventId }: IProps) => {
   const history = useHistory();
-  const eventId = useParam(eventIdKey);
   const remoteEvent = useEvent(eventId);
 
   const editTokenFound = useEditToken(eventId);
@@ -120,6 +122,7 @@ export const ViewEventContainer = () => {
   return (
     <>
       <ViewEvent
+        eventId={eventId}
         event={event}
         participantsText={shortParticipantsText}
         userCanEdit={editTokenFound || userIsAdmin() ? true : false}

@@ -34,7 +34,7 @@
 .description {
   @media #{$desktop} {
     grid-column: 2;
-    grid-row: 3 / span 4;
+    grid-row: 3 / span 3;
   }
 }
 
@@ -176,5 +176,12 @@
   @media #{$desktop} {
     grid-column: 3;
     grid-row: 4;
+  }
+}
+
+.shortName {
+  @media #{$desktop} {
+    grid-column: 2;
+    grid-row: 6 / span 2;
   }
 }

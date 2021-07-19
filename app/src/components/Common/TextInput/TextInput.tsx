@@ -45,6 +45,7 @@ export const TextInput = ({
         {label}
       </label>
       <input
+        id={label}
         type={isNumber ? 'number' : 'text'}
         className={inputStyle}
         placeholder={placeholder}
