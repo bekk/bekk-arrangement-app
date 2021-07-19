@@ -177,9 +177,9 @@ const getEventState = ({
   waitingListSpot,
   registrationState,
 }: EventStateProps): eventState => {
-  if (editToken) return 'Rediger';
-
   if (event.isCancelled) return 'Avlyst';
+
+  if (editToken) return 'Rediger';
 
   if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
 
