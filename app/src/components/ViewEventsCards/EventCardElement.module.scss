@@ -10,6 +10,7 @@
   min-height: 340px;
   justify-content: space-between;
   color: var(--lightTextColor);
+  text-decoration: none;
   @media #{$desktop} {
     min-height: 300px;
   }

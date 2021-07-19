@@ -6,6 +6,7 @@ import {
   getEvents,
   getNumberOfParticipantsForEvent,
   getParticipantsForEvent,
+  getPastEvents,
   getWaitinglistSpot,
 } from 'src/api/arrangementSvc';
 import {
@@ -31,6 +32,19 @@ export const useEvents = () => {
   return eventCache.useAll(
     useCallback(async () => {
       const eventContracts = await getEvents();
+      return eventContracts.map(({ id, ...event }) => {
+        return [id, parseEventViewModel(event)];
+      });
+    }, [])
+  );
+};
+
+const pastEventCache = cachedRemoteData<string, IEvent>();
+
+export const usePastEvents = () => {
+  return pastEventCache.useAll(
+    useCallback(async () => {
+      const eventContracts = await getPastEvents();
       return eventContracts.map(({ id, ...event }) => {
         return [id, parseEventViewModel(event)];
       });
