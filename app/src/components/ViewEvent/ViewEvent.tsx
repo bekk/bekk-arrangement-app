@@ -16,10 +16,11 @@ import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 
 interface IProps {
-  eventId: string;
+  eventId?: string;
   event: IEvent;
   participantsText: string;
   userCanEdit: boolean;
+  isPreview?: true;
 }
 
 export const ViewEvent = ({
@@ -27,17 +28,20 @@ export const ViewEvent = ({
   event,
   userCanEdit,
   participantsText,
+  isPreview,
 }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
 
   const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
-  const copyLink = async () => {
-    const url = document.location.origin + viewEventRoute(eventId);
-    await navigator.clipboard.writeText(url);
-    setWasCopied(true);
-    setTimeout(() => setWasCopied(false), 3000);
-  };
+  const copyLink =
+    eventId !== undefined &&
+    (async () => {
+      const url = document.location.origin + viewEventRoute(eventId);
+      await navigator.clipboard.writeText(url);
+      setWasCopied(true);
+      setTimeout(() => setWasCopied(false), 3000);
+    });
 
   const history = useHistory();
 
@@ -46,7 +50,7 @@ export const ViewEvent = ({
       <WavySubHeader eventId={eventId}>
         <div className={style.headerContainer}>
           <h1 className={style.header}>{event.title}</h1>
-          {userCanEdit && (
+          {userCanEdit && eventId !== undefined && (
             <Button
               onClick={() => history.push(editEventRoute(eventId))}
               color={'Secondary'}
@@ -90,9 +94,17 @@ export const ViewEvent = ({
           kontakt på {stringifyEmail(event.organizerEmail)}
         </p>
         <div className={style.buttonGroup}>
-          <Button color="Primary" onClick={copyLink}>
-            {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
-          </Button>
+          {!isPreview && copyLink !== false && (
+            <Button color="Primary" onClick={copyLink}>
+              {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
+            </Button>
+          )}
+          {isPreview && (
+            <div>
+              <h3>Spørsmål til deltaker</h3>
+              <div>{event.participantQuestion}</div>
+            </div>
+          )}
           {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
           Dupliser arrangement
         </Button> */}

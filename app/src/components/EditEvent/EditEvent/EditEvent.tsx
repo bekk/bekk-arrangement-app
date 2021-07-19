@@ -143,12 +143,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         <div className={style.startDate}>
           <DateInput
             value={event.start.date}
-            label={isMultiDayEvent ? 'Startdato:' : 'Når:'}
+            label={'Startdato:'}
             onChange={(date) =>
               updateEvent({
                 ...event,
                 ...setStartEndDates(event, [
-                  'set-start',
+                  'set-same-date',
                   { ...event.start, date },
                 ]),
               })
@@ -158,7 +158,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         <div className={style.startTime}>
           <TimeInput
             value={event.start.time}
-            label={isMultiDayEvent ? 'Kl:' : 'Fra'}
+            label={isMultiDayEvent ? 'Kl:' : 'Fra:'}
             onChange={(time) =>
               updateEvent({
                 ...event,
@@ -173,7 +173,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         <div className={style.endTime}>
           <TimeInput
             value={event.end.time}
-            label={isMultiDayEvent ? 'Kl:' : 'Til'}
+            label={isMultiDayEvent ? 'Kl:' : 'Til:'}
             onChange={(time) =>
               updateEvent({
                 ...event,
@@ -357,7 +357,10 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   );
 };
 
-type Action = ['set-start', EditDateTime] | ['set-end', EditDateTime];
+type Action =
+  | ['set-same-date', EditDateTime]
+  | ['set-start', EditDateTime]
+  | ['set-end', EditDateTime];
 
 type State = {
   start: EditDateTime;
@@ -381,6 +384,8 @@ const setStartEndDates = (
   }
 
   switch (type) {
+    case 'set-same-date':
+      return { start: date, end: date };
     case 'set-start':
       return { start: date, end };
     case 'set-end':
