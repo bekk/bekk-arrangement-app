@@ -3,7 +3,7 @@ import style from './ViewEventsCards.module.scss';
 import { createRoute } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
 import { Page } from 'src/components/Page/Page';
-import { useEvents, usePastEvents } from 'src/hooks/cache';
+import { usePastEvents, useUpcomingEvents } from 'src/hooks/cache';
 import { EventCardElement } from 'src/components/ViewEventsCards/EventCardElement';
 import { Button } from 'src/components/Common/Button/Button';
 import { useHistory } from 'react-router';
@@ -11,7 +11,7 @@ import { authenticateUser, isAuthenticated } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 
 export const ViewEventsCardsContainer = () => {
-  const events = useEvents();
+  const events = useUpcomingEvents();
   const pastEvents = usePastEvents();
 
   return (
