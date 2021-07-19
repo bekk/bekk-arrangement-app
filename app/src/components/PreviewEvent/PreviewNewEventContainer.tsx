@@ -43,7 +43,7 @@ export const PreviewNewEventContainer = () => {
       <h1 className={style.header}>Forhåndsvisning</h1>
       <div className={style.previewContainer}>
         <ViewEvent
-          eventId={'new-event'}
+          eventId={undefined}
           event={event}
           participantsText={participantsText}
           userCanEdit={false}
