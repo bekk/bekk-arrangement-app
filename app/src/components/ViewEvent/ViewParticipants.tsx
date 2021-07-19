@@ -57,7 +57,7 @@ const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
     <table className={style.table}>
       <tbody>
         {props.participants.map((attendee) => (
-          <React.Fragment key={attendee.name + attendee.email}>
+          <React.Fragment key={attendee.name + attendee.email.email}>
             <tr>
               <td className={style.mobileNameCell}>{attendee.name}</td>
               <td className={style.mobileEmailCell}>
@@ -88,7 +88,7 @@ const ParticipantTableDesktop = (props: { participants: IParticipant[] }) => {
       </thead>
       <tbody>
         {props.participants.map((attendee) => (
-          <tr key={attendee.name + attendee.email}>
+          <tr key={attendee.name + attendee.email.email}>
             <td className={style.desktopCell}>{attendee.name}</td>
             <td className={style.desktopCell}>
               {stringifyEmail(attendee.email)}

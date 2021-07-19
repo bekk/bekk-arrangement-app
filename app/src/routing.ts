@@ -1,3 +1,4 @@
+import { useRouteMatch } from 'react-router';
 import { queryStringStringify } from 'src/utils/browser-state';
 
 export const eventIdKey = 'eventId';
@@ -28,6 +29,7 @@ export const confirmParticipantRoute = ({
   email: string;
 }) => `/${eventId}/confirm/${email}`;
 
+
 export const cancelParticipantRoute = ({
   eventId,
   email,
@@ -40,3 +42,23 @@ export const cancelParticipantRoute = ({
   `/${eventId}/cancel/${email}${queryStringStringify({
     [cancellationTokenKey]: cancellationToken,
   })}`;
+
+export const useIsEditingRoute = () => {
+  let routematch = useRouteMatch(editEventRoute(":"+eventIdKey))
+  return routematch !== null
+}
+export const useIsPreviewRoute = () => {
+  let routematch = useRouteMatch(previewEventRoute(":"+eventIdKey))
+  return routematch !== null
+}
+
+export const useIsCreateRoute = () => {
+  let routematch = useRouteMatch(createRoute)
+  return routematch !== null
+}
+export const useShouldHaveBlackHeaderBackground = () => {
+  let isEditingRoute = useIsEditingRoute()
+  let isPreviewRoute = useIsPreviewRoute()
+  let isCreateRoute = useIsCreateRoute()
+  return (isEditingRoute || isPreviewRoute || isCreateRoute)
+}

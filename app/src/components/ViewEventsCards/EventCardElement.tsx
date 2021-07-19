@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEvent } from 'src/types/event';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
@@ -17,6 +17,15 @@ import { isInThePast } from 'src/types/date-time';
 import { isNumber } from 'lodash';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
+import {
+  hav,
+  kveld,
+  regn,
+  skyfritt,
+  sol,
+  solnedgang,
+  soloppgang,
+} from 'src/style/colors';
 
 interface IProps {
   eventId: string;
@@ -82,15 +91,17 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     editToken,
   });
 
-  const cardStyle = classNames(style.card, getColor(eventId), {
-    [style.cardActive]: eventState !== 'Avsluttet' && eventState !== 'Avlyst',
-    [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
-  });
-
-  const history = useHistory();
+  const cardStyle = classNames(
+    style.card,
+    getEventColor(eventId, style).style,
+    {
+      [style.cardActive]: eventState !== 'Avsluttet' && eventState !== 'Avlyst',
+      [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
+    }
+  );
 
   return (
-    <div className={cardStyle} onClick={() => history.push(viewRoute)}>
+    <Link className={cardStyle} to={viewRoute}>
       <div className={style.date}>{dateTimeText}</div>
       <div className={titleStyle}>{event.title}</div>
       <div className={style.location}>
@@ -120,23 +131,38 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
           }
         />
       </div>
-    </div>
+    </Link>
   );
 };
 
-const colors = [
-  style.cardColorHav,
-  style.cardColorKveld,
-  style.cardColorRegn,
-  style.cardColorSkyfritt,
-  style.cardColorSol,
-  style.cardColorSolnedgang,
-  style.cardColorSoloppgang,
-];
+const colors = (style: any) =>
+  new Map([
+    ['Hav', { style: style.hav, colorCode: hav }],
+    ['Kveld', { style: style.kveld, colorCode: kveld }],
+    ['Regn', { style: style.regn, colorCode: regn }],
+    ['Skyfritt', { style: style.skyfritt, colorCode: skyfritt }],
+    ['Sol', { style: style.sol, colorCode: sol }],
+    ['Solnedgang', { style: style.solnedgang, colorCode: solnedgang }],
+    ['Soloppgang', { style: style.soloppgang, colorCode: soloppgang }],
+  ]);
+
 const getEventHash = (eventId: string): number =>
   [...eventId].map((char) => char.charCodeAt(0)).reduce((a, x) => a + x, 0);
-const getColor = (eventId: string) =>
-  colors[getEventHash(eventId) % colors.length];
+
+export const getEventColor = (
+  eventId: string | undefined,
+  style: any
+): { style: string; colorCode: string } => {
+  const defaultStyle = { style: style.soloppgang, colorCode: soloppgang };
+  if (eventId === undefined) {
+    return defaultStyle;
+  }
+  return (
+    colors(style).get(
+      [...colors(style).keys()][getEventHash(eventId) % colors(style).size]
+    ) ?? defaultStyle
+  );
+};
 
 interface EventStateProps {
   event: IEvent;

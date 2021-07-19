@@ -10,6 +10,7 @@
   min-height: 340px;
   justify-content: space-between;
   color: var(--lightTextColor);
+  text-decoration: none;
   @media #{$desktop} {
     min-height: 300px;
   }
@@ -35,39 +36,39 @@
   }
 }
 
-.cardColorHav {
+.hav {
   &:hover {
     background-color: var(--hav);
   }
 }
-.cardColorKveld {
+.kveld {
   &:hover {
     background-color: var(--kveld);
   }
 }
 
-.cardColorRegn {
+.regn {
   &:hover {
     background-color: var(--regn);
   }
 }
 
-.cardColorSkyfritt {
+.skyfritt {
   &:hover {
     background-color: var(--skyfritt);
   }
 }
-.cardColorSol {
+.sol {
   &:hover {
     background-color: var(--sol);
   }
 }
-.cardColorSolnedgang {
+.solnedgang {
   &:hover {
     background-color: var(--solnedgang);
   }
 }
-.cardColorSoloppgang {
+.soloppgang {
   &:hover {
     background-color: var(--soloppgang);
   }

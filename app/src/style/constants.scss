@@ -21,6 +21,8 @@ $smallDesktop: 16px;
 $smallMobile: 12px;
 $buttonMobile: 18px;
 $label: 16px;
+$pageMobileWidth: 75%;
+$pageDesktopWidth: 70%;
 
 $desktop: 'only screen and (min-width: #{$desktopMinWidth})';
 $mobile: 'screen and (max-width: #{$mobileMaxWidth})';
@@ -54,7 +56,7 @@ $transitionLength: 0.2s;
 
 @mixin titleText {
   color: var(--lightTextColor);
-  font-size: $textMobile;
+  font-size: $titleMobile;
   font-family: $serifFontRegular;
   @media #{$desktop} {
     font-size: $titleDesktop;

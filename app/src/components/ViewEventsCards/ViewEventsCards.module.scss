@@ -13,12 +13,21 @@
 
 .header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: left;
+  width: $pageMobileWidth;
+  margin: auto;
+  @media #{$desktop} {
+    flex-direction: row;
+    align-items: center;
+    width: $pageDesktopWidth;
+  }
 }
 
 .headerText {
   @include titleText;
+  color: black;
 }
 
 .pastEventsContainer {

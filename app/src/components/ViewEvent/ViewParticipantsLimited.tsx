@@ -55,7 +55,7 @@ const ParticipantTableLimited = (props: { participants: IParticipant[] }) => {
       </thead>
       <tbody>
         {props.participants.map((attendee) => (
-          <tr key={attendee.name + attendee.email}>
+          <tr key={attendee.name}>
             <td className={style.desktopCell}>{attendee.name}</td>
           </tr>
         ))}

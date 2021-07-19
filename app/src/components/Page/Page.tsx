@@ -8,5 +8,5 @@ interface Props {
 }
 
 export const Page = ({ children }: Props) => (
-  <div className={style.content}>{children}</div>
+  <div role="main" className={style.content}>{children}</div>
 );
