@@ -34,7 +34,9 @@ interface IProps {
 }
 
 export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
-  const [isMultiDayEvent, setMultiDay] = useState(false);
+  const [isMultiDayEvent, setMultiDay] = useState(
+    event.start.date !== event.end.date
+  );
 
   const [hasShortname, _setHasShortname] = useState(false);
   const setHasShortname = (hasShortname: boolean) => {
