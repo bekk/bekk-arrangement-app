@@ -6,8 +6,7 @@ import { stringifyEmail } from 'src/types/email';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
-import { useParam } from 'src/utils/browser-state';
-import { editEventRoute, eventIdKey, viewEventRoute } from 'src/routing';
+import { editEventRoute, viewEventRoute } from 'src/routing';
 import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
 import { GentlemanIcon } from 'src/components/Common/Icons/GentlemanIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
@@ -17,14 +16,19 @@ import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 
 interface IProps {
+  eventId: string;
   event: IEvent;
   participantsText: string;
   userCanEdit: boolean;
 }
 
-export const ViewEvent = ({ event, userCanEdit, participantsText }: IProps) => {
+export const ViewEvent = ({
+  eventId,
+  event,
+  userCanEdit,
+  participantsText,
+}: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
-  const eventId = useParam(eventIdKey);
 
   const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
