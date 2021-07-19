@@ -1,4 +1,4 @@
-import { cachedRemoteData } from 'src/remote-data';
+import { cachedRemoteData, hasLoaded } from 'src/remote-data';
 import { IEvent, parseEventViewModel } from 'src/types/event';
 import { useCallback } from 'react';
 import {
@@ -32,24 +32,24 @@ export const useEvents = () => {
   return eventCache.useAll(
     useCallback(async () => {
       const eventContracts = await getEvents();
-      return eventContracts.map(({ id, ...event }) => {
+      const eventsContractPastEvents = await getPastEvents();
+      return eventContracts.concat(eventsContractPastEvents).map(({ id, ...event }) => {
         return [id, parseEventViewModel(event)];
       });
     }, [])
   );
 };
 
-const pastEventCache = cachedRemoteData<string, IEvent>();
-
 export const usePastEvents = () => {
-  return pastEventCache.useAll(
-    useCallback(async () => {
-      const eventContracts = await getPastEvents();
-      return eventContracts.map(({ id, ...event }) => {
-        return [id, parseEventViewModel(event)];
-      });
-    }, [])
-  );
+  const map = useEvents()
+  return new Map( 
+    [...map].filter(([_, event]) => hasLoaded(event) && event.data.isInThePast))
+};
+
+export const useUpcomingEvents = () => {
+  const map = useEvents()
+  return new Map( 
+    [...map].filter(([_, event]) => hasLoaded(event) && !event.data.isInThePast))
 };
 
 //**  Participant  **//
