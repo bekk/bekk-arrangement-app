@@ -19,6 +19,7 @@ import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import {
   hav,
+  hvit,
   kveld,
   regn,
   skyfritt,
@@ -153,9 +154,12 @@ export const getEventColor = (
   eventId: string | undefined,
   style: any
 ): { style: string; colorCode: string } => {
-  const defaultStyle = { style: style.soloppgang, colorCode: soloppgang };
+  const defaultStyle = { style: style.none, colorCode: hvit };
   if (eventId === undefined) {
     return defaultStyle;
+  }
+  if (eventId === 'all-events') {
+    return { style: style.soloppgang, colorCode: soloppgang };
   }
   return (
     colors(style).get(
