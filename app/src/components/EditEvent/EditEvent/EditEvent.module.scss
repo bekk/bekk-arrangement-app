@@ -1,8 +1,40 @@
 @import 'src/style/constants';
 
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   @media #{$desktop} {
+    align-items: flex-start;
     display: grid;
+    column-gap: 50px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.title {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.organizerName {
+  @media #{$desktop} {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+.organizerEmail {
+  @media #{$desktop} {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+.description {
+  @media #{$desktop} {
+    grid-column: 2;
+    grid-row: 3 / span 4;
   }
 }
 
@@ -11,11 +43,11 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
     'sd sd sd sd'
-    'st st et et'
-    'cb cb cb cb';
-  gap: 5px;
+    'st st et et';
+  gap: 20px;
   @media #{$desktop} {
-    grid-template-areas: 'sd sd sd sd st et';
+    grid-column: 1;
+    grid-row: 3 / span 2;
   }
 }
 
@@ -24,38 +56,69 @@
   grid-template-columns: repeat(5, 1fr);
   grid-template-areas:
     'sd sd sd sd st'
-    'ed ed ed ed et'
-    'cb cb cb cb cb';
-  gap: 10px;
+    'ed ed ed ed et';
+  gap: 20px;
   @media #{$desktop} {
-    grid-template-areas:
-      'sd sd sd sd st'
-      'ed ed ed ed et';
+    grid-column: 1;
+    grid-row: 3 / span 2;
   }
 }
 
 .startDate {
   grid-area: sd;
+  width: 100%;
 }
 
-.test {
+.endDate {
   grid-area: ed;
 }
 
 .startTime {
   grid-area: st;
-  max-width: 100%;
 }
 
 .endTime {
   grid-area: et;
 }
-.cb {
-  grid-area: cb;
+
+.endDateCheckBox {
+  @media #{$desktop} {
+    grid-column: 1;
+    grid-row: 5;
+  }
 }
 
-//Se på denne
-.flex {
+.location {
+  @media #{$desktop} {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}
+
+.openForRegistrationTime {
+  @media #{$desktop} {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+.limitSpotsContainer {
+  @media #{$desktop} {
+    padding-top: 30px;
+    grid-column: 3;
+    grid-row: 2;
+    align-self: center;
+  }
+}
+
+.externalEvent {
+  @media #{$desktop} {
+    grid-column: 1;
+    grid-row: 6;
+  }
+}
+
+.limitSpots {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -64,5 +127,54 @@
     &:not(:first-child) {
       margin-left: 10px;
     }
+  }
+  @media #{$desktop} {
+    grid-column: 3;
+    grid-row: 3;
+    margin-top: 0;
+  }
+}
+
+.waitListCB {
+  margin-bottom: 5px;
+}
+
+.removeQButton {
+  margin-top: 10px;
+}
+
+.text {
+  @include smallText;
+  color: var(--svart60);
+}
+
+.questionOpen {
+  @media #{$desktop} {
+    grid-column: 3;
+    grid-row: 3 / span 2;
+  }
+}
+
+//Used when limitSpot is checked
+.questionOpen2 {
+  @media #{$desktop} {
+    grid-column: 3;
+    grid-row: 4 / span 2;
+  }
+}
+
+.questionClosed {
+  @media #{$desktop} {
+    margin-top: 25px;
+    grid-column: 3;
+    grid-row: 3;
+  }
+}
+
+//Used when limitSpot is checked
+.questionClosed2 {
+  @media #{$desktop} {
+    grid-column: 3;
+    grid-row: 4;
   }
 }

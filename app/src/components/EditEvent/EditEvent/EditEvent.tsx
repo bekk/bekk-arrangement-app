@@ -40,7 +40,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   const validateEndTime = parseEditDateTime(event.end);
   return (
     <div className={style.container}>
-      <div>
+      <div className={style.title}>
         <ValidatedTextInput
           label={'Tittel'}
           placeholder="Navn på arrangementet ditt"
@@ -55,7 +55,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
-      <div>
+      <div className={style.organizerName}>
         <ValidatedTextInput
           label="Navn på arrangør"
           placeholder="Kari Nordmann"
@@ -70,7 +70,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
-      <div>
+      <div className={style.organizerEmail}>
         <ValidatedTextInput
           label="Arrangørens e-post"
           placeholder="kari.nordmann@bekk.no"
@@ -85,7 +85,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
-      <div>
+      <div className={style.location}>
         <ValidatedTextInput
           label={'Lokasjon'}
           placeholder="Eventyrland"
@@ -100,13 +100,14 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
       </div>
-      <div>
+      <div className={style.description}>
         <ValidatedTextArea
           label={'Beskrivelse'}
           placeholder={'Hva står på agendaen?'}
           value={event.description}
           validation={parseDescription}
           onLightBackground
+          minRow={10}
           onChange={(description) =>
             updateEvent({
               ...event,
@@ -191,14 +192,17 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           </div>
         )}
       </div>
-      <Checkbox
-        label="Arrangementet går over flere dager"
-        isChecked={isMultiDayEvent}
-        onChange={setMultiDay}
-      />
+      <div className={style.endDateCheckBox}>
+        <Checkbox
+          label="Arrangementet går over flere dager"
+          isChecked={isMultiDayEvent}
+          onChange={setMultiDay}
+        />
+      </div>
       <DateTimeInputWithTimezone
         labelDate={'Påmelding åpner: '}
         labelTime={'Kl: '}
+        className={style.openForRegistrationTime}
         value={event.openForRegistrationTime}
         onChange={(openForRegistrationTime) =>
           updateEvent({
@@ -207,22 +211,24 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           })
         }
       />
-      <Checkbox
-        label="Begrens plasser"
-        isChecked={hasLimitedSpots}
-        onChange={(limited) => {
-          if (limited) {
-            updateEvent({
-              ...event,
-              maxParticipants: '',
-              hasWaitingList: false,
-            });
-          }
-          setHasLimitedSpots(limited);
-        }}
-      />
+      <div className={style.limitSpotsContainer}>
+        <Checkbox
+          label="Begrens antall plasser"
+          isChecked={hasLimitedSpots}
+          onChange={(limited) => {
+            if (limited) {
+              updateEvent({
+                ...event,
+                maxParticipants: '',
+                hasWaitingList: false,
+              });
+            }
+            setHasLimitedSpots(limited);
+          }}
+        />
+      </div>
       {hasLimitedSpots && (
-        <div className={style.flex}>
+        <div className={style.limitSpots}>
           <div>
             <ValidatedTextInput
               label={'Maks antall'}
@@ -250,22 +256,50 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           </div>
         </div>
       )}
-      {event.participantQuestion !== undefined ? (
-        <ValidatedTextInput
-          label={'Spørsmål til deltakere'}
-          placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
-          value={event.participantQuestion}
-          validation={parseQuestion}
-          onLightBackground
-          onChange={(participantQuestion) =>
-            updateEvent({
-              ...event,
-              participantQuestion,
-            })
-          }
+      <div className={style.externalEvent}>
+        <Checkbox
+          label="Eksternt arrangement"
+          onChange={(isExternal) => updateEvent({ ...event, isExternal })}
+          isChecked={event.isExternal}
         />
+        <p className={style.text}>
+          Eksterne arrangement er tilgjengelig for personer utenfor Bekk.
+        </p>
+      </div>
+      {event.participantQuestion !== undefined ? (
+        <div
+          className={hasLimitedSpots ? style.questionOpen2 : style.questionOpen}
+        >
+          <ValidatedTextArea
+            label={'Spørsmål til deltakere'}
+            placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+            value={event.participantQuestion}
+            validation={parseQuestion}
+            onLightBackground
+            minRow={4}
+            onChange={(participantQuestion) =>
+              updateEvent({
+                ...event,
+                participantQuestion,
+              })
+            }
+          />
+          <Button
+            className={style.removeQButton}
+            color="Secondary"
+            onClick={() =>
+              updateEvent({ ...event, participantQuestion: undefined })
+            }
+          >
+            Fjern spørsmål til deltakere
+          </Button>
+        </div>
       ) : (
         <Button
+          color="Secondary"
+          className={
+            hasLimitedSpots ? style.questionClosed2 : style.questionClosed
+          }
           onClick={() =>
             updateEvent({
               ...event,
@@ -273,15 +307,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             })
           }
         >
-          + Legg til spørsmål til deltaker
+          Legg til spørsmål til deltaker
         </Button>
       )}
-      <Checkbox
-        label="Eksternt arrangement"
-        onChange={(isExternal) => updateEvent({ ...event, isExternal })}
-        isChecked={event.isExternal}
-        onDarkBackground
-      />
     </div>
   );
 };
