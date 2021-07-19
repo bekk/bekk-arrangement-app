@@ -6,20 +6,19 @@
   background-color: var(--overskyet50);
   display: block;
   width: 100%;
-  text-align: left;
+  text-align: right;
   align-self: center;
   @include regularText;
   color: black;
+  height: 39px;
   @media #{$desktop} {
-    width: 160px;
-    text-align: center;
+    height: 42px;
   }
   border-top: none;
   border-left: none;
   border-right: none;
   border-bottom: solid 2px var(--svart60);
   padding: 10px;
-  height: 39px;
 }
 
 .datePickerContainer {
