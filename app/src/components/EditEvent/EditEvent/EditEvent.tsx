@@ -132,7 +132,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                   updateEvent({
                     ...event,
                     ...setStartEndDates(event, [
-                      'set-start',
+                      'set-same-date',
                       { ...event.start, date },
                     ]),
                   })
@@ -385,7 +385,10 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   );
 };
 
-type Action = ['set-start', EditDateTime] | ['set-end', EditDateTime];
+type Action =
+  | ['set-same-date', EditDateTime]
+  | ['set-start', EditDateTime]
+  | ['set-end', EditDateTime];
 
 type State = {
   start: EditDateTime;
@@ -409,6 +412,8 @@ const setStartEndDates = (
   }
 
   switch (type) {
+    case 'set-same-date':
+      return { start: date, end: date };
     case 'set-start':
       return { start: date, end };
     case 'set-end':
