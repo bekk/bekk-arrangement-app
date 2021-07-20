@@ -23,6 +23,7 @@ export const CreateEventContainer = () => {
     toEditEvent(initialEvent())
   );
   const validEvent = validateEvent(event);
+  const errors = parseEditEvent(event);
 
   const gotoPreview = useGotoEventPreview(previewNewEventRoute);
 
@@ -40,6 +41,11 @@ export const CreateEventContainer = () => {
         <Button
           onClick={redirectToPreview || (() => {})}
           disabled={!redirectToPreview}
+          disabledResaon={
+            <ul>
+              {Array.isArray(errors) && errors.map((x) => <li>{x.message}</li>)}
+            </ul>
+          }
         >
           Forhåndsvisning
         </Button>
