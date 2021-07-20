@@ -3,9 +3,9 @@
 .arrow {
   cursor: pointer;
   * {
-    stroke: white;
+    stroke: var(--svart60);
     ellipse:hover {
-      fill: white;
+      fill: var(--overskyet50);
     }
   }
   svg {

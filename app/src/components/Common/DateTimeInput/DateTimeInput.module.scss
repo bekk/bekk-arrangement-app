@@ -1,63 +1,12 @@
 @import 'src/style/constants';
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-top: 50px;
-  @media #{$desktop} {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.dateTimeInput {
-  white-space: pre-wrap;
-  @include regularText;
-  display: grid;
-}
-
-.timeWithTimezone {
-  display: flex;
-  flex-direction: row;
-}
-
-.label {
-  grid-row: 1;
-  white-space: pre-wrap;
-  align-self: center;
-  display: block;
-  margin-top: 50px;
-  @include boldText;
-}
-
-.container {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: solid 1px;
-  border-color: var(--textColor);
-  grid-row: 2;
-  @media #{$desktop} {
-    grid-row: 1;
-  }
-}
-
-.error {
-  border-color: var(--error);
-}
-
 .flex {
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.timeFlex {
-  display: flex;
-  align-items: center;
-  margin-left: 50px;
-  width: fit-content;
-}
-
-.kl {
-  min-width: 4em;
+.dateInput {
+  flex-grow: 1;
+  margin-right: 10px;
 }

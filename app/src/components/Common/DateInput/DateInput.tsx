@@ -21,9 +21,10 @@ import { Arrow } from 'src/components/Common/Arrow/Arrow';
 interface IProps {
   value: EditDate;
   onChange: (value: EditDate) => void;
+  label?: string;
 }
 
-export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
+export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useOnClickOutside(() => setIsOpen(false));
 
@@ -57,59 +58,64 @@ export const DateInput = ({ value, onChange }: IProps): JSX.Element => {
   );
 
   return (
-    <div className={style.datePickerContainer}>
-      <div className={style.dateInput} onClick={() => setIsOpen(true)}>
-        {date.day}. {formatMonthYear(date)}
-      </div>
-      {isOpen && (
-        <div ref={ref} className={style.datepicker}>
-          <div className={style.header}>
-            <div className={style.button} onClick={decDisplayMonth}>
-              <Arrow direction="left" noCircle />
-            </div>
-            <div className={style.displayMonth}>
-              {formatMonthYear(displayMonth)}
-            </div>
-            <div className={style.button} onClick={incDisplayMonth}>
-              <Arrow direction="right" noCircle />
-            </div>
-          </div>
-          <div className={style.grid}>
-            {daysInPrevMonth.map((d) => (
-              <div
-                className={classNames(style.date, style.inactiveDate, {
-                  [style.selectedInactiveDate]: datesEqual(d, date),
-                })}
-              >
-                <div>{d.day}</div>
-              </div>
-            ))}
-            {daysInDisplayMonth.map((d) => (
-              <div
-                className={classNames(style.date, style.activeDate, {
-                  [style.selectedActiveDate]: datesEqual(d, date),
-                })}
-                onClick={() => {
-                  setDate(d);
-                  setIsOpen(false);
-                }}
-              >
-                <div>{d.day}</div>
-              </div>
-            ))}
-            {daysInNextMonth.map((d) => (
-              <div
-                className={classNames(style.date, style.inactiveDate, {
-                  [style.selectedInactiveDate]: datesEqual(d, date),
-                })}
-              >
-                <div>{d.day}</div>
-              </div>
-            ))}
-          </div>
+    <>
+      <label className={style.textLabel} htmlFor={label}>
+        {label}
+      </label>
+      <div className={style.datePickerContainer}>
+        <div className={style.dateInput} onClick={() => setIsOpen(true)}>
+          {date.day}. {formatMonthYear(date)}
         </div>
-      )}
-    </div>
+        {isOpen && (
+          <div ref={ref} className={style.datepicker}>
+            <div className={style.header}>
+              <div className={style.button} onClick={decDisplayMonth}>
+                <Arrow direction="left" noCircle />
+              </div>
+              <div className={style.displayMonth}>
+                {formatMonthYear(displayMonth)}
+              </div>
+              <div className={style.button} onClick={incDisplayMonth}>
+                <Arrow direction="right" noCircle />
+              </div>
+            </div>
+            <div className={style.grid}>
+              {daysInPrevMonth.map((d) => (
+                <div
+                  className={classNames(style.date, style.inactiveDate, {
+                    [style.selectedInactiveDate]: datesEqual(d, date),
+                  })}
+                >
+                  <div>{d.day}</div>
+                </div>
+              ))}
+              {daysInDisplayMonth.map((d) => (
+                <div
+                  className={classNames(style.date, style.activeDate, {
+                    [style.selectedActiveDate]: datesEqual(d, date),
+                  })}
+                  onClick={() => {
+                    setDate(d);
+                    setIsOpen(false);
+                  }}
+                >
+                  <div>{d.day}</div>
+                </div>
+              ))}
+              {daysInNextMonth.map((d) => (
+                <div
+                  className={classNames(style.date, style.inactiveDate, {
+                    [style.selectedInactiveDate]: datesEqual(d, date),
+                  })}
+                >
+                  <div>{d.day}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

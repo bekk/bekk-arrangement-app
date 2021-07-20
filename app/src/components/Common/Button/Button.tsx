@@ -9,6 +9,7 @@ interface IProps {
   color?: 'Primary' | 'Secondary';
   displayAsLink?: boolean;
   children?: ReactChild;
+  className?: string;
 }
 export const Button = ({
   onClick,
@@ -16,8 +17,9 @@ export const Button = ({
   disabled = false,
   displayAsLink = false,
   children,
+  className,
 }: IProps) => {
-  const buttonStyle = classNames({
+  const buttonStyle = classNames(className, {
     [style.button]: !displayAsLink,
     [style.secondaryButton]: color === 'Secondary' && !displayAsLink,
     [style.primaryButton]: color === 'Primary' && !displayAsLink,

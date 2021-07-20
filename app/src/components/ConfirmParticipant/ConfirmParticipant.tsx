@@ -8,6 +8,7 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { useParam } from 'src/utils/browser-state';
 import { useEvent, useWaitinglistSpot } from 'src/hooks/cache';
 import { Page } from 'src/components/Page/Page';
+import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 export const ConfirmParticipant = () => {
   const eventId = useParam(eventIdKey);
   const participantEmail = decodeURIComponent(useParam(emailKey));
@@ -25,44 +26,50 @@ export const ConfirmParticipant = () => {
     remoteWaitinglistSpot.data >= 1;
 
   return isWaitlisted ? (
-    <Page>
-      <h1 className={style.header}>
-        Du er nummer {remoteWaitinglistSpot.data} på ventelisten!
-      </h1>
-      <div className={style.text}>
-        Du er nå på venteliste for {event.title} den{' '}
-        {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)} -{' '}
-        {stringifyTime(event.end.time)}{' '}
-        <span role="img" aria-label="hugging face">
-          🤗
-        </span>
-        <br />
-        <br />
-        Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
-        avmelding står i e-posten. <br /> Du vil få beskjed på e-post om du får
-        plass på arrangementet.
-      </div>
-      <BlockLink to={viewEventRoute(eventId)}>
-        Tilbake til arrangement
-      </BlockLink>
-    </Page>
+    <>
+      <WavySubHeader eventId={eventId} />
+      <Page>
+        <h1 className={style.header}>
+          Du er nummer {remoteWaitinglistSpot.data} på ventelisten!
+        </h1>
+        <div className={style.text}>
+          Du er nå på venteliste for {event.title} den{' '}
+          {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)}{' '}
+          - {stringifyTime(event.end.time)}{' '}
+          <span role="img" aria-label="hugging face">
+            🤗
+          </span>
+          <br />
+          <br />
+          Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
+          avmelding står i e-posten. <br /> Du vil få beskjed på e-post om du
+          får plass på arrangementet.
+        </div>
+        <BlockLink to={viewEventRoute(eventId)}>
+          Tilbake til arrangement
+        </BlockLink>
+      </Page>
+    </>
   ) : (
-    <Page>
-      <h1 className={style.header}>Du er påmeldt!</h1>
-      <div className={style.text}>
-        Gratulerer, du er nå påmeldt {event.title} den{' '}
-        {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)} -{' '}
-        {stringifyTime(event.end.time)}! Vi gleder oss til å se deg{' '}
-        <span role="img" aria-label="hugging face">
-          🤗
-        </span>
-        <br />
-        Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
-        avmelding står i e-posten.
-      </div>
-      <BlockLink to={viewEventRoute(eventId)}>
-        Tilbake til arrangement
-      </BlockLink>
-    </Page>
+    <>
+      <WavySubHeader eventId={eventId} />
+      <Page>
+        <h1 className={style.header}>Du er påmeldt!</h1>
+        <div className={style.text}>
+          Gratulerer, du er nå påmeldt {event.title} den{' '}
+          {stringifyDate(event.start.date)} kl {stringifyTime(event.start.time)}{' '}
+          - {stringifyTime(event.end.time)}! Vi gleder oss til å se deg{' '}
+          <span role="img" aria-label="hugging face">
+            🤗
+          </span>
+          <br />
+          Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
+          avmelding står i e-posten.
+        </div>
+        <BlockLink to={viewEventRoute(eventId)}>
+          Tilbake til arrangement
+        </BlockLink>
+      </Page>
+    </>
   );
 };

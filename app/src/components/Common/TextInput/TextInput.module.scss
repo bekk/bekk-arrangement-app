@@ -3,12 +3,16 @@
 
 .textLabel {
   display: block;
-  margin-top: 30px;
   padding-bottom: 5px;
   @include labelText;
 }
 
+.textLabelLightBackground {
+  color: var(--svart60);
+}
+
 .textInput {
+  @include regularText;
   width: 100%;
   line-height: 1.5;
   outline: none;
@@ -17,11 +21,24 @@
   border-bottom: solid 2px;
   display: block;
   padding: 10px 10px 0 10px;
-  @include regularText;
+  color: black;
+  &:focus {
+    border-color: var(--nattKontrast);
+  }
 }
 
 input::-webkit-input-placeholder {
   line-height: 1.5;
+}
+
+.onDarkBackground {
+  background-color: white;
+  border-color: var(--svart20);
+}
+
+.onLightBackground {
+  background-color: var(--overskyet50);
+  border-color: var(--svart60);
 }
 
 .visited {
@@ -30,15 +47,4 @@ input::-webkit-input-placeholder {
 
 .error {
   border-color: var(--error);
-}
-
-.blackTextInput {
-  background-color: var(--backgroundColor);
-  border-color: var(--disabled);
-}
-
-.whiteTextInput {
-  background-color: white;
-  border-color: var(--svart20);
-  color: black;
 }

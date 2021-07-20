@@ -8,27 +8,32 @@ import {
 } from 'src/types/time-instance';
 import { TimeInput } from '../TimeInput/TimeInput';
 import { isValid } from 'src/types/validation';
+import classNames from 'classnames';
 
 interface IProps {
-  label: string;
+  labelDate?: string;
+  labelTime?: string;
   value: TimeInstanceEdit;
   onChange: (datetime: TimeInstanceEdit) => void;
+  className?: string;
 }
 
 export const DateTimeInputWithTimezone = ({
-  label,
+  labelDate,
+  labelTime,
   value,
   onChange,
+  className,
 }: IProps) => {
   const timeInstance = parseEditTimeInstance(value);
   const timezoneOffsetUTC = new Date().getTimezoneOffset() / -60;
 
   return (
     <>
-      <label className={style.label}>{label}</label>
-      <div className={style.flex}>
-        <div>
+      <div className={classNames(style.flex, className)}>
+        <div className={style.dateInput}>
           <DateInput
+            label={labelDate}
             value={value.date}
             onChange={(date) => {
               onChange({
@@ -39,10 +44,10 @@ export const DateTimeInputWithTimezone = ({
           />
         </div>
 
-        <div className={style.timeFlex}>
-          <div className={style.kl}>Kl.</div>
+        <div>
           <TimeInput
             value={value.time}
+            label={labelTime}
             onChange={(time) => {
               onChange({
                 ...value,
