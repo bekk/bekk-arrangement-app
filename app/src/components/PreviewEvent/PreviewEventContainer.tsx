@@ -22,7 +22,7 @@ export const PreviewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = `${event.maxParticipants} plasser`;
+  const participantsText = (event.maxParticipants === 0 ? ' ∞' : event.maxParticipants.toString()) + " plasser"
 
   const returnToEdit = () => {
     history.goBack();

@@ -10,7 +10,7 @@ interface IProps {
   placeholder?: string;
   isError?: boolean;
   onBlur?: () => void;
-  backgroundColor?: 'White' | 'Black';
+  onLightBackground?: boolean;
   minRow?: number;
 }
 
@@ -21,20 +21,29 @@ export const TextArea = ({
   onChange,
   isError = false,
   onBlur = () => undefined,
-  backgroundColor = 'Black',
+  onLightBackground = false,
   minRow = 2,
 }: IProps): JSX.Element => {
   const [hasVisited, setVisited] = useState(false);
   const inputStyle = classNames(style.textArea, {
     [style.visited]: hasVisited,
     [style.error]: hasVisited && isError,
-    [style.whiteTextArea]: backgroundColor === 'White',
-    [style.darkTextArea]: backgroundColor === 'Black',
+    [style.onLightBackground]: onLightBackground,
+    [style.onDarkBackground]: !onLightBackground,
   });
+  const labelStyle = classNames(style.textLabel, {
+    [style.textLabelLightBackground]: onLightBackground,
+  });
+
+  const blur = () => {
+    onBlur();
+    setVisited(true);
+  };
+
   return (
     <>
       {label && (
-        <label className={style.textLabel} htmlFor={label}>
+        <label className={labelStyle} htmlFor={label}>
           {label}
         </label>
       )}
@@ -45,8 +54,7 @@ export const TextArea = ({
         placeholder={placeholder}
         value={value}
         onChange={(v) => onChange(v.target.value)}
-        onFocus={() => setVisited(true)}
-        onBlur={onBlur}
+        onBlur={blur}
       />
     </>
   );

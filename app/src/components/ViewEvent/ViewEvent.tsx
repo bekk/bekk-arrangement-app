@@ -31,7 +31,6 @@ export const ViewEvent = ({
   isPreview,
 }: IProps) => {
   const [wasCopied, setWasCopied] = useState(false);
-
   const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
 
   const copyLink =
@@ -99,7 +98,7 @@ export const ViewEvent = ({
               {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
             </Button>
           )}
-          {isPreview && (
+          {isPreview && event.participantQuestion && (
             <div>
               <h3>Spørsmål til deltaker</h3>
               <div>{event.participantQuestion}</div>

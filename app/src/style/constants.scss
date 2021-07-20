@@ -6,6 +6,7 @@ $smallMobileWidth: 375px;
 $tabletMinWidth: 768px;
 $tabletMaxWidth: 1024px;
 $desktopMinWidth: 1025px;
+$monitorMinWidth: 1600px;
 
 $titleMobile: 48px;
 $titleDesktop: 58px;
@@ -18,12 +19,13 @@ $subSubHeaderMobile: 25px;
 $textDesktop: 20px;
 $textMobile: 18px;
 $smallDesktop: 16px;
-$smallMobile: 12px;
+$smallMobile: 14px;
 $buttonMobile: 18px;
-$label: 16px;
+$label: 14px;
 $pageMobileWidth: 75%;
 $pageDesktopWidth: 70%;
 
+$monitor: 'only screen and (min-width: #{$monitorMinWidth})';
 $desktop: 'only screen and (min-width: #{$desktopMinWidth})';
 $mobile: 'screen and (max-width: #{$mobileMaxWidth})';
 $tablet: 'only screen and (min-width: #{$tabletMinWidth})';
@@ -111,4 +113,9 @@ $transitionLength: 0.2s;
   font-size: $buttonMobile;
   text-align: center;
   overflow-wrap: break-word;
+}
+
+@mixin inputText {
+  @include regularText();
+  color: black;
 }

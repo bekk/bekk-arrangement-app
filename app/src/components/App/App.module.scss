@@ -5,8 +5,15 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background-color: var(--backgroundColor);
   @include regularText;
   font-family: $fontRegular;
   padding-bottom: 200px;
+}
+
+.lightBackground {
+  background-color: white;
+}
+
+.darkBackground {
+  background-color: var(--backgroundColor);
 }

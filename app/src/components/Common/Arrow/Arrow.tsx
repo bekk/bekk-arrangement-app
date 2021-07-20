@@ -10,8 +10,7 @@ interface IProps {
 }
 
 export const Arrow = ({ direction, noCircle }: IProps) => {
-  const arrowStyle = classNames({
-    [style.arrow]: true,
+  const arrowStyle = classNames(style.arrow, {
     [style.left]: direction === 'left',
     [style.right]: direction === 'right',
     [style.up]: direction === 'up',
@@ -26,8 +25,8 @@ export const Arrow = ({ direction, noCircle }: IProps) => {
   return (
     <div className={arrowStyle}>
       <svg width="411px" height="420px" viewBox="0 0 411 420" version="1.1">
-        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-          <g transform="translate(33.000000, 33.000000)" stroke="#000000">
+        <g stroke="000" strokeWidth="1" fill="none" fillRule="evenodd">
+          <g transform="translate(33.000000, 33.000000)" stroke="#000">
             <polyline strokeWidth={strokeWidth} points={points} />
             {!noCircle && (
               <ellipse

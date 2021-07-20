@@ -1,6 +1,5 @@
 import React from 'react';
 import logo from 'src/images/logo.svg';
-import logoBlack from 'src/images/logoBlack.svg';
 import style from './Header.module.scss';
 import {
   eventsRoute,
@@ -13,16 +12,14 @@ import classNames from 'classnames';
 
 export const Header = () => {
   const shouldHaveBlackHeader = useShouldHaveBlackHeaderBackground();
-  const headerStyle = classNames(style.logoContainer, {
+  const headerStyle = classNames(style.header, {
     [style.coloredHeader]: !shouldHaveBlackHeader,
   });
-
-  const headerLogo = shouldHaveBlackHeader ? logo : logoBlack;
 
   return (
     <div className={headerStyle}>
       <Link to={eventsRoute}>
-        <img className={style.logo} src={headerLogo} alt="logo" />
+        <img className={style.logo} src={logo} alt="logo" />
       </Link>
     </div>
   );

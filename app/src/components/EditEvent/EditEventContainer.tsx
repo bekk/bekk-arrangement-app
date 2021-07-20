@@ -78,7 +78,7 @@ export const EditEventContainer = () => {
 
   return (
     <Page>
-      <h1 className={style.header}>Endre arrangement</h1>
+      <h1 className={style.header}>Rediger arrangement</h1>
       <EditEvent eventResult={editEvent} updateEvent={setEditEvent} />
       <div className={style.buttonContainer}>
         <BlockLink to={eventsRoute}>Avbryt</BlockLink>

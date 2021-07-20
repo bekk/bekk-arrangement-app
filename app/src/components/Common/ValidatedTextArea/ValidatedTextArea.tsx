@@ -10,7 +10,7 @@ interface ValidTextAreaProps {
   value: string;
   validation: (value: string) => unknown | IError[];
   onChange: (value: string) => void;
-  backgroundColor?: 'White' | 'Black';
+  onLightBackground?: boolean;
   minRow?: number;
   isError?: boolean;
 }
@@ -21,7 +21,7 @@ export const ValidatedTextArea = ({
   value,
   validation,
   onChange,
-  backgroundColor = 'Black',
+  onLightBackground = false,
   minRow,
   isError,
 }: ValidTextAreaProps) => {
@@ -38,13 +38,13 @@ export const ValidatedTextArea = ({
         onChange={onChange}
         isError={showError && isError}
         onBlur={() => setShowError(true)}
-        backgroundColor={backgroundColor}
+        onLightBackground={onLightBackground}
         minRow={minRow}
       />
       {showError && !isValid(validationResult) && (
         <ValidationResult
           validationResult={validationResult}
-          backgroundColor={backgroundColor}
+          onLightBackground={onLightBackground}
         />
       )}
     </>
