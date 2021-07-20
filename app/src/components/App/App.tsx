@@ -91,7 +91,7 @@ export const App = () => {
             email: ':' + emailKey,
           })}
         >
-          <div className={classNames(style.container, style.darkBackground)}>
+          <div className={classNames(style.container, style.lightBackground)}>
             <CancelParticipant />
           </div>
         </PrivateRoute>
