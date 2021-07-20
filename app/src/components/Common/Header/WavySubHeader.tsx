@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { getEventColor } from 'src/components/ViewEventsCards/EventCardElement';
 
 interface IProps {
-  children: ReactChild[] | ReactChild;
+  children?: ReactChild[] | ReactChild;
   eventId?: string | 'all-events';
 }
 
