@@ -85,7 +85,7 @@ export const App = () => {
             <PreviewEventContainer />
           </div>
         </PrivateRoute>
-        <PrivateRoute
+        <Route
           path={cancelParticipantRoute({
             eventId: ':' + eventIdKey,
             email: ':' + emailKey,
@@ -94,7 +94,7 @@ export const App = () => {
           <div className={classNames(style.container, style.lightBackground)}>
             <CancelParticipant />
           </div>
-        </PrivateRoute>
+        </Route>
         <Route
           exact
           path={confirmParticipantRoute({

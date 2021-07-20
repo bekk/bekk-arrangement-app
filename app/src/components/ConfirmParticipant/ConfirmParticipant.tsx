@@ -9,6 +9,7 @@ import { useParam } from 'src/utils/browser-state';
 import { useEvent, useWaitinglistSpot } from 'src/hooks/cache';
 import { Page } from 'src/components/Page/Page';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
+
 export const ConfirmParticipant = () => {
   const eventId = useParam(eventIdKey);
   const participantEmail = decodeURIComponent(useParam(emailKey));

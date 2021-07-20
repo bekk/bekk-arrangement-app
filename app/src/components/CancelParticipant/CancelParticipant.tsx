@@ -15,7 +15,7 @@ import {
 } from 'src/routing';
 import { useQuery, useParam } from 'src/utils/browser-state';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
-import { useEvent } from 'src/hooks/cache';
+import { useEvent, useWaitinglistSpot } from 'src/hooks/cache';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
 
 export const CancelParticipant = () => {
@@ -28,6 +28,12 @@ export const CancelParticipant = () => {
   const [wasDeleted, setWasDeleted] = useState(false);
   const { catchAndNotify } = useNotification();
   const { removeSavedParticipant } = useSavedParticipations();
+
+  const remoteWaitinglistSpot = useWaitinglistSpot(eventId, participantEmail);
+  const isWaitlisted = hasLoaded(remoteWaitinglistSpot)
+    ? remoteWaitinglistSpot.data !== 'ikke-påmeldt' &&
+      remoteWaitinglistSpot.data >= 1
+    : undefined;
 
   const { saveParticipation } = useSavedParticipations();
   useEffect(() => {
@@ -89,6 +95,11 @@ export const CancelParticipant = () => {
     <>
       <h1 className={style.header}>Avmelding</h1>
       <div className={style.text}>Vil du melde deg av {event.title}?</div>
+      {isWaitlisted === true && hasLoaded(remoteWaitinglistSpot) && (
+        <div className={style.text}>
+          {`Du er på plass ${remoteWaitinglistSpot.data} på ventelisten`}
+        </div>
+      )}
       <div className={style.buttonContainer}>
         <Button onClick={cancelParticipant}>Meld av</Button>
         <BlockLink to={viewEventRoute(eventId)}>Se arrangement</BlockLink>
