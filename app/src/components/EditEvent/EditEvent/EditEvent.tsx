@@ -22,7 +22,6 @@ import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/Valid
 import { Checkbox } from '@bekk/storybook';
 import { Button } from 'src/components/Common/Button/Button';
 import style from './EditEvent.module.scss';
-import dateTimeStyle from 'src/components/Common/DateTimeInput/DateTimeInput.module.scss';
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
