@@ -182,10 +182,16 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           />
         </div>
         {!isValid(validatedStarTime) && (
-          <ValidationResult validationResult={validatedStarTime} />
+          <ValidationResult
+            onLightBackground
+            validationResult={validatedStarTime}
+          />
         )}
         {!isValid(validateEndTime) && (
-          <ValidationResult validationResult={validateEndTime} />
+          <ValidationResult
+            onLightBackground
+            validationResult={validateEndTime}
+          />
         )}
         {isMultiDayEvent && (
           <div className={style.endDate}>
@@ -203,7 +209,10 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               }
             />
             {!isValid(validateEndTime) && (
-              <ValidationResult validationResult={validateEndTime} />
+              <ValidationResult
+                onLightBackground
+                validationResult={validateEndTime}
+              />
             )}
           </div>
         )}
