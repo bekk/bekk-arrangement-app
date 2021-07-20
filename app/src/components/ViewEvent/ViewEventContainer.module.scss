@@ -16,3 +16,13 @@
     width: 50%;
   }
 }
+
+.fourOhFour {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+
+  span {
+    font-family: $fontMedium;
+  }
+}
