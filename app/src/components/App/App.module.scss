@@ -8,7 +8,9 @@
   @include regularText;
   font-family: $fontRegular;
   padding-bottom: 200px;
-  height: 100%;
+  @media #{$monitor} {
+    height: 100%;
+  }
 }
 
 .lightBackground {
