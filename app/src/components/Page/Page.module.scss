@@ -6,6 +6,6 @@
   @media #{$desktop} {
     width: $pageDesktopWidth;
     max-width: 2000px;
-    height: 100vh;
+    height: fit-content;
   }
 }
