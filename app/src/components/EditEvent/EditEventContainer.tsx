@@ -21,7 +21,7 @@ import { eventIdKey } from 'src/routing';
 import { ButtonWithPromptModal } from 'src/components/Common/ButtonWithConfirmModal/ButtonWithPromptModal';
 import { useEvent } from 'src/hooks/cache';
 import { useGotoEventPreview } from 'src/hooks/history';
-import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
+import { useEditToken, useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);
@@ -39,13 +39,8 @@ const useEditEvent = () => {
   return { eventId, validEvent, editEvent, setEditEvent };
 };
 
-const useSaveThisEditToken = ({
-  editToken,
-  eventId,
-}: {
-  editToken?: string;
-  eventId: string;
-}) => {
+const useSaveThisEditToken = ({ eventId }: { eventId: string }) => {
+  const editToken = useQuery(editTokenKey);
   const { saveEditableEvent } = useSavedEditableEvents();
   useEffect(() => {
     if (editToken) {
@@ -62,8 +57,8 @@ export const EditEventContainer = () => {
 
   const gotoPreview = useGotoEventPreview(previewEventRoute(eventId));
 
-  const editToken = useQuery(editTokenKey);
-  useSaveThisEditToken({ editToken, eventId });
+  useSaveThisEditToken({ eventId });
+  const editToken = useEditToken(eventId);
 
   if (!editEvent) {
     return <div>Loading</div>;
