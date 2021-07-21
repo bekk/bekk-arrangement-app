@@ -57,7 +57,7 @@ $transitionLength: 0.2s;
 }
 
 @mixin titleText {
-  color: var(--lightTextColor);
+  color: var(--svart);
   font-size: $titleMobile;
   font-family: $serifFontRegular;
   @media #{$desktop} {
