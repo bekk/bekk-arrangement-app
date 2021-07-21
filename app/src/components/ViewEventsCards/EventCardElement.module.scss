@@ -25,10 +25,10 @@
     fill: black;
   }
 
-  &:hover .externalIcon path:first-child {
+  &:hover .externalIcon path:first-of-type {
     stroke: black;
   }
-  &:hover .externalIcon path:not(:first-child) {
+  &:hover .externalIcon path:not(:first-of-type) {
     fill: black;
   }
   &:hover .externalIcon circle {
