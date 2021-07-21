@@ -19,6 +19,7 @@ import { useHistory } from 'react-router';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
+import style from './ViewEventContainer.module.scss';
 
 interface Props {
   eventId: string;
@@ -66,51 +67,57 @@ export const AddParticipant = ({ eventId, event }: Props) => {
   const participantQuestion = event.participantQuestion;
 
   return (
-    <>
-      <ValidatedTextInput
-        label={'Navn'}
-        placeholder={'Ola Nordmann'}
-        value={participant.name}
-        validation={parseName}
-        onChange={(name: string) =>
-          setParticipant({
-            ...participant,
-            name,
-          })
-        }
-      />
-      <ValidatedTextInput
-        label={'E-post'}
-        placeholder={'ola.nordmann@bekk.no'}
-        value={participant.email}
-        validation={parseEditEmail}
-        onChange={(email: string) =>
-          setParticipant({
-            ...participant,
-            email,
-          })
-        }
-      />
-      {participantQuestion !== undefined && (
-        <ValidatedTextArea
-          label={participantQuestion}
-          placeholder={'Kommentar til arrangør'}
-          value={participant.comment}
-          validation={parseComment}
-          minRow={3}
-          onChange={(comment: string) =>
+    <div className={style.addParticipantContainer}>
+      <div>
+        <ValidatedTextInput
+          label={'Navn'}
+          placeholder={'Ola Nordmann'}
+          value={participant.name}
+          validation={parseName}
+          onChange={(name: string) =>
             setParticipant({
               ...participant,
-              comment,
+              name,
             })
           }
         />
+      </div>
+      <div>
+        <ValidatedTextInput
+          label={'E-post'}
+          placeholder={'ola.nordmann@bekk.no'}
+          value={participant.email}
+          validation={parseEditEmail}
+          onChange={(email: string) =>
+            setParticipant({
+              ...participant,
+              email,
+            })
+          }
+        />
+      </div>
+      {participantQuestion !== undefined && (
+        <div>
+          <ValidatedTextArea
+            label={participantQuestion}
+            placeholder={'Kommentar til arrangør'}
+            value={participant.comment}
+            validation={parseComment}
+            minRow={3}
+            onChange={(comment: string) =>
+              setParticipant({
+                ...participant,
+                comment,
+              })
+            }
+          />
+        </div>
       )}
       <br />
       <Button onClick={participate} disabled={timeLeft.difference > 0}>
         Meld meg på
       </Button>
-    </>
+    </div>
   );
 };
 
