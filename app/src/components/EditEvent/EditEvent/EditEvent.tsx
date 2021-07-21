@@ -262,9 +262,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           />
           {hasShortname && (
             <div className={style.flex}>
-              <div style={{ maxWidth: 'min-content' }}>
-                {document.location.origin}/
-              </div>
+              <div className={style.origin}>{document.location.origin}/</div>
               <div>
                 <ValidatedTextInput
                   label={''}

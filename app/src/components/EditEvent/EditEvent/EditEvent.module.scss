@@ -185,3 +185,15 @@
     grid-row: 6 / span 2;
   }
 }
+
+.origin {
+  max-width: min-content;
+  @include smallText;
+  color: var(--svart60);
+  margin-right: 0.2em;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
