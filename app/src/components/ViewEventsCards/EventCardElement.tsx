@@ -79,8 +79,8 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
   const viewRoute = viewEventRoute(eventId);
 
   const titleStyle = classNames(style.title, {
-    [style.longTitle]: event.title.length >= 25,
-    [style.shortTitle]: event.title.length < 25,
+    [style.longTitle]: event.title.length >= 20,
+    [style.shortTitle]: event.title.length < 20,
   });
 
   const eventState = getEventState({
