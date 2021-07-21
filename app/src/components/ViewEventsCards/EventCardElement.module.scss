@@ -25,10 +25,10 @@
     fill: black;
   }
 
-  &:hover .externalIcon path:first-child {
+  &:hover .externalIcon path:first-of-type {
     stroke: black;
   }
-  &:hover .externalIcon path:not(:first-child) {
+  &:hover .externalIcon path:not(:first-of-type) {
     fill: black;
   }
   &:hover .externalIcon circle {
@@ -100,6 +100,7 @@
 
 .shortTitle {
   font-size: 35px;
+  line-height: 40px;
   @media #{$desktop} {
     font-size: 30;
   }
@@ -107,6 +108,7 @@
 
 .longTitle {
   font-size: 30px;
+  line-height: 35px;
   @media #{$desktop} {
     font-size: 26;
   }
