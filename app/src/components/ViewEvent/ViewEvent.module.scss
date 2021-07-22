@@ -23,6 +23,8 @@
 .header {
   @include headerText;
   color: black;
+  word-wrap: break-word;
+  hyphens: auto;
   @media #{$desktop} {
     margin-right: 40px;
   }

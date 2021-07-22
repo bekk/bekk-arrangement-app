@@ -69,6 +69,7 @@ $transitionLength: 0.2s;
   color: var(--lightTextColor);
   font-size: $headerMobile;
   font-family: $serifFontRegular;
+  line-height: $headerMobile;
   @media #{$desktop} {
     font-size: $headerDesktop;
   }
