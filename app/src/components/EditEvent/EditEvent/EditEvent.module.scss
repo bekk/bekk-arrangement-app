@@ -40,7 +40,7 @@
   grid-template-areas:
     'sd sd sd sd'
     'st st et et';
-  gap: 20px;
+  gap: 15px;
   @media #{$desktop} {
     grid-template-areas: 'sd sd sd sd st et';
   }
@@ -96,16 +96,6 @@
 .openForRegistrationTime {
 }
 
-//Fjern??
-.limitSpotsContainer {
-  @media #{$desktop} {
-    padding-top: 30px;
-    grid-column: 3;
-    grid-row: 2;
-    align-self: center;
-  }
-}
-
 //Fjern
 .externalEvent {
 }
@@ -138,37 +128,6 @@
 .text {
   @include smallText;
   color: var(--svart60);
-}
-
-.questionOpen {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 3 / span 2;
-  }
-}
-
-//Used when limitSpot is checked
-.questionOpen2 {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 4 / span 2;
-  }
-}
-
-.questionClosed {
-  @media #{$desktop} {
-    margin-top: 25px;
-    grid-column: 3;
-    grid-row: 3;
-  }
-}
-
-//Used when limitSpot is checked
-.questionClosed2 {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 4;
-  }
 }
 
 .shortName {

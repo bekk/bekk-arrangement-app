@@ -45,7 +45,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     }
   };
 
-  const [hasLimitedSpots, setHasLimitedSpots] = useState(
+  const [hasUnlimitedSpots, setHasUnlimitedSpots] = useState(
     event.maxParticipants !== '0' && event.maxParticipants !== ''
   );
 
@@ -250,10 +250,39 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             })
           }
         />
-        <div className={style.limitSpotsContainer}>
+        <div>
+          {!hasUnlimitedSpots && (
+            <div className={style.limitSpots}>
+              <div>
+                <ValidatedTextInput
+                  label={labels.limitSpots}
+                  placeholder={placeholders.limitSpots}
+                  value={event.maxParticipants}
+                  isNumber={true}
+                  validation={parseMaxAttendees}
+                  onLightBackground
+                  onChange={(maxParticipants) =>
+                    updateEvent({
+                      ...event,
+                      maxParticipants,
+                    })
+                  }
+                />
+              </div>
+              <div className={style.waitListCB}>
+                <Checkbox
+                  label={labels.waitingList}
+                  onChange={(hasWaitingList) =>
+                    updateEvent({ ...event, hasWaitingList })
+                  }
+                  isChecked={event.hasWaitingList}
+                />
+              </div>
+            </div>
+          )}
           <Checkbox
             label={labels.unlimitedSpots}
-            isChecked={hasLimitedSpots}
+            isChecked={hasUnlimitedSpots}
             onChange={(limited) => {
               if (limited) {
                 updateEvent({
@@ -262,40 +291,10 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                   hasWaitingList: false,
                 });
               }
-              setHasLimitedSpots(limited);
+              setHasUnlimitedSpots(limited);
             }}
           />
         </div>
-
-        {hasLimitedSpots && (
-          <div className={style.limitSpots}>
-            <div>
-              <ValidatedTextInput
-                label={labels.limitSpots}
-                placeholder={placeholders.limitSpots}
-                value={event.maxParticipants}
-                isNumber={true}
-                validation={parseMaxAttendees}
-                onLightBackground
-                onChange={(maxParticipants) =>
-                  updateEvent({
-                    ...event,
-                    maxParticipants,
-                  })
-                }
-              />
-            </div>
-            <div className={style.waitListCB}>
-              <Checkbox
-                label={labels.waitingList}
-                onChange={(hasWaitingList) =>
-                  updateEvent({ ...event, hasWaitingList })
-                }
-                isChecked={event.hasWaitingList}
-              />
-            </div>
-          </div>
-        )}
         <div className={style.externalEvent}>
           <Checkbox
             label={labels.externalEvent}
@@ -330,11 +329,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           </div>
         )}
         {event.participantQuestion !== undefined ? (
-          <div
-            className={
-              hasLimitedSpots ? style.questionOpen2 : style.questionOpen
-            }
-          >
+          <div>
             <ValidatedTextArea
               label={labels.participantQuestion}
               placeholder={placeholders.participantQuestion}
@@ -362,9 +357,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         ) : (
           <Button
             color="Secondary"
-            className={
-              hasLimitedSpots ? style.questionClosed2 : style.questionClosed
-            }
             onClick={() =>
               updateEvent({
                 ...event,
