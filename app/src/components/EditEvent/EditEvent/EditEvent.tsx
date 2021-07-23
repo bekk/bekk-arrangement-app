@@ -56,309 +56,320 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
 
   return (
     <div className={style.container}>
-      <div className={style.title}>
-        <ValidatedTextInput
-          label={'Tittel'}
-          placeholder="Navn på arrangementet ditt"
-          value={event.title}
-          validation={parseTitle}
-          onLightBackground
-          onChange={(title) =>
-            updateEvent({
-              ...event,
-              title,
-            })
-          }
-        />
-      </div>
-      <div className={style.organizerName}>
-        <ValidatedTextInput
-          label="Navn på arrangør"
-          placeholder="Kari Nordmann"
-          value={event.organizerName}
-          validation={parseHost}
-          onLightBackground
-          onChange={(organizerName) =>
-            updateEvent({
-              ...event,
-              organizerName,
-            })
-          }
-        />
-      </div>
-      <div className={style.organizerEmail}>
-        <ValidatedTextInput
-          label="Arrangørens e-post"
-          placeholder="kari.nordmann@bekk.no"
-          value={event.organizerEmail}
-          validation={parseEditEmail}
-          onLightBackground
-          onChange={(organizerEmail) =>
-            updateEvent({
-              ...event,
-              organizerEmail,
-            })
-          }
-        />
-      </div>
-      <div className={style.location}>
-        <ValidatedTextInput
-          label={'Lokasjon'}
-          placeholder="Eventyrland"
-          value={event.location}
-          validation={parseLocation}
-          onLightBackground
-          onChange={(location) =>
-            updateEvent({
-              ...event,
-              location,
-            })
-          }
-        />
-      </div>
-      <div className={style.description}>
-        <ValidatedTextArea
-          label={'Beskrivelse'}
-          placeholder={'Hva står på agendaen?'}
-          value={event.description}
-          validation={parseDescription}
-          onLightBackground
-          minRow={8}
-          onChange={(description) =>
-            updateEvent({
-              ...event,
-              description,
-            })
-          }
-        />
-      </div>
-      <div
-        className={
-          isMultiDayEvent
-            ? style.startEndDateContainer
-            : style.startDateContainer
-        }
-      >
-        <div className={style.startDate}>
-          <DateInput
-            value={event.start.date}
-            label={'Startdato:'}
-            onChange={(date) =>
-              updateEvent({
-                ...event,
-                ...setStartEndDates(event, [
-                  'set-same-date',
-                  { ...event.start, date },
-                ]),
-              })
-            }
-          />
-        </div>
-        <div className={style.startTime}>
-          <TimeInput
-            value={event.start.time}
-            label={isMultiDayEvent ? 'Kl:' : 'Fra:'}
-            onChange={(time) =>
-              updateEvent({
-                ...event,
-                ...setStartEndDates(event, [
-                  'set-start',
-                  { ...event.start, time },
-                ]),
-              })
-            }
-          />
-        </div>
-        <div className={style.endTime}>
-          <TimeInput
-            value={event.end.time}
-            label={isMultiDayEvent ? 'Kl:' : 'Til:'}
-            onChange={(time) =>
-              updateEvent({
-                ...event,
-                ...setStartEndDates(event, ['set-end', { ...event.end, time }]),
-              })
-            }
-          />
-        </div>
-        {!isValid(validatedStarTime) && (
-          <ValidationResult
+      <div className={style.column}>
+        <div className={style.title}>
+          <ValidatedTextInput
+            label={'Tittel'}
+            placeholder="Navn på arrangementet ditt"
+            value={event.title}
+            validation={parseTitle}
             onLightBackground
-            validationResult={validatedStarTime}
+            onChange={(title) =>
+              updateEvent({
+                ...event,
+                title,
+              })
+            }
           />
-        )}
-        {!isValid(validateEndTime) && (
-          <ValidationResult
+        </div>
+        <div className={style.location}>
+          <ValidatedTextInput
+            label={'Lokasjon'}
+            placeholder="Eventyrland"
+            value={event.location}
+            validation={parseLocation}
             onLightBackground
-            validationResult={validateEndTime}
+            onChange={(location) =>
+              updateEvent({
+                ...event,
+                location,
+              })
+            }
           />
-        )}
-        {isMultiDayEvent && (
-          <div className={style.endDate}>
+        </div>
+        <div
+          className={
+            isMultiDayEvent
+              ? style.startEndDateContainer
+              : style.startDateContainer
+          }
+        >
+          <div className={style.startDate}>
             <DateInput
-              value={event.end.date}
-              label={'Sluttdato:'}
+              value={event.start.date}
+              label={'Startdato:'}
               onChange={(date) =>
                 updateEvent({
                   ...event,
                   ...setStartEndDates(event, [
-                    'set-end',
-                    { ...event.end, date },
+                    'set-same-date',
+                    { ...event.start, date },
                   ]),
                 })
               }
             />
-            {!isValid(validateEndTime) && (
-              <ValidationResult
-                onLightBackground
-                validationResult={validateEndTime}
-              />
-            )}
           </div>
-        )}
-      </div>
-      <div className={style.endDateCheckBox}>
-        <Checkbox
-          label="Arrangementet går over flere dager"
-          isChecked={isMultiDayEvent}
-          onChange={setMultiDay}
-        />
-      </div>
-      <DateTimeInputWithTimezone
-        labelDate={'Påmelding åpner: '}
-        labelTime={'Kl: '}
-        className={style.openForRegistrationTime}
-        value={event.openForRegistrationTime}
-        onChange={(openForRegistrationTime) =>
-          updateEvent({
-            ...event,
-            openForRegistrationTime,
-          })
-        }
-      />
-      <div className={style.limitSpotsContainer}>
-        <Checkbox
-          label="Begrens antall plasser"
-          isChecked={hasLimitedSpots}
-          onChange={(limited) => {
-            if (limited) {
-              updateEvent({
-                ...event,
-                maxParticipants: '',
-                hasWaitingList: false,
-              });
-            }
-            setHasLimitedSpots(limited);
-          }}
-        />
-      </div>
-
-      {isCreateView && (
-        <div className={style.shortName}>
-          <Checkbox
-            label={'Legg til et kortnavn (pen URL)'}
-            isChecked={hasShortname}
-            onChange={setHasShortname}
-          />
-          {hasShortname && (
-            <div className={style.flex}>
-              <div className={style.origin}>{document.location.origin}/</div>
-              <div>
-                <ValidatedTextInput
-                  label={''}
-                  value={event.shortname || ''}
-                  onChange={(shortname) => updateEvent({ ...event, shortname })}
-                  validation={parseShortname}
-                  onLightBackground
-                />
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      {hasLimitedSpots && (
-        <div className={style.limitSpots}>
-          <div>
-            <ValidatedTextInput
-              label={'Maks antall'}
-              placeholder="10"
-              value={event.maxParticipants}
-              isNumber={true}
-              validation={parseMaxAttendees}
-              onLightBackground
-              onChange={(maxParticipants) =>
+          <div className={style.startTime}>
+            <TimeInput
+              value={event.start.time}
+              label={isMultiDayEvent ? 'Kl:' : 'Fra:'}
+              onChange={(time) =>
                 updateEvent({
                   ...event,
-                  maxParticipants,
+                  ...setStartEndDates(event, [
+                    'set-start',
+                    { ...event.start, time },
+                  ]),
                 })
               }
             />
           </div>
-          <div className={style.waitListCB}>
-            <Checkbox
-              label="Venteliste"
-              onChange={(hasWaitingList) =>
-                updateEvent({ ...event, hasWaitingList })
+          <div className={style.endTime}>
+            <TimeInput
+              value={event.end.time}
+              label={isMultiDayEvent ? 'Kl:' : 'Til:'}
+              onChange={(time) =>
+                updateEvent({
+                  ...event,
+                  ...setStartEndDates(event, [
+                    'set-end',
+                    { ...event.end, time },
+                  ]),
+                })
               }
-              isChecked={event.hasWaitingList}
             />
           </div>
+          {!isValid(validatedStarTime) && (
+            <ValidationResult
+              onLightBackground
+              validationResult={validatedStarTime}
+            />
+          )}
+          {!isValid(validateEndTime) && (
+            <ValidationResult
+              onLightBackground
+              validationResult={validateEndTime}
+            />
+          )}
+          {isMultiDayEvent && (
+            <div className={style.endDate}>
+              <DateInput
+                value={event.end.date}
+                label={'Sluttdato:'}
+                onChange={(date) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-end',
+                      { ...event.end, date },
+                    ]),
+                  })
+                }
+              />
+              {!isValid(validateEndTime) && (
+                <ValidationResult
+                  onLightBackground
+                  validationResult={validateEndTime}
+                />
+              )}
+            </div>
+          )}
         </div>
-      )}
-      <div className={style.externalEvent}>
-        <Checkbox
-          label="Eksternt arrangement"
-          onChange={(isExternal) => updateEvent({ ...event, isExternal })}
-          isChecked={event.isExternal}
-        />
-        <p className={style.text}>
-          Eksterne arrangement er tilgjengelig for personer utenfor Bekk.
-        </p>
-      </div>
-      {event.participantQuestion !== undefined ? (
-        <div
-          className={hasLimitedSpots ? style.questionOpen2 : style.questionOpen}
-        >
+        <div className={style.endDateCheckBox}>
+          <Checkbox
+            label="Arrangementet går over flere dager"
+            isChecked={isMultiDayEvent}
+            onChange={setMultiDay}
+          />
+        </div>
+        <div className={style.description}>
           <ValidatedTextArea
-            label={'Spørsmål til deltakere'}
-            placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
-            value={event.participantQuestion}
-            validation={parseQuestion}
+            label={'Beskrivelse'}
+            placeholder={'Hva står på agendaen?'}
+            value={event.description}
+            validation={parseDescription}
             onLightBackground
-            minRow={4}
-            onChange={(participantQuestion) =>
+            minRow={8}
+            onChange={(description) =>
               updateEvent({
                 ...event,
-                participantQuestion,
+                description,
               })
             }
           />
-          <Button
-            className={style.removeQButton}
-            color="Secondary"
-            onClick={() =>
-              updateEvent({ ...event, participantQuestion: undefined })
-            }
-          >
-            Fjern spørsmål til deltakere
-          </Button>
         </div>
-      ) : (
-        <Button
-          color="Secondary"
-          className={
-            hasLimitedSpots ? style.questionClosed2 : style.questionClosed
-          }
-          onClick={() =>
+      </div>
+      <div className={style.column}>
+        <div className={style.organizerName}>
+          <ValidatedTextInput
+            label="Navn på arrangør"
+            placeholder="Kari Nordmann"
+            value={event.organizerName}
+            validation={parseHost}
+            onLightBackground
+            onChange={(organizerName) =>
+              updateEvent({
+                ...event,
+                organizerName,
+              })
+            }
+          />
+        </div>
+        <div className={style.organizerEmail}>
+          <ValidatedTextInput
+            label="Arrangørens e-post"
+            placeholder="kari.nordmann@bekk.no"
+            value={event.organizerEmail}
+            validation={parseEditEmail}
+            onLightBackground
+            onChange={(organizerEmail) =>
+              updateEvent({
+                ...event,
+                organizerEmail,
+              })
+            }
+          />
+        </div>
+        <DateTimeInputWithTimezone
+          labelDate={'Påmelding åpner: '}
+          labelTime={'Kl: '}
+          className={style.openForRegistrationTime}
+          value={event.openForRegistrationTime}
+          onChange={(openForRegistrationTime) =>
             updateEvent({
               ...event,
-              participantQuestion: '',
+              openForRegistrationTime,
             })
           }
-        >
-          Legg til spørsmål til deltaker
-        </Button>
-      )}
+        />
+        <div className={style.limitSpotsContainer}>
+          <Checkbox
+            label="Begrens antall plasser"
+            isChecked={hasLimitedSpots}
+            onChange={(limited) => {
+              if (limited) {
+                updateEvent({
+                  ...event,
+                  maxParticipants: '',
+                  hasWaitingList: false,
+                });
+              }
+              setHasLimitedSpots(limited);
+            }}
+          />
+        </div>
+
+        {isCreateView && (
+          <div className={style.shortName}>
+            <Checkbox
+              label={'Legg til et kortnavn (pen URL)'}
+              isChecked={hasShortname}
+              onChange={setHasShortname}
+            />
+            {hasShortname && (
+              <div className={style.flex}>
+                <div className={style.origin}>{document.location.origin}/</div>
+                <div>
+                  <ValidatedTextInput
+                    label={''}
+                    value={event.shortname || ''}
+                    onChange={(shortname) =>
+                      updateEvent({ ...event, shortname })
+                    }
+                    validation={parseShortname}
+                    onLightBackground
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        {hasLimitedSpots && (
+          <div className={style.limitSpots}>
+            <div>
+              <ValidatedTextInput
+                label={'Maks antall'}
+                placeholder="10"
+                value={event.maxParticipants}
+                isNumber={true}
+                validation={parseMaxAttendees}
+                onLightBackground
+                onChange={(maxParticipants) =>
+                  updateEvent({
+                    ...event,
+                    maxParticipants,
+                  })
+                }
+              />
+            </div>
+            <div className={style.waitListCB}>
+              <Checkbox
+                label="Venteliste"
+                onChange={(hasWaitingList) =>
+                  updateEvent({ ...event, hasWaitingList })
+                }
+                isChecked={event.hasWaitingList}
+              />
+            </div>
+          </div>
+        )}
+        <div className={style.externalEvent}>
+          <Checkbox
+            label="Eksternt arrangement"
+            onChange={(isExternal) => updateEvent({ ...event, isExternal })}
+            isChecked={event.isExternal}
+          />
+          <p className={style.text}>
+            Eksterne arrangement er tilgjengelig for personer utenfor Bekk.
+          </p>
+        </div>
+        {event.participantQuestion !== undefined ? (
+          <div
+            className={
+              hasLimitedSpots ? style.questionOpen2 : style.questionOpen
+            }
+          >
+            <ValidatedTextArea
+              label={'Spørsmål til deltakere'}
+              placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+              value={event.participantQuestion}
+              validation={parseQuestion}
+              onLightBackground
+              minRow={4}
+              onChange={(participantQuestion) =>
+                updateEvent({
+                  ...event,
+                  participantQuestion,
+                })
+              }
+            />
+            <Button
+              className={style.removeQButton}
+              color="Secondary"
+              onClick={() =>
+                updateEvent({ ...event, participantQuestion: undefined })
+              }
+            >
+              Fjern spørsmål til deltakere
+            </Button>
+          </div>
+        ) : (
+          <Button
+            color="Secondary"
+            className={
+              hasLimitedSpots ? style.questionClosed2 : style.questionClosed
+            }
+            onClick={() =>
+              updateEvent({
+                ...event,
+                participantQuestion: '',
+              })
+            }
+          >
+            Legg til spørsmål til deltaker
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

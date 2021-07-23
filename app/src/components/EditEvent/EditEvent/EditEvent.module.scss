@@ -7,35 +7,31 @@
   @media #{$desktop} {
     align-items: flex-start;
     display: grid;
-    column-gap: 50px;
-    grid-template-columns: repeat(3, 1fr);
+    column-gap: 80px;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+//Kan fjernes
 .title {
-  grid-column: 1;
-  grid-row: 1;
 }
 
+//Fjern
 .organizerName {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 1;
-  }
 }
 
+//Fjern
 .organizerEmail {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 2;
-  }
 }
 
+//Fjern
 .description {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 3 / span 3;
-  }
 }
 
 .startDateContainer {
@@ -46,8 +42,7 @@
     'st st et et';
   gap: 20px;
   @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 3 / span 2;
+    display: flex;
   }
 }
 
@@ -67,6 +62,7 @@
 .startDate {
   grid-area: sd;
   width: 100%;
+  min-width: 150px;
 }
 
 .endDate {
@@ -81,27 +77,19 @@
   grid-area: et;
 }
 
+//Fjern
 .endDateCheckBox {
-  @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 5;
-  }
 }
 
+//Fjern
 .location {
-  @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 2;
-  }
 }
 
+//Fjern
 .openForRegistrationTime {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 1;
-  }
 }
 
+//Fjern??
 .limitSpotsContainer {
   @media #{$desktop} {
     padding-top: 30px;
@@ -111,11 +99,8 @@
   }
 }
 
+//Fjern
 .externalEvent {
-  @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 6;
-  }
 }
 
 .limitSpots {
