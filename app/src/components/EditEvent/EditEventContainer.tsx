@@ -87,7 +87,7 @@ export const EditEventContainer = () => {
             <>
               <p>
                 Er du sikker på at du vil avlyse arrangementet? <br />
-                Alle deltakere vil bli slettet. Dette kan ikke reverseres{' '}
+                Alle deltakerene vil få beskjed. Dette kan ikke reverseres{' '}
                 <span role="img" aria-label="grimacing-face">
                   😬
                 </span>
