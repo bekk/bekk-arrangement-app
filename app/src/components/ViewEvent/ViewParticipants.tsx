@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './ViewParticipants.module.scss';
 import { stringifyEmail } from 'src/types/email';
-import { useParticipants } from 'src/hooks/cache';
+import { useEvent, useParticipants } from 'src/hooks/cache';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { useMediaQuery } from 'react-responsive';
 import { IParticipant } from 'src/types/participant';
@@ -33,7 +33,7 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
         screenIsMobileSize ? (
           <ParticipantTableMobile participants={attendees} />
         ) : (
-          <ParticipantTableDesktop participants={attendees} />
+          <ParticipantTableDesktop eventId={eventId} participants={attendees} />
         )
       ) : (
         <div>Ingen påmeldte</div>
@@ -44,7 +44,10 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
           {screenIsMobileSize ? (
             <ParticipantTableMobile participants={waitingList} />
           ) : (
-            <ParticipantTableDesktop participants={waitingList} />
+            <ParticipantTableDesktop
+              eventId={eventId}
+              participants={waitingList}
+            />
           )}
         </>
       )}
@@ -76,14 +79,23 @@ const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
   );
 };
 
-const ParticipantTableDesktop = (props: { participants: IParticipant[] }) => {
+const ParticipantTableDesktop = (props: {
+  eventId: string;
+  participants: IParticipant[];
+}) => {
+  const event = useEvent(props.eventId);
+  const hasComments = hasLoaded(event)
+    ? event.data.participantQuestion !== undefined
+    : true;
   return (
     <table className={style.table}>
       <thead>
         <tr>
           <th className={style.desktopHeaderCell}>Navn</th>
           <th className={style.desktopHeaderCell}>E-post</th>
-          <th className={style.desktopHeaderCell}>Kommentar</th>
+          {hasComments && (
+            <th className={style.desktopHeaderCell}>Kommentar</th>
+          )}
         </tr>
       </thead>
       <tbody>
@@ -93,7 +105,9 @@ const ParticipantTableDesktop = (props: { participants: IParticipant[] }) => {
             <td className={style.desktopCell}>
               {stringifyEmail(attendee.email)}
             </td>
-            <td className={style.desktopCell}>{attendee.comment}</td>
+            {hasComments && (
+              <td className={style.desktopCell}>{attendee.comment}</td>
+            )}
           </tr>
         ))}
       </tbody>
