@@ -57,7 +57,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   return (
     <div className={style.container}>
       <div className={style.column}>
-        <div className={style.title}>
+        <div>
           <ValidatedTextInput
             label={labels.title}
             placeholder={placeholders.title}
@@ -72,7 +72,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             }
           />
         </div>
-        <div className={style.location}>
+        <div>
           <ValidatedTextInput
             label={labels.location}
             placeholder={placeholders.location}
@@ -190,7 +190,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             {isMultiDayEvent ? buttonText.removeEndDate : buttonText.addEndDate}
           </Button>
         </div>
-        <div className={style.description}>
+        <div>
           <ValidatedTextArea
             label={labels.description}
             placeholder={placeholders.description}
@@ -208,10 +208,10 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         </div>
       </div>
       <div className={style.column}>
-        <div className={style.organizerName}>
+        <div>
           <ValidatedTextInput
             label={labels.organizerName}
-            placeholder={placeholders.organizerEmail}
+            placeholder={placeholders.organizerName}
             value={event.organizerName}
             validation={parseHost}
             onLightBackground
@@ -223,7 +223,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             }
           />
         </div>
-        <div className={style.organizerEmail}>
+        <div>
           <ValidatedTextInput
             label={labels.organizerEmail}
             placeholder={placeholders.organizerEmail}
@@ -241,7 +241,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         <DateTimeInputWithTimezone
           labelDate={labels.registrationStartDate}
           labelTime={labels.registrationTime}
-          className={style.openForRegistrationTime}
           value={event.openForRegistrationTime}
           onChange={(openForRegistrationTime) =>
             updateEvent({
