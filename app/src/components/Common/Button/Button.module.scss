@@ -58,6 +58,9 @@
   border: none;
   background-color: transparent;
   padding: 0;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .tooltipHover {
