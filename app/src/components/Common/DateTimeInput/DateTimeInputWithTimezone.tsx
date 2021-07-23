@@ -58,10 +58,11 @@ export const DateTimeInputWithTimezone = ({
           />
         </div>
       </div>
-
-      {!isValid(timeInstance) && (
-        <ValidationResult validationResult={timeInstance} />
-      )}
+      <div className={style.errorText}>
+        {!isValid(timeInstance) && (
+          <ValidationResult validationResult={timeInstance} onLightBackground />
+        )}
+      </div>
     </>
   );
 };
