@@ -59,8 +59,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       <div className={style.column}>
         <div className={style.title}>
           <ValidatedTextInput
-            label={'Tittel'}
-            placeholder="Navn på arrangementet ditt"
+            label={labels.title}
+            placeholder={placeholders.title}
             value={event.title}
             validation={parseTitle}
             onLightBackground
@@ -74,8 +74,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         </div>
         <div className={style.location}>
           <ValidatedTextInput
-            label={'Lokasjon'}
-            placeholder="Eventyrland"
+            label={labels.location}
+            placeholder={placeholders.location}
             value={event.location}
             validation={parseLocation}
             onLightBackground
@@ -97,7 +97,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           <div className={style.startDate}>
             <DateInput
               value={event.start.date}
-              label={'Startdato:'}
+              label={labels.startDate}
               onChange={(date) =>
                 updateEvent({
                   ...event,
@@ -112,7 +112,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           <div className={style.startTime}>
             <TimeInput
               value={event.start.time}
-              label={isMultiDayEvent ? 'Kl:' : 'Fra:'}
+              label={
+                isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
+              }
               onChange={(time) =>
                 updateEvent({
                   ...event,
@@ -127,7 +129,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           <div className={style.endTime}>
             <TimeInput
               value={event.end.time}
-              label={isMultiDayEvent ? 'Kl:' : 'Til:'}
+              label={
+                isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
+              }
               onChange={(time) =>
                 updateEvent({
                   ...event,
@@ -155,7 +159,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             <div className={style.endDate}>
               <DateInput
                 value={event.end.date}
-                label={'Sluttdato:'}
+                label={labels.endDate}
                 onChange={(date) =>
                   updateEvent({
                     ...event,
@@ -177,15 +181,15 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         </div>
         <div className={style.endDateCheckBox}>
           <Checkbox
-            label="Arrangementet går over flere dager"
+            label={buttonText.addEndDate}
             isChecked={isMultiDayEvent}
             onChange={setMultiDay}
           />
         </div>
         <div className={style.description}>
           <ValidatedTextArea
-            label={'Beskrivelse'}
-            placeholder={'Hva står på agendaen?'}
+            label={labels.description}
+            placeholder={placeholders.description}
             value={event.description}
             validation={parseDescription}
             onLightBackground
@@ -202,8 +206,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
       <div className={style.column}>
         <div className={style.organizerName}>
           <ValidatedTextInput
-            label="Navn på arrangør"
-            placeholder="Kari Nordmann"
+            label={labels.organizerName}
+            placeholder={placeholders.organizerEmail}
             value={event.organizerName}
             validation={parseHost}
             onLightBackground
@@ -217,8 +221,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         </div>
         <div className={style.organizerEmail}>
           <ValidatedTextInput
-            label="Arrangørens e-post"
-            placeholder="kari.nordmann@bekk.no"
+            label={labels.organizerEmail}
+            placeholder={placeholders.organizerEmail}
             value={event.organizerEmail}
             validation={parseEditEmail}
             onLightBackground
@@ -231,8 +235,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           />
         </div>
         <DateTimeInputWithTimezone
-          labelDate={'Påmelding åpner: '}
-          labelTime={'Kl: '}
+          labelDate={labels.registrationStartDate}
+          labelTime={labels.registrationTime}
           className={style.openForRegistrationTime}
           value={event.openForRegistrationTime}
           onChange={(openForRegistrationTime) =>
@@ -244,7 +248,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         />
         <div className={style.limitSpotsContainer}>
           <Checkbox
-            label="Begrens antall plasser"
+            label={labels.unlimitedSpots}
             isChecked={hasLimitedSpots}
             onChange={(limited) => {
               if (limited) {
@@ -259,10 +263,47 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           />
         </div>
 
+        {hasLimitedSpots && (
+          <div className={style.limitSpots}>
+            <div>
+              <ValidatedTextInput
+                label={labels.limitSpots}
+                placeholder={placeholders.limitSpots}
+                value={event.maxParticipants}
+                isNumber={true}
+                validation={parseMaxAttendees}
+                onLightBackground
+                onChange={(maxParticipants) =>
+                  updateEvent({
+                    ...event,
+                    maxParticipants,
+                  })
+                }
+              />
+            </div>
+            <div className={style.waitListCB}>
+              <Checkbox
+                label={labels.waitingList}
+                onChange={(hasWaitingList) =>
+                  updateEvent({ ...event, hasWaitingList })
+                }
+                isChecked={event.hasWaitingList}
+              />
+            </div>
+          </div>
+        )}
+        <div className={style.externalEvent}>
+          <Checkbox
+            label={labels.externalEvent}
+            onChange={(isExternal) => updateEvent({ ...event, isExternal })}
+            isChecked={event.isExternal}
+          />
+          <p className={style.text}>{helpText.externalEvent}</p>
+        </div>
         {isCreateView && (
           <div className={style.shortName}>
             <Checkbox
-              label={'Legg til et kortnavn (pen URL)'}
+              label={labels.shortname}
               isChecked={hasShortname}
               onChange={setHasShortname}
             />
@@ -284,45 +325,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             )}
           </div>
         )}
-        {hasLimitedSpots && (
-          <div className={style.limitSpots}>
-            <div>
-              <ValidatedTextInput
-                label={'Maks antall'}
-                placeholder="10"
-                value={event.maxParticipants}
-                isNumber={true}
-                validation={parseMaxAttendees}
-                onLightBackground
-                onChange={(maxParticipants) =>
-                  updateEvent({
-                    ...event,
-                    maxParticipants,
-                  })
-                }
-              />
-            </div>
-            <div className={style.waitListCB}>
-              <Checkbox
-                label="Venteliste"
-                onChange={(hasWaitingList) =>
-                  updateEvent({ ...event, hasWaitingList })
-                }
-                isChecked={event.hasWaitingList}
-              />
-            </div>
-          </div>
-        )}
-        <div className={style.externalEvent}>
-          <Checkbox
-            label="Eksternt arrangement"
-            onChange={(isExternal) => updateEvent({ ...event, isExternal })}
-            isChecked={event.isExternal}
-          />
-          <p className={style.text}>
-            Eksterne arrangement er tilgjengelig for personer utenfor Bekk.
-          </p>
-        </div>
         {event.participantQuestion !== undefined ? (
           <div
             className={
@@ -330,8 +332,8 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             }
           >
             <ValidatedTextArea
-              label={'Spørsmål til deltakere'}
-              placeholder="Allergier, preferanser eller noe annet på hjertet? Valg mellom matrett A og B?"
+              label={labels.participantQuestion}
+              placeholder={placeholders.participantQuestion}
               value={event.participantQuestion}
               validation={parseQuestion}
               onLightBackground
@@ -408,4 +410,49 @@ const setStartEndDates = (
     case 'set-end':
       return { start, end: date };
   }
+};
+
+const labels = {
+  title: 'Tittel*',
+  startDate: 'Arrangementet starter*',
+  startTime: 'Fra*',
+  endTime: 'Til*',
+  endDate: 'Arrangementet slutter*',
+  timeWithEndDate: 'Kl*',
+  location: 'Lokasjon*',
+  description: 'Beskrivelse*',
+  organizerName: 'Navn på arrangør*',
+  organizerEmail: 'Arrangørens e-post*',
+  registrationStartDate: 'Påmelding åpner*',
+  registrationTime: 'Kl*',
+  unlimitedSpots: 'Ubegrenset antall deltakere',
+  limitSpots: 'Maks antall*',
+  waitingList: 'Venteliste',
+  externalEvent: 'Eksternt arrangement',
+  participantQuestion: 'Spørsmål til deltakerne*',
+  shortname: 'Lag en penere URL for arrangementet',
+};
+
+const placeholders = {
+  title: 'Navn på arrangementet ditt',
+  location: 'Eventyrland',
+  description: 'Hva står på agendaen?',
+  organizerName: 'Kari Nordmann*',
+  organizerEmail: 'kari.nordmann@bekk.no',
+  participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',
+  limitSpots: 'F.eks. 10',
+};
+
+const helpText = {
+  externalEvent:
+    'Eksterne arrangement er tilgjengelig for personer utenfor Bekk.',
+};
+
+const buttonText = {
+  addEndDate: 'Legg til sluttdato',
+  removeEndDate: 'Fjern sluttdato',
+  addRegistrationEndDate: 'Legg til påmeldingsfrist',
+  removeRegistrationEndDate: 'Fjern påmeldingsfrist',
+  addParticipantQuestion: 'Legg til spørsmål til deltakere',
+  removeParticipantQuestion: 'Fjern spørsmål til deltakere',
 };
