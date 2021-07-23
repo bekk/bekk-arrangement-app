@@ -22,7 +22,9 @@ export const PreviewEventContainer = () => {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }
 
-  const participantsText = (event.maxParticipants === 0 ? ' ∞' : event.maxParticipants.toString()) + " plasser"
+  const participantsText =
+    (event.maxParticipants === 0 ? ' ∞' : event.maxParticipants.toString()) +
+    ' plasser';
 
   const returnToEdit = () => {
     history.goBack();
@@ -46,8 +48,10 @@ export const PreviewEventContainer = () => {
         />
       </div>
       <div className={style.buttonContainer}>
-        <Button onClick={returnToEdit}>Rediger</Button>
-        <Button onClick={putEditedEvent}>Oppdater arrangement</Button>
+        <Button color={'Secondary'} onClick={returnToEdit}>
+          Tilbake til redigering
+        </Button>
+        <Button onClick={putEditedEvent}>Lagre</Button>
       </div>
     </Page>
   );

@@ -83,6 +83,7 @@ export const EditEventContainer = () => {
             onConfirm={onDeleteEvent}
             placeholder="Arrangementet er avlyst pga. ..."
             textareaLabel="Send en forklarende tekst på e-post til alle påmeldte deltakere:"
+            className={style.redButton}
           >
             <>
               <p>

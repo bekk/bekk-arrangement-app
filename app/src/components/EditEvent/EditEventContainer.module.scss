@@ -1,4 +1,5 @@
 @import 'src/style/constants';
+@import 'src/style/colors';
 
 .header {
   @include headerText;
@@ -25,4 +26,8 @@
 
 .groupedButtons > button:not(:first-child) {
   margin-left: 10px;
+}
+
+.redButton {
+  background-color: var(--solnedgangKontrast);
 }

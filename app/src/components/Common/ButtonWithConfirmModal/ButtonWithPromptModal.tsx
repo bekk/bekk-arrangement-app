@@ -11,6 +11,7 @@ interface IProps {
   children: ReactChild | ReactChild[];
   placeholder?: string;
   textareaLabel?: string;
+  className?: string;
 }
 
 export function ButtonWithPromptModal({
@@ -19,6 +20,7 @@ export function ButtonWithPromptModal({
   placeholder,
   children,
   textareaLabel,
+  className,
 }: IProps) {
   const [showModal, setShowModal] = useState(false);
   const [promptAnswer, setPromptAnswer] = useState('');
@@ -30,7 +32,9 @@ export function ButtonWithPromptModal({
 
   return (
     <>
-      <Button onClick={() => setShowModal(true)}>{text}</Button>
+      <Button className={className} onClick={() => setShowModal(true)}>
+        {text}
+      </Button>
       {showModal && (
         <Modal header={text} closeModal={() => setShowModal(false)}>
           <>
@@ -46,15 +50,20 @@ export function ButtonWithPromptModal({
               />
             </div>
             <div className={style.groupedButtons}>
+              <Button color={'Secondary'} onClick={() => setShowModal(false)}>
+                Avbryt
+              </Button>
               <Button
                 color={'Primary'}
                 onClick={confirmAndClose}
                 disabled={promptAnswer.length < 3}
+                disabledResaon={
+                  <ul>
+                    <li>Tekstfeltet må fylles ut</li>
+                  </ul>
+                }
               >
                 {text}
-              </Button>
-              <Button color={'Secondary'} onClick={() => setShowModal(false)}>
-                Avbryt
               </Button>
             </div>
           </>
