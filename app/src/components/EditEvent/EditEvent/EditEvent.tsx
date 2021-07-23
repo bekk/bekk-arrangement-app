@@ -280,28 +280,30 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               </div>
             </div>
           )}
-          <Checkbox
-            label={labels.unlimitedSpots}
-            isChecked={hasUnlimitedSpots}
-            onChange={(limited) => {
-              if (limited) {
-                updateEvent({
-                  ...event,
-                  maxParticipants: '',
-                  hasWaitingList: false,
-                });
-              }
-              setHasUnlimitedSpots(limited);
-            }}
-          />
+          <div className={style.unlimitedSpots}>
+            <Checkbox
+              label={labels.unlimitedSpots}
+              isChecked={hasUnlimitedSpots}
+              onChange={(limited) => {
+                if (limited) {
+                  updateEvent({
+                    ...event,
+                    maxParticipants: '',
+                    hasWaitingList: false,
+                  });
+                }
+                setHasUnlimitedSpots(limited);
+              }}
+            />
+          </div>
         </div>
-        <div className={style.externalEvent}>
+        <div>
           <Checkbox
             label={labels.externalEvent}
             onChange={(isExternal) => updateEvent({ ...event, isExternal })}
             isChecked={event.isExternal}
           />
-          <p className={style.text}>{helpText.externalEvent}</p>
+          <p className={style.helpTextCB}>{helpText.externalEvent}</p>
         </div>
         {isCreateView && (
           <div className={style.shortName}>
@@ -346,17 +348,21 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             />
             <Button
               className={style.removeQButton}
-              color="Secondary"
+              displayAsLink
+              onLightBackground
               onClick={() =>
                 updateEvent({ ...event, participantQuestion: undefined })
               }
             >
-              Fjern spørsmål til deltakere
+              {buttonText.removeParticipantQuestion}
             </Button>
           </div>
         ) : (
           <Button
             color="Secondary"
+            displayAsLink
+            onLightBackground
+            className={style.participantQuestion}
             onClick={() =>
               updateEvent({
                 ...event,
@@ -364,7 +370,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               })
             }
           >
-            Legg til spørsmål til deltaker
+            {buttonText.addParticipantQuestion}
           </Button>
         )}
       </div>
@@ -449,6 +455,6 @@ const buttonText = {
   removeEndDate: '- Fjern sluttdato',
   addRegistrationEndDate: 'Legg til påmeldingsfrist',
   removeRegistrationEndDate: 'Fjern påmeldingsfrist',
-  addParticipantQuestion: 'Legg til spørsmål til deltakere',
-  removeParticipantQuestion: 'Fjern spørsmål til deltakere',
+  addParticipantQuestion: '+ Legg til spørsmål til deltakere',
+  removeParticipantQuestion: '- Fjern spørsmål til deltakere',
 };

@@ -5,7 +5,6 @@
   flex-direction: column;
   gap: 20px;
   @media #{$desktop} {
-    align-items: flex-start;
     display: grid;
     column-gap: 80px;
     grid-template-columns: repeat(2, 1fr);
@@ -96,10 +95,6 @@
 .openForRegistrationTime {
 }
 
-//Fjern
-.externalEvent {
-}
-
 .limitSpots {
   display: flex;
   align-items: flex-end;
@@ -117,6 +112,11 @@
   }
 }
 
+.unlimitedSpots {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
 .waitListCB {
   margin-bottom: 5px;
 }
@@ -125,16 +125,15 @@
   margin-top: 10px;
 }
 
-.text {
+.helpTextCB {
   @include smallText;
   color: var(--svart60);
+  margin: 0;
+  margin-left: 31px;
 }
 
 .shortName {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 6 / span 2;
-  }
+  margin-top: 5px;
 }
 
 .origin {
@@ -147,4 +146,8 @@
 .flex {
   display: flex;
   align-items: center;
+}
+
+.participantQuestion {
+  align-self: flex-start;
 }
