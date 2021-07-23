@@ -49,7 +49,9 @@ export const CreateEventContainer = () => {
         >
           Forhåndsvisning
         </Button>
-        <BlockLink to={eventsRoute}>Avbryt</BlockLink>
+        <BlockLink to={eventsRoute} onLightBackground>
+          Avbryt
+        </BlockLink>
       </div>
     </Page>
   );
