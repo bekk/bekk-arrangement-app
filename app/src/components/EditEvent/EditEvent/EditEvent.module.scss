@@ -42,7 +42,7 @@
     'st st et et';
   gap: 20px;
   @media #{$desktop} {
-    display: flex;
+    grid-template-areas: 'sd sd sd sd st et';
   }
 }
 
@@ -77,8 +77,15 @@
   grid-area: et;
 }
 
+.dateError {
+  margin-top: -15px;
+  grid-column: 1/-1;
+}
+
 //Fjern
-.endDateCheckBox {
+.endDateButton {
+  margin-top: -15px;
+  grid-column: 1/-1;
 }
 
 //Fjern

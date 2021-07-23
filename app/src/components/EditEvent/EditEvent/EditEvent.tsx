@@ -87,89 +87,70 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             }
           />
         </div>
-        <div
-          className={
-            isMultiDayEvent
-              ? style.startEndDateContainer
-              : style.startDateContainer
-          }
-        >
-          <div className={style.startDate}>
-            <DateInput
-              value={event.start.date}
-              label={labels.startDate}
-              onChange={(date) =>
-                updateEvent({
-                  ...event,
-                  ...setStartEndDates(event, [
-                    'set-same-date',
-                    { ...event.start, date },
-                  ]),
-                })
-              }
-            />
-          </div>
-          <div className={style.startTime}>
-            <TimeInput
-              value={event.start.time}
-              label={
-                isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
-              }
-              onChange={(time) =>
-                updateEvent({
-                  ...event,
-                  ...setStartEndDates(event, [
-                    'set-start',
-                    { ...event.start, time },
-                  ]),
-                })
-              }
-            />
-          </div>
-          <div className={style.endTime}>
-            <TimeInput
-              value={event.end.time}
-              label={
-                isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
-              }
-              onChange={(time) =>
-                updateEvent({
-                  ...event,
-                  ...setStartEndDates(event, [
-                    'set-end',
-                    { ...event.end, time },
-                  ]),
-                })
-              }
-            />
-          </div>
-          {!isValid(validatedStarTime) && (
-            <ValidationResult
-              onLightBackground
-              validationResult={validatedStarTime}
-            />
-          )}
-          {!isValid(validateEndTime) && (
-            <ValidationResult
-              onLightBackground
-              validationResult={validateEndTime}
-            />
-          )}
-          {isMultiDayEvent && (
-            <div className={style.endDate}>
+        <div>
+          <div
+            className={
+              isMultiDayEvent
+                ? style.startEndDateContainer
+                : style.startDateContainer
+            }
+          >
+            <div className={style.startDate}>
               <DateInput
-                value={event.end.date}
-                label={labels.endDate}
+                value={event.start.date}
+                label={labels.startDate}
                 onChange={(date) =>
                   updateEvent({
                     ...event,
                     ...setStartEndDates(event, [
-                      'set-end',
-                      { ...event.end, date },
+                      'set-same-date',
+                      { ...event.start, date },
                     ]),
                   })
                 }
               />
+            </div>
+            <div className={style.startTime}>
+              <TimeInput
+                value={event.start.time}
+                label={
+                  isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
+                }
+                onChange={(time) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-start',
+                      { ...event.start, time },
+                    ]),
+                  })
+                }
+              />
+            </div>
+            <div className={style.endTime}>
+              <TimeInput
+                value={event.end.time}
+                label={
+                  isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
+                }
+                onChange={(time) =>
+                  updateEvent({
+                    ...event,
+                    ...setStartEndDates(event, [
+                      'set-end',
+                      { ...event.end, time },
+                    ]),
+                  })
+                }
+              />
+            </div>
+            <div className={style.dateError}>
+              {!isValid(validatedStarTime) && (
+                <ValidationResult
+                  onLightBackground
+                  validationResult={validatedStarTime}
+                />
+              )}
               {!isValid(validateEndTime) && (
                 <ValidationResult
                   onLightBackground
@@ -177,14 +158,37 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 />
               )}
             </div>
-          )}
-        </div>
-        <div className={style.endDateCheckBox}>
-          <Checkbox
-            label={buttonText.addEndDate}
-            isChecked={isMultiDayEvent}
-            onChange={setMultiDay}
-          />
+            {isMultiDayEvent && (
+              <div className={style.endDate}>
+                <DateInput
+                  value={event.end.date}
+                  label={labels.endDate}
+                  onChange={(date) =>
+                    updateEvent({
+                      ...event,
+                      ...setStartEndDates(event, [
+                        'set-end',
+                        { ...event.end, date },
+                      ]),
+                    })
+                  }
+                />
+                {!isValid(validateEndTime) && (
+                  <ValidationResult
+                    onLightBackground
+                    validationResult={validateEndTime}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+          <Button
+            onClick={() => setMultiDay(!isMultiDayEvent)}
+            displayAsLink
+            onLightBackground
+          >
+            {isMultiDayEvent ? buttonText.removeEndDate : buttonText.addEndDate}
+          </Button>
         </div>
         <div className={style.description}>
           <ValidatedTextArea
@@ -449,8 +453,8 @@ const helpText = {
 };
 
 const buttonText = {
-  addEndDate: 'Legg til sluttdato',
-  removeEndDate: 'Fjern sluttdato',
+  addEndDate: '+ Legg til sluttdato',
+  removeEndDate: '- Fjern sluttdato',
   addRegistrationEndDate: 'Legg til påmeldingsfrist',
   removeRegistrationEndDate: 'Fjern påmeldingsfrist',
   addParticipantQuestion: 'Legg til spørsmål til deltakere',
