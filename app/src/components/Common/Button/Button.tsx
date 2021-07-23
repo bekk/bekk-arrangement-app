@@ -11,6 +11,7 @@ interface IProps {
   children?: ReactChild;
   disabledResaon?: string | JSX.Element;
   className?: string;
+  onLightBackground?: boolean;
 }
 export const Button = ({
   onClick,
@@ -20,12 +21,14 @@ export const Button = ({
   children,
   disabledResaon,
   className,
+  onLightBackground,
 }: IProps) => {
   const buttonStyle = classNames(style.tooltipHover, className, {
     [style.button]: !displayAsLink,
     [style.secondaryButton]: color === 'Secondary' && !displayAsLink,
     [style.primaryButton]: color === 'Primary' && !displayAsLink,
     [style.link]: displayAsLink,
+    [style.darkLink]: displayAsLink && onLightBackground,
   });
   return (
     <button className={buttonStyle} onClick={onClick} disabled={disabled}>

@@ -55,7 +55,6 @@
   @include regularText;
   display: block;
   text-decoration: underline;
-  margin-top: 20px;
   border: none;
   background-color: transparent;
 }
@@ -91,4 +90,8 @@
   & ::marker {
     color: var(--error);
   }
+}
+
+.darkLink {
+  color: black;
 }
