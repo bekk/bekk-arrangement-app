@@ -57,6 +57,7 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
     endOfLastDisplayWeek
   );
 
+  const daysInWeek = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
   return (
     <>
       <label className={style.textLabel} htmlFor={label}>
@@ -80,11 +81,19 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
               </div>
             </div>
             <div className={style.grid}>
+              {daysInWeek.map((d) => (
+                <div className={style.dayInWeek}>{d}</div>
+              ))}
               {daysInPrevMonth.map((d) => (
                 <div
                   className={classNames(style.date, style.inactiveDate, {
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
+                  onClick={() => {
+                    decDisplayMonth();
+                    setDate(d);
+                    setIsOpen(false);
+                  }}
                 >
                   <div>{d.day}</div>
                 </div>
@@ -108,7 +117,15 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
                 >
-                  <div>{d.day}</div>
+                  <div
+                    onClick={() => {
+                      incDisplayMonth();
+                      setDate(d);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {d.day}
+                  </div>
                 </div>
               ))}
             </div>

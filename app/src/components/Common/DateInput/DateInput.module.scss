@@ -122,6 +122,12 @@
 
 .inactiveDate {
   color: var(--svart20);
+  cursor: pointer;
+  &:hover {
+    color: black;
+    border: solid 1px black;
+    border-radius: 20px;
+  }
 }
 
 .selectedActiveDate {
@@ -134,4 +140,14 @@
   color: var(--svart60);
   background-color: var(--svart20);
   border-radius: 20px;
+}
+
+.dayInWeek {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--svart40);
 }
