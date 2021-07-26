@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { getEventIdByShortname } from 'src/api/arrangementSvc';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
+import { useShortname } from 'src/hooks/cache';
 import { useEffectOnce } from 'src/hooks/utils';
+import { hasLoaded, isBad, isLoading, isNotRequested } from 'src/remote-data';
 import { eventIdKey, shortnameKey } from 'src/routing';
 import { useParam } from 'src/utils/browser-state';
 import style from './ViewEventContainer.module.scss';
@@ -14,21 +16,13 @@ export const ViewEventContainerRegularRoute = () => {
 export const ViewEventShortnameRoute = () => {
   const shortname = useParam(shortnameKey);
 
-  const [eventId, setEventId] = useState<string | null>();
-  useEffectOnce(async () => {
-    try {
-      const eventId = await getEventIdByShortname(shortname);
-      setEventId(eventId);
-    } catch {
-      setEventId(null);
-    }
-  });
+  const eventId = useShortname(shortname);
 
-  if (eventId === undefined) {
+  if (isNotRequested(eventId) || isLoading(eventId)) {
     return null;
   }
 
-  if (eventId === null) {
+  if (isBad(eventId)) {
     return (
       <div className={style.fourOhFour}>
         <div>
@@ -38,5 +32,5 @@ export const ViewEventShortnameRoute = () => {
     );
   }
 
-  return <ViewEventContainer eventId={eventId} />;
+  return <ViewEventContainer eventId={eventId.data} />;
 };

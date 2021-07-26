@@ -3,6 +3,7 @@ import { IEvent, parseEventViewModel } from 'src/types/event';
 import { useCallback } from 'react';
 import {
   getEvent,
+  getEventIdByShortname,
   getEvents,
   getNumberOfParticipantsForEvent,
   getParticipantsForEvent,
@@ -42,6 +43,17 @@ export const useEvents = () => {
         });
     }, [])
   );
+};
+
+const shortnameCache = cachedRemoteData<string, string>();
+
+export const useShortname = (shortname: string) => {
+  return shortnameCache.useOne({
+    key: shortname,
+    fetcher: useCallback(async () => {
+      return getEventIdByShortname(shortname);
+    }, [shortname]),
+  });
 };
 
 export const usePastEvents = () => {
