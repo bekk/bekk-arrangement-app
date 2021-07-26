@@ -71,6 +71,7 @@ export interface IEventWriteModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
+  viewUrl?: string;
   editUrlTemplate: string;
   participantQuestion?: string;
   hasWaitingList: boolean;
@@ -167,6 +168,7 @@ export const toEventWriteModel = (
   organizerEmail: toEmailWriteModel(event.organizerEmail),
   startDate: event.start,
   endDate: event.end,
+  viewUrl: event.shortname && urlFromShortname(event.shortname),
   editUrlTemplate,
 });
 
