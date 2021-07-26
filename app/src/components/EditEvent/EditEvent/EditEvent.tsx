@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IEditEvent } from 'src/types/event';
+import { IEditEvent, urlFromShortname } from 'src/types/event';
 import {
   parseTitle,
   parseDescription,
@@ -25,7 +25,6 @@ import style from './EditEvent.module.scss';
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
-import { useIsCreateRoute } from 'src/routing';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -53,8 +52,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
 
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
-
-  const isCreateView = useIsCreateRoute();
 
   return (
     <div className={style.container}>
@@ -263,7 +260,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         />
         {hasShortname && (
           <div className={style.flex}>
-            <div className={style.origin}>{document.location.origin}/</div>
+            <div className={style.origin}>{urlFromShortname('')}</div>
             <div>
               <ValidatedTextInput
                 label={''}

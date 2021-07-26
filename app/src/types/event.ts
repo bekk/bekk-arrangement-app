@@ -36,6 +36,7 @@ import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
 import { getEmailAndNameFromJWT } from 'src/auth';
+import { viewEventShortnameRoute } from 'src/routing';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -271,4 +272,9 @@ export const initialEvent = (): IEvent => {
     isExternal: false,
     isInThePast: false,
   };
+};
+
+export const urlFromShortname = (shortname: string) => {
+  const hostAndProtocol = document.location.origin;
+  return hostAndProtocol + viewEventShortnameRoute(shortname);
 };
