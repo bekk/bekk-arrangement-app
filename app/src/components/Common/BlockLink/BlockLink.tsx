@@ -12,7 +12,7 @@ interface IProps {
 
 export const BlockLink = ({ to, onLightBackground, children }: IProps) => {
   const linkStyle = classNames(style.link, {
-    [style.onLightBackground]: onLightBackground,
+    [style.darkText]: onLightBackground,
   });
 
   return (

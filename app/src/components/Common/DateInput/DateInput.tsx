@@ -81,11 +81,14 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
               </div>
             </div>
             <div className={style.grid}>
-              {daysInWeek.map((d) => (
-                <div className={style.dayInWeek}>{d}</div>
+              {daysInWeek.map((d, i) => (
+                <div key={i} className={style.dayInWeek}>
+                  {d}
+                </div>
               ))}
-              {daysInPrevMonth.map((d) => (
+              {daysInPrevMonth.map((d, i) => (
                 <div
+                  key={i}
                   className={classNames(style.date, style.inactiveDate, {
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
@@ -98,8 +101,9 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                   <div>{d.day}</div>
                 </div>
               ))}
-              {daysInDisplayMonth.map((d) => (
+              {daysInDisplayMonth.map((d, i) => (
                 <div
+                  key={i}
                   className={classNames(style.date, style.activeDate, {
                     [style.selectedActiveDate]: datesEqual(d, date),
                   })}
@@ -111,8 +115,9 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                   <div>{d.day}</div>
                 </div>
               ))}
-              {daysInNextMonth.map((d) => (
+              {daysInNextMonth.map((d, i) => (
                 <div
+                  key={i}
                   className={classNames(style.date, style.inactiveDate, {
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}

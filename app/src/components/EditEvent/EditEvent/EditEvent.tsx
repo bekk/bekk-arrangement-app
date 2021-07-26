@@ -46,7 +46,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
   };
 
   const [hasUnlimitedSpots, setHasUnlimitedSpots] = useState(
-    event.maxParticipants !== '0' && event.maxParticipants !== ''
+    event.maxParticipants === '0'
   );
 
   const validatedStarTime = parseEditDateTime(event.start);
@@ -268,7 +268,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                   }
                 />
               </div>
-              <div className={style.waitListCB}>
+              <div className={style.waitListCheckBox}>
                 <Checkbox
                   label={labels.waitingList}
                   onChange={(hasWaitingList) =>
@@ -287,6 +287,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 if (limited) {
                   updateEvent({
                     ...event,
+                    maxParticipants: '0',
+                    hasWaitingList: false,
+                  });
+                } else {
+                  updateEvent({
+                    ...event,
                     maxParticipants: '',
                     hasWaitingList: false,
                   });
@@ -302,7 +308,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             onChange={(isExternal) => updateEvent({ ...event, isExternal })}
             isChecked={event.isExternal}
           />
-          <p className={style.helpTextCB}>{helpText.externalEvent}</p>
+          <p className={style.helpTextCheckBox}>{helpText.externalEvent}</p>
         </div>
         {isCreateView && (
           <div className={style.shortName}>

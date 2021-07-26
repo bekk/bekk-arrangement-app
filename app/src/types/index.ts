@@ -44,6 +44,7 @@ export const parseMaxAttendees = (value: string): number | IError[] => {
     'Antallet kan ikke være over 5000, sett 0 hvis uendelig er ønsket':
       number > 5000,
     'Verdien må være positiv': number < 0,
+    'Antall deltakere må settes': value === '',
   });
   return validator.resolve(number);
 };
