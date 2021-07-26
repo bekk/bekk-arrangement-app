@@ -131,7 +131,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               <TimeInput
                 value={event.end.time}
                 label={
-                  isMultiDayEvent ? labels.timeWithEndDate : labels.startTime
+                  isMultiDayEvent ? labels.timeWithEndDate : labels.endTime
                 }
                 onChange={(time) =>
                   updateEvent({
