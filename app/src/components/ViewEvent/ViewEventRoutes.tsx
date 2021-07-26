@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { getEventIdByShortname } from 'src/api/arrangementSvc';
+import React from 'react';
 import { ViewEventContainer } from 'src/components/ViewEvent/ViewEventContainer';
 import { useShortname } from 'src/hooks/cache';
-import { useEffectOnce } from 'src/hooks/utils';
-import { hasLoaded, isBad, isLoading, isNotRequested } from 'src/remote-data';
+import { isBad, isLoading, isNotRequested } from 'src/remote-data';
 import { eventIdKey, shortnameKey } from 'src/routing';
 import { useParam } from 'src/utils/browser-state';
 import style from './ViewEventContainer.module.scss';
