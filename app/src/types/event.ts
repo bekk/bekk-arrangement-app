@@ -57,6 +57,7 @@ export interface IEventViewModel {
   isCancelled: boolean;
   isExternal: boolean;
   isInThePast: boolean;
+  shortname?: string;
 }
 
 export interface IEventWriteModel {
@@ -73,6 +74,7 @@ export interface IEventWriteModel {
   participantQuestion?: string;
   hasWaitingList: boolean;
   isExternal: boolean;
+  shortname?: string;
 }
 
 export interface IEvent {
@@ -186,6 +188,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const isCancelled = eventView.isCancelled;
   const isExternal = eventView.isExternal;
   const isInThePast = eventView.isInThePast;
+  const shortname = parseShortname(eventView.shortname);
 
   const event = {
     title,
@@ -201,7 +204,8 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     hasWaitingList,
     isCancelled,
     isExternal,
-    isInThePast
+    isInThePast,
+    shortname,
   };
 
   assertIsValid(event);
@@ -223,6 +227,7 @@ export const toEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  shortname,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -237,6 +242,7 @@ export const toEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  shortname,
 });
 
 export const initialEvent = (): IEvent => {

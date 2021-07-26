@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
-import { viewEventRoute } from 'src/routing';
+import { viewEventRoute, viewEventShortnameRoute } from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
 import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
 import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
@@ -76,7 +76,10 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         event.end.date
       )}`;
 
-  const viewRoute = viewEventRoute(eventId);
+  const viewRoute =
+    event.shortname !== undefined
+      ? viewEventShortnameRoute(event.shortname)
+      : viewEventRoute(eventId);
 
   const titleStyle = classNames(style.title, {
     [style.longTitle]: event.title.length >= 20,

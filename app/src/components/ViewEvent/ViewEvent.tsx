@@ -98,16 +98,25 @@ export const ViewEvent = ({
               {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
             </Button>
           )}
-          {isPreview && event.participantQuestion && (
-            <div>
-              <h3>Spørsmål til deltaker</h3>
-              <div>{event.participantQuestion}</div>
-            </div>
-          )}
+
           {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
           Dupliser arrangement
         </Button> */}
         </div>
+        {isPreview && event.participantQuestion && (
+          <div>
+            <h3>Spørsmål til deltaker</h3>
+            <div>{event.participantQuestion}</div>
+          </div>
+        )}
+        {isPreview && event.shortname && (
+          <div>
+            <h3>Pen og kort URL</h3>
+            <div>
+              {document.location.origin}/{event.shortname}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

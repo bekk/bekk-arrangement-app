@@ -37,7 +37,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     event.start.date !== event.end.date
   );
 
-  const [hasShortname, _setHasShortname] = useState(false);
+  const [hasShortname, _setHasShortname] = useState(
+    event.shortname !== undefined
+  );
   const setHasShortname = (hasShortname: boolean) => {
     _setHasShortname(hasShortname);
     if (!hasShortname) {
@@ -253,29 +255,27 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         />
       </div>
 
-      {isCreateView && (
-        <div className={style.shortName}>
-          <Checkbox
-            label={'Legg til et kortnavn (pen URL)'}
-            isChecked={hasShortname}
-            onChange={setHasShortname}
-          />
-          {hasShortname && (
-            <div className={style.flex}>
-              <div className={style.origin}>{document.location.origin}/</div>
-              <div>
-                <ValidatedTextInput
-                  label={''}
-                  value={event.shortname || ''}
-                  onChange={(shortname) => updateEvent({ ...event, shortname })}
-                  validation={parseShortname}
-                  onLightBackground
-                />
-              </div>
+      <div className={style.shortName}>
+        <Checkbox
+          label={'Legg til et kortnavn (pen URL)'}
+          isChecked={hasShortname}
+          onChange={setHasShortname}
+        />
+        {hasShortname && (
+          <div className={style.flex}>
+            <div className={style.origin}>{document.location.origin}/</div>
+            <div>
+              <ValidatedTextInput
+                label={''}
+                value={event.shortname || ''}
+                onChange={(shortname) => updateEvent({ ...event, shortname })}
+                validation={parseShortname}
+                onLightBackground
+              />
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
       {hasLimitedSpots && (
         <div className={style.limitSpots}>
           <div>
