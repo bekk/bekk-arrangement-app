@@ -55,9 +55,12 @@
   @include regularText;
   display: block;
   text-decoration: underline;
-  margin-top: 20px;
   border: none;
   background-color: transparent;
+  padding: 0;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .tooltipHover {
@@ -91,4 +94,8 @@
   & ::marker {
     color: var(--error);
   }
+}
+
+.darkLink {
+  color: black;
 }

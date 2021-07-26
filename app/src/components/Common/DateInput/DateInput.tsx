@@ -57,6 +57,7 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
     endOfLastDisplayWeek
   );
 
+  const daysInWeek = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
   return (
     <>
       <label className={style.textLabel} htmlFor={label}>
@@ -80,17 +81,29 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
               </div>
             </div>
             <div className={style.grid}>
-              {daysInPrevMonth.map((d) => (
+              {daysInWeek.map((d, i) => (
+                <div key={i} className={style.dayInWeek}>
+                  {d}
+                </div>
+              ))}
+              {daysInPrevMonth.map((d, i) => (
                 <div
+                  key={i}
                   className={classNames(style.date, style.inactiveDate, {
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
+                  onClick={() => {
+                    decDisplayMonth();
+                    setDate(d);
+                    setIsOpen(false);
+                  }}
                 >
                   <div>{d.day}</div>
                 </div>
               ))}
-              {daysInDisplayMonth.map((d) => (
+              {daysInDisplayMonth.map((d, i) => (
                 <div
+                  key={i}
                   className={classNames(style.date, style.activeDate, {
                     [style.selectedActiveDate]: datesEqual(d, date),
                   })}
@@ -102,13 +115,22 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                   <div>{d.day}</div>
                 </div>
               ))}
-              {daysInNextMonth.map((d) => (
+              {daysInNextMonth.map((d, i) => (
                 <div
+                  key={i}
                   className={classNames(style.date, style.inactiveDate, {
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
                 >
-                  <div>{d.day}</div>
+                  <div
+                    onClick={() => {
+                      incDisplayMonth();
+                      setDate(d);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {d.day}
+                  </div>
                 </div>
               ))}
             </div>
