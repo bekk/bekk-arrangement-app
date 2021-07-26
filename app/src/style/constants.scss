@@ -60,6 +60,7 @@ $transitionLength: 0.2s;
   color: var(--svart);
   font-size: $titleMobile;
   font-family: $serifFontRegular;
+  line-height: $titleMobile;
   @media #{$desktop} {
     font-size: $titleDesktop;
   }

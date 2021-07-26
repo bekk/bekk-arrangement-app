@@ -15,12 +15,11 @@ export const TimezoneDropdown = ({ value, onChange }: IProps) => {
         className={style.dropdown}
         name="tidssone"
         value={value}
-        onChange={v => {
-          console.log();
+        onChange={(v) => {
           updateTimezone(Number(v.target.value));
         }}
       >
-        {range(-12, 12).map(i => {
+        {range(-12, 12).map((i) => {
           const displayValue = i > 0 ? `+${i}` : i;
           return (
             <option key={i} value={i}>

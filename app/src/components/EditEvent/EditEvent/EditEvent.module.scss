@@ -5,37 +5,16 @@
   flex-direction: column;
   gap: 20px;
   @media #{$desktop} {
-    align-items: flex-start;
     display: grid;
-    column-gap: 50px;
-    grid-template-columns: repeat(3, 1fr);
+    column-gap: 80px;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.title {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.organizerName {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 1;
-  }
-}
-
-.organizerEmail {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 2;
-  }
-}
-
-.description {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 3 / span 3;
-  }
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .startDateContainer {
@@ -44,10 +23,9 @@
   grid-template-areas:
     'sd sd sd sd'
     'st st et et';
-  gap: 20px;
+  gap: 15px;
   @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 3 / span 2;
+    grid-template-areas: 'sd sd sd sd st et';
   }
 }
 
@@ -67,6 +45,7 @@
 .startDate {
   grid-area: sd;
   width: 100%;
+  min-width: 150px;
 }
 
 .endDate {
@@ -81,41 +60,9 @@
   grid-area: et;
 }
 
-.endDateCheckBox {
-  @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 5;
-  }
-}
-
-.location {
-  @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 2;
-  }
-}
-
-.openForRegistrationTime {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 1;
-  }
-}
-
-.limitSpotsContainer {
-  @media #{$desktop} {
-    padding-top: 30px;
-    grid-column: 3;
-    grid-row: 2;
-    align-self: center;
-  }
-}
-
-.externalEvent {
-  @media #{$desktop} {
-    grid-column: 1;
-    grid-row: 6;
-  }
+.dateError {
+  margin-top: -15px;
+  grid-column: 1/-1;
 }
 
 .limitSpots {
@@ -129,13 +76,16 @@
     }
   }
   @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 3;
     margin-top: 0;
   }
 }
 
-.waitListCB {
+.unlimitedSpots {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.waitListCheckBox {
   margin-bottom: 5px;
 }
 
@@ -143,47 +93,15 @@
   margin-top: 10px;
 }
 
-.text {
+.helpTextCheckBox {
   @include smallText;
   color: var(--svart60);
-}
-
-.questionOpen {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 3 / span 2;
-  }
-}
-
-//Used when limitSpot is checked
-.questionOpen2 {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 4 / span 2;
-  }
-}
-
-.questionClosed {
-  @media #{$desktop} {
-    margin-top: 25px;
-    grid-column: 3;
-    grid-row: 3;
-  }
-}
-
-//Used when limitSpot is checked
-.questionClosed2 {
-  @media #{$desktop} {
-    grid-column: 3;
-    grid-row: 4;
-  }
+  margin: 0;
+  margin-left: 31px;
 }
 
 .shortName {
-  @media #{$desktop} {
-    grid-column: 2;
-    grid-row: 6 / span 2;
-  }
+  margin-top: 5px;
 }
 
 .origin {
@@ -196,4 +114,8 @@
 .flex {
   display: flex;
   align-items: center;
+}
+
+.participantQuestion {
+  align-self: flex-start;
 }

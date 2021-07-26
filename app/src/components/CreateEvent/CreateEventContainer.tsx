@@ -43,13 +43,16 @@ export const CreateEventContainer = () => {
           disabled={!redirectToPreview}
           disabledResaon={
             <ul>
-              {Array.isArray(errors) && errors.map((x) => <li>{x.message}</li>)}
+              {Array.isArray(errors) &&
+                errors.map((x) => <li key={x.message}>{x.message}</li>)}
             </ul>
           }
         >
           Forhåndsvisning
         </Button>
-        <BlockLink to={eventsRoute}>Avbryt</BlockLink>
+        <BlockLink to={eventsRoute} onLightBackground>
+          Avbryt
+        </BlockLink>
       </div>
     </Page>
   );

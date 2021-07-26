@@ -106,7 +106,7 @@ export interface IEditEvent {
   openForRegistrationTime: TimeInstanceEdit;
   organizerName: string;
   organizerEmail: string;
-  maxParticipants: string;
+  maxParticipants?: string;
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;

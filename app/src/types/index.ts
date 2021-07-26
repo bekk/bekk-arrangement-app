@@ -36,19 +36,23 @@ export const parseHost = (value: string): string | IError[] => {
   return validator.resolve(value);
 };
 
-export const parseMaxAttendees = (value: string): number | IError[] => {
-  const number = Number(value);
+export const parseMaxAttendees = (
+  value: string | undefined
+): number | IError[] => {
+  const number = Number(value || 0);
   const validator = validate<number>({
     'Verdien må være et tall': Number.isNaN(number),
     'Du kan kun invitere et helt antall mennesker😎': !Number.isInteger(number),
     'Antallet kan ikke være over 5000, sett 0 hvis uendelig er ønsket':
       number > 5000,
     'Verdien må være positiv': number < 0,
+    'Antall deltakere må settes': value === '',
   });
   return validator.resolve(number);
 };
-export const toEditMaxAttendees = (value: number): string =>
-  value !== 0 ? value.toString() : '';
+
+export const toEditMaxAttendees = (value: number): string | undefined =>
+  value !== 0 ? value.toString() : undefined;
 
 export const parseQuestion = (
   value?: string

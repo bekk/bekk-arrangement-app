@@ -93,6 +93,8 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     ? `Åpner om ${asString(timeLeft)}`
     : eventIsFull && !event.hasWaitingList
     ? 'Arrangementet er dessverre fullt'
+    : event.isCancelled
+    ? 'Arrangementet er desverre avlyst'
     : undefined;
 
   const waitlistText =
@@ -164,9 +166,11 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               ) : waitlistText ? (
                 <p>{waitlistText}</p>
               ) : null}
-              {!isInThePast(event.end) && timeLeft.difference < oneMinute && (
-                <AddParticipant eventId={eventId} event={event} />
-              )}
+              {!isInThePast(event.end) &&
+                timeLeft.difference < oneMinute &&
+                !event.isCancelled && (
+                  <AddParticipant eventId={eventId} event={event} />
+                )}
             </div>
           )}
           <h2 className={style.subHeader}>Påmeldte</h2>
