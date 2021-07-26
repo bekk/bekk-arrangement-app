@@ -267,7 +267,7 @@ export const initialEvent = (): IEvent => {
     openForRegistrationTime,
     organizerName: name ?? '',
     organizerEmail: { email: email ?? '' },
-    maxParticipants: 0,
+    maxParticipants: -1,
     participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,

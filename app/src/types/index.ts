@@ -51,8 +51,15 @@ export const parseMaxAttendees = (
   return validator.resolve(number);
 };
 
-export const toEditMaxAttendees = (value: number): string | undefined =>
-  value !== 0 ? value.toString() : undefined;
+export const toEditMaxAttendees = (value: number): string | undefined => {
+  if (value === 0) {
+    return undefined;
+  }
+  if (value === -1) {
+    return '';
+  }
+  return value.toString();
+};
 
 export const parseQuestion = (
   value?: string

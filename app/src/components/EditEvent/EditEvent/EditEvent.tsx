@@ -46,9 +46,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     }
   };
 
-  const [hasUnlimitedSpots, setHasUnlimitedSpots] = useState(
-    event.maxParticipants === '0' || event.maxParticipants === undefined
-  );
+  const hasUnlimitedSpots = event.maxParticipants === undefined;
 
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
@@ -296,7 +294,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                     hasWaitingList: false,
                   });
                 }
-                setHasUnlimitedSpots(limited);
               }}
             />
           </div>
