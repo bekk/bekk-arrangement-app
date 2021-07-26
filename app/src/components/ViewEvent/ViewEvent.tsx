@@ -113,7 +113,7 @@ export const ViewEvent = ({
         )}
         {isPreview && event.shortname && (
           <div>
-            <h3>Pen og kort URL</h3>
+            <h3>Arrangementet kan nåes via:</h3>
             <div>{urlFromShortname(event.shortname)}</div>
           </div>
         )}
