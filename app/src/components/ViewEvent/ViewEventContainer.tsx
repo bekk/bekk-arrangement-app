@@ -177,7 +177,9 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
           )}
           <div className={style.attendeesTitleContainer}>
             <h2 className={style.subHeader}>Påmeldte</h2>
-            {(editTokenFound || userIsAdmin()) && (<DownloadExportLink eventId={eventId} />)}
+            {(editTokenFound || userIsAdmin()) && (
+              <DownloadExportLink eventId={eventId} />
+            )}
           </div>
           <p>{participantsText}</p>
           {editTokenFound || userIsAdmin() ? (
@@ -221,15 +223,14 @@ export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
   };
 
   return (
-    <>
-      <a
-        role="button"
-        ref={link}
-        onClick={handleAction}
-        className={style.downloadIcon}
-      >
-        <DownloadIcon />
-      </a>
-    </>
+  // eslint-disable-next-line
+    <a
+      role="button"
+      ref={link}
+      onClick={handleAction}
+      className={style.downloadIcon}
+    >
+      <DownloadIcon />
+    </a>
   );
 }
