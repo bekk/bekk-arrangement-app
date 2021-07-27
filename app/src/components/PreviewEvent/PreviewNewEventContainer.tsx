@@ -3,7 +3,11 @@ import style from './PreviewEventContainer.module.scss';
 import { Page } from 'src/components/Page/Page';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useHistory } from 'react-router';
-import { viewEventRoute, editEventRoute } from 'src/routing';
+import {
+  viewEventRoute,
+  editEventRoute,
+  viewEventShortnameRoute,
+} from 'src/routing';
 import { postEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
@@ -31,11 +35,13 @@ export const PreviewNewEventContainer = () => {
     const editUrlTemplate =
       document.location.origin + editEventRoute('{eventId}', '{editToken}');
     const {
-      event: { id },
+      event: { id, shortname },
       editToken,
     } = await postEvent(event, editUrlTemplate);
     saveEditableEvent({ eventId: id, editToken });
-    history.push(viewEventRoute(id));
+    history.push(
+      shortname ? viewEventShortnameRoute(shortname) : viewEventRoute(id)
+    );
   });
 
   return (

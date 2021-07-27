@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IEditEvent } from 'src/types/event';
+import { IEditEvent, urlFromShortname } from 'src/types/event';
 import {
   parseTitle,
   parseDescription,
@@ -25,7 +25,6 @@ import style from './EditEvent.module.scss';
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
-import { useIsCreateRoute } from 'src/routing';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -37,7 +36,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     event.start.date !== event.end.date
   );
 
-  const [hasShortname, _setHasShortname] = useState(false);
+  const [hasShortname, _setHasShortname] = useState(
+    event.shortname !== undefined
+  );
   const setHasShortname = (hasShortname: boolean) => {
     _setHasShortname(hasShortname);
     if (!hasShortname) {
@@ -45,14 +46,10 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     }
   };
 
-  const [hasUnlimitedSpots, setHasUnlimitedSpots] = useState(
-    event.maxParticipants === '0'
-  );
+  const hasUnlimitedSpots = event.maxParticipants === undefined;
 
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
-
-  const isCreateView = useIsCreateRoute();
 
   return (
     <div className={style.container}>
@@ -250,7 +247,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
         <div>
-          {!hasUnlimitedSpots && (
+          {!hasUnlimitedSpots && event.maxParticipants !== undefined && (
             <div className={style.limitSpots}>
               <div>
                 <ValidatedTextInput
@@ -287,7 +284,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 if (limited) {
                   updateEvent({
                     ...event,
-                    maxParticipants: '0',
+                    maxParticipants: undefined,
                     hasWaitingList: false,
                   });
                 } else {
@@ -297,7 +294,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                     hasWaitingList: false,
                   });
                 }
-                setHasUnlimitedSpots(limited);
               }}
             />
           </div>
@@ -310,31 +306,29 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           />
           <p className={style.helpTextCheckBox}>{helpText.externalEvent}</p>
         </div>
-        {isCreateView && (
-          <div className={style.shortName}>
-            <Checkbox
-              label={labels.shortname}
-              isChecked={hasShortname}
-              onChange={setHasShortname}
-            />
-            {hasShortname && (
-              <div className={style.flex}>
-                <div className={style.origin}>{document.location.origin}/</div>
-                <div>
-                  <ValidatedTextInput
-                    label={''}
-                    value={event.shortname || ''}
-                    onChange={(shortname) =>
-                      updateEvent({ ...event, shortname })
-                    }
-                    validation={parseShortname}
-                    onLightBackground
-                  />
-                </div>
+
+        <div className={style.shortName}>
+          <Checkbox
+            label={'Legg til et kortnavn (pen URL)'}
+            isChecked={hasShortname}
+            onChange={setHasShortname}
+          />
+          {hasShortname && (
+            <div className={style.flex}>
+              <div className={style.origin}>{urlFromShortname('')}</div>
+              <div>
+                <ValidatedTextInput
+                  label={''}
+                  value={event.shortname || ''}
+                  onChange={(shortname) => updateEvent({ ...event, shortname })}
+                  validation={parseShortname}
+                  onLightBackground
+                />
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
+
         {event.participantQuestion !== undefined ? (
           <div>
             <ValidatedTextArea

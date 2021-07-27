@@ -36,6 +36,7 @@ import { parseDateViewModel, dateToIDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
 import { getEmailAndNameFromJWT } from 'src/auth';
+import { viewEventShortnameRoute } from 'src/routing';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -57,6 +58,7 @@ export interface IEventViewModel {
   isCancelled: boolean;
   isExternal: boolean;
   isInThePast: boolean;
+  shortname?: string;
 }
 
 export interface IEventWriteModel {
@@ -69,10 +71,12 @@ export interface IEventWriteModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: number;
+  viewUrl?: string;
   editUrlTemplate: string;
   participantQuestion?: string;
   hasWaitingList: boolean;
   isExternal: boolean;
+  shortname?: string;
 }
 
 export interface IEvent {
@@ -102,7 +106,7 @@ export interface IEditEvent {
   openForRegistrationTime: TimeInstanceEdit;
   organizerName: string;
   organizerEmail: string;
-  maxParticipants: string;
+  maxParticipants?: string;
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
@@ -164,6 +168,7 @@ export const toEventWriteModel = (
   organizerEmail: toEmailWriteModel(event.organizerEmail),
   startDate: event.start,
   endDate: event.end,
+  viewUrl: event.shortname && urlFromShortname(event.shortname),
   editUrlTemplate,
 });
 
@@ -186,6 +191,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const isCancelled = eventView.isCancelled;
   const isExternal = eventView.isExternal;
   const isInThePast = eventView.isInThePast;
+  const shortname = parseShortname(eventView.shortname);
 
   const event = {
     title,
@@ -201,7 +207,8 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     hasWaitingList,
     isCancelled,
     isExternal,
-    isInThePast
+    isInThePast,
+    shortname,
   };
 
   assertIsValid(event);
@@ -223,6 +230,7 @@ export const toEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  shortname,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -237,6 +245,7 @@ export const toEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  shortname,
 });
 
 export const initialEvent = (): IEvent => {
@@ -258,11 +267,16 @@ export const initialEvent = (): IEvent => {
     openForRegistrationTime,
     organizerName: name ?? '',
     organizerEmail: { email: email ?? '' },
-    maxParticipants: 0,
+    maxParticipants: -1,
     participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,
     isExternal: false,
     isInThePast: false,
   };
+};
+
+export const urlFromShortname = (shortname: string) => {
+  const hostAndProtocol = document.location.origin;
+  return hostAndProtocol + viewEventShortnameRoute(shortname);
 };

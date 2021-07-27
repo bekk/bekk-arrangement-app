@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from './ViewEvent.module.scss';
-import { IEvent } from 'src/types/event';
+import { IEvent, urlFromShortname } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
 import { dateAsText, isSameDate } from 'src/types/date';
@@ -36,7 +36,9 @@ export const ViewEvent = ({
   const copyLink =
     eventId !== undefined &&
     (async () => {
-      const url = document.location.origin + viewEventRoute(eventId);
+      const url = event.shortname
+        ? urlFromShortname(event.shortname)
+        : document.location.origin + viewEventRoute(eventId);
       await navigator.clipboard.writeText(url);
       setWasCopied(true);
       setTimeout(() => setWasCopied(false), 3000);
@@ -98,16 +100,23 @@ export const ViewEvent = ({
               {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
             </Button>
           )}
-          {isPreview && event.participantQuestion && (
-            <div>
-              <h3>Spørsmål til deltaker</h3>
-              <div>{event.participantQuestion}</div>
-            </div>
-          )}
+
           {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
           Dupliser arrangement
         </Button> */}
         </div>
+        {isPreview && event.participantQuestion && (
+          <div>
+            <h3>Spørsmål til deltaker</h3>
+            <div>{event.participantQuestion}</div>
+          </div>
+        )}
+        {isPreview && event.shortname && (
+          <div>
+            <h3>Arrangementet kan nåes via:</h3>
+            <div>{urlFromShortname(event.shortname)}</div>
+          </div>
+        )}
       </div>
     </section>
   );

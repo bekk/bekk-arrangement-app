@@ -87,6 +87,7 @@
 
 .contentContainer {
   margin: auto;
+  padding-bottom: 30px;
   width: $pageMobileWidth;
   @media #{$desktop} {
     width: $pageDesktopWidth;

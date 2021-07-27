@@ -4,7 +4,11 @@ import { Page } from 'src/components/Page/Page';
 import { useNotification } from 'src/components/NotificationHandler/NotificationHandler';
 import { useHistory } from 'react-router';
 import { useParam } from 'src/utils/browser-state';
-import { eventIdKey, viewEventRoute } from 'src/routing';
+import {
+  eventIdKey,
+  viewEventRoute,
+  viewEventShortnameRoute,
+} from 'src/routing';
 import { putEvent } from 'src/api/arrangementSvc';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
@@ -32,7 +36,11 @@ export const PreviewEventContainer = () => {
 
   const putEditedEvent = catchAndNotify(async () => {
     await putEvent(eventId, event, editToken);
-    history.push(viewEventRoute(eventId));
+    history.push(
+      event.shortname
+        ? viewEventShortnameRoute(event.shortname)
+        : viewEventRoute(eventId)
+    );
   });
 
   return (
