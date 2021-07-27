@@ -31,3 +31,18 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.attendeesTitleContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.downloadIcon {
+  margin-top: 41px;
+  &:hover rect{
+    fill: white;
+  }
+  &:hover path{
+    fill: black;
+  }
+}

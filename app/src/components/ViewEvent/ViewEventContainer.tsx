@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import style from './ViewEventContainer.module.scss';
 import { isInThePast } from 'src/types/date-time';
 import { asString } from 'src/utils/timeleft';
@@ -19,6 +19,8 @@ import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
 import { useHistory } from 'react-router';
 import { Button } from 'src/components/Common/Button/Button';
+import { getParticipantExportResponse } from 'src/api/arrangementSvc';
+import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon';
 
 interface IProps {
   eventId: string;
@@ -173,7 +175,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 )}
             </div>
           )}
-          <h2 className={style.subHeader}>Påmeldte</h2>
+          <div className={style.attendeesTitleContainer}>
+            <h2 className={style.subHeader}>Påmeldte</h2>
+            <DownloadExportLink eventId={eventId} />
+          </div>
           <p>{participantsText}</p>
           {editTokenFound || userIsAdmin() ? (
             <ViewParticipants eventId={eventId} editToken={editTokenFound} />
@@ -190,3 +195,41 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     </>
   );
 };
+
+interface IPropsDownloadExport {
+  eventId: string;
+}
+
+export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
+  const link = createRef<HTMLAnchorElement>();
+
+  const handleAction = async () => {
+    if (link.current?.href) {
+      return;
+    }
+
+    const result = await getParticipantExportResponse(eventId);
+    const blob = await result.blob();
+
+    const href = window.URL.createObjectURL(blob);
+
+    if (link.current) {
+      link.current.download = eventId + '.csv';
+      link.current.href = href;
+      link.current.click();
+    }
+  };
+
+  return (
+    <>
+      <a
+        role="button"
+        ref={link}
+        onClick={handleAction}
+        className={style.downloadIcon}
+      >
+        <DownloadIcon />
+      </a>
+    </>
+  );
+}

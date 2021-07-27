@@ -4,7 +4,7 @@ import {
   INewEventViewModel,
   toEventWriteModel,
 } from 'src/types/event';
-import { post, get, del, put } from './crud';
+import { post, get, del, put, getResponse } from './crud';
 import { WithId } from 'src/types';
 import {
   IParticipant,
@@ -84,6 +84,14 @@ export const getNumberOfParticipantsForEvent = (
   get({
     host: getArrangementSvcUrl(),
     path: `/events/${eventId}/participants/count`,
+  });
+
+export const getParticipantExportResponse = (
+  eventId: string
+): Promise<Response> =>
+  getResponse({
+    host: getArrangementSvcUrl(),
+    path: `/events/${eventId}/participants/export`,
   });
 
 export const getWaitinglistSpot = (
