@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './ViewEventsCards.module.scss';
 import { createRoute } from 'src/routing';
 import { hasLoaded, RemoteData } from 'src/remote-data';
@@ -11,10 +11,34 @@ import { authenticateUser, isAuthenticated } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 import { IEvent } from 'src/types/event';
 import { isInOrder } from 'src/types/date-time';
+import { Dropdown } from 'src/components/Common/Dropdown/Dropdown';
+import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 
 export const ViewEventsCardsContainer = () => {
   const events = useUpcomingEvents();
   const pastEvents = usePastEvents();
+  const allEvents = new Map([...events].concat([...pastEvents]));
+
+  const [selectedOption, setSelectedOption] = useState(1);
+
+  const options = [
+    { name: 'Kommende arrangement', id: 1 },
+    { name: 'Tidligere arrangment', id: 2 },
+    { name: 'Mine arrangment', id: 3 },
+  ];
+
+  const showEvents = (id: number) => {
+    switch (id) {
+      case 1:
+        return <UpcomingEvents events={events} />;
+
+      case 2:
+        return <PastEvents events={pastEvents} />;
+
+      case 3:
+        return <MyEvents events={allEvents} />;
+    }
+  };
 
   return (
     <>
@@ -25,22 +49,14 @@ export const ViewEventsCardsContainer = () => {
         </div>
       </WavySubHeader>
       <Page>
-        <h2 className={style.subHeaderText}>Kommende arrangementer</h2>
-        <div className={style.grid}>
-          {sortEvents(events).map(([id, event]) => (
-            <EventCardElement key={id} eventId={id} event={event} />
-          ))}
+        <div className={style.headerContainer}>
+          <Dropdown
+            items={options}
+            onChange={(option) => setSelectedOption(option)}
+            selectedId={selectedOption}
+          />
         </div>
-        <div className={style.pastEventsContainer}>
-          <h2 className={style.subHeaderText}>Fullførte arrangementer</h2>
-          <div className={style.grid}>
-            {sortEvents(pastEvents)
-              .reverse()
-              .map(([id, event]) => (
-                <EventCardElement key={id} eventId={id} event={event} />
-              ))}
-          </div>
-        </div>
+        {showEvents(selectedOption)}
       </Page>
     </>
   );
@@ -64,5 +80,47 @@ const sortEvents = (events: Map<string, RemoteData<IEvent>>) => {
   );
   return [...eventList].sort(([idA, a], [idB, b]) =>
     isInOrder({ first: a.start, last: b.start }) ? -1 : 1
+  );
+};
+
+const UpcomingEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
+  return (
+    <div>
+      <div className={style.grid}>
+        {sortEvents(props.events).map(([id, event]) => (
+          <EventCardElement key={id} eventId={id} event={event} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const PastEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
+  return (
+    <div>
+      <div className={style.grid}>
+        {sortEvents(props.events)
+          .reverse()
+          .map(([id, event]) => (
+            <EventCardElement key={id} eventId={id} event={event} />
+          ))}
+      </div>
+    </div>
+  );
+};
+
+const MyEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
+  const savedEvents = useSavedEditableEvents();
+  const filteredEvents = [...sortEvents(props.events)].filter(([id, events]) =>
+    savedEvents.savedEvents.map((x) => x.eventId).includes(id)
+  );
+  return (
+    <div>
+      <div className={style.grid}>
+        {filteredEvents.reverse().map(([id, event]) => (
+          <EventCardElement key={id} eventId={id} event={event} />
+        ))}
+      </div>
+    </div>
   );
 };
