@@ -1,101 +1,100 @@
-.dropdown  {
-  position: 'relative';
+@import 'src/style/constants';
+
+.container {
   display: block;
-  border-radius: 20;
-  width: 210;
+  min-width: 300px;
+  max-width: 300px;
+  position: relative;
+  align-self: center;
+  height: fit-content;
+}
+
+.selectedElement {
+  display: flex;
+  height: 39px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border: 1px solid white;
+  border-radius: 20px;
+  @include buttonText;
+  color: white;
+
   &:hover {
-    cursor: 'pointer';
+    cursor: pointer;
     background-color: white;
     color: black;
-    svg {
-      fill: black;
+    polyline {
+      stroke: black;
     }
   }
 }
 
-.dropdownWhite {
-  color: white;
-  border: 1px solid white;
-  svg {
-    fill: white;
-  }
-}
-.dropdownDark {
+.selectedElementOpen {
+  background-color: white;
   color: black;
-  border: 1px solid black;
-  svg {
-    fill: black;
+  border-bottom: 1px solid black;
+  border-radius: 20px 20px 0 0;
+  polyline {
+    stroke: black;
   }
 }
-//   dropdownBackground: {
-//     paddingBottom: 20;
-//     color: black;
-//     backgroundColor: white;
-//     border: `1px solid black`;
-//     '& svg': {
-//       fill: black;
-//     };
-//   };
-//   selectedElement: {
-//     display: 'flex';
-//     color: 'inherit';
-//     height: '100%';
-//     width: '100%';
-//     padding: [0; 25];
-//     fontFamily: fontLight;
-//     fontSize: buttonMobile;
-//     [`@media ${desktop}`]: {
-//       fontSize: buttonDesktop;
-//     };
-//     '-webkit-appearance': 'none';
-//     '& > p': {
-//       margin: [10; 0];
-//     };
-//   };
-//   selectedElementOpen: {
-//     borderBottomColor: black;
-//     borderBottomStyle: 'solid';
-//     borderBottomWidth: 1;
-//   };
-//   elementsWrapper: {
-//     maxHeight: 280;
-//     overflowY: 'auto';
-//   };
-//   dropdownElement: {
-//     minHeight: '1.25em';
-//     lineHeight: '1.25';
-//     padding: 5;
-//     width: '100%';
-//     overflowX: 'hidden';
-//     textOverflow: 'ellipsis';
-//     '&:hover': {
-//       backgroundColor: overskyet;
-//       color: black;
-//     };
-//     '&:active': {
-//       backgroundColor: gul;
-//     };
-//     '& > p': {
-//       margin: 5;
-//       marginLeft: 10;
-//     };
-//   };
-//   dropdownElementSelected: {
-//     backgroundColor: gul;
-//   };
-//   arrow: {
-//     position: 'absolute';
-//     right: 20;
-//     transition: '0.2s ease-out';
-//     cursor: 'pointer';
-//     placeSelf: 'center';
-//   };
-//   upSideDown: {
-//     transform: 'rotate(180deg)';
-//     transition: '0.2s ease-out';
-//   };
-//   text: {
-//     whiteSpace: 'nowrap';
-//     paddingRight: 10;
-//   };
-// });
+
+.elementsWrapper {
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  border-radius: 0 0 20px 20px;
+}
+
+.elementText {
+  font-family: $fontLight;
+  font-size: $buttonMobile;
+  padding-left: 20px;
+  color: black;
+}
+
+.dropdownElement {
+  min-height: 1.25em;
+  line-height: 1.25;
+  padding: 5;
+  width: 100%;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  &:hover {
+    background-color: var(--overskyet);
+    color: black;
+  }
+  &:active {
+    background-color: var(--gul);
+  }
+  & > p {
+    margin: 5;
+    margin-left: 10;
+  }
+}
+
+.dropdownElementSelected {
+  background-color: var(--gul);
+}
+
+.arrow {
+  right: 20;
+  transition: 0.2s ease-out;
+  cursor: pointer;
+  place-self: center;
+}
+
+.upSideDown {
+  transform: rotate(180deg);
+  transition: 0.2s ease-out;
+}
+
+.text {
+  white-space: nowrap;
+  padding-right: 10;
+}
+
+.lastElement {
+  border-radius: 0 0 20px 20px;
+}
