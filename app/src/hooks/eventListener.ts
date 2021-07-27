@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export function useEventListener(
   eventType: string,
@@ -8,7 +8,7 @@ export function useEventListener(
   useEffect(() => {
     document.addEventListener(eventType, onEventTrigger, false);
     return () => document.removeEventListener(eventType, onEventTrigger, false);
-  }, dependents);
+  }, [eventType, onEventTrigger]);
 }
 
 export function useKeyDownWithModifier(
@@ -39,3 +39,20 @@ const isStandardModifierPressed = (e: KeyboardEvent) =>
   e.getModifierState('Control') ||
   e.getModifierState('Meta') ||
   e.getModifierState('Alt');
+
+export function useOnClickOutside<T extends Element>(
+  onClickOutside: () => void
+) {
+  const ref = useRef<T>(null);
+  const handleClick = useCallback(
+    (event: any) => {
+      if (ref && ref.current && ref.current.contains(event.target)) {
+        return;
+      }
+      onClickOutside();
+    },
+    [onClickOutside]
+  );
+  useEventListener('mousedown', handleClick, [handleClick]);
+  return ref;
+}
