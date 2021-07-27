@@ -18,6 +18,16 @@
   z-index: 2;
 }
 
+.whiteArrow {
+  * {
+    stroke: var(--hvit);
+    ellipse:hover {
+      stroke: black;
+      fill: white;
+    }
+  }
+}
+
 .left {
   left: 0;
   svg {
