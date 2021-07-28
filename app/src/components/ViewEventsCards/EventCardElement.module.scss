@@ -39,38 +39,45 @@
 .hav {
   &:hover {
     background-color: var(--hav);
+    border-color: var(--hav);
   }
 }
 .kveld {
   &:hover {
     background-color: var(--kveld);
+    border-color: var(--kveld);
   }
 }
 
 .regn {
   &:hover {
     background-color: var(--regn);
+    border-color: var(--regn);
   }
 }
 
 .skyfritt {
   &:hover {
     background-color: var(--skyfritt);
+    border-color: var(--skyfritt);
   }
 }
 .sol {
   &:hover {
     background-color: var(--sol);
+    border-color: var(--sol);
   }
 }
 .solnedgang {
   &:hover {
     background-color: var(--solnedgang);
+    border-color: var(--solnedgang);
   }
 }
 .soloppgang {
   &:hover {
     background-color: var(--soloppgang);
+    border-color: var(--soloppgang);
   }
 }
 
