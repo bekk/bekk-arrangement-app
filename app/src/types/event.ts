@@ -32,11 +32,12 @@ import {
   parseEditTimeInstance,
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
-import { parseDateViewModel, dateToIDate } from 'src/types/date';
+import { parseDateViewModel, dateToIDate, toEditDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
 import { getEmailAndNameFromJWT } from 'src/auth';
 import { viewEventShortnameRoute } from 'src/routing';
+import { toEditTime } from 'src/types/time';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -271,32 +272,30 @@ export const toEditEvent = ({
   shortname,
 });
 
-// TODO: bytte til initial edit event
-export const initialEvent = (): IEvent => {
+export const initialEditEvent = (): IEditEvent => {
   const eventStartDate = addWeeks(1, new Date());
-  const openForRegistrationTime = new Date();
+  const openForRegistrationTime = toEditTimeInstance(new Date());
   const { email, name } = getEmailAndNameFromJWT();
   return {
     title: '',
     description: '',
     location: '',
     start: {
-      date: dateToIDate(eventStartDate),
-      time: { hour: 17, minute: 0 },
+      date: toEditDate(dateToIDate(eventStartDate)),
+      time: toEditTime({ hour: 17, minute: 0 }),
     },
     end: {
-      date: dateToIDate(eventStartDate),
-      time: { hour: 20, minute: 0 },
+      date: toEditDate(dateToIDate(eventStartDate)),
+      time: toEditTime({ hour: 20, minute: 0 }),
     },
     openForRegistrationTime,
     organizerName: name ?? '',
-    organizerEmail: { email: email ?? '' },
-    maxParticipants: ['limited', -1],
+    organizerEmail: email ?? '',
+    maxParticipants: ['limited', ''],
     participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,
     isExternal: false,
-    isInThePast: false,
   };
 };
 
