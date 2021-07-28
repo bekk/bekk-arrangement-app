@@ -15,7 +15,7 @@ export const DownloadIcon = ({ className }: IconProps) => {
     >
       <title> Nedlastningsikon </title>
       <rect x="0.5" y="0.5" width="38" height="38" stroke="white" />
-      <g clip-path="url(#clip0)">
+      <g clipPath="url(#downloadIcon)">
         <path
           d="M27.5286 20.9101L26.8255 20.229L20.0048 26.8246V4.58838H18.9934V26.8246L12.1728 20.229L11.4697 20.9101L19.4991 28.6886L27.5286 20.9101Z"
           fill="white"
@@ -26,7 +26,7 @@ export const DownloadIcon = ({ className }: IconProps) => {
         />
       </g>
       <defs>
-        <clipPath id="clip0">
+        <clipPath id="downloadIcon">
           <rect
             width="16.0588"
             height="28.6765"
