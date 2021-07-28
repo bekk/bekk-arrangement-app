@@ -23,7 +23,7 @@ export const ViewEventsCardsContainer = () => {
 
   const options = [
     { name: 'Kommende arrangement', id: 1 },
-    { name: 'Tidligere arranegment', id: 2 },
+    { name: 'Tidligere arrangement', id: 2 },
     { name: 'Mine arrangement', id: 3 },
   ];
 
