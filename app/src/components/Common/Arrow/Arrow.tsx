@@ -7,14 +7,22 @@ type Direction = 'right' | 'left' | 'down' | 'up';
 interface IProps {
   direction: Direction;
   noCircle?: boolean;
+  className?: string;
+  color?: 'white' | 'black';
 }
 
-export const Arrow = ({ direction, noCircle }: IProps) => {
-  const arrowStyle = classNames(style.arrow, {
+export const Arrow = ({
+  direction,
+  noCircle,
+  className,
+  color = 'black',
+}: IProps) => {
+  const arrowStyle = classNames(style.arrow, className, {
     [style.left]: direction === 'left',
     [style.right]: direction === 'right',
     [style.up]: direction === 'up',
     [style.down]: direction === 'down',
+    [style.whiteArrow]: color === 'white',
   });
 
   const points = noCircle
