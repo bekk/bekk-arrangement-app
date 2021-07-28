@@ -13,6 +13,10 @@ import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
 import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
 import { usePreviewEvent } from 'src/hooks/history';
+import {
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+} from 'src/types/event';
 
 export const PreviewNewEventContainer = () => {
   const { catchAndNotify } = useNotification();
@@ -29,7 +33,11 @@ export const PreviewNewEventContainer = () => {
     history.goBack();
   };
 
-  const participantsText = `${event.maxParticipants} plasser`;
+  const participantsText = `${
+    isMaxParticipantsLimited(event.maxParticipants)
+      ? maxParticipantsLimit(event.maxParticipants)
+      : 'ubegrensa'
+  } plasser`;
 
   const postNewEvent = catchAndNotify(async () => {
     const editUrlTemplate =
