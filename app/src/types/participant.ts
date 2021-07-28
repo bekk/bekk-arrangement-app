@@ -15,10 +15,10 @@ export interface IParticipantWriteModel {
 
 export interface IParticipantViewModel {
   name: string;
-  email: string;
+  email?: string;
   eventId: string;
   registrationTime: number;
-  comment: string;
+  comment?: string;
 }
 
 export interface IParticipantsWithWaitingList {
@@ -61,9 +61,13 @@ export const toParticipantWriteModel = (
 export const parseParticipantViewModel = (
   participantView: IParticipantViewModel
 ): IParticipant => {
-  const email = parseEmailViewModel(participantView.email);
+  const email = participantView.email
+    ? parseEmailViewModel(participantView.email)
+    : { email: '' };
   const name = parseName(participantView.name);
-  const comment = parseComment(participantView.comment);
+  const comment = participantView.comment
+    ? parseComment(participantView.comment)
+    : '';
 
   const participant = {
     ...participantView,
@@ -125,7 +129,7 @@ export const parseComment = (value: string): string | IError[] => {
 export function initalParticipant(): IParticipant {
   const { name, email } = getEmailAndNameFromJWT();
   return {
-    email: { email:email ?? '' },
+    email: { email: email ?? '' },
     name: name ?? '',
     comment: '',
   };
