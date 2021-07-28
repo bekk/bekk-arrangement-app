@@ -164,7 +164,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                   goToRemoveParticipantRoute(participationsForThisEvent[0])
                 }
               >
-                Meld deg av
+                Meld meg av
               </Button>
             </div>
           ) : (
