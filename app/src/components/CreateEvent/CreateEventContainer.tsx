@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  IEditEvent,
-  initialEditEvent,
-  toEditEvent,
-  parseEditEvent,
-} from 'src/types/event';
+import { IEditEvent, initialEditEvent, parseEditEvent } from 'src/types/event';
 import { eventsRoute, previewNewEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
 import { Page } from 'src/components/Page/Page';
