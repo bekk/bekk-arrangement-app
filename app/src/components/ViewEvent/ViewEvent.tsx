@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import style from './ViewEvent.module.scss';
-import { IEvent, urlFromShortname } from 'src/types/event';
+import {
+  IEvent,
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+  urlFromShortname,
+} from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
 import { dateAsText, isSameDate } from 'src/types/date';
@@ -75,7 +80,9 @@ export const ViewEvent = ({
               <p>{participantsText}</p>
             ) : (
               <p>
-                {event.maxParticipants === 0 ? ' ∞' : event.maxParticipants}{' '}
+                {!isMaxParticipantsLimited(event.maxParticipants)
+                  ? ' ∞'
+                  : maxParticipantsLimit(event.maxParticipants)}{' '}
                 plasser
               </p>
             )}

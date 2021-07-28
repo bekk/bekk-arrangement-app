@@ -21,6 +21,10 @@ import { useHistory } from 'react-router';
 import { Button } from 'src/components/Common/Button/Button';
 import { getParticipantExportResponse } from 'src/api/arrangementSvc';
 import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon';
+import {
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+} from 'src/types/event';
 
 interface IProps {
   eventId: string;
@@ -60,33 +64,42 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
   const event = remoteEvent.data;
 
   const eventIsFull =
-    event.maxParticipants !== 0 &&
-    event.maxParticipants <= numberOfParticipants;
+    isMaxParticipantsLimited(event.maxParticipants) &&
+    maxParticipantsLimit(event.maxParticipants) <= numberOfParticipants;
 
   const waitingList =
-    hasLoaded(remoteNumberOfParticipants) && eventIsFull
-      ? remoteNumberOfParticipants.data - event.maxParticipants
+    hasLoaded(remoteNumberOfParticipants) &&
+    eventIsFull &&
+    isMaxParticipantsLimited(event.maxParticipants)
+      ? remoteNumberOfParticipants.data -
+        maxParticipantsLimit(event.maxParticipants)
       : '-';
 
   const shortParticipantsText = `${
-    eventIsFull ? event.maxParticipants : numberOfParticipants
+    eventIsFull
+      ? isMaxParticipantsLimited(event.maxParticipants) &&
+        maxParticipantsLimit(event.maxParticipants)
+      : numberOfParticipants
   }${
-    event.maxParticipants === 0
+    !isMaxParticipantsLimited(event.maxParticipants)
       ? ' av ∞ påmeldte'
-      : ' av ' + event.maxParticipants + ' påmeldte'
+      : ' av ' + maxParticipantsLimit(event.maxParticipants) + ' påmeldte'
   }`;
 
   const participantsText = `${
     eventIsFull
-      ? event.maxParticipants + ' påmeldte'
+      ? isMaxParticipantsLimited(event.maxParticipants) &&
+        maxParticipantsLimit(event.maxParticipants) + ' påmeldte'
       : numberOfParticipants + ' påmeldte'
   }${
-    event.maxParticipants === 0
+    !isMaxParticipantsLimited(event.maxParticipants)
       ? '. Ubegrenset antall plasser igjen'
       : event.hasWaitingList && eventIsFull
       ? ` og ${waitingList} på venteliste`
       : numberOfParticipants !== '-' &&
-        `. ${event.maxParticipants - numberOfParticipants} plasser igjen.`
+        `. ${
+          maxParticipantsLimit(event.maxParticipants) - numberOfParticipants
+        } plasser igjen.`
   }`;
 
   const closedEventText = isInThePast(event.end)
@@ -104,10 +117,11 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
       ? 'Arrangementet er dessverre fullt, men du kan fortsatt bli med på ventelisten!'
       : undefined;
 
-  const numberOfPossibleParticipantsText =
-    event.maxParticipants === 0
-      ? 'Ubegrenset antall plasser'
-      : event.maxParticipants + ' plasser';
+  const numberOfPossibleParticipantsText = !isMaxParticipantsLimited(
+    event.maxParticipants
+  )
+    ? 'Ubegrenset antall plasser'
+    : maxParticipantsLimit(event.maxParticipants) + ' plasser';
 
   const goToRemoveParticipantRoute = ({
     eventId,
@@ -152,7 +166,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                   goToRemoveParticipantRoute(participationsForThisEvent[0])
                 }
               >
-                Meld deg av
+                Meld meg av
               </Button>
             </div>
           ) : (

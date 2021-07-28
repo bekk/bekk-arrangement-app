@@ -49,7 +49,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           cancellationToken: '{cancellationToken}',
         });
       const {
-        participant: { email },
+        participant: { email = '' },
         cancellationToken,
       } = await postParticipant(eventId, validParticipant, cancelUrlTemplate);
 

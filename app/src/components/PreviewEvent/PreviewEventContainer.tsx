@@ -14,6 +14,10 @@ import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { Button } from 'src/components/Common/Button/Button';
 import { usePreviewEvent } from 'src/hooks/history';
 import { useEditToken } from 'src/hooks/saved-tokens';
+import {
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+} from 'src/types/event';
 
 export const PreviewEventContainer = () => {
   const { catchAndNotify } = useNotification();
@@ -27,8 +31,9 @@ export const PreviewEventContainer = () => {
   }
 
   const participantsText =
-    (event.maxParticipants === 0 ? ' ∞' : event.maxParticipants.toString()) +
-    ' plasser';
+    (!isMaxParticipantsLimited(event.maxParticipants)
+      ? '∞'
+      : maxParticipantsLimit(event.maxParticipants).toString()) + ' plasser';
 
   const returnToEdit = () => {
     history.goBack();

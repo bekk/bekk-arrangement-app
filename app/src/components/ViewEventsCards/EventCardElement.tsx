@@ -1,5 +1,9 @@
 import React from 'react';
-import { IEvent } from 'src/types/event';
+import {
+  IEvent,
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+} from 'src/types/event';
 import { Link } from 'react-router-dom';
 import style from './EventCardElement.module.scss';
 import { stringifyDate, isSameDate } from 'src/types/date';
@@ -53,20 +57,21 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     : undefined;
 
   const numberOfAvailableSpot =
-    event.maxParticipants !== 0 && numberOfParticipants !== undefined
-      ? event.maxParticipants - numberOfParticipants
+    isMaxParticipantsLimited(event.maxParticipants) &&
+    numberOfParticipants !== undefined
+      ? maxParticipantsLimit(event.maxParticipants) - numberOfParticipants
       : undefined;
 
-  const registrationState =
-    event.maxParticipants === 0
-      ? 'Plass'
-      : numberOfParticipants === undefined
-      ? 'Laster'
-      : numberOfParticipants < event.maxParticipants
-      ? 'Plass'
-      : numberOfParticipants >= event.maxParticipants && event.hasWaitingList
-      ? 'Plass på venteliste'
-      : 'Fullt';
+  const registrationState = !isMaxParticipantsLimited(event.maxParticipants)
+    ? 'Plass'
+    : numberOfParticipants === undefined
+    ? 'Laster'
+    : numberOfParticipants < maxParticipantsLimit(event.maxParticipants)
+    ? 'Plass'
+    : numberOfParticipants >= maxParticipantsLimit(event.maxParticipants) &&
+      event.hasWaitingList
+    ? 'Plass på venteliste'
+    : 'Fullt';
 
   const dateTimeText = isSameDate(event.start.date, event.end.date)
     ? `${stringifyDate(event.start.date)}, ${stringifyTime(

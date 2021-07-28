@@ -35,8 +35,9 @@ const useEditEvent = () => {
   }, [remoteEvent, editEvent, setEditEvent]);
 
   const validEvent = validateEvent(editEvent);
+  const errors = editEvent ? parseEditEvent(editEvent) : [];
 
-  return { eventId, validEvent, editEvent, setEditEvent };
+  return { eventId, validEvent, editEvent, setEditEvent, errors };
 };
 
 const useSaveThisEditToken = ({ eventId }: { eventId: string }) => {
@@ -50,7 +51,8 @@ const useSaveThisEditToken = ({ eventId }: { eventId: string }) => {
 };
 
 export const EditEventContainer = () => {
-  const { eventId, validEvent, editEvent, setEditEvent } = useEditEvent();
+  const { eventId, validEvent, editEvent, setEditEvent, errors } =
+    useEditEvent();
 
   const { catchAndNotify } = useNotification();
   const history = useHistory();
@@ -95,14 +97,18 @@ export const EditEventContainer = () => {
               </p>
             </>
           </ButtonWithPromptModal>
-          {validEvent && (
-            <Button
-              onClick={() => gotoPreview(validEvent)}
-              disabled={!validEvent}
-            >
-              Forhåndsvis endringer
-            </Button>
-          )}
+          <Button
+            onClick={() => validEvent && gotoPreview(validEvent)}
+            disabled={!validEvent}
+            disabledResaon={
+              <ul>
+                {Array.isArray(errors) &&
+                  errors.map((x) => <li key={x.message}>{x.message}</li>)}
+              </ul>
+            }
+          >
+            Forhåndsvis endringer
+          </Button>
         </div>
       </div>
     </Page>

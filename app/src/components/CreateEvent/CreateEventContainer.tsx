@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  IEditEvent,
-  initialEvent,
-  toEditEvent,
-  parseEditEvent,
-} from 'src/types/event';
+import { IEditEvent, initialEditEvent, parseEditEvent } from 'src/types/event';
 import { eventsRoute, previewNewEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
 import { Page } from 'src/components/Page/Page';
@@ -20,7 +15,7 @@ export const CreateEventContainer = () => {
   useAuthentication();
 
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
-    toEditEvent(initialEvent())
+    initialEditEvent()
   );
   const validEvent = validateEvent(event);
   const errors = parseEditEvent(event);

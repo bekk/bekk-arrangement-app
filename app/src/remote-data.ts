@@ -147,7 +147,7 @@ export const useUpdateRemoteData = <T, P>(
 
   const updateRemoteData = useCallback(
     (param: P) => {
-      setRemoteData(remoteData => {
+      setRemoteData((remoteData) => {
         if (hasLoaded(remoteData)) {
           return {
             status: 'UPDATING',
@@ -161,7 +161,7 @@ export const useUpdateRemoteData = <T, P>(
         return remoteData;
       });
       fetcher(param)
-        .then(data => setRemoteData({ status: 'OK', data }))
+        .then((data) => setRemoteData({ status: 'OK', data }))
         .catch(({ userMessage }) => {
           return setRemoteData({
             status: 'ERROR',

@@ -9,6 +9,8 @@ export interface IError {
   type: ErrorType;
 }
 const isIError = (error: any): error is IError =>
+  typeof error === 'object' &&
+  error !== null &&
   'message' in error &&
   typeof error.message === 'string' &&
   'type' in error &&
@@ -29,16 +31,14 @@ export function assertIsValid<T>(
         Object.values(validValue)
           .filter(isIErrorList)
           .flat()
-          .map(x => x.message)
+          .map((x) => x.message)
           .join(', ')
     );
   }
 }
 
 export const listOfErrors = (obj: Record<string, unknown>): IError[] =>
-  Object.values(obj)
-    .filter(isIErrorList)
-    .flat();
+  Object.values(obj).filter(isIErrorList).flat();
 
 export const error = (message: string): IError => ({
   type: 'Error',
