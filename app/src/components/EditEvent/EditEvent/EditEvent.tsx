@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { IEditEvent, urlFromShortname } from 'src/types/event';
+import {
+  IEditEvent,
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+  urlFromShortname,
+} from 'src/types/event';
 import {
   parseTitle,
   parseDescription,
@@ -46,7 +51,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     }
   };
 
-  const hasUnlimitedSpots = event.maxParticipants === undefined;
+  const hasUnlimitedSpots = !isMaxParticipantsLimited(event.maxParticipants);
 
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
@@ -247,35 +252,36 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           }
         />
         <div>
-          {!hasUnlimitedSpots && event.maxParticipants !== undefined && (
-            <div className={style.limitSpots}>
-              <div>
-                <ValidatedTextInput
-                  label={labels.limitSpots}
-                  placeholder={placeholders.limitSpots}
-                  value={event.maxParticipants}
-                  isNumber={true}
-                  validation={parseMaxAttendees}
-                  onLightBackground
-                  onChange={(maxParticipants) =>
-                    updateEvent({
-                      ...event,
-                      maxParticipants,
-                    })
-                  }
-                />
+          {!hasUnlimitedSpots &&
+            isMaxParticipantsLimited(event.maxParticipants) && (
+              <div className={style.limitSpots}>
+                <div>
+                  <ValidatedTextInput
+                    label={labels.limitSpots}
+                    placeholder={placeholders.limitSpots}
+                    value={maxParticipantsLimit(event.maxParticipants)}
+                    isNumber={true}
+                    validation={(max) => parseMaxAttendees(['limited', max])}
+                    onLightBackground
+                    onChange={(maxParticipants) =>
+                      updateEvent({
+                        ...event,
+                        maxParticipants: ['limited', maxParticipants],
+                      })
+                    }
+                  />
+                </div>
+                <div className={style.waitListCheckBox}>
+                  <Checkbox
+                    label={labels.waitingList}
+                    onChange={(hasWaitingList) =>
+                      updateEvent({ ...event, hasWaitingList })
+                    }
+                    isChecked={event.hasWaitingList}
+                  />
+                </div>
               </div>
-              <div className={style.waitListCheckBox}>
-                <Checkbox
-                  label={labels.waitingList}
-                  onChange={(hasWaitingList) =>
-                    updateEvent({ ...event, hasWaitingList })
-                  }
-                  isChecked={event.hasWaitingList}
-                />
-              </div>
-            </div>
-          )}
+            )}
           <div className={style.unlimitedSpots}>
             <Checkbox
               label={labels.unlimitedSpots}
@@ -284,13 +290,13 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 if (limited) {
                   updateEvent({
                     ...event,
-                    maxParticipants: undefined,
+                    maxParticipants: ['unlimited'],
                     hasWaitingList: false,
                   });
                 } else {
                   updateEvent({
                     ...event,
-                    maxParticipants: '',
+                    maxParticipants: ['limited', ''],
                     hasWaitingList: false,
                   });
                 }

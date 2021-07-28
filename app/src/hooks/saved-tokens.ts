@@ -111,7 +111,8 @@ export const useSavedParticipations = () => {
 
 export const usePopulateTokensInLocalStorage = () => {
   const { savedEvents, saveEditableEvent } = useSavedEditableEvents();
-  const { savedParticipations, saveParticipation } = useSavedParticipations();
+  const { savedParticipations, saveParticipation, removeSavedParticipant } =
+    useSavedParticipations();
 
   useEffectOnce(async () => {
     if (isAuthenticated()) {
@@ -132,9 +133,14 @@ export const usePopulateTokensInLocalStorage = () => {
             .map(participationKey)
             .includes(participationKey(x))
       );
+      const removedParticipations = savedParticipations.filter(
+        (x) =>
+          !participations.map(participationKey).includes(participationKey(x))
+      );
 
       newEvents.forEach(saveEditableEvent);
       newParticipations.forEach(saveParticipation);
+      removedParticipations.forEach(removeSavedParticipant);
     }
   });
 };

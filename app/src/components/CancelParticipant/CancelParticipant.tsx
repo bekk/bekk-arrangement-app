@@ -102,7 +102,9 @@ export const CancelParticipant = () => {
       )}
       <div className={style.buttonContainer}>
         <Button onClick={cancelParticipant}>Meld av</Button>
-        <BlockLink to={viewEventRoute(eventId)}>Se arrangement</BlockLink>
+        <BlockLink onLightBackground to={viewEventRoute(eventId)}>
+          Se arrangement
+        </BlockLink>
       </div>
     </>
   );

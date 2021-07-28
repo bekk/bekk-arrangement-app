@@ -32,11 +32,12 @@ import {
   parseEditTimeInstance,
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
-import { parseDateViewModel, dateToIDate } from 'src/types/date';
+import { parseDateViewModel, dateToIDate, toEditDate } from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
 import { getEmailAndNameFromJWT } from 'src/auth';
 import { viewEventShortnameRoute } from 'src/routing';
+import { toEditTime } from 'src/types/time';
 
 export interface INewEventViewModel {
   event: WithId<IEventViewModel>;
@@ -52,7 +53,7 @@ export interface IEventViewModel {
   openForRegistrationTime: TimeInstanceContract;
   organizerName: string;
   organizerEmail: string;
-  maxParticipants: number;
+  maxParticipants?: number;
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
@@ -70,7 +71,7 @@ export interface IEventWriteModel {
   openForRegistrationTime: TimeInstanceContract;
   organizerName: string;
   organizerEmail: string;
-  maxParticipants: number;
+  maxParticipants?: number;
   viewUrl?: string;
   editUrlTemplate: string;
   participantQuestion?: string;
@@ -78,6 +79,19 @@ export interface IEventWriteModel {
   isExternal: boolean;
   shortname?: string;
 }
+
+type UnlimitedParticipants = ['unlimited'];
+type LimitedParticipants<max> = ['limited', max];
+export type MaxParticipants<max> =
+  | UnlimitedParticipants
+  | LimitedParticipants<max>;
+
+export const isMaxParticipantsLimited = <t>(
+  max: MaxParticipants<t>
+): max is LimitedParticipants<t> => max[0] === 'limited';
+
+export const maxParticipantsLimit = <t>(prop: LimitedParticipants<t>): t =>
+  prop[1];
 
 export interface IEvent {
   title: string;
@@ -88,7 +102,7 @@ export interface IEvent {
   openForRegistrationTime: TimeInstance;
   organizerName: string;
   organizerEmail: Email;
-  maxParticipants: number;
+  maxParticipants: MaxParticipants<number>;
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
@@ -106,7 +120,7 @@ export interface IEditEvent {
   openForRegistrationTime: TimeInstanceEdit;
   organizerName: string;
   organizerEmail: string;
-  maxParticipants?: string;
+  maxParticipants: MaxParticipants<string>;
   participantQuestion?: string;
   hasWaitingList: boolean;
   isCancelled: boolean;
@@ -162,6 +176,9 @@ export const toEventWriteModel = (
   editUrlTemplate: string = ''
 ): IEventWriteModel => ({
   ...event,
+  maxParticipants: isMaxParticipantsLimited(event.maxParticipants)
+    ? maxParticipantsLimit(event.maxParticipants)
+    : undefined,
   openForRegistrationTime: toTimeInstanceWriteModel(
     event.openForRegistrationTime
   ),
@@ -185,7 +202,14 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
 
   const organizerName = parseHost(eventView.organizerName);
   const organizerEmail = parseEditEmail(eventView.organizerEmail);
-  const maxParticipants = eventView.maxParticipants;
+  const maxParticipants = parseMaxAttendees(
+    eventView.maxParticipants !== undefined
+      ? (['limited', eventView.maxParticipants.toString()] as [
+          'limited',
+          string
+        ])
+      : (['unlimited'] as ['unlimited'])
+  );
   const participantQuestion = parseQuestion(eventView.participantQuestion);
   const hasWaitingList = eventView.hasWaitingList;
   const isCancelled = eventView.isCancelled;
@@ -248,31 +272,30 @@ export const toEditEvent = ({
   shortname,
 });
 
-export const initialEvent = (): IEvent => {
+export const initialEditEvent = (): IEditEvent => {
   const eventStartDate = addWeeks(1, new Date());
-  const openForRegistrationTime = new Date();
+  const openForRegistrationTime = toEditTimeInstance(new Date());
   const { email, name } = getEmailAndNameFromJWT();
   return {
     title: '',
     description: '',
     location: '',
     start: {
-      date: dateToIDate(eventStartDate),
-      time: { hour: 17, minute: 0 },
+      date: toEditDate(dateToIDate(eventStartDate)),
+      time: toEditTime({ hour: 17, minute: 0 }),
     },
     end: {
-      date: dateToIDate(eventStartDate),
-      time: { hour: 20, minute: 0 },
+      date: toEditDate(dateToIDate(eventStartDate)),
+      time: toEditTime({ hour: 20, minute: 0 }),
     },
     openForRegistrationTime,
     organizerName: name ?? '',
-    organizerEmail: { email: email ?? '' },
-    maxParticipants: -1,
+    organizerEmail: email ?? '',
+    maxParticipants: ['limited', ''],
     participantQuestion: undefined,
     hasWaitingList: false,
     isCancelled: false,
     isExternal: false,
-    isInThePast: false,
   };
 };
 

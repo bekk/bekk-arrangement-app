@@ -1,3 +1,8 @@
+import {
+  MaxParticipants,
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+} from 'src/types/event';
 import { validate, IError } from './validation';
 
 export type Optional<T> = T | undefined;
@@ -37,10 +42,14 @@ export const parseHost = (value: string): string | IError[] => {
 };
 
 export const parseMaxAttendees = (
-  value: string | undefined
-): number | IError[] => {
-  const number = Number(value || 0);
-  const validator = validate<number>({
+  max: MaxParticipants<string>
+): MaxParticipants<number> | IError[] => {
+  if (!isMaxParticipantsLimited(max)) {
+    return ['unlimited'];
+  }
+  const value = maxParticipantsLimit(max);
+  const number = Number(value);
+  const validator = validate<MaxParticipants<number>>({
     'Verdien må være et tall': Number.isNaN(number),
     'Du kan kun invitere et helt antall mennesker😎': !Number.isInteger(number),
     'Antallet kan ikke være over 5000, sett 0 hvis uendelig er ønsket':
@@ -48,17 +57,16 @@ export const parseMaxAttendees = (
     'Verdien må være positiv': number < 0,
     'Antall deltakere må settes': value === '',
   });
-  return validator.resolve(number);
+  return validator.resolve(['limited', number]);
 };
 
-export const toEditMaxAttendees = (value: number): string | undefined => {
-  if (value === 0) {
-    return undefined;
+export const toEditMaxAttendees = (
+  value: MaxParticipants<number>
+): MaxParticipants<string> => {
+  if (!isMaxParticipantsLimited(value)) {
+    return ['unlimited'];
   }
-  if (value === -1) {
-    return '';
-  }
-  return value.toString();
+  return ['limited', maxParticipantsLimit(value).toString()];
 };
 
 export const parseQuestion = (
