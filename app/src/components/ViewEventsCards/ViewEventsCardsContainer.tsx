@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from './ViewEventsCards.module.scss';
 import { createRoute } from 'src/routing';
 import { hasLoaded, RemoteData } from 'src/remote-data';
