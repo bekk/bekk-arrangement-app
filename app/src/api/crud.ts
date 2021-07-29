@@ -10,6 +10,9 @@ interface IRequest {
 export const get = ({ host, path }: IRequest) =>
   fetchAndValidate('GET', host, path).then(res => res.json());
 
+export const getResponse = ({ host, path }: IRequest) =>
+  fetchAndValidate('GET', host, path)
+
 export const post = ({ host, path, body }: IRequest) =>
   fetchAndValidate('POST', host, path, body).then(res => res.json());
 
