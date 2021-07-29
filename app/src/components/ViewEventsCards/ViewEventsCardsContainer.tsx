@@ -12,19 +12,24 @@ import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 import { IEvent } from 'src/types/event';
 import { isInOrder } from 'src/types/date-time';
 import { Dropdown } from 'src/components/Common/Dropdown/Dropdown';
-import { useSavedEditableEvents } from 'src/hooks/saved-tokens';
+import {
+  useSavedEditableEvents,
+  useSavedParticipations,
+} from 'src/hooks/saved-tokens';
+import { usePersistentHistoryState } from 'src/utils/browser-state';
 
 export const ViewEventsCardsContainer = () => {
   const events = useUpcomingEvents();
   const pastEvents = usePastEvents();
   const allEvents = new Map([...events].concat([...pastEvents]));
 
-  const [selectedOption, setSelectedOption] = useState(1);
+  const [selectedOption, setSelectedOption] = usePersistentHistoryState(1);
 
   const options = [
     { name: 'Kommende arrangement', id: 1 },
     { name: 'Tidligere arrangement', id: 2 },
     { name: 'Mine arrangement', id: 3 },
+    { name: 'Arrangementer jeg deltar på', id: 4 },
   ];
 
   const showEvents = (id: number) => {
@@ -37,6 +42,9 @@ export const ViewEventsCardsContainer = () => {
 
       case 3:
         return <MyEvents events={allEvents} />;
+
+      case 4:
+        return <MyParticipations events={events} />;
     }
   };
 
@@ -113,6 +121,24 @@ const MyEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
   const savedEvents = useSavedEditableEvents();
   const filteredEvents = [...sortEvents(props.events)].filter(([id, events]) =>
     savedEvents.savedEvents.map((x) => x.eventId).includes(id)
+  );
+  return (
+    <div>
+      <div className={style.grid}>
+        {filteredEvents.reverse().map(([id, event]) => (
+          <EventCardElement key={id} eventId={id} event={event} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const MyParticipations = (props: {
+  events: Map<string, RemoteData<IEvent>>;
+}) => {
+  const savedEvents = useSavedParticipations();
+  const filteredEvents = [...sortEvents(props.events)].filter(([id, events]) =>
+    savedEvents.savedParticipations.map((x) => x.eventId).includes(id)
   );
   return (
     <div>
