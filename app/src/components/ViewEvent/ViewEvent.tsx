@@ -20,7 +20,7 @@ import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { useHistory } from 'react-router';
 import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
-import { useDuplicateEvent, useGotoCreateDuplicate } from 'src/hooks/history';
+import { useGotoCreateDuplicate } from 'src/hooks/history';
 
 interface IProps {
   eventId?: string;

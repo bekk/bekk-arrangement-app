@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  IEditEvent,
-  initialEditEvent,
-  parseEditEvent,
-  toEditEvent,
-} from 'src/types/event';
+import { IEditEvent, initialEditEvent, parseEditEvent } from 'src/types/event';
 import { eventsRoute, previewNewEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
 import { Page } from 'src/components/Page/Page';
@@ -20,7 +15,6 @@ export const CreateEventContainer = () => {
   useAuthentication();
 
   const duplicateEvent = useDuplicateEvent();
-  console.log(duplicateEvent);
 
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
     duplicateEvent ?? initialEditEvent()
