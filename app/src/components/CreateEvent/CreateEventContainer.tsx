@@ -1,5 +1,10 @@
 import React from 'react';
-import { IEditEvent, initialEditEvent, parseEditEvent } from 'src/types/event';
+import {
+  IEditEvent,
+  initialEditEvent,
+  parseEditEvent,
+  toEditEvent,
+} from 'src/types/event';
 import { eventsRoute, previewNewEventRoute } from 'src/routing';
 import { useAuthentication } from 'src/auth';
 import { Page } from 'src/components/Page/Page';
@@ -9,13 +14,16 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import style from './CreateEventContainer.module.scss';
 import { isValid } from 'src/types/validation';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
-import { useGotoEventPreview } from 'src/hooks/history';
+import { useDuplicateEvent, useGotoEventPreview } from 'src/hooks/history';
 
 export const CreateEventContainer = () => {
   useAuthentication();
 
+  const duplicateEvent = useDuplicateEvent();
+  console.log(duplicateEvent);
+
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
-    initialEditEvent()
+    duplicateEvent ?? initialEditEvent()
   );
   const validEvent = validateEvent(event);
   const errors = parseEditEvent(event);
