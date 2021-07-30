@@ -251,6 +251,27 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             })
           }
         />
+        <div className={style.unlimitedSpots}>
+          <Checkbox
+            label={labels.unlimitedSpots}
+            isChecked={hasUnlimitedSpots}
+            onChange={(limited) => {
+              if (limited) {
+                updateEvent({
+                  ...event,
+                  maxParticipants: ['unlimited'],
+                  hasWaitingList: false,
+                });
+              } else {
+                updateEvent({
+                  ...event,
+                  maxParticipants: ['limited', ''],
+                  hasWaitingList: false,
+                });
+              }
+            }}
+          />
+        </div>
         <div>
           {!hasUnlimitedSpots &&
             isMaxParticipantsLimited(event.maxParticipants) && (
@@ -282,27 +303,6 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 </div>
               </div>
             )}
-          <div className={style.unlimitedSpots}>
-            <Checkbox
-              label={labels.unlimitedSpots}
-              isChecked={hasUnlimitedSpots}
-              onChange={(limited) => {
-                if (limited) {
-                  updateEvent({
-                    ...event,
-                    maxParticipants: ['unlimited'],
-                    hasWaitingList: false,
-                  });
-                } else {
-                  updateEvent({
-                    ...event,
-                    maxParticipants: ['limited', ''],
-                    hasWaitingList: false,
-                  });
-                }
-              }}
-            />
-          </div>
         </div>
         <div>
           <Checkbox
@@ -315,14 +315,14 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
 
         <div className={style.shortName}>
           <Checkbox
-            label={'Legg til et kortnavn (pen URL)'}
+            label={'Tilpass URL'}
             isChecked={hasShortname}
             onChange={setHasShortname}
           />
           {hasShortname && (
             <div className={style.flex}>
               <div className={style.origin}>{urlFromShortname('')}</div>
-              <div>
+              <div className={style.pathBox}>
                 <ValidatedTextInput
                   label={''}
                   value={event.shortname || ''}
