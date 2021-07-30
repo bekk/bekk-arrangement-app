@@ -4,6 +4,7 @@ import {
   IEvent,
   isMaxParticipantsLimited,
   maxParticipantsLimit,
+  toEditEvent,
   urlFromShortname,
 } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
@@ -11,7 +12,7 @@ import { stringifyEmail } from 'src/types/email';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
-import { editEventRoute, viewEventRoute } from 'src/routing';
+import { createRoute, editEventRoute, viewEventRoute } from 'src/routing';
 import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
 import { GentlemanIcon } from 'src/components/Common/Icons/GentlemanIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
@@ -19,6 +20,7 @@ import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { useHistory } from 'react-router';
 import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
+import { useGotoCreateDuplicate } from 'src/hooks/history';
 
 interface IProps {
   eventId?: string;
@@ -50,6 +52,7 @@ export const ViewEvent = ({
     });
 
   const history = useHistory();
+  const gotoDuplicate = useGotoCreateDuplicate(createRoute);
 
   return (
     <section className={style.container}>
@@ -57,12 +60,22 @@ export const ViewEvent = ({
         <div className={style.headerContainer}>
           <h1 className={style.header}>{event.title}</h1>
           {userCanEdit && eventId !== undefined && (
-            <Button
-              onClick={() => history.push(editEventRoute(eventId))}
-              color={'Secondary'}
-            >
-              Rediger
-            </Button>
+            <>
+              <Button
+                onClick={() => history.push(editEventRoute(eventId))}
+                color={'Secondary'}
+              >
+                Rediger
+              </Button>
+              <Button
+                displayAsLink
+                onLightBackground
+                onClick={() => gotoDuplicate(toEditEvent(event))}
+                color={'Secondary'}
+              >
+                Dupliser
+              </Button>
+            </>
           )}
         </div>
         <div className={style.generalInfoContainer}>
