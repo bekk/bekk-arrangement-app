@@ -30,6 +30,8 @@ import style from './EditEvent.module.scss';
 import { TimeInput } from 'src/components/Common/TimeInput/TimeInput';
 import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
+import { datesInOrder, EditDate, parseEditDate } from 'src/types/date';
+import { EditTime, parseEditTime, toEditTime } from 'src/types/time';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -104,10 +106,12 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 onChange={(date) =>
                   updateEvent({
                     ...event,
-                    ...setStartEndDates(event, [
-                      'set-same-date',
-                      { ...event.start, date },
-                    ]),
+                    ...setStartEndDates(
+                      event,
+                      isMultiDayEvent
+                        ? ['set-start-date', date]
+                        : ['set-same-date', date]
+                    ),
                   })
                 }
               />
@@ -121,10 +125,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 onChange={(time) =>
                   updateEvent({
                     ...event,
-                    ...setStartEndDates(event, [
-                      'set-start',
-                      { ...event.start, time },
-                    ]),
+                    ...setStartEndDates(event, ['set-start-time', time]),
                   })
                 }
               />
@@ -138,10 +139,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                 onChange={(time) =>
                   updateEvent({
                     ...event,
-                    ...setStartEndDates(event, [
-                      'set-end',
-                      { ...event.end, time },
-                    ]),
+                    ...setStartEndDates(event, ['set-end-time', time]),
                   })
                 }
               />
@@ -168,10 +166,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
                   onChange={(date) =>
                     updateEvent({
                       ...event,
-                      ...setStartEndDates(event, [
-                        'set-end',
-                        { ...event.end, date },
-                      ]),
+                      ...setStartEndDates(event, ['set-end-date', date]),
                     })
                   }
                 />
@@ -185,7 +180,18 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             )}
           </div>
           <Button
-            onClick={() => setMultiDay(!isMultiDayEvent)}
+            onClick={() => {
+              if (isMultiDayEvent) {
+                updateEvent({
+                  ...event,
+                  ...setStartEndDates(event, [
+                    'set-same-date',
+                    event.start.date,
+                  ]),
+                });
+              }
+              setMultiDay(!isMultiDayEvent);
+            }}
             displayAsLink
             onLightBackground
           >
@@ -384,38 +390,106 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
 };
 
 type Action =
-  | ['set-same-date', EditDateTime]
-  | ['set-start', EditDateTime]
-  | ['set-end', EditDateTime];
+  | ['set-same-date', EditDate]
+  | ['set-start-date', EditDate]
+  | ['set-end-date', EditDate]
+  | ['set-start-time', EditTime]
+  | ['set-end-time', EditTime];
 
 type State = {
   start: EditDateTime;
   end: EditDateTime;
 };
 
-const setStartEndDates = (
-  { start, end }: State,
-  [type, date]: Action
-): State => {
-  const parsedStart = parseEditDateTime(start);
-  const parsedEnd = parseEditDateTime(end);
-  const parsedDate = parseEditDateTime(date);
-  if (isValid(parsedStart) && isValid(parsedEnd) && isValid(parsedDate)) {
-    const first = type === 'set-start' ? parsedDate : parsedStart;
-    const last = type === 'set-end' ? parsedDate : parsedEnd;
-
-    if (!isInOrder({ first, last })) {
-      return { start: date, end: date };
+const setStartEndDates = ({ start, end }: State, message: Action): State => {
+  switch (message[0]) {
+    case 'set-same-date': {
+      const date = message[1];
+      return {
+        start: { ...start, date },
+        end: { ...end, date },
+      };
     }
-  }
+    case 'set-start-date': {
+      const date = message[1];
 
-  switch (type) {
-    case 'set-same-date':
-      return { start: date, end: date };
-    case 'set-start':
-      return { start: date, end };
-    case 'set-end':
-      return { start, end: date };
+      const first = parseEditDate(date);
+      const last = parseEditDate(end.date);
+
+      if (isValid(first) && isValid(last)) {
+        if (!datesInOrder({ first, last })) {
+          return { start: { ...start, date }, end: { ...end, date } };
+        }
+      }
+
+      return { start: { ...start, date }, end };
+    }
+    case 'set-end-date': {
+      const date = message[1];
+
+      const first = parseEditDate(start.date);
+      const last = parseEditDate(date);
+
+      if (isValid(first) && isValid(last)) {
+        if (!datesInOrder({ first, last })) {
+          return { start: { ...start, date }, end: { ...end, date } };
+        }
+      }
+
+      return { start, end: { ...end, date } };
+    }
+    case 'set-start-time': {
+      const time = message[1];
+
+      const first = parseEditDateTime({ ...start, time });
+      const last = parseEditDateTime(end);
+
+      if (isValid(first) && isValid(last)) {
+        if (!isInOrder({ first, last })) {
+          const startTime = parseEditTime(time);
+          if (isValid(startTime)) {
+            return {
+              start: { ...start, time },
+              end: {
+                ...end,
+                time: toEditTime({
+                  hour: startTime.hour + 1,
+                  minute: startTime.minute,
+                }),
+              },
+            };
+          }
+        }
+      }
+
+      return { end, start: { ...start, time } };
+    }
+    case 'set-end-time': {
+      const time = message[1];
+
+      const first = parseEditDateTime(start);
+      const last = parseEditDateTime({ ...end, time });
+
+      if (isValid(first) && isValid(last)) {
+        if (!isInOrder({ first, last })) {
+          const endTime = parseEditTime(time);
+          if (isValid(endTime)) {
+            return {
+              start: {
+                ...start,
+                time: toEditTime({
+                  hour: endTime.hour - 1,
+                  minute: endTime.minute,
+                }),
+              },
+              end: { ...end, time },
+            };
+          }
+        }
+      }
+
+      return { start, end: { ...end, time } };
+    }
   }
 };
 
