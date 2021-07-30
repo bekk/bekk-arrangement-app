@@ -50,7 +50,7 @@ $transitionLength: 0.2s;
   color: var(--lightTextColor);
   font-size: $textMobile;
   font-family: $fontLight;
-  line-height: 23px;
+  line-height: 26px;
   @media #{$desktop} {
     font-size: $textDesktop;
   }
