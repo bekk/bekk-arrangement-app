@@ -9,13 +9,15 @@ import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import style from './CreateEventContainer.module.scss';
 import { isValid } from 'src/types/validation';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
-import { useGotoEventPreview } from 'src/hooks/history';
+import { useDuplicateEvent, useGotoEventPreview } from 'src/hooks/history';
 
 export const CreateEventContainer = () => {
   useAuthentication();
 
+  const duplicateEvent = useDuplicateEvent();
+
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
-    initialEditEvent()
+    duplicateEvent ?? initialEditEvent()
   );
   const validEvent = validateEvent(event);
   const errors = parseEditEvent(event);
