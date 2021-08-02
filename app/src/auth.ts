@@ -60,7 +60,7 @@ export function getEmailAndNameFromJWT(): {
 } {
   const token = getIdToken();
   const { email, name } = token
-    ? getClaimsFromToken(token) 
+    ? getClaimsFromToken(token)
     : { email: undefined, name: undefined }; // getIdToken returns '' when there is no token
   return {
     email,
@@ -135,6 +135,8 @@ export function isAuthenticated(): boolean {
   }
   return false;
 }
+
+export const needsToAuthenticate = (status: number) => status === 401;
 
 export function getEmployeeId(): any {
   if (!isAuthenticated()) {

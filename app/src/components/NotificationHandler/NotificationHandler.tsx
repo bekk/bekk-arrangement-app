@@ -4,10 +4,12 @@ import { Notification } from '@bekk/storybook';
 export class UserNotification extends Error {
   public title: string;
   public userMessage: string;
-  constructor(userMessage: string, title: string = 'Feil') {
+  public status: number;
+  constructor(userMessage: string, status: number = 0, title: string = 'Feil') {
     super();
     this.title = title;
     this.userMessage = userMessage;
+    this.status = status;
   }
 }
 
@@ -20,9 +22,8 @@ type NotifyUser = (n: UserNotification) => void;
 const NotificationContext = createContext<NotifyUser>(() => undefined);
 
 export const NotificationHandler = ({ children }: IProps) => {
-  const [notification, setNotification] = useState<
-    UserNotification | undefined
-  >();
+  const [notification, setNotification] =
+    useState<UserNotification | undefined>();
   const notifyUser = (n: UserNotification) => setNotification(n);
   return (
     <NotificationContext.Provider value={notifyUser}>
@@ -61,7 +62,7 @@ export const useNotification = () => {
     f: (x?: T) => Promise<void>
   ): (x?: T) => Promise<void> {
     return (x?: T) =>
-      f(x).catch(e => {
+      f(x).catch((e) => {
         if (e instanceof UserNotification) {
           notify(e);
         } else {

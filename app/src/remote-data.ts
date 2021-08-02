@@ -27,6 +27,7 @@ export type NotRequested = {
 
 export type Bad = {
   status: 'ERROR';
+  statusCode: number;
   userMessage: string;
 };
 
@@ -80,6 +81,7 @@ export function cachedRemoteData<Key extends string, T>() {
           notify(
             new UserNotification(
               values.userMessage,
+              0,
               'Ikke all dataen kunne lastes'
             )
           );
@@ -162,10 +164,11 @@ export const useUpdateRemoteData = <T, P>(
       });
       fetcher(param)
         .then((data) => setRemoteData({ status: 'OK', data }))
-        .catch(({ userMessage }) => {
+        .catch(({userMessage, status} : {userMessage: string, status: number}) => {
           return setRemoteData({
             status: 'ERROR',
-            userMessage,
+            statusCode: status,
+            userMessage
           });
         });
     },

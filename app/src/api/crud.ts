@@ -64,6 +64,7 @@ async function fetchAndValidate(
   return Promise.reject(
     new UserNotification(
       userMessage,
+      response.status,
       response.status < 500
         ? `${response.status} Et nettverkskall har feilet`
         : `${response.status} Det er noe galt med backenden`

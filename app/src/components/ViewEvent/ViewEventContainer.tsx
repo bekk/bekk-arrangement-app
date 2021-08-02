@@ -4,7 +4,13 @@ import { isInThePast } from 'src/types/date-time';
 import { asString } from 'src/utils/timeleft';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { cancelParticipantRoute } from 'src/routing';
-import { userIsAdmin, userIsLoggedIn } from 'src/auth';
+import {
+  isAuthenticated,
+  needsToAuthenticate,
+  redirectToAuth0,
+  userIsAdmin,
+  userIsLoggedIn,
+} from 'src/auth';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { Page } from 'src/components/Page/Page';
 import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
@@ -54,6 +60,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
   const oneMinute = 60000;
 
   if (isBad(remoteEvent)) {
+    if (!isAuthenticated() && needsToAuthenticate(remoteEvent.statusCode)) {
+      redirectToAuth0();
+      return <p>Redirigerer til innlogging</p>;
+    }
     return <div>{remoteEvent.userMessage}</div>;
   }
 
@@ -237,7 +247,7 @@ export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
   };
 
   return (
-  // eslint-disable-next-line
+    // eslint-disable-next-line
     <a
       role="button"
       ref={link}
