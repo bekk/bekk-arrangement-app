@@ -293,7 +293,7 @@ export const initialEditEvent = (): IEditEvent => {
     organizerEmail: email ?? '',
     maxParticipants: ['limited', ''],
     participantQuestion: undefined,
-    hasWaitingList: false,
+    hasWaitingList: true,
     isCancelled: false,
     isExternal: false,
   };
