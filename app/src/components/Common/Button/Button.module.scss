@@ -10,6 +10,7 @@
     border $transitionLength;
   @media #{$desktop} {
     min-width: 200px;
+    width: max-content;
   }
 
   &:hover {

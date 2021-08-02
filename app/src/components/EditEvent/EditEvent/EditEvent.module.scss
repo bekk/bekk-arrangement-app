@@ -66,6 +66,8 @@
 }
 
 .limitSpots {
+  position: relative;
+  top: -18px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -109,13 +111,18 @@
   @include smallText;
   color: var(--svart60);
   margin-right: 0.2em;
+  padding-bottom: 3px;
 }
 
 .flex {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 }
 
+.pathBox {
+  flex-grow: 1;
+  margin-left: 2px;
+}
 .participantQuestion {
   align-self: flex-start;
 }
