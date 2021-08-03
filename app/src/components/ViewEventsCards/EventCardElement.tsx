@@ -1,26 +1,17 @@
-import React from 'react';
-import {
-  IEvent,
-  isMaxParticipantsLimited,
-  maxParticipantsLimit,
-} from 'src/types/event';
-import { Link } from 'react-router-dom';
-import style from './EventCardElement.module.scss';
-import { stringifyDate, isSameDate } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
-import { viewEventRoute, viewEventShortnameRoute } from 'src/routing';
-import { hasLoaded } from 'src/remote-data';
-import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
-import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import classNames from 'classnames';
+import { isNumber } from 'lodash';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
+import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import {
   EventState,
   eventState,
 } from 'src/components/ViewEventsCards/EventState';
-import { isInThePast } from 'src/types/date-time';
-import { isNumber } from 'lodash';
-import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
-import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
+import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
+import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
+import { hasLoaded } from 'src/remote-data';
+import { viewEventRoute, viewEventShortnameRoute } from 'src/routing';
 import {
   hav,
   hvit,
@@ -31,6 +22,14 @@ import {
   solnedgang,
   soloppgang,
 } from 'src/style/colors';
+import { isSameDate, stringifyDate } from 'src/types/date';
+import {
+  IEvent,
+  isMaxParticipantsLimited,
+  maxParticipantsLimit,
+} from 'src/types/event';
+import { stringifyTime } from 'src/types/time';
+import style from './EventCardElement.module.scss';
 
 interface IProps {
   eventId: string;
@@ -195,7 +194,7 @@ const getEventState = ({
 
   if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
 
-  if (isInThePast(event.end)) return 'Avsluttet';
+  if (event.isInThePast) return 'Avsluttet';
 
   if (isNumber(waitingListSpot)) {
     if (waitingListSpot > 0) return 'På venteliste';

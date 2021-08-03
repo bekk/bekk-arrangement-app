@@ -126,6 +126,7 @@ export interface IEditEvent {
   isCancelled: boolean;
   isExternal: boolean;
   shortname?: string;
+  isInThePast: boolean;
 }
 
 export const parseEditEvent = ({
@@ -143,6 +144,7 @@ export const parseEditEvent = ({
   isCancelled,
   isExternal,
   shortname,
+  isInThePast,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -255,6 +257,7 @@ export const toEditEvent = ({
   isCancelled,
   isExternal,
   shortname,
+  isInThePast,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -270,6 +273,7 @@ export const toEditEvent = ({
   isCancelled,
   isExternal,
   shortname,
+  isInThePast,
 });
 
 export const initialEditEvent = (): IEditEvent => {
@@ -296,6 +300,7 @@ export const initialEditEvent = (): IEditEvent => {
     hasWaitingList: true,
     isCancelled: false,
     isExternal: false,
+    isInThePast: false,
   };
 };
 

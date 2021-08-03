@@ -84,11 +84,6 @@ export const isInTheFuture = ({ date, time }: IDateTime) => {
   return isAfter(toDate({ date, time }), now);
 };
 
-export const isInThePast = ({ date, time }: IDateTime) => {
-  const now = new Date();
-  return isBefore(toDate({ date, time }), now);
-};
-
 export const isInOrder = ({
   first,
   last,
