@@ -23,6 +23,7 @@ import {
   soloppgang,
 } from 'src/style/colors';
 import { isSameDate, stringifyDate } from 'src/types/date';
+import { isInThePast } from 'src/types/date-time';
 import {
   IEvent,
   isMaxParticipantsLimited,
@@ -194,7 +195,7 @@ const getEventState = ({
 
   if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
 
-  if (event.isInThePast) return 'Avsluttet';
+  if (isInThePast(event.end)) return 'Avsluttet';
 
   if (isNumber(waitingListSpot)) {
     if (waitingListSpot > 0) return 'På venteliste';

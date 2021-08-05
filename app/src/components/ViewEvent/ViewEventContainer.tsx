@@ -24,6 +24,7 @@ import {
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { cancelParticipantRoute } from 'src/routing';
+import { isInThePast } from 'src/types/date-time';
 import {
   isMaxParticipantsLimited,
   maxParticipantsLimit,
@@ -111,7 +112,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
         } plasser igjen.`
   }`;
 
-  const closedEventText = event.isInThePast
+  const closedEventText = isInThePast(event.end)
     ? 'Arrangementet har allerede funnet sted'
     : timeLeft.difference > 0
     ? `Åpner om ${asString(timeLeft)}`
@@ -191,7 +192,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               ) : waitlistText ? (
                 <p>{waitlistText}</p>
               ) : null}
-              {!event.isInThePast &&
+              {!isInThePast(event.end) &&
                 timeLeft.difference < oneMinute &&
                 !event.isCancelled && (
                   <AddParticipant eventId={eventId} event={event} />

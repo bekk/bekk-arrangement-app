@@ -14,6 +14,7 @@ import {
   parseParticipantViewModel,
   IParticipantsWithWaitingList,
 } from 'src/types/participant';
+import { isInThePast } from 'src/types/date-time';
 
 //**  Event  **//
 
@@ -59,14 +60,14 @@ export const useShortname = (shortname: string) => {
 export const usePastEvents = () => {
   const map = useEvents();
   return new Map(
-    [...map].filter(([_, event]) => hasLoaded(event) && event.data.isInThePast)
+    [...map].filter(([_, event]) => hasLoaded(event) && isInThePast(event.data.end))
   );
 };
 
 export const useUpcomingEvents = () => {
   const map = useEvents();
   return new Map(
-    [...map].filter(([_, event]) => hasLoaded(event) && !event.data.isInThePast)
+    [...map].filter(([_, event]) => hasLoaded(event) && !isInThePast(event.data.end))
   );
 };
 
