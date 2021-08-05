@@ -1,28 +1,28 @@
+import { isAfter, isBefore } from 'date-fns';
 import {
+  datesInOrder,
+  EditDate,
   IDate,
   IDateContract,
-  EditDate,
-  datesInOrder,
   isSameDate,
+  parseDateViewModel,
   parseEditDate,
   stringifyDate,
-  toEditDate,
-  parseDateViewModel,
   toDateWriteModel,
+  toEditDate,
 } from 'src/types/date';
 import {
-  ITime,
-  stringifyTime,
-  ITimeContract,
   EditTime,
-  timesInOrder,
+  ITime,
+  ITimeContract,
   parseEditTime,
-  toEditTime,
   parseTimeViewModel,
+  stringifyTime,
+  timesInOrder,
+  toEditTime,
   toTimeWriteModel,
 } from 'src/types/time';
 import { IError, isValid } from 'src/types/validation';
-import { isAfter, isBefore } from 'date-fns';
 import { concatLists } from 'src/utils';
 
 export type IDateTimeContract = {

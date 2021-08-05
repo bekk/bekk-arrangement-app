@@ -26,7 +26,6 @@ npm start
 
 Appen kjører da på http://localhost:3000
 
-
 ### 🔥Hett tips🔥
 
 Skaff deg tmux, gå til rotmappa til prosjektet og kjør
@@ -34,3 +33,7 @@ Skaff deg tmux, gå til rotmappa til prosjektet og kjør
 ```
 ./tmux.sh
 ```
+
+### Koble mot lokal backend
+
+export ARRANGEMENT_SVC_URL=http://localhost:5000

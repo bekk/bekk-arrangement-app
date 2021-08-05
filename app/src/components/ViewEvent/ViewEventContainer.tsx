@@ -1,9 +1,6 @@
 import React, { createRef } from 'react';
-import style from './ViewEventContainer.module.scss';
-import { isInThePast } from 'src/types/date-time';
-import { asString } from 'src/utils/timeleft';
-import { useTimeLeft } from 'src/hooks/timeleftHooks';
-import { cancelParticipantRoute } from 'src/routing';
+import { useHistory } from 'react-router';
+import { getParticipantExportResponse } from 'src/api/arrangementSvc';
 import {
   isAuthenticated,
   needsToAuthenticate,
@@ -11,26 +8,29 @@ import {
   userIsAdmin,
   userIsLoggedIn,
 } from 'src/auth';
-import { hasLoaded, isBad } from 'src/remote-data';
+import { Button } from 'src/components/Common/Button/Button';
+import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon';
 import { Page } from 'src/components/Page/Page';
+import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
+import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
+import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
+import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
 import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
 import {
   Participation,
   useEditToken,
   useSavedParticipations,
 } from 'src/hooks/saved-tokens';
-import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
-import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
-import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
-import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
-import { useHistory } from 'react-router';
-import { Button } from 'src/components/Common/Button/Button';
-import { getParticipantExportResponse } from 'src/api/arrangementSvc';
-import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon';
+import { useTimeLeft } from 'src/hooks/timeleftHooks';
+import { hasLoaded, isBad } from 'src/remote-data';
+import { cancelParticipantRoute } from 'src/routing';
+import { isInThePast } from 'src/types/date-time';
 import {
   isMaxParticipantsLimited,
   maxParticipantsLimit,
 } from 'src/types/event';
+import { asString } from 'src/utils/timeleft';
+import style from './ViewEventContainer.module.scss';
 
 interface IProps {
   eventId: string;
