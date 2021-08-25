@@ -93,7 +93,7 @@
   @media #{$desktop} {
     width: $pageDesktopWidth;
     max-width: 800px;
-    margin-left: 15%;
+    margin-left: calc(max((100vw - 2000px) / 2, 15%));
   }
 }
 
@@ -125,4 +125,3 @@
     }
   }
 }
-
