@@ -5,7 +5,7 @@ import {
   initalParticipant,
   parseEditParticipant,
   parseName,
-  parseComment,
+  parseAnswers,
 } from 'src/types/participant';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { parseEditEmail } from 'src/types/email';
@@ -64,7 +64,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
     }
   });
 
-  const participantQuestion = event.participantQuestion;
+  const participantQuestion = event.participantQuestions[0];
 
   return (
     <div className={style.addParticipantContainer}>
@@ -96,18 +96,18 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           }
         />
       </div>
-      {participantQuestion !== undefined && (
+      {participantQuestion.length > 0 && (
         <div>
           <ValidatedTextArea
             label={participantQuestion}
             placeholder={'Kommentar til arrangør'}
-            value={participant.comment}
-            validation={parseComment}
+            value={participant.answers[0]}
+            validation={(answer) => parseAnswers([answer])}
             minRow={3}
-            onChange={(comment: string) =>
+            onChange={(answer: string) =>
               setParticipant({
                 ...participant,
-                comment,
+                answers: [answer],
               })
             }
           />

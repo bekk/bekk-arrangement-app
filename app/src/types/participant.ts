@@ -9,7 +9,7 @@ import { getEmailAndNameFromJWT } from 'src/auth';
 
 export interface IParticipantWriteModel {
   name: string;
-  comment: string;
+  answers: string[];
   cancelUrlTemplate: string;
 }
 
@@ -18,7 +18,7 @@ export interface IParticipantViewModel {
   email?: string;
   eventId: string;
   registrationTime: number;
-  comment?: string;
+  answers: string[];
 }
 
 export interface IParticipantsWithWaitingList {
@@ -39,13 +39,13 @@ export interface INewParticipantViewModel {
 export interface IParticipant {
   name: string;
   email: Email;
-  comment: string;
+  answers: string[];
 }
 
 export interface IEditParticipant {
   name: string;
   email: string;
-  comment: string;
+  answers: string[];
 }
 
 export const toParticipantWriteModel = (
@@ -65,15 +65,13 @@ export const parseParticipantViewModel = (
     ? parseEmailViewModel(participantView.email)
     : { email: '' };
   const name = parseName(participantView.name);
-  const comment = participantView.comment
-    ? parseComment(participantView.comment)
-    : '';
+  const answers = parseAnswers(participantView.answers);
 
   const participant = {
     ...participantView,
     email,
     name,
-    comment,
+    answers,
   };
 
   assertIsValid(participant);
@@ -84,12 +82,12 @@ export const parseParticipantViewModel = (
 export const parseEditParticipant = ({
   name,
   email,
-  comment,
+  answers,
 }: IEditParticipant): IParticipant | IError[] => {
   const participant = {
     name: parseName(name),
     email: parseEditEmail(email),
-    comment: parseComment(comment),
+    answers: parseAnswers(answers),
   };
 
   try {
@@ -104,11 +102,11 @@ export const parseEditParticipant = ({
 export const toEditParticipant = ({
   name,
   email,
-  comment,
+  answers,
 }: IParticipant): IEditParticipant => ({
   name,
   email: toEditEmail(email),
-  comment,
+  answers,
 });
 
 export const parseName = (value: string): string | IError[] => {
@@ -119,9 +117,9 @@ export const parseName = (value: string): string | IError[] => {
   return validator.resolve(value);
 };
 
-export const parseComment = (value: string): string | IError[] => {
-  const validator = validate<string>({
-    'Kommentar kan ha maks 500 tegn': value.length > 500,
+export const parseAnswers = (value: string[]): string[] | IError[] => {
+  const validator = validate<string[]>({
+    'Svar kan ha maks 500 tegn': value.every((s) => s.length > 500),
   });
   return validator.resolve(value);
 };
@@ -131,6 +129,6 @@ export function initalParticipant(): IParticipant {
   return {
     email: { email: email ?? '' },
     name: name ?? '',
-    comment: '',
+    answers: [],
   };
 }

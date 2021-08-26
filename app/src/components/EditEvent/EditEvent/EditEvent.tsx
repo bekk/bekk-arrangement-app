@@ -11,7 +11,7 @@ import {
   parseHost,
   parseMaxAttendees,
   parseLocation,
-  parseQuestion,
+  parseQuestions,
   parseShortname,
 } from 'src/types';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
@@ -341,19 +341,19 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           )}
         </div>
 
-        {event.participantQuestion !== undefined ? (
+        {event.participantQuestions.length > 0 ? (
           <div>
             <ValidatedTextArea
               label={labels.participantQuestion}
               placeholder={placeholders.participantQuestion}
-              value={event.participantQuestion}
-              validation={parseQuestion}
+              value={event.participantQuestions[0]}
+              validation={(s) => parseQuestions([s])}
               onLightBackground
               minRow={4}
               onChange={(participantQuestion) =>
                 updateEvent({
                   ...event,
-                  participantQuestion,
+                  participantQuestions: [participantQuestion],
                 })
               }
             />
@@ -362,7 +362,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               displayAsLink
               onLightBackground
               onClick={() =>
-                updateEvent({ ...event, participantQuestion: undefined })
+                updateEvent({ ...event, participantQuestions: [] })
               }
             >
               {buttonText.removeParticipantQuestion}
@@ -377,7 +377,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             onClick={() =>
               updateEvent({
                 ...event,
-                participantQuestion: '',
+                participantQuestions: [],
               })
             }
           >

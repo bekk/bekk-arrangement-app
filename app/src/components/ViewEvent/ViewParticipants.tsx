@@ -69,7 +69,10 @@ const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
             </tr>
             <tr>
               <td colSpan={2} className={style.mobileCommentCell}>
-                {attendee.comment}
+                {
+                  // TODO Denne må fikses:
+                }
+                {attendee.answers}
               </td>
             </tr>
           </React.Fragment>
@@ -85,7 +88,7 @@ const ParticipantTableDesktop = (props: {
 }) => {
   const event = useEvent(props.eventId);
   const hasComments = hasLoaded(event)
-    ? event.data.participantQuestion !== undefined
+    ? event.data.participantQuestions.length > 0
     : true;
   return (
     <table className={style.table}>
@@ -105,8 +108,12 @@ const ParticipantTableDesktop = (props: {
             <td className={style.desktopCell}>
               {stringifyEmail(attendee.email)}
             </td>
+            {
+              // TODO Denne må fikses:
+              // answers er en liste og kan ikkje blæstes i jsx-en
+            }
             {hasComments && (
-              <td className={style.desktopCell}>{attendee.comment}</td>
+              <td className={style.desktopCell}>{attendee.answers}</td>
             )}
           </tr>
         ))}

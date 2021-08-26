@@ -125,10 +125,10 @@ export const ViewEvent = ({
           Dupliser arrangement
         </Button> */}
         </div>
-        {isPreview && event.participantQuestion && (
+        {isPreview && event.participantQuestions.length > 0 && (
           <div>
             <h3>Spørsmål til deltaker</h3>
-            <div>{event.participantQuestion}</div>
+            <div>{event.participantQuestions[0]}</div>
           </div>
         )}
         {isPreview && event.shortname && (
