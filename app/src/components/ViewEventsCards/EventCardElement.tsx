@@ -124,7 +124,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
           <div className={style.externalIcon}>
             <ExternalIcon color="white" />
           </div>
-          <div className={style.iconText}> Eksternt arrangementet </div>
+          <div className={style.iconText}> Eksternt arrangement </div>
         </div>
       )}
       <div className={style.cardFooter}>
