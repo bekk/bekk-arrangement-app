@@ -8,19 +8,19 @@ interface IRequest {
 }
 
 export const get = ({ host, path }: IRequest) =>
-  fetchAndValidate('GET', host, path).then(res => res.json());
+  fetchAndValidate('GET', host, path).then((res) => res.json());
 
 export const getResponse = ({ host, path }: IRequest) =>
-  fetchAndValidate('GET', host, path)
+  fetchAndValidate('GET', host, path);
 
 export const post = ({ host, path, body }: IRequest) =>
-  fetchAndValidate('POST', host, path, body).then(res => res.json());
+  fetchAndValidate('POST', host, path, body).then((res) => res.json());
 
 export const patch = ({ host, path, body }: IRequest) =>
   fetchAndValidate('PATCH', host, path, body);
 
 export const put = ({ host, path, body }: IRequest) =>
-  fetchAndValidate('PUT', host, path, body).then(res => res.json());
+  fetchAndValidate('PUT', host, path, body).then((res) => res.json());
 
 export const del = ({ host, path, body }: IRequest) =>
   fetchAndValidate('DELETE', host, path, body);
@@ -35,6 +35,7 @@ const options = (method: string, token: string, body?: string) => ({
     'Content-Type': 'application/json',
     From: 'arrangement-app',
   },
+  credentials: 'omit',
   body,
 });
 
