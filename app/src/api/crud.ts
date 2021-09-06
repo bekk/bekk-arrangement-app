@@ -35,7 +35,7 @@ const options = (method: string, token: string, body?: string) => ({
     'Content-Type': 'application/json',
     From: 'arrangement-app',
   },
-  credentials: 'omit',
+  credentials: 'omit' as 'omit',
   body,
 });
 
