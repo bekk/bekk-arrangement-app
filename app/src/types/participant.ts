@@ -9,7 +9,7 @@ import { getEmailAndNameFromJWT } from 'src/auth';
 
 export interface IParticipantWriteModel {
   name: string;
-  answers: string[];
+  participantAnswers: string[];
   cancelUrlTemplate: string;
 }
 
@@ -18,7 +18,7 @@ export interface IParticipantViewModel {
   email?: string;
   eventId: string;
   registrationTime: number;
-  answers: string[];
+  participantAnswers: string[];
 }
 
 export interface IParticipantsWithWaitingList {
@@ -39,13 +39,13 @@ export interface INewParticipantViewModel {
 export interface IParticipant {
   name: string;
   email: Email;
-  answers: string[];
+  participantAnswers: string[];
 }
 
 export interface IEditParticipant {
   name: string;
   email: string;
-  answers: string[];
+  participantAnswers: string[];
 }
 
 export const toParticipantWriteModel = (
@@ -65,7 +65,7 @@ export const parseParticipantViewModel = (
     ? parseEmailViewModel(participantView.email)
     : { email: '' };
   const name = parseName(participantView.name);
-  const answers = parseAnswers(participantView.answers);
+  const answers = parseAnswers(participantView.participantAnswers);
 
   const participant = {
     ...participantView,
@@ -82,12 +82,12 @@ export const parseParticipantViewModel = (
 export const parseEditParticipant = ({
   name,
   email,
-  answers,
+  participantAnswers: answers,
 }: IEditParticipant): IParticipant | IError[] => {
   const participant = {
     name: parseName(name),
     email: parseEditEmail(email),
-    answers: parseAnswers(answers),
+    participantAnswers: parseAnswers(answers),
   };
 
   try {
@@ -102,11 +102,11 @@ export const parseEditParticipant = ({
 export const toEditParticipant = ({
   name,
   email,
-  answers,
+  participantAnswers: answers,
 }: IParticipant): IEditParticipant => ({
   name,
   email: toEditEmail(email),
-  answers,
+  participantAnswers: answers,
 });
 
 export const parseName = (value: string): string | IError[] => {
@@ -118,6 +118,9 @@ export const parseName = (value: string): string | IError[] => {
 };
 
 export const parseAnswers = (value: string[]): string[] | IError[] => {
+  if (value.length === 0) {
+    return value;
+  }
   const validator = validate<string[]>({
     'Svar kan ha maks 500 tegn': value.every((s) => s.length > 500),
   });
@@ -129,6 +132,6 @@ export function initalParticipant(): IParticipant {
   return {
     email: { email: email ?? '' },
     name: name ?? '',
-    answers: [],
+    participantAnswers: [],
   };
 }

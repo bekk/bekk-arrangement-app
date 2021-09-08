@@ -70,6 +70,9 @@ export const toEditMaxAttendees = (
 };
 
 export const parseQuestions = (value: string[]): string[] | IError[] => {
+  if (value.length === 0) {
+    return value;
+  }
   const validator = validate<string[]>({
     'Spørsmål til deltaker må ha minst 5 tegn': value.every(
       (s) => s.length < 5

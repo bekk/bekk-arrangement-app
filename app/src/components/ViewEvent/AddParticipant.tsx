@@ -64,7 +64,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
     }
   });
 
-  const participantQuestion = event.participantQuestions[0];
+  const participantQuestion = event.participantQuestions[0] || '';
 
   return (
     <div className={style.addParticipantContainer}>
@@ -101,13 +101,13 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           <ValidatedTextArea
             label={participantQuestion}
             placeholder={'Kommentar til arrangør'}
-            value={participant.answers[0]}
+            value={participant.participantAnswers[0] || ''}
             validation={(answer) => parseAnswers([answer])}
             minRow={3}
             onChange={(answer: string) =>
               setParticipant({
                 ...participant,
-                answers: [answer],
+                participantAnswers: [answer],
               })
             }
           />

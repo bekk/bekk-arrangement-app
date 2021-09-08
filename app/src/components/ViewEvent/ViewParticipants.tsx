@@ -72,7 +72,7 @@ const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
                 {
                   // TODO Denne må fikses:
                 }
-                {attendee.answers}
+                {attendee.participantAnswers}
               </td>
             </tr>
           </React.Fragment>
@@ -113,7 +113,9 @@ const ParticipantTableDesktop = (props: {
               // answers er en liste og kan ikkje blæstes i jsx-en
             }
             {hasComments && (
-              <td className={style.desktopCell}>{attendee.answers}</td>
+              <td className={style.desktopCell}>
+                {attendee.participantAnswers}
+              </td>
             )}
           </tr>
         ))}
