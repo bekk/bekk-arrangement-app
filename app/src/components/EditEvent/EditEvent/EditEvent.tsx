@@ -377,7 +377,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             onClick={() =>
               updateEvent({
                 ...event,
-                participantQuestions: [],
+                participantQuestions: [''],
               })
             }
           >
