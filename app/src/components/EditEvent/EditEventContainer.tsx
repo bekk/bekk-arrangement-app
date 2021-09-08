@@ -22,6 +22,7 @@ import { ButtonWithPromptModal } from 'src/components/Common/ButtonWithConfirmMo
 import { useEvent } from 'src/hooks/cache';
 import { useGotoEventPreview } from 'src/hooks/history';
 import { useEditToken, useSavedEditableEvents } from 'src/hooks/saved-tokens';
+import classnames from 'classnames';
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);
@@ -85,7 +86,7 @@ export const EditEventContainer = () => {
             onConfirm={onDeleteEvent}
             placeholder="Arrangementet er avlyst pga. ..."
             textareaLabel="Send en forklarende tekst på e-post til alle påmeldte deltakere:"
-            className={style.redButton}
+            className={classnames(style.button, style.redButton)}
           >
             <>
               <p>
@@ -99,6 +100,7 @@ export const EditEventContainer = () => {
           </ButtonWithPromptModal>
           <Button
             onClick={() => validEvent && gotoPreview(validEvent)}
+            className={style.button}
             disabled={!validEvent}
             disabledResaon={
               <ul>

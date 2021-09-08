@@ -24,10 +24,14 @@
   margin-top: 10px;
 }
 
-.groupedButtons > button:not(:first-child) {
+.groupedButtons > button {
   margin-left: 25px;
 }
 
 .redButton {
   background-color: var(--solnedgangKontrast);
+}
+
+.button {
+  font-size: 14px;
 }

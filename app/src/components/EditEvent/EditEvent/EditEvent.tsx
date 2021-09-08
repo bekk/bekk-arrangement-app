@@ -341,49 +341,63 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           )}
         </div>
 
-        {event.participantQuestions.length > 0 ? (
-          <div>
+        <div>
+          {event.participantQuestions.map((q, i) => (
             <ValidatedTextArea
               label={labels.participantQuestion}
               placeholder={placeholders.participantQuestion}
-              value={event.participantQuestions[0]}
+              value={q}
               validation={(s) => parseQuestions([s])}
               onLightBackground
               minRow={4}
               onChange={(participantQuestion) =>
                 updateEvent({
                   ...event,
-                  participantQuestions: [participantQuestion],
+                  participantQuestions: event.participantQuestions.map(
+                    (oldQ, oldI) => {
+                      if (i === oldI) {
+                        return participantQuestion;
+                      }
+                      return oldQ;
+                    }
+                  ),
                 })
               }
             />
+          ))}
+          {event.participantQuestions.length > 0 && (
             <Button
               className={style.removeQButton}
               displayAsLink
               onLightBackground
               onClick={() =>
-                updateEvent({ ...event, participantQuestions: [] })
+                updateEvent({
+                  ...event,
+                  participantQuestions: event.participantQuestions
+                    .reverse()
+                    .slice(1)
+                    .reverse(),
+                })
               }
             >
               {buttonText.removeParticipantQuestion}
             </Button>
-          </div>
-        ) : (
-          <Button
-            color="Secondary"
-            displayAsLink
-            onLightBackground
-            className={style.participantQuestion}
-            onClick={() =>
-              updateEvent({
-                ...event,
-                participantQuestions: [''],
-              })
-            }
-          >
-            {buttonText.addParticipantQuestion}
-          </Button>
-        )}
+          )}
+        </div>
+        <Button
+          color="Secondary"
+          displayAsLink
+          onLightBackground
+          className={style.participantQuestion}
+          onClick={() =>
+            updateEvent({
+              ...event,
+              participantQuestions: event.participantQuestions.concat(['']),
+            })
+          }
+        >
+          {buttonText.addParticipantQuestion}
+        </Button>
       </div>
     </div>
   );
@@ -535,5 +549,5 @@ const buttonText = {
   addRegistrationEndDate: 'Legg til påmeldingsfrist',
   removeRegistrationEndDate: 'Fjern påmeldingsfrist',
   addParticipantQuestion: '+ Legg til spørsmål til deltakere',
-  removeParticipantQuestion: '- Fjern spørsmål til deltakere',
+  removeParticipantQuestion: '- Fjern spørsmål',
 };

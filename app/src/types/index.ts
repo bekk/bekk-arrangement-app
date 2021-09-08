@@ -74,10 +74,8 @@ export const parseQuestions = (value: string[]): string[] | IError[] => {
     return value;
   }
   const validator = validate<string[]>({
-    'Spørsmål til deltaker må ha minst 5 tegn': value.every(
-      (s) => s.length < 5
-    ),
-    'Spørsmål til deltaker kan ha maks 500 tegn': value.every(
+    'Spørsmål til deltaker må ha minst 5 tegn': value.some((s) => s.length < 5),
+    'Spørsmål til deltaker kan ha maks 500 tegn': value.some(
       (s) => s.length > 500
     ),
   });
