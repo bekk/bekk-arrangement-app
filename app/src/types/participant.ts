@@ -122,7 +122,7 @@ export const parseAnswers = (value: string[]): string[] | IError[] => {
     return value;
   }
   const validator = validate<string[]>({
-    'Svar kan ha maks 500 tegn': value.every((s) => s.length > 500),
+    'Svar kan ha maks 500 tegn': value.some((s) => s.length > 500),
   });
   return validator.resolve(value);
 };
