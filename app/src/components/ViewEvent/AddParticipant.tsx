@@ -99,7 +99,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           <ValidatedTextArea
             label={q}
             placeholder={''}
-            value={participant.participantAnswers[i]}
+            value={participant.participantAnswers[i] ?? ''}
             validation={(answer) => parseAnswers([answer])}
             minRow={3}
             onChange={(answer: string) =>
