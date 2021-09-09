@@ -127,11 +127,13 @@ export const parseAnswers = (value: string[]): string[] | IError[] => {
   return validator.resolve(value);
 };
 
-export function initalParticipant(): IParticipant {
+export function initalParticipant(
+  numberOfParticipantQuestions: number
+): IParticipant {
   const { name, email } = getEmailAndNameFromJWT();
   return {
     email: { email: email ?? '' },
     name: name ?? '',
-    participantAnswers: [],
+    participantAnswers: Array(numberOfParticipantQuestions).fill(''),
   };
 }

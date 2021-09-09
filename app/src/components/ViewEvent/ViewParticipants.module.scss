@@ -24,13 +24,13 @@
 }
 
 .mobileEmailCell {
-  @include boldText;
+  @include regularText;
   font-size: 16px;
   padding: 15px 0;
-  text-align: right;
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: 120px;
+  opacity: 0.7;
 }
 
 .mobileCommentCell {
@@ -40,6 +40,7 @@
 }
 
 .desktopCell {
+  vertical-align: top;
   padding: 15px 15px 15px 0;
   text-align: left;
   border-bottom: 1px solid var(--svart20);
@@ -63,4 +64,13 @@
   @include subSubHeaderText;
   margin-top: 50px;
   margin-bottom: 20px;
+}
+
+.question {
+  font-family: $fontMedium;
+}
+
+.answer {
+  font-family: $fontLight;
+  margin-bottom: 10px;
 }

@@ -31,7 +31,7 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
     <div>
       {remoteParticipants.data.attendees.length > 0 ? (
         screenIsMobileSize ? (
-          <ParticipantTableMobile participants={attendees} />
+          <ParticipantTableMobile eventId={eventId} participants={attendees} />
         ) : (
           <ParticipantTableDesktop eventId={eventId} participants={attendees} />
         )
@@ -42,7 +42,10 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
         <>
           <h3 className={style.subSubHeader}>På venteliste</h3>
           {screenIsMobileSize ? (
-            <ParticipantTableMobile participants={waitingList} />
+            <ParticipantTableMobile
+              eventId={eventId}
+              participants={waitingList}
+            />
           ) : (
             <ParticipantTableDesktop
               eventId={eventId}
@@ -55,24 +58,38 @@ export const ViewParticipants = ({ eventId, editToken }: IProps) => {
   );
 };
 
-const ParticipantTableMobile = (props: { participants: IParticipant[] }) => {
+const ParticipantTableMobile = (props: {
+  eventId: string;
+  participants: IParticipant[];
+}) => {
+  const event = useEvent(props.eventId);
+  const questions = (hasLoaded(event) && event.data.participantQuestions) || [];
   return (
     <table className={style.table}>
       <tbody>
         {props.participants.map((attendee) => (
           <React.Fragment key={attendee.name + attendee.email.email}>
             <tr>
-              <td className={style.mobileNameCell}>{attendee.name}</td>
-              <td className={style.mobileEmailCell}>
-                {stringifyEmail(attendee.email)}
+              <td className={style.mobileNameCell}>
+                {attendee.name}{' '}
+                <span className={style.mobileEmailCell}>
+                  ({stringifyEmail(attendee.email)})
+                </span>
               </td>
             </tr>
             <tr>
               <td colSpan={2} className={style.mobileCommentCell}>
-                {
-                  // TODO Denne må fikses:
-                }
-                {attendee.participantAnswers}
+                {questions.map(
+                  (q, i) =>
+                    attendee.participantAnswers[i] && (
+                      <div>
+                        <div className={style.question}>{q}</div>
+                        <div className={style.answer}>
+                          {attendee.participantAnswers[i]}
+                        </div>
+                      </div>
+                    )
+                )}
               </td>
             </tr>
           </React.Fragment>
@@ -90,6 +107,7 @@ const ParticipantTableDesktop = (props: {
   const hasComments = hasLoaded(event)
     ? event.data.participantQuestions.length > 0
     : true;
+  const questions = (hasLoaded(event) && event.data.participantQuestions) || [];
   return (
     <table className={style.table}>
       <thead>
@@ -108,15 +126,19 @@ const ParticipantTableDesktop = (props: {
             <td className={style.desktopCell}>
               {stringifyEmail(attendee.email)}
             </td>
-            {
-              // TODO Denne må fikses:
-              // answers er en liste og kan ikkje blæstes i jsx-en
-            }
-            {hasComments && (
-              <td className={style.desktopCell}>
-                {attendee.participantAnswers}
-              </td>
-            )}
+            <td className={style.desktopCell}>
+              {questions.map(
+                (q, i) =>
+                  attendee.participantAnswers[i] && (
+                    <div>
+                      <div className={style.question}>{q}</div>
+                      <div className={style.answer}>
+                        {attendee.participantAnswers[i]}
+                      </div>
+                    </div>
+                  )
+              )}
+            </td>
           </tr>
         ))}
       </tbody>
