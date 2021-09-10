@@ -24,6 +24,7 @@ import {
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { cancelParticipantRoute } from 'src/routing';
+import { dateAsText, dateToIDate } from 'src/types/date';
 import { isInThePast } from 'src/types/date-time';
 import {
   isMaxParticipantsLimited,
@@ -115,7 +116,9 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
   const closedEventText = isInThePast(event.end)
     ? 'Arrangementet har allerede funnet sted'
     : timeLeft.difference > 0
-    ? `Åpner om ${asString(timeLeft)}`
+    ? `Åpner ${dateAsText(
+        dateToIDate(event.openForRegistrationTime)
+      )}, om ${asString(timeLeft)}`
     : eventIsFull && !event.hasWaitingList
     ? 'Arrangementet er dessverre fullt'
     : event.isCancelled
@@ -186,7 +189,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 <div>
                   <p>{numberOfPossibleParticipantsText}</p>
                   <p>
-                    Påmeldingen er stengt <br /> {closedEventText}
+                    Påmeldingen er stengt <br />
+                    <div className={style.closedEventText}>
+                      {closedEventText}
+                    </div>
                   </p>
                 </div>
               ) : waitlistText ? (
@@ -254,7 +260,7 @@ export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
       onClick={handleAction}
       className={style.downloadIcon}
     >
-      <DownloadIcon />
+      <DownloadIcon title="Last ned deltageroversikt" />
     </a>
   );
 }
