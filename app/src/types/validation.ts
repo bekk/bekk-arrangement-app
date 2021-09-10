@@ -17,7 +17,7 @@ const isIError = (error: any): error is IError =>
   isErrorType(error.type);
 
 export const isIErrorList = (errors: any): errors is IError[] =>
-  Array.isArray(errors) && errors.every(isIError);
+  Array.isArray(errors) && errors.every(isIError) && errors.length > 0;
 
 export const isValid = <T>(notErrors: T): notErrors is Exclude<T, IError[]> =>
   !isIErrorList(notErrors);

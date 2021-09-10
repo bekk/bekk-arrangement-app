@@ -6,7 +6,7 @@ import {
   parseMaxAttendees,
   parseLocation,
   WithId,
-  parseQuestion,
+  parseQuestions,
   toEditMaxAttendees,
   parseShortname,
 } from '.';
@@ -54,7 +54,7 @@ export interface IEventViewModel {
   organizerName: string;
   organizerEmail: string;
   maxParticipants?: number;
-  participantQuestion?: string;
+  participantQuestions: string[];
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
@@ -73,7 +73,7 @@ export interface IEventWriteModel {
   maxParticipants?: number;
   viewUrl?: string;
   editUrlTemplate: string;
-  participantQuestion?: string;
+  participantQuestions: string[];
   hasWaitingList: boolean;
   isExternal: boolean;
   shortname?: string;
@@ -102,7 +102,7 @@ export interface IEvent {
   organizerName: string;
   organizerEmail: Email;
   maxParticipants: MaxParticipants<number>;
-  participantQuestion?: string;
+  participantQuestions: string[];
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
@@ -119,7 +119,7 @@ export interface IEditEvent {
   organizerName: string;
   organizerEmail: string;
   maxParticipants: MaxParticipants<string>;
-  participantQuestion?: string;
+  participantQuestions: string[];
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
@@ -136,7 +136,7 @@ export const parseEditEvent = ({
   organizerName,
   organizerEmail,
   maxParticipants,
-  participantQuestion,
+  participantQuestions,
   hasWaitingList,
   isCancelled,
   isExternal,
@@ -152,7 +152,7 @@ export const parseEditEvent = ({
     organizerName: parseName(organizerName),
     organizerEmail: parseEditEmail(organizerEmail),
     maxParticipants: parseMaxAttendees(maxParticipants),
-    participantQuestion: parseQuestion(participantQuestion),
+    participantQuestions: parseQuestions(participantQuestions),
     hasWaitingList,
     isCancelled,
     isExternal,
@@ -207,7 +207,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
         ])
       : (['unlimited'] as ['unlimited'])
   );
-  const participantQuestion = parseQuestion(eventView.participantQuestion);
+  const participantQuestions = parseQuestions(eventView.participantQuestions);
   const hasWaitingList = eventView.hasWaitingList;
   const isCancelled = eventView.isCancelled;
   const isExternal = eventView.isExternal;
@@ -223,7 +223,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     organizerName,
     organizerEmail,
     maxParticipants,
-    participantQuestion,
+    participantQuestions,
     hasWaitingList,
     isCancelled,
     isExternal,
@@ -245,7 +245,7 @@ export const toEditEvent = ({
   organizerName,
   organizerEmail,
   maxParticipants,
-  participantQuestion,
+  participantQuestions,
   hasWaitingList,
   isCancelled,
   isExternal,
@@ -260,7 +260,7 @@ export const toEditEvent = ({
   organizerName,
   organizerEmail: toEditEmail(organizerEmail),
   maxParticipants: toEditMaxAttendees(maxParticipants),
-  participantQuestion,
+  participantQuestions,
   hasWaitingList,
   isCancelled,
   isExternal,
@@ -287,7 +287,7 @@ export const initialEditEvent = (): IEditEvent => {
     organizerName: name ?? '',
     organizerEmail: email ?? '',
     maxParticipants: ['limited', ''],
-    participantQuestion: undefined,
+    participantQuestions: [],
     hasWaitingList: true,
     isCancelled: false,
     isExternal: false,

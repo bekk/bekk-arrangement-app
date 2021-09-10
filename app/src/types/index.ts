@@ -69,15 +69,15 @@ export const toEditMaxAttendees = (
   return ['limited', maxParticipantsLimit(value).toString()];
 };
 
-export const parseQuestion = (
-  value?: string
-): string | undefined | IError[] => {
-  if (value === undefined) {
-    return undefined;
+export const parseQuestions = (value: string[]): string[] | IError[] => {
+  if (value.length === 0) {
+    return value;
   }
-  const validator = validate<string>({
-    'Spørsmål til deltaker må ha minst 5 tegn': value.length < 5,
-    'Spørsmål til deltaker kan ha maks 500 tegn': value.length > 500,
+  const validator = validate<string[]>({
+    'Spørsmål til deltaker må ha minst 5 tegn': value.some((s) => s.length < 5),
+    'Spørsmål til deltaker kan ha maks 500 tegn': value.some(
+      (s) => s.length > 500
+    ),
   });
   return validator.resolve(value);
 };

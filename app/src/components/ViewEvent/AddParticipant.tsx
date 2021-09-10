@@ -5,7 +5,7 @@ import {
   initalParticipant,
   parseEditParticipant,
   parseName,
-  parseComment,
+  parseAnswers,
 } from 'src/types/participant';
 import { ValidatedTextInput } from 'src/components/Common/ValidatedTextInput/ValidatedTextInput';
 import { parseEditEmail } from 'src/types/email';
@@ -31,7 +31,7 @@ export const AddParticipant = ({ eventId, event }: Props) => {
   const history = useHistory();
 
   const [participant, setParticipant] = useState<IEditParticipant>(
-    toEditParticipant(initalParticipant())
+    toEditParticipant(initalParticipant(event.participantQuestions.length))
   );
 
   const validParticipant = validateParticipation(participant);
@@ -64,8 +64,6 @@ export const AddParticipant = ({ eventId, event }: Props) => {
     }
   });
 
-  const participantQuestion = event.participantQuestion;
-
   return (
     <div className={style.addParticipantContainer}>
       <div>
@@ -96,23 +94,30 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           }
         />
       </div>
-      {participantQuestion !== undefined && (
+      {event.participantQuestions.map((q, i) => (
         <div>
           <ValidatedTextArea
-            label={participantQuestion}
-            placeholder={'Kommentar til arrangør'}
-            value={participant.comment}
-            validation={parseComment}
+            label={q}
+            placeholder={''}
+            value={participant.participantAnswers[i] ?? ''}
+            validation={(answer) => parseAnswers([answer])}
             minRow={3}
-            onChange={(comment: string) =>
+            onChange={(answer: string) =>
               setParticipant({
                 ...participant,
-                comment,
+                participantAnswers: participant.participantAnswers.map(
+                  (a, oldI) => {
+                    if (i === oldI) {
+                      return answer;
+                    }
+                    return a;
+                  }
+                ),
               })
             }
           />
         </div>
-      )}
+      ))}
       <br />
       <Button onClick={participate} disabled={timeLeft.difference > 0}>
         Meld meg på

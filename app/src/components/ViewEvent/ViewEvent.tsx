@@ -125,16 +125,22 @@ export const ViewEvent = ({
           Dupliser arrangement
         </Button> */}
         </div>
-        {isPreview && event.participantQuestion && (
-          <div>
-            <h3>Spørsmål til deltaker</h3>
-            <div>{event.participantQuestion}</div>
-          </div>
-        )}
-        {isPreview && event.shortname && (
-          <div>
-            <h3>Arrangementet kan nåes via:</h3>
-            <div>{urlFromShortname(event.shortname)}</div>
+        {isPreview && (
+          <div className={style.preview}>
+            {event.participantQuestions.length > 0 && (
+              <div>
+                <h3>Spørsmål til deltaker</h3>
+                {event.participantQuestions.map((q) => (
+                  <div>{q}</div>
+                ))}
+              </div>
+            )}
+            {event.shortname && (
+              <div>
+                <h3>Arrangementet kan nåes via:</h3>
+                <div>{urlFromShortname(event.shortname)}</div>
+              </div>
+            )}
           </div>
         )}
       </div>
