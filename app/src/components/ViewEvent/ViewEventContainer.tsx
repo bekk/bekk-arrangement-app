@@ -9,7 +9,7 @@ import {
   userIsLoggedIn,
 } from 'src/auth';
 import { Button } from 'src/components/Common/Button/Button';
-import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon';
+import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon/DownloadIcon';
 import { Page } from 'src/components/Page/Page';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
