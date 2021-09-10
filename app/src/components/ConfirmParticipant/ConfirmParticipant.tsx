@@ -2,7 +2,12 @@ import React from 'react';
 import { stringifyDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import style from './ConfirmParticipant.module.scss';
-import { viewEventRoute, eventIdKey, emailKey } from 'src/routing';
+import {
+  viewEventRoute,
+  eventIdKey,
+  emailKey,
+  viewEventShortnameRoute,
+} from 'src/routing';
 import { hasLoaded } from 'src/remote-data';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { useParam } from 'src/utils/browser-state';
@@ -26,6 +31,11 @@ export const ConfirmParticipant = () => {
     remoteWaitinglistSpot.data !== 'ikke-påmeldt' &&
     remoteWaitinglistSpot.data >= 1;
 
+  const viewRoute =
+    event.shortname !== undefined
+      ? viewEventShortnameRoute(event.shortname)
+      : viewEventRoute(eventId);
+
   return isWaitlisted ? (
     <>
       <WavySubHeader eventId={eventId} />
@@ -46,9 +56,7 @@ export const ConfirmParticipant = () => {
           avmelding står i e-posten. <br /> Du vil få beskjed på e-post om du
           får plass på arrangementet.
         </div>
-        <BlockLink to={viewEventRoute(eventId)}>
-          Tilbake til arrangement
-        </BlockLink>
+        <BlockLink to={viewRoute}>Tilbake til arrangement</BlockLink>
       </Page>
     </>
   ) : (
@@ -67,9 +75,7 @@ export const ConfirmParticipant = () => {
           Bekreftelse er sendt på e-post til {participantEmail}. Detaljer for
           avmelding står i e-posten.
         </div>
-        <BlockLink to={viewEventRoute(eventId)}>
-          Tilbake til arrangement
-        </BlockLink>
+        <BlockLink to={viewRoute}>Tilbake til arrangement</BlockLink>
       </Page>
     </>
   );
