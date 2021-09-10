@@ -100,6 +100,11 @@
   margin-bottom: 20px;
 }
 
+.today {
+  background-color: lightgray;
+  border-radius: 20px;
+}
+
 .date {
   position: relative;
 
@@ -128,11 +133,6 @@
     border: solid 1px black;
     border-radius: 20px;
   }
-}
-
-.today {
-  background-color: lightgray;
-  border-radius: 20px;
 }
 
 .selectedActiveDate {
