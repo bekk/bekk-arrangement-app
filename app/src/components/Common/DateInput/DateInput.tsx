@@ -13,6 +13,7 @@ import {
   addDays,
   periodOfDates,
   datesEqual,
+  calendarDateFromJsDateObject,
 } from 'typescript-calendar-date';
 import classNames from 'classnames';
 import { useOnClickOutside } from 'src/hooks/navigation';
@@ -57,6 +58,8 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
     endOfLastDisplayWeek
   );
 
+  const today = calendarDateFromJsDateObject(new Date());
+
   const daysInWeek = ['M', 'T', 'O', 'T', 'F', 'L', 'S'];
   return (
     <>
@@ -90,6 +93,7 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                 <div
                   key={i}
                   className={classNames(style.date, style.inactiveDate, {
+                    [style.today]: datesEqual(d, today),
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
                   onClick={() => {
@@ -105,6 +109,7 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                 <div
                   key={i}
                   className={classNames(style.date, style.activeDate, {
+                    [style.today]: datesEqual(d, today),
                     [style.selectedActiveDate]: datesEqual(d, date),
                   })}
                   onClick={() => {
@@ -119,6 +124,7 @@ export const DateInput = ({ value, onChange, label }: IProps): JSX.Element => {
                 <div
                   key={i}
                   className={classNames(style.date, style.inactiveDate, {
+                    [style.today]: datesEqual(d, today),
                     [style.selectedInactiveDate]: datesEqual(d, date),
                   })}
                 >
