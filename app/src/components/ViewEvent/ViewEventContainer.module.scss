@@ -39,10 +39,16 @@
 
 .downloadIcon {
   margin-top: 41px;
-  &:hover rect{
+  &:hover rect {
     fill: white;
   }
-  &:hover path{
+  &:hover path {
     fill: black;
   }
+}
+
+.closedEventText {
+  font-family: $fontLight;
+  font-size: 16px;
+  margin-top: 10px;
 }

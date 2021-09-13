@@ -9,7 +9,7 @@ import {
   userIsLoggedIn,
 } from 'src/auth';
 import { Button } from 'src/components/Common/Button/Button';
-import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon';
+import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon/DownloadIcon';
 import { Page } from 'src/components/Page/Page';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
@@ -24,11 +24,13 @@ import {
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { cancelParticipantRoute } from 'src/routing';
+import { dateAsText, dateToIDate } from 'src/types/date';
 import { isInThePast } from 'src/types/date-time';
 import {
   isMaxParticipantsLimited,
   maxParticipantsLimit,
 } from 'src/types/event';
+import { dateToITime, stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
 import style from './ViewEventContainer.module.scss';
 
@@ -115,7 +117,11 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
   const closedEventText = isInThePast(event.end)
     ? 'Arrangementet har allerede funnet sted'
     : timeLeft.difference > 0
-    ? `Åpner om ${asString(timeLeft)}`
+    ? `Åpner ${dateAsText(
+        dateToIDate(event.openForRegistrationTime)
+      )}, kl ${stringifyTime(
+        dateToITime(event.openForRegistrationTime)
+      )}, om ${asString(timeLeft)}`
     : eventIsFull && !event.hasWaitingList
     ? 'Arrangementet er dessverre fullt'
     : event.isCancelled
@@ -186,7 +192,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 <div>
                   <p>{numberOfPossibleParticipantsText}</p>
                   <p>
-                    Påmeldingen er stengt <br /> {closedEventText}
+                    Påmeldingen er stengt <br />
+                    <div className={style.closedEventText}>
+                      {closedEventText}
+                    </div>
                   </p>
                 </div>
               ) : waitlistText ? (
@@ -254,7 +263,7 @@ export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
       onClick={handleAction}
       className={style.downloadIcon}
     >
-      <DownloadIcon />
+      <DownloadIcon title="Last ned deltageroversikt" />
     </a>
   );
 }

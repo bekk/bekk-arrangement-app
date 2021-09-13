@@ -79,6 +79,13 @@ export const ViewEvent = ({
           )}
         </div>
         <div className={style.generalInfoContainer}>
+          <div className={style.organizer}>
+            <div>Arrangør</div>
+            <div className={style.organizerName}>{event.organizerName}</div>
+            <div className={style.organizerEmail}>
+              ({stringifyEmail(event.organizerEmail)})
+            </div>
+          </div>
           <div className={style.iconTextContainer}>
             <ClockIcon color="black" className={style.clockIcon} />
             <DateSection startDate={event.start} endDate={event.end} />
@@ -106,27 +113,19 @@ export const ViewEvent = ({
               <p>Eksternt arrangement</p>
             </div>
           )}
+          <div className={style.buttonGroup}>
+            {!isPreview && copyLink !== false && (
+              <Button color="Secondary" onClick={copyLink}>
+                {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
+              </Button>
+            )}
+          </div>
         </div>
       </WavySubHeader>
       <div className={style.contentContainer}>
         <p className={style.description}>
           <Description description={event.description} />
         </p>
-        <p className={style.organizer}>
-          Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
-          kontakt på {stringifyEmail(event.organizerEmail)}
-        </p>
-        <div className={style.buttonGroup}>
-          {!isPreview && copyLink !== false && (
-            <Button color="Primary" onClick={copyLink}>
-              {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
-            </Button>
-          )}
-
-          {/* <Button color="Primary" onClick={() => console.log('Dupliser')}>
-          Dupliser arrangement
-        </Button> */}
-        </div>
         {isPreview && (
           <div className={style.preview}>
             {event.participantQuestions.length > 0 && (

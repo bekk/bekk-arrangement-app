@@ -1,9 +1,13 @@
+import classnames from 'classnames';
 import React from 'react';
+import style from './DownloadIcon.module.scss';
 
 interface IconProps {
+  title: string;
   className?: string;
 }
-export const DownloadIcon = ({ className }: IconProps) => {
+export const DownloadIcon = ({ title, className }: IconProps) => {
+  let styles = classnames(style.downloadIcon, className);
   return (
     <svg
       width="39"
@@ -11,9 +15,9 @@ export const DownloadIcon = ({ className }: IconProps) => {
       viewBox="0 0 39 39"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      className={styles}
     >
-      <title> Nedlastningsikon </title>
+      <title> {title} </title>
       <rect x="0.5" y="0.5" width="38" height="38" stroke="white" />
       <g clipPath="url(#downloadIcon)">
         <path
