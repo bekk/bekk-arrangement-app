@@ -30,6 +30,7 @@ import {
   isMaxParticipantsLimited,
   maxParticipantsLimit,
 } from 'src/types/event';
+import { dateToITime, stringifyTime } from 'src/types/time';
 import { asString } from 'src/utils/timeleft';
 import style from './ViewEventContainer.module.scss';
 
@@ -118,6 +119,8 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     : timeLeft.difference > 0
     ? `Åpner ${dateAsText(
         dateToIDate(event.openForRegistrationTime)
+      )}, kl ${stringifyTime(
+        dateToITime(event.openForRegistrationTime)
       )}, om ${asString(timeLeft)}`
     : eventIsFull && !event.hasWaitingList
     ? 'Arrangementet er dessverre fullt'

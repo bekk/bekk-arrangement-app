@@ -6,18 +6,30 @@ export interface ITimeLeft {
   difference: number;
 }
 
+const plural = (n: number, singular: string, plural: string) => {
+  if (n === 1) {
+    return `${n} ${singular}`;
+  }
+  return `${n} ${plural}`;
+};
+
 export const asString = ({ days, hours, minutes, seconds }: ITimeLeft) => {
+  const dager = plural(days, 'dag', 'dager');
+  const timer = plural(hours, 'time', 'timer');
+  const minutter = plural(minutes, 'minutt', 'minutter');
+  const sekunder = plural(seconds, 'sekund', 'sekunder');
+
   if (days > 0) {
-    return `${days} dager, ${hours} timer og ${minutes} minutter`;
+    return `${dager}, ${timer} og ${minutter}`;
   }
   if (hours > 0) {
-    return `${hours} timer, ${minutes} minutter ${seconds} sekunder`;
+    return `${timer}, ${minutter} og ${sekunder}`;
   }
   if (minutes > 0) {
-    return `${minutes} minutter og ${seconds} sekunder`;
+    return `${minutter} og ${sekunder}`;
   }
   if (seconds >= 0) {
-    return ` ${seconds} sekunder`;
+    return `${sekunder}`;
   }
 };
 
