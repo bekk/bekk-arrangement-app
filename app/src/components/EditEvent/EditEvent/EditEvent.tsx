@@ -531,7 +531,8 @@ const labels = {
 const placeholders = {
   title: 'Navn på arrangementet ditt',
   location: 'Eventyrland',
-  description: 'Hva står på agendaen?',
+  description:
+    '# Overskrift\n\nVi støtter litt pseudomarkdown!\n\n- bullet points med bindestrek (-)\n- overskrifter med skigard (#)\n- du kan også paste inn linker direkte',
   organizerName: 'Kari Nordmann*',
   organizerEmail: 'kari.nordmann@bekk.no',
   participantQuestion: 'Allergier, preferanser eller noe annet på hjertet?',

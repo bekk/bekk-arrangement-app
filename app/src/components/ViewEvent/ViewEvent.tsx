@@ -109,7 +109,9 @@ export const ViewEvent = ({
         </div>
       </WavySubHeader>
       <div className={style.contentContainer}>
-        <p className={style.description}>{event.description}</p>
+        <p className={style.description}>
+          <Description description={event.description} />
+        </p>
         <p className={style.organizer}>
           Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
           kontakt på {stringifyEmail(event.organizerEmail)}
@@ -172,3 +174,38 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
 
 export const capitalize = (text: string) =>
   text.charAt(0).toUpperCase() + text.substring(1);
+
+const Description = ({ description }: { description: string }) => {
+  const paragraphs = description.split('\n');
+  return (
+    <>
+      {paragraphs.map((paragraph) => (
+        <div className={style.paragraph}>
+          {formatLinks(paragraph).map(formatHeadersAndStuff)}
+        </div>
+      ))}
+    </>
+  );
+};
+
+const formatLinks = (line: string) => {
+  const linkRegex = /(https?:\/\/[^\s]+)/;
+  return line.split(linkRegex).map((s) => {
+    if (linkRegex.test(s)) {
+      return <a href={s}>{s}</a>;
+    }
+    return s;
+  });
+};
+
+const formatHeadersAndStuff = (s: string | JSX.Element, i: number) => {
+  if (i === 0 && typeof s === 'string') {
+    if (s.charAt(0) === '-') {
+      return <li>{s.slice(1).trim()}</li>;
+    }
+    if (s.charAt(0) === '#') {
+      return <h3>{s.slice(1).trim()}</h3>;
+    }
+  }
+  return s;
+};
