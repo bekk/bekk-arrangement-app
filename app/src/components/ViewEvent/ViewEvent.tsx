@@ -191,7 +191,11 @@ const formatLinks = (line: string) => {
   const linkRegex = /(https?:\/\/[^\s]+)/;
   return line.split(linkRegex).map((s) => {
     if (linkRegex.test(s)) {
-      return <a href={s}>{s}</a>;
+      return (
+        <a href={s} className={style.link}>
+          {s}
+        </a>
+      );
     }
     return s;
   });
