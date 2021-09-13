@@ -58,6 +58,7 @@ export interface IEventViewModel {
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
+  isHidden: boolean;
   shortname?: string;
 }
 
@@ -76,6 +77,7 @@ export interface IEventWriteModel {
   participantQuestions: string[];
   hasWaitingList: boolean;
   isExternal: boolean;
+  isHidden: boolean;
   shortname?: string;
 }
 
@@ -106,6 +108,7 @@ export interface IEvent {
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
+  isHidden: boolean;
   shortname?: string;
 }
 
@@ -123,6 +126,7 @@ export interface IEditEvent {
   hasWaitingList: boolean;
   isCancelled: boolean;
   isExternal: boolean;
+  isHidden: boolean;
   shortname?: string;
 }
 
@@ -140,6 +144,7 @@ export const parseEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  isHidden,
   shortname,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
@@ -156,6 +161,7 @@ export const parseEditEvent = ({
     hasWaitingList,
     isCancelled,
     isExternal,
+    isHidden,
     shortname: parseShortname(shortname),
   };
 
@@ -211,6 +217,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const hasWaitingList = eventView.hasWaitingList;
   const isCancelled = eventView.isCancelled;
   const isExternal = eventView.isExternal;
+  const isHidden = eventView.isHidden;
   const shortname = parseShortname(eventView.shortname);
 
   const event = {
@@ -227,6 +234,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     hasWaitingList,
     isCancelled,
     isExternal,
+    isHidden,
     shortname,
   };
 
@@ -249,6 +257,7 @@ export const toEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  isHidden,
   shortname,
 }: IEvent): IEditEvent => ({
   title,
@@ -264,6 +273,7 @@ export const toEditEvent = ({
   hasWaitingList,
   isCancelled,
   isExternal,
+  isHidden,
   shortname,
 });
 
@@ -291,6 +301,7 @@ export const initialEditEvent = (): IEditEvent => {
     hasWaitingList: true,
     isCancelled: false,
     isExternal: false,
+    isHidden: false,
   };
 };
 

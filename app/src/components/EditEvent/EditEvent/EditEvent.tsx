@@ -318,6 +318,14 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           />
           <p className={style.helpTextCheckBox}>{helpText.externalEvent}</p>
         </div>
+        <div>
+          <Checkbox
+            label={labels.hiddenEvent}
+            onChange={(isHidden) => updateEvent({ ...event, isHidden })}
+            isChecked={event.isHidden}
+          />
+          <p className={style.helpTextCheckBox}>{helpText.hiddenEvent}</p>
+        </div>
 
         <div className={style.shortName}>
           <Checkbox
@@ -524,6 +532,7 @@ const labels = {
   limitSpots: 'Maks antall*',
   waitingList: 'Venteliste',
   externalEvent: 'Eksternt arrangement',
+  hiddenEvent: 'Skjul arrangementet fra oversikten',
   participantQuestion: 'Spørsmål til deltakerne*',
   shortname: 'Lag en penere URL for arrangementet',
 };
@@ -542,6 +551,8 @@ const placeholders = {
 const helpText = {
   externalEvent:
     'Eksterne arrangement er tilgjengelig for personer utenfor Bekk.',
+  hiddenEvent:
+    'Arrangementet vil ikke dukke opp i oversikten over arrangementer eller på forsiden.',
 };
 
 const buttonText = {
