@@ -188,6 +188,11 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
           ) : (
             <div className={style.registrationContainer}>
               <h2 className={style.subHeader}>Meld deg på</h2>
+              {!isInThePast(event.end) &&
+                timeLeft.difference < oneMinute &&
+                !event.isCancelled && (
+                  <AddParticipant eventId={eventId} event={event} />
+                )}
               {closedEventText ? (
                 <div>
                   <p>{numberOfPossibleParticipantsText}</p>
@@ -201,11 +206,6 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               ) : waitlistText ? (
                 <p>{waitlistText}</p>
               ) : null}
-              {!isInThePast(event.end) &&
-                timeLeft.difference < oneMinute &&
-                !event.isCancelled && (
-                  <AddParticipant eventId={eventId} event={event} />
-                )}
             </div>
           )}
           <div className={style.attendeesTitleContainer}>
