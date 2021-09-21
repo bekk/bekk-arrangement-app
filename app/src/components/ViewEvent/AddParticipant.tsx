@@ -20,6 +20,7 @@ import { useSavedParticipations } from 'src/hooks/saved-tokens';
 import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 import style from './ViewEventContainer.module.scss';
+import classNames from 'classnames';
 
 interface Props {
   eventId: string;
@@ -33,6 +34,8 @@ export const AddParticipant = ({ eventId, event }: Props) => {
   const [participant, setParticipant] = useState<IEditParticipant>(
     toEditParticipant(initalParticipant(event.participantQuestions.length))
   );
+
+  const [waitingOnParticipation, setWaitingOnParticipation] = useState(false);
 
   const validParticipant = validateParticipation(participant);
 
@@ -48,6 +51,9 @@ export const AddParticipant = ({ eventId, event }: Props) => {
           email: '{email}',
           cancellationToken: '{cancellationToken}',
         });
+
+      setWaitingOnParticipation(true);
+
       const {
         participant: { email = '' },
         cancellationToken,
@@ -119,8 +125,14 @@ export const AddParticipant = ({ eventId, event }: Props) => {
         </div>
       ))}
       <br />
-      <Button onClick={participate} disabled={timeLeft.difference > 0}>
-        Meld meg på
+      <Button
+        onClick={participate}
+        className={classNames({
+          [style.loadingSpinner]: waitingOnParticipation,
+        })}
+        disabled={timeLeft.difference > 0 || waitingOnParticipation}
+      >
+        {!waitingOnParticipation ? 'Meld meg på' : 'Melder på...'}
       </Button>
     </div>
   );

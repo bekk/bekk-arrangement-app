@@ -52,3 +52,18 @@
   font-size: 16px;
   margin-top: 10px;
 }
+
+@keyframes snurr {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingSpinner {
+  position: relative;
+  animation: snurr infinite 1s;
+  animation-delay: 200ms;
+}
