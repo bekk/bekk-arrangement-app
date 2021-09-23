@@ -61,7 +61,14 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
       const {
         participant: { email = '' },
         cancellationToken,
-      } = await postParticipant(eventId, validParticipant, cancelUrlTemplate);
+      } = await postParticipant(
+        eventId,
+        validParticipant,
+        cancelUrlTemplate
+      ).catch((e) => {
+        setWaitingOnParticipation(false);
+        throw e;
+      });
 
       saveParticipation({ eventId, email, cancellationToken });
 
