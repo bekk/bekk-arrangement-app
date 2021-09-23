@@ -35,6 +35,7 @@ import {
   maxParticipantsLimit,
 } from 'src/types/event';
 import { dateToITime, stringifyTime } from 'src/types/time';
+import { plural } from 'src/utils';
 import { asString } from 'src/utils/timeleft';
 import style from './ViewEventContainer.module.scss';
 
@@ -51,7 +52,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
   const remoteNumberOfParticipants = useNumberOfParticipants(eventId);
   const numberOfParticipants = hasLoaded(remoteNumberOfParticipants)
     ? remoteNumberOfParticipants.data
-    : '-';
+    : Infinity;
 
   const { savedParticipations: participationsInLocalStorage } =
     useSavedParticipations();
@@ -105,20 +106,29 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
       : ' av ' + maxParticipantsLimit(event.maxParticipants) + ' påmeldte'
   }`;
 
+  const avilableSpots = isMaxParticipantsLimited(event.maxParticipants)
+    ? maxParticipantsLimit(event.maxParticipants) - numberOfParticipants
+    : Infinity;
+
   const participantsText = `${
     eventIsFull
       ? isMaxParticipantsLimited(event.maxParticipants) &&
-        maxParticipantsLimit(event.maxParticipants) + ' påmeldte'
-      : numberOfParticipants + ' påmeldte'
+        plural(
+          maxParticipantsLimit(event.maxParticipants),
+          'påmeldt',
+          'påmeldte'
+        )
+      : plural(numberOfParticipants, 'påmeldt', ' påmeldte')
   }${
     !isMaxParticipantsLimited(event.maxParticipants)
       ? '. Ubegrenset antall plasser igjen'
       : event.hasWaitingList && eventIsFull
       ? ` og ${waitingList} på venteliste`
-      : numberOfParticipants !== '-' &&
-        `. ${
-          maxParticipantsLimit(event.maxParticipants) - numberOfParticipants
-        } plasser igjen.`
+      : `. ${plural(
+          maxParticipantsLimit(event.maxParticipants) - numberOfParticipants,
+          'plass',
+          'plasser'
+        )} igjen.`
   }`;
 
   const closedEventText = isInThePast(event.end)
@@ -144,7 +154,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     event.maxParticipants
   )
     ? 'Ubegrenset antall plasser'
-    : maxParticipantsLimit(event.maxParticipants) + ' plasser';
+    : plural(avilableSpots, 'ledig plass', 'ledige plasser');
 
   const goToRemoveParticipantRoute = ({
     eventId,
@@ -194,10 +204,16 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
             </div>
           ) : (
             <div className={style.registrationContainer}>
-              <h2 className={style.subHeader}>Meld deg på</h2>
+              <div className={style.påmeldt}>
+                <h2 className={style.subHeader}>Meld deg på</h2>
+                <div className={style.numberOfParticipants}>
+                  ({numberOfPossibleParticipantsText})
+                </div>
+              </div>
               {!isInThePast(event.end) &&
                 timeLeft.difference < oneMinute &&
-                !event.isCancelled && (
+                !event.isCancelled &&
+                !(eventIsFull && !event.hasWaitingList) && (
                   <AddParticipant
                     eventId={eventId}
                     event={event}
@@ -205,36 +221,48 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                     name={name}
                   />
                 )}
-              {closedEventText ? (
-                <div>
-                  <p>{numberOfPossibleParticipantsText}</p>
-                  <p>
-                    Påmeldingen er stengt <br />
-                    <div className={style.closedEventText}>
-                      {closedEventText}
-                    </div>
-                  </p>
-                </div>
-              ) : waitlistText ? (
-                <p>{waitlistText}</p>
-              ) : null}
+              <div className={style.boxHolder}>
+                {closedEventText ? (
+                  <div>
+                    <p className={style.marginKiller}>
+                      Påmeldingen er stengt <br />
+                      <div className={style.closedEventText}>
+                        {closedEventText}
+                      </div>
+                    </p>
+                  </div>
+                ) : waitlistText ? (
+                  <p>{waitlistText}</p>
+                ) : null}
+              </div>
             </div>
           )}
-          <div className={style.attendeesTitleContainer}>
-            <h2 className={style.subHeader}>Påmeldte</h2>
-            {(editTokenFound || userIsAdmin()) && (
-              <DownloadExportLink eventId={eventId} />
-            )}
-          </div>
-          <p>{participantsText}</p>
           {editTokenFound || userIsAdmin() ? (
-            <ViewParticipants eventId={eventId} editToken={editTokenFound} />
+            <>
+              <div className={style.attendeesTitleContainer}>
+                <h2 className={style.subHeader}>Påmeldte</h2>
+                {(editTokenFound || userIsAdmin()) && (
+                  <DownloadExportLink eventId={eventId} />
+                )}
+              </div>
+              <p>{participantsText}</p>
+              <ViewParticipants eventId={eventId} editToken={editTokenFound} />
+            </>
           ) : (
             userIsLoggedIn() && (
-              <ViewParticipantsLimited
-                eventId={eventId}
-                editToken={editTokenFound}
-              />
+              <>
+                <div className={style.attendeesTitleContainer}>
+                  <h2 className={style.subHeader}>Påmeldte</h2>
+                  {(editTokenFound || userIsAdmin()) && (
+                    <DownloadExportLink eventId={eventId} />
+                  )}
+                </div>
+                <p>{participantsText}</p>
+                <ViewParticipantsLimited
+                  eventId={eventId}
+                  editToken={editTokenFound}
+                />
+              </>
             )
           )}
         </section>

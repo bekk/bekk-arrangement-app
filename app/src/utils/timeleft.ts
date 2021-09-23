@@ -1,3 +1,5 @@
+import { plural } from 'src/utils';
+
 export interface ITimeLeft {
   days: number;
   hours: number;
@@ -5,13 +7,6 @@ export interface ITimeLeft {
   seconds: number;
   difference: number;
 }
-
-const plural = (n: number, singular: string, plural: string) => {
-  if (n === 1) {
-    return `${n} ${singular}`;
-  }
-  return `${n} ${plural}`;
-};
 
 export const asString = ({ days, hours, minutes, seconds }: ITimeLeft) => {
   const dager = plural(days, 'dag', 'dager');

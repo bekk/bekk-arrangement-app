@@ -1,4 +1,5 @@
 @import 'src/style/constants';
+@import 'src/style/colors';
 
 .p {
   @include regularText;
@@ -66,4 +67,26 @@
   position: relative;
   animation: snurr infinite 1s;
   animation-delay: 200ms;
+}
+
+.påmeldt {
+  display: flex;
+}
+
+.numberOfParticipants {
+  font-size: 14px;
+  color: var(--morgendis);
+  margin-top: 50px;
+  margin-left: 20px;
+}
+
+.boxHolder {
+  min-height: 120px;
+  max-height: 120px;
+  position: relative;
+  margin-top: 25px;
+}
+
+.marginKiller {
+  margin-top: 0;
 }

@@ -128,7 +128,6 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
           />
         </div>
       ))}
-      <br />
       <Button
         onClick={participate}
         className={classNames({
