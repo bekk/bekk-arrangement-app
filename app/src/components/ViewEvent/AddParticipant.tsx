@@ -25,14 +25,18 @@ import classNames from 'classnames';
 interface Props {
   eventId: string;
   event: IEvent;
+  email?: string;
+  name?: string;
 }
 
-export const AddParticipant = ({ eventId, event }: Props) => {
+export const AddParticipant = ({ eventId, event, email, name }: Props) => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
 
   const [participant, setParticipant] = useState<IEditParticipant>(
-    toEditParticipant(initalParticipant(event.participantQuestions.length))
+    toEditParticipant(
+      initalParticipant(event.participantQuestions.length, email, name)
+    )
   );
 
   const [waitingOnParticipation, setWaitingOnParticipation] = useState(false);

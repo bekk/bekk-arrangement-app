@@ -15,6 +15,8 @@ import {
   IParticipantsWithWaitingList,
 } from 'src/types/participant';
 import { isInThePast } from 'src/types/date-time';
+import { getEmailAndName } from 'src/api/employeeSvc';
+import { getEmployeeId } from 'src/auth';
 
 //**  Event  **//
 
@@ -127,5 +129,29 @@ export const useWaitinglistSpot = (eventId: string, email?: string) => {
       const waitinglistSpot = await getWaitinglistSpot(eventId, email);
       return waitinglistSpot;
     }, [eventId, email]),
+  });
+};
+
+const userEmailAndNameCache = cachedRemoteData<
+  string,
+  { name: string; email: string } | undefined
+>();
+
+export const useEmailAndName = () => {
+  let employeeId: null | number;
+  try {
+    employeeId = getEmployeeId();
+  } catch {
+    employeeId = null;
+  }
+  return userEmailAndNameCache.useOne({
+    key: '',
+    fetcher: useCallback(async () => {
+      if (employeeId === null) {
+        return undefined;
+      }
+      const userAndEmail = await getEmailAndName(employeeId);
+      return userAndEmail;
+    }, [employeeId]),
   });
 };

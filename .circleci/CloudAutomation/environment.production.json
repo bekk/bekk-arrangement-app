@@ -4,6 +4,10 @@
     "value": "https://api.bekk.no/arrangement-svc"
   },
   {
+    "name": "EMPLOYEE_SVC_URL",
+    "value": "https://api.bekk.no/employee-svc"
+  },
+  {
     "name": "AUTH0_ISSUER_DOMAIN",
     "value": "bekk.eu.auth0.com"
   },

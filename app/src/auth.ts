@@ -54,20 +54,6 @@ function getClaimsFromToken(jwt: string): any {
   return JSON.parse(jsonString);
 }
 
-export function getEmailAndNameFromJWT(): {
-  email: string | undefined;
-  name: string | undefined;
-} {
-  const token = getIdToken();
-  const { email, name } = token
-    ? getClaimsFromToken(token)
-    : { email: undefined, name: undefined }; // getIdToken returns '' when there is no token
-  return {
-    email,
-    name,
-  };
-}
-
 function getApplicationRoot(): string {
   return window.location.origin;
 }

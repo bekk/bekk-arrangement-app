@@ -33,6 +33,8 @@ app.get('/config', (request, response) =>
     arrangementSvcUrl:
       process.env.ARRANGEMENT_SVC_URL ||
       'https://api.dev.bekk.no/arrangement-svc',
+    employeeSvcUrl:
+      process.env.EMPLOYEE_SVC_URL || 'https://api.dev.bekk.no/employee-svc',
     audience: process.env.AUTH0_AUDIENCE || 'QHQy75S7tmnhDdBGYSnszzlhMPul0fAE',
     issuerDomain: process.env.AUTH0_ISSUER_DOMAIN || 'bekk-dev.eu.auth0.com',
     scopes: process.env.SCOPES || 'openid name groups email',

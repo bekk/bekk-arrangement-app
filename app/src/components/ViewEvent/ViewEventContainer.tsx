@@ -15,7 +15,11 @@ import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
 import { ViewParticipants } from 'src/components/ViewEvent/ViewParticipants';
 import { ViewParticipantsLimited } from 'src/components/ViewEvent/ViewParticipantsLimited';
-import { useEvent, useNumberOfParticipants } from 'src/hooks/cache';
+import {
+  useEmailAndName,
+  useEvent,
+  useNumberOfParticipants,
+} from 'src/hooks/cache';
 import {
   Participation,
   useEditToken,
@@ -61,6 +65,8 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
 
   const oneMinute = 60000;
 
+  const emailAndName = useEmailAndName();
+
   if (isBad(remoteEvent)) {
     if (!isAuthenticated() && needsToAuthenticate(remoteEvent.statusCode)) {
       redirectToAuth0();
@@ -69,11 +75,12 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     return <div>{remoteEvent.userMessage}</div>;
   }
 
-  if (!hasLoaded(remoteEvent)) {
+  if (!hasLoaded(remoteEvent) || !hasLoaded(emailAndName)) {
     return <div>Loading</div>;
   }
 
   const event = remoteEvent.data;
+  const { email, name } = emailAndName.data ?? {};
 
   const eventIsFull =
     isMaxParticipantsLimited(event.maxParticipants) &&
@@ -191,7 +198,12 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               {!isInThePast(event.end) &&
                 timeLeft.difference < oneMinute &&
                 !event.isCancelled && (
-                  <AddParticipant eventId={eventId} event={event} />
+                  <AddParticipant
+                    eventId={eventId}
+                    event={event}
+                    email={email}
+                    name={name}
+                  />
                 )}
               {closedEventText ? (
                 <div>

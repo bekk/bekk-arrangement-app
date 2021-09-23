@@ -3,6 +3,7 @@ let issuerDomain: string;
 let audience: string;
 let scopes: string;
 let arrangementSvcUrl: string;
+let employeeSvcUrl: string;
 
 interface IConfig {
   bekkApiUrl: string;
@@ -10,6 +11,7 @@ interface IConfig {
   issuerDomain: string;
   scopes: string;
   arrangementSvcUrl: string;
+  employeeSvcUrl: string;
 }
 
 export function setConfig(config: IConfig): void {
@@ -18,6 +20,7 @@ export function setConfig(config: IConfig): void {
   audience = config.audience;
   scopes = config.scopes;
   arrangementSvcUrl = config.arrangementSvcUrl;
+  employeeSvcUrl = config.employeeSvcUrl;
 }
 
 export async function getConfig(): Promise<IConfig> {
@@ -43,4 +46,8 @@ export function getScopes(): string {
 
 export function getArrangementSvcUrl(): string {
   return arrangementSvcUrl;
+}
+
+export function getEmployeeSvcUrl(): string {
+  return employeeSvcUrl;
 }

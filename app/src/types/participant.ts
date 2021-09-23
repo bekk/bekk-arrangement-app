@@ -5,7 +5,6 @@ import {
   toEditEmail,
   parseEditEmail,
 } from './email';
-import { getEmailAndNameFromJWT } from 'src/auth';
 
 export interface IParticipantWriteModel {
   name: string;
@@ -128,9 +127,10 @@ export const parseAnswers = (value: string[]): string[] | IError[] => {
 };
 
 export function initalParticipant(
-  numberOfParticipantQuestions: number
+  numberOfParticipantQuestions: number,
+  email?: string,
+  name?: string
 ): IParticipant {
-  const { name, email } = getEmailAndNameFromJWT();
   return {
     email: { email: email ?? '' },
     name: name ?? '',

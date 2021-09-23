@@ -10,14 +10,19 @@ import style from './CreateEventContainer.module.scss';
 import { isValid } from 'src/types/validation';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
 import { useDuplicateEvent, useGotoEventPreview } from 'src/hooks/history';
+import { useEmailAndName } from 'src/hooks/cache';
+import { hasLoaded } from 'src/remote-data';
 
 export const CreateEventContainer = () => {
   useAuthentication();
 
   const duplicateEvent = useDuplicateEvent();
 
+  const emailAndName = useEmailAndName();
+  const { email, name } = (hasLoaded(emailAndName) && emailAndName.data) || {};
+
   const [event, setEvent] = usePersistentHistoryState<IEditEvent>(
-    duplicateEvent ?? initialEditEvent()
+    duplicateEvent ?? initialEditEvent(email, name)
   );
   const validEvent = validateEvent(event);
   const errors = parseEditEvent(event);
