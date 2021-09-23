@@ -105,7 +105,7 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
         />
       </div>
       {event.participantQuestions.map((q, i) => (
-        <div>
+        <div key={q}>
           <ValidatedTextArea
             label={q}
             placeholder={''}

@@ -179,7 +179,7 @@ const Description = ({ description }: { description: string }) => {
   return (
     <>
       {paragraphs.map((paragraph) => (
-        <div className={style.paragraph}>
+        <div key={paragraph} className={style.paragraph}>
           {formatLinks(paragraph).map(formatHeadersAndStuff)}
         </div>
       ))}
