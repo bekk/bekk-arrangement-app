@@ -1,7 +1,7 @@
 import { IError, validate } from './validation';
 import { EditDate } from './date';
 import { EditTime } from './time';
-import { format } from 'date-fns';
+import { addWeeks, format } from 'date-fns';
 import { nb } from 'date-fns/esm/locale';
 
 export const timezoneStart = -11;
@@ -88,4 +88,8 @@ export const stringifyTimeInstanceWithDayName = (
   date: TimeInstance
 ): string => {
   return format(date, 'cccc dd. MMMM yyyy', { locale: nb });
+};
+
+export const addWeekToTimeInstance = (date: TimeInstance): TimeInstance => {
+  return addWeeks(date, 1);
 };

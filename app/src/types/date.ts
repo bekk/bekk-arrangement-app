@@ -2,6 +2,12 @@ import { validate, IError } from './validation';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/esm/locale';
 import { identityFunction } from 'src/utils';
+import {
+  addDays,
+  CalendarDate,
+  monthName,
+  monthNumber,
+} from 'typescript-calendar-date';
 
 export type IDateContract = IDate;
 export type IDateWriteModel = IDateContract;
@@ -93,3 +99,17 @@ export const dateToIDate = (date: Date): IDate => ({
   month: date.getMonth() + 1,
   day: date.getDate(),
 });
+
+const fromCalendarDate = ({ day, month, year }: CalendarDate): IDate => {
+  return { day, month: monthNumber(month), year };
+};
+
+const toCalendarDate = ({ day, month, year }: IDate): CalendarDate => {
+  return { day, month: monthName(month), year };
+};
+
+export const addWeek = (date: IDate): IDate => {
+  const oldDate = toCalendarDate(date);
+  const newDate = addDays(oldDate, 7);
+  return fromCalendarDate(newDate);
+};
