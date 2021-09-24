@@ -193,9 +193,11 @@ const getEventState = ({
 
   // if (editToken) return 'Rediger';
 
-  if (event.openForRegistrationTime >= new Date()) return EventState.IkkeApnet;
-
   if (isInThePast(event.end)) return EventState.Avsluttet;
+
+  if (event.closeRegistrationTime && event.closeRegistrationTime <= new Date()) return EventState.PameldingHarStengt;
+
+  if (event.openForRegistrationTime >= new Date()) return EventState.IkkeApnet;
 
   if (isNumber(waitingListSpot)) {
     if (waitingListSpot > 0) return EventState.PaVenteliste;
