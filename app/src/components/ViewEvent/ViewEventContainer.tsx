@@ -219,7 +219,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                   />
                 )}
               <div className={style.boxHolder}>
-                {closedEventText ? (
+                {closedEventText !== undefined ? (
                   <div>
                     <p className={style.marginKiller}>
                       Påmeldingen {isClosingSoon ? 'stenger snart' : 'er stengt'} <br />
@@ -326,7 +326,7 @@ const getClosedEventText = (event: IEvent, timeLeft: ITimeLeft, closeRegistratio
   }
 
   if( closeRegistrationTimeLeft.difference <= 0 ) {
-    return 'Påmeldingen har stengt'
+    return ''
   }
 
   if(isClosingSoon && event.closeRegistrationTime){
