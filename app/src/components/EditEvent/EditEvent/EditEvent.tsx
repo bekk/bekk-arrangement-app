@@ -286,7 +286,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               }
             }}
           >
-            {buttonText.removeEndDate}
+            {event.closeRegistrationTime ? buttonText.removeRegistrationEndDate : buttonText.addRegistrationEndDate}
           </Button>
         </div>
 
