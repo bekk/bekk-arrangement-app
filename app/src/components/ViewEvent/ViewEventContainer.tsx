@@ -31,12 +31,13 @@ import { cancelParticipantRoute } from 'src/routing';
 import { dateAsText, dateToIDate } from 'src/types/date';
 import { isInThePast } from 'src/types/date-time';
 import {
+  IEvent,
   isMaxParticipantsLimited,
   maxParticipantsLimit,
 } from 'src/types/event';
 import { dateToITime, stringifyTime } from 'src/types/time';
 import { plural } from 'src/utils';
-import { asString } from 'src/utils/timeleft';
+import { asString, ITimeLeft } from 'src/utils/timeleft';
 import style from './ViewEventContainer.module.scss';
 
 interface IProps {
@@ -64,7 +65,12 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
 
+  const closeRegistrationTimeLeft = useTimeLeft(
+    hasLoaded(remoteEvent) && remoteEvent.data.closeRegistrationTime ? remoteEvent.data.closeRegistrationTime : false
+  );
+
   const oneMinute = 60000;
+  const oneHour = oneMinute * 60;
 
   const emailAndName = useEmailAndName();
 
@@ -131,19 +137,8 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
         )} igjen.`
   }`;
 
-  const closedEventText = isInThePast(event.end)
-    ? 'Arrangementet har allerede funnet sted'
-    : timeLeft.difference > 0
-    ? `Åpner ${dateAsText(
-        dateToIDate(event.openForRegistrationTime)
-      )}, kl ${stringifyTime(
-        dateToITime(event.openForRegistrationTime)
-      )}, om ${asString(timeLeft)}`
-    : eventIsFull && !event.hasWaitingList
-    ? 'Arrangementet er dessverre fullt'
-    : event.isCancelled
-    ? 'Arrangementet er desverre avlyst'
-    : undefined;
+  const isClosingSoon = closeRegistrationTimeLeft.difference < oneHour && closeRegistrationTimeLeft.difference > 0;
+  const closedEventText = getClosedEventText(event, timeLeft, closeRegistrationTimeLeft, isClosingSoon, eventIsFull);
 
   const waitlistText =
     eventIsFull && waitingList
@@ -213,7 +208,9 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               {!isInThePast(event.end) &&
                 timeLeft.difference < oneMinute &&
                 !event.isCancelled &&
-                !(eventIsFull && !event.hasWaitingList) && (
+                !(eventIsFull && !event.hasWaitingList) && 
+                closeRegistrationTimeLeft.difference > 0
+                &&(
                   <AddParticipant
                     eventId={eventId}
                     event={event}
@@ -225,7 +222,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 {closedEventText ? (
                   <div>
                     <p className={style.marginKiller}>
-                      Påmeldingen er stengt <br />
+                      Påmeldingen {isClosingSoon ? 'stenger snart' : 'er stengt'} <br />
                       <div className={style.closedEventText}>
                         {closedEventText}
                       </div>
@@ -306,4 +303,37 @@ export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
       <DownloadIcon title="Last ned deltageroversikt" />
     </a>
   );
+}
+
+
+const getClosedEventText = (event: IEvent, timeLeft: ITimeLeft, closeRegistrationTimeLeft: ITimeLeft, isClosingSoon: boolean, eventIsFull: boolean) => {
+
+  if(isInThePast(event.end)){
+    return 'Arrangementet har allerede funnet sted'
+  }
+
+  if(timeLeft.difference > 0){
+    const openDate = dateAsText(dateToIDate(event.openForRegistrationTime));
+    const openTime = stringifyTime(dateToITime(event.openForRegistrationTime));
+    return `Åpner ${openDate}, kl ${openTime}, om ${asString(timeLeft)}`
+  }
+  if(eventIsFull && !event.hasWaitingList){
+    return 'Arrangementet er dessverre fullt'
+  }
+  
+  if(event.isCancelled){
+    return 'Arrangementet er desverre avlyst'
+  }
+
+  if( closeRegistrationTimeLeft.difference <= 0 ) {
+    return 'Påmeldingen har stengt'
+  }
+
+  if(isClosingSoon && event.closeRegistrationTime){
+    const closeDate = dateAsText(dateToIDate(event.closeRegistrationTime));
+    const closeTime = stringifyTime(dateToITime(event.closeRegistrationTime));
+    return `Stenger ${closeDate}, kl ${closeTime}, om ${asString(closeRegistrationTimeLeft)}`
+  }
+
+  return undefined
 }
