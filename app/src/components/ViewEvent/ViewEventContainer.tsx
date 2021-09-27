@@ -162,7 +162,9 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     event.maxParticipants
   )
     ? 'Ubegrenset antall plasser'
-    : plural(avilableSpots, 'ledig plass', 'ledige plasser');
+    : avilableSpots > 0
+    ? plural(avilableSpots, 'ledig plass', 'ledige plasser')
+    : 'Ingen ledige plasser';
 
   const goToRemoveParticipantRoute = ({
     eventId,
