@@ -10,26 +10,30 @@ import { FrownyFaceIcon } from 'src/components/Common/Icons/FrownyFaceIcon';
 import { useHistory } from 'react-router';
 import { Button } from 'src/components/Common/Button/Button';
 
-export type eventState =
-  | 'Rediger'
-  | 'Ikke åpnet'
-  | 'Avsluttet'
-  | 'Påmeldt'
-  | 'På venteliste'
-  | 'Plass'
-  | 'Plass på venteliste'
-  | 'Fullt'
-  | 'Laster'
-  | 'Avlyst';
+export enum EventState  {
+  Rediger = 'Rediger',
+  IkkeApnet = 'Ikke åpnet',
+  PameldingHarStengt = 'Påmeldingen har stengt',
+  Avsluttet = 'Avsluttet',
+  Pameldt = 'Påmeldt',
+  PaVenteliste = 'På venteliste',
+  Plass = 'Plass',
+  PlassPaVenteliste = 'Plass på venteliste',
+  Fullt = 'Fullt',
+  Laster = 'Laster',
+  Avlyst = 'Avlyst',
+  IkkePameldt = "ikke-påmeldt"
+}
+
 interface IProps {
   eventId: string;
-  eventState: eventState;
+  eventState: EventState;
   event: IEvent;
   numberOfAvailableSpots?: number;
   waitingListSpot?: number;
 }
 
-export const EventState = ({
+export const ParticipationState = ({
   eventId,
   eventState,
   event,
@@ -43,7 +47,7 @@ export const EventState = ({
     history.push(path);
   };
   switch (eventState) {
-    case 'Rediger':
+    case EventState.Rediger:
       return (
         <Button
           onClick={(htmlEvent: any) =>
@@ -54,7 +58,7 @@ export const EventState = ({
         </Button>
       );
 
-    case 'Ikke åpnet':
+    case EventState.IkkeApnet:
       const openForRegistrationTime = event.openForRegistrationTime;
       const dateTimeText = `${capitalize(
         stringifyTimeInstanceWithDayName(openForRegistrationTime)
@@ -65,10 +69,14 @@ export const EventState = ({
         </div>
       );
 
-    case 'Avsluttet':
+
+    case EventState.PameldingHarStengt:
+      return <div className={style.stateText}>Påmelding er stengt</div>;
+
+    case EventState.Avsluttet:
       return <div className={style.stateText}>Arrangementet er avsluttet</div>;
 
-    case 'Påmeldt':
+    case EventState.Pameldt:
       return (
         <div className={style.stateIconContainer}>
           <SmileIcon className={style.stateIcon} />
@@ -76,14 +84,14 @@ export const EventState = ({
         </div>
       );
 
-    case 'På venteliste':
+    case EventState.PaVenteliste:
       return (
         <div className={style.stateText}>
           Du er nr. {waitingListSpot} på venteliste
         </div>
       );
 
-    case 'Plass':
+    case EventState.Plass:
       if (numberOfAvailableSpots !== undefined && numberOfAvailableSpots <= 5) {
         return (
           <div className={style.stateContainer}>
@@ -110,7 +118,7 @@ export const EventState = ({
         </Button>
       );
 
-    case 'Plass på venteliste':
+    case EventState.PlassPaVenteliste:
       return (
         <div className={style.stateContainer}>
           <div className={style.stateText}>Arrangementet er fullt.</div>
@@ -124,18 +132,21 @@ export const EventState = ({
         </div>
       );
 
-    case 'Fullt':
+    case EventState.Fullt:
       return <div className={style.stateText}>Arrangementet er fullt</div>;
 
-    case 'Laster':
-      return <div className={style.stateText}>Laster...</div>;
-
-    case 'Avlyst':
+    case EventState.Avlyst:
       return (
         <div className={style.stateIconContainer}>
           <FrownyFaceIcon className={style.stateIcon} />
           Avlyst
         </div>
       );
+
+    case EventState.Laster:
+      return <div className={style.stateText}>Laster...</div>;
+
+    case EventState.IkkePameldt:
+      return null;
   }
 };

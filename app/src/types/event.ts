@@ -50,6 +50,7 @@ export interface IEventViewModel {
   startDate: IDateTime;
   endDate: IDateTime;
   openForRegistrationTime: TimeInstanceContract;
+  closeRegistrationTime?: TimeInstanceContract;
   organizerName: string;
   organizerEmail: string;
   maxParticipants?: number;
@@ -68,6 +69,7 @@ export interface IEventWriteModel {
   startDate: IDateTime;
   endDate: IDateTime;
   openForRegistrationTime: TimeInstanceContract;
+  closeRegistrationTime?: TimeInstanceContract;
   organizerName: string;
   organizerEmail: string;
   maxParticipants?: number;
@@ -100,6 +102,7 @@ export interface IEvent {
   start: IDateTime;
   end: IDateTime;
   openForRegistrationTime: TimeInstance;
+  closeRegistrationTime?: TimeInstance;
   organizerName: string;
   organizerEmail: Email;
   maxParticipants: MaxParticipants<number>;
@@ -118,6 +121,7 @@ export interface IEditEvent {
   start: EditDateTime;
   end: EditDateTime;
   openForRegistrationTime: TimeInstanceEdit;
+  closeRegistrationTime?: TimeInstanceEdit;
   organizerName: string;
   organizerEmail: string;
   maxParticipants: MaxParticipants<string>;
@@ -136,6 +140,7 @@ export const parseEditEvent = ({
   start,
   end,
   openForRegistrationTime,
+  closeRegistrationTime,
   organizerName,
   organizerEmail,
   maxParticipants,
@@ -153,6 +158,9 @@ export const parseEditEvent = ({
     start: parseEditDateTime(start),
     end: parseEditDateTime(end),
     openForRegistrationTime: parseEditTimeInstance(openForRegistrationTime),
+    closeRegistrationTime: closeRegistrationTime
+      ? parseEditTimeInstance(closeRegistrationTime)
+      : undefined,
     organizerName: parseName(organizerName),
     organizerEmail: parseEditEmail(organizerEmail),
     maxParticipants: parseMaxAttendees(maxParticipants),
@@ -184,6 +192,9 @@ export const toEventWriteModel = (
   openForRegistrationTime: toTimeInstanceWriteModel(
     event.openForRegistrationTime
   ),
+  closeRegistrationTime: event.closeRegistrationTime
+    ? toTimeInstanceWriteModel(event.closeRegistrationTime)
+    : undefined,
   organizerEmail: toEmailWriteModel(event.organizerEmail),
   startDate: event.start,
   endDate: event.end,
@@ -201,6 +212,9 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const openForRegistration = parseTimeInstanceViewModel(
     eventView.openForRegistrationTime
   );
+  const closeRegistration = eventView.closeRegistrationTime
+    ? parseTimeInstanceViewModel(eventView.closeRegistrationTime)
+    : undefined;
 
   const organizerName = parseHost(eventView.organizerName);
   const organizerEmail = parseEditEmail(eventView.organizerEmail);
@@ -226,6 +240,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     start,
     end,
     openForRegistrationTime: openForRegistration,
+    closeRegistrationTime: closeRegistration,
     organizerName,
     organizerEmail,
     maxParticipants,
@@ -249,6 +264,7 @@ export const toEditEvent = ({
   start,
   end,
   openForRegistrationTime,
+  closeRegistrationTime,
   organizerName,
   organizerEmail,
   maxParticipants,
@@ -265,6 +281,9 @@ export const toEditEvent = ({
   start: toEditDateTime(start),
   end: toEditDateTime(end),
   openForRegistrationTime: toEditTimeInstance(openForRegistrationTime),
+  closeRegistrationTime: closeRegistrationTime
+    ? toEditTimeInstance(closeRegistrationTime)
+    : undefined,
   organizerName,
   organizerEmail: toEditEmail(organizerEmail),
   maxParticipants: toEditMaxAttendees(maxParticipants),
@@ -292,6 +311,7 @@ export const initialEditEvent = (email?: string, name?: string): IEditEvent => {
       time: toEditTime({ hour: 20, minute: 0 }),
     },
     openForRegistrationTime,
+    closeRegistrationTime: undefined,
     organizerName: name ?? '',
     organizerEmail: email ?? '',
     maxParticipants: ['limited', ''],

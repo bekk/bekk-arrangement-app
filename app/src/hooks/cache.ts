@@ -17,6 +17,7 @@ import {
 import { isInThePast } from 'src/types/date-time';
 import { getEmailAndName } from 'src/api/employeeSvc';
 import { getEmployeeId } from 'src/auth';
+import { EventState } from 'src/components/ViewEventsCards/ParticipationState';
 
 //**  Event  **//
 
@@ -116,15 +117,14 @@ export const useNumberOfParticipants = (eventId: string) => {
 
 const waitinglistSpotCache = cachedRemoteData<
   string,
-  number | 'ikke-påmeldt'
->();
+  number | EventState.IkkePameldt>();
 
 export const useWaitinglistSpot = (eventId: string, email?: string) => {
   return waitinglistSpotCache.useOne({
     key: `${eventId}:${email}`,
     fetcher: useCallback(async () => {
       if (email === undefined) {
-        return 'ikke-påmeldt';
+        return EventState.IkkePameldt;
       }
       const waitinglistSpot = await getWaitinglistSpot(eventId, email);
       return waitinglistSpot;
