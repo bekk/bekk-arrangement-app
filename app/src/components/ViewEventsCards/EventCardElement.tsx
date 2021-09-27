@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import {
+  ParticipationState,
   EventState,
-  eventState,
-} from 'src/components/ViewEventsCards/EventState';
+} from 'src/components/ViewEventsCards/ParticipationState';
 import { useNumberOfParticipants, useWaitinglistSpot } from 'src/hooks/cache';
 import { useEditToken, useSavedParticipations } from 'src/hooks/saved-tokens';
 import { hasLoaded } from 'src/remote-data';
@@ -63,15 +63,15 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
       : undefined;
 
   const registrationState = !isMaxParticipantsLimited(event.maxParticipants)
-    ? 'Plass'
+    ? EventState.Plass
     : numberOfParticipants === undefined
-    ? 'Laster'
+    ? EventState.Laster
     : numberOfParticipants < maxParticipantsLimit(event.maxParticipants)
-    ? 'Plass'
+    ? EventState.Plass
     : numberOfParticipants >= maxParticipantsLimit(event.maxParticipants) &&
       event.hasWaitingList
-    ? 'Plass på venteliste'
-    : 'Fullt';
+    ? EventState.PlassPaVenteliste
+    : EventState.Fullt;
 
   const dateTimeText = isSameDate(event.start.date, event.end.date)
     ? `${stringifyDate(event.start.date)}, ${stringifyTime(
@@ -95,7 +95,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     event,
     waitingListSpot: hasLoaded(waitingListSpot)
       ? waitingListSpot.data
-      : 'Laster',
+      : EventState.Laster,
     registrationState,
     editToken,
   });
@@ -104,8 +104,8 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     style.card,
     getEventColor(eventId, style).style,
     {
-      [style.cardActive]: eventState !== 'Avsluttet' && eventState !== 'Avlyst',
-      [style.cardFaded]: eventState === 'Avsluttet' || eventState === 'Avlyst',
+      [style.cardActive]: eventState !== EventState.Avsluttet && eventState !== EventState.Avlyst,
+      [style.cardFaded]: eventState === EventState.Avsluttet || eventState === EventState.Avlyst,
     }
   );
 
@@ -128,7 +128,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         </div>
       )}
       <div className={style.cardFooter}>
-        <EventState
+        <ParticipationState
           eventId={eventId}
           eventState={eventState}
           event={event}
@@ -179,8 +179,8 @@ export const getEventColor = (
 interface EventStateProps {
   event: IEvent;
   editToken?: string;
-  waitingListSpot: number | 'ikke-påmeldt' | 'Laster';
-  registrationState: 'Plass' | 'Plass på venteliste' | 'Laster' | 'Fullt';
+  waitingListSpot: number | EventState.IkkePameldt | EventState.Laster;
+  registrationState: EventState.Plass | EventState.PlassPaVenteliste | EventState.Laster | EventState.Fullt;
 }
 
 const getEventState = ({
@@ -188,18 +188,20 @@ const getEventState = ({
   editToken,
   waitingListSpot,
   registrationState,
-}: EventStateProps): eventState => {
-  if (event.isCancelled) return 'Avlyst';
+}: EventStateProps): EventState => {
+  if (event.isCancelled) return EventState.Avlyst;
 
-  if (editToken) return 'Rediger';
+  // if (editToken) return 'Rediger';
 
-  if (event.openForRegistrationTime >= new Date()) return 'Ikke åpnet';
+  if (isInThePast(event.end)) return EventState.Avsluttet;
 
-  if (isInThePast(event.end)) return 'Avsluttet';
+  if (event.closeRegistrationTime && event.closeRegistrationTime <= new Date()) return EventState.PameldingHarStengt;
+
+  if (event.openForRegistrationTime >= new Date()) return EventState.IkkeApnet;
 
   if (isNumber(waitingListSpot)) {
-    if (waitingListSpot > 0) return 'På venteliste';
-    else return 'Påmeldt';
+    if (waitingListSpot > 0) return EventState.PaVenteliste;
+    else return EventState.Pameldt;
   }
 
   return registrationState;

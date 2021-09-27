@@ -257,6 +257,39 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             })
           }
         />
+        <div>
+          {event.closeRegistrationTime && (
+            <DateTimeInputWithTimezone
+              labelDate={labels.registrationEndDate}
+              labelTime={labels.registrationTime}
+              value={event.closeRegistrationTime}
+              onChange={(closeRegistrationTime) =>
+                updateEvent({
+                  ...event,
+                  closeRegistrationTime,
+                })
+              }
+            />
+          )}
+          <Button
+            className={style.removeQButton}
+            displayAsLink
+            onLightBackground
+            onClick={() => {
+              if (event.closeRegistrationTime) {
+                updateEvent({ ...event, closeRegistrationTime: undefined });
+              } else {
+                updateEvent({
+                  ...event,
+                  closeRegistrationTime: event.openForRegistrationTime,
+                });
+              }
+            }}
+          >
+            {event.closeRegistrationTime ? buttonText.removeRegistrationEndDate : buttonText.addRegistrationEndDate}
+          </Button>
+        </div>
+
         <div className={style.unlimitedSpots}>
           <Checkbox
             label={labels.unlimitedSpots}
@@ -527,6 +560,7 @@ const labels = {
   organizerName: 'Navn på arrangør*',
   organizerEmail: 'Arrangørens e-post*',
   registrationStartDate: 'Påmelding åpner*',
+  registrationEndDate: 'Påmelding stenger*',
   registrationTime: 'Kl*',
   unlimitedSpots: 'Ubegrenset antall deltakere',
   limitSpots: 'Maks antall*',
@@ -558,8 +592,8 @@ const helpText = {
 const buttonText = {
   addEndDate: '+ Legg til sluttdato',
   removeEndDate: '- Fjern sluttdato',
-  addRegistrationEndDate: 'Legg til påmeldingsfrist',
-  removeRegistrationEndDate: 'Fjern påmeldingsfrist',
+  addRegistrationEndDate: '+ Legg til påmeldingsfrist',
+  removeRegistrationEndDate: '- Fjern påmeldingsfrist',
   addParticipantQuestion: '+ Legg til spørsmål til deltakere',
   removeParticipantQuestion: '- Fjern spørsmål',
 };
