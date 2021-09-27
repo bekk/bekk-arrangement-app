@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import style from './ViewEvent.module.scss';
 import {
   IEvent,
+  incrementOneWeek,
   isMaxParticipantsLimited,
   maxParticipantsLimit,
   toEditEvent,
@@ -70,7 +71,9 @@ export const ViewEvent = ({
               <Button
                 displayAsLink
                 onLightBackground
-                onClick={() => gotoDuplicate(toEditEvent(event))}
+                onClick={() =>
+                  gotoDuplicate(toEditEvent(incrementOneWeek(event)))
+                }
                 color={'Secondary'}
               >
                 Dupliser

@@ -30,9 +30,15 @@ import {
   toTimeInstanceWriteModel,
   toEditTimeInstance,
   parseEditTimeInstance,
+  addWeekToTimeInstance,
 } from 'src/types/time-instance';
 import { addWeeks } from 'date-fns/esm/fp';
-import { parseDateViewModel, dateToIDate, toEditDate } from 'src/types/date';
+import {
+  parseDateViewModel,
+  dateToIDate,
+  toEditDate,
+  addWeek,
+} from 'src/types/date';
 import { parseName } from 'src/types/participant';
 
 import { viewEventShortnameRoute } from 'src/routing';
@@ -326,4 +332,18 @@ export const initialEditEvent = (email?: string, name?: string): IEditEvent => {
 export const urlFromShortname = (shortname: string) => {
   const hostAndProtocol = document.location.origin;
   return hostAndProtocol + viewEventShortnameRoute(shortname);
+};
+
+export const incrementOneWeek = (event: IEvent): IEvent => {
+  return {
+    ...event,
+    start: { ...event.start, date: addWeek(event.start.date) },
+    end: { ...event.end, date: addWeek(event.end.date) },
+    openForRegistrationTime: addWeekToTimeInstance(
+      event.openForRegistrationTime
+    ),
+    closeRegistrationTime:
+      event.closeRegistrationTime &&
+      addWeekToTimeInstance(event.closeRegistrationTime),
+  };
 };
