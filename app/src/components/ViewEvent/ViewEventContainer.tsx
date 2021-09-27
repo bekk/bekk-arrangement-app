@@ -65,8 +65,12 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     hasLoaded(remoteEvent) && remoteEvent.data.openForRegistrationTime
   );
 
+  const hasCloseRegTime =
+    (hasLoaded(remoteEvent) && remoteEvent.data.closeRegistrationTime) ?? false;
   const closeRegistrationTimeLeft = useTimeLeft(
-    hasLoaded(remoteEvent) && remoteEvent.data.closeRegistrationTime ? remoteEvent.data.closeRegistrationTime : false
+    hasLoaded(remoteEvent) && remoteEvent.data.closeRegistrationTime
+      ? remoteEvent.data.closeRegistrationTime
+      : false
   );
 
   const oneMinute = 60000;
@@ -137,8 +141,17 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
         )} igjen.`
   }`;
 
-  const isClosingSoon = closeRegistrationTimeLeft.difference < oneHour && closeRegistrationTimeLeft.difference > 0;
-  const closedEventText = getClosedEventText(event, timeLeft, closeRegistrationTimeLeft, isClosingSoon, eventIsFull);
+  const isClosingSoon =
+    hasCloseRegTime &&
+    closeRegistrationTimeLeft.difference < oneHour &&
+    closeRegistrationTimeLeft.difference > 0;
+  const closedEventText = getClosedEventText(
+    event,
+    timeLeft,
+    hasCloseRegTime && closeRegistrationTimeLeft,
+    isClosingSoon,
+    eventIsFull
+  );
 
   const waitlistText =
     eventIsFull && waitingList
@@ -208,9 +221,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               {!isInThePast(event.end) &&
                 timeLeft.difference < oneMinute &&
                 !event.isCancelled &&
-                !(eventIsFull && !event.hasWaitingList) && 
-                closeRegistrationTimeLeft.difference > 0
-                &&(
+                !(eventIsFull && !event.hasWaitingList) &&
+                (hasCloseRegTime
+                  ? closeRegistrationTimeLeft.difference > 0
+                  : true) && (
                   <AddParticipant
                     eventId={eventId}
                     event={event}
@@ -222,7 +236,8 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 {closedEventText !== undefined ? (
                   <div>
                     <p className={style.marginKiller}>
-                      Påmeldingen {isClosingSoon ? 'stenger snart' : 'er stengt'} <br />
+                      Påmeldingen{' '}
+                      {isClosingSoon ? 'stenger snart' : 'er stengt'} <br />
                       <div className={style.closedEventText}>
                         {closedEventText}
                       </div>
@@ -305,35 +320,45 @@ export function DownloadExportLink({ eventId }: IPropsDownloadExport) {
   );
 }
 
-
-const getClosedEventText = (event: IEvent, timeLeft: ITimeLeft, closeRegistrationTimeLeft: ITimeLeft, isClosingSoon: boolean, eventIsFull: boolean) => {
-
-  if(isInThePast(event.end)){
-    return 'Arrangementet har allerede funnet sted'
+const getClosedEventText = (
+  event: IEvent,
+  timeLeft: ITimeLeft,
+  closeRegistrationTimeLeft: ITimeLeft | false,
+  isClosingSoon: boolean,
+  eventIsFull: boolean
+) => {
+  if (isInThePast(event.end)) {
+    return 'Arrangementet har allerede funnet sted';
   }
 
-  if(timeLeft.difference > 0){
+  if (timeLeft.difference > 0) {
     const openDate = dateAsText(dateToIDate(event.openForRegistrationTime));
     const openTime = stringifyTime(dateToITime(event.openForRegistrationTime));
-    return `Åpner ${openDate}, kl ${openTime}, om ${asString(timeLeft)}`
+    return `Åpner ${openDate}, kl ${openTime}, om ${asString(timeLeft)}`;
   }
-  if(eventIsFull && !event.hasWaitingList){
-    return 'Arrangementet er dessverre fullt'
-  }
-  
-  if(event.isCancelled){
-    return 'Arrangementet er desverre avlyst'
+  if (eventIsFull && !event.hasWaitingList) {
+    return 'Arrangementet er dessverre fullt';
   }
 
-  if( closeRegistrationTimeLeft.difference <= 0 ) {
-    return ''
+  if (event.isCancelled) {
+    return 'Arrangementet er desverre avlyst';
   }
 
-  if(isClosingSoon && event.closeRegistrationTime){
+  if (closeRegistrationTimeLeft && closeRegistrationTimeLeft.difference <= 0) {
+    return '';
+  }
+
+  if (
+    isClosingSoon &&
+    closeRegistrationTimeLeft &&
+    event.closeRegistrationTime
+  ) {
     const closeDate = dateAsText(dateToIDate(event.closeRegistrationTime));
     const closeTime = stringifyTime(dateToITime(event.closeRegistrationTime));
-    return `Stenger ${closeDate}, kl ${closeTime}, om ${asString(closeRegistrationTimeLeft)}`
+    return `Stenger ${closeDate}, kl ${closeTime}, om ${asString(
+      closeRegistrationTimeLeft
+    )}`;
   }
 
-  return undefined
-}
+  return undefined;
+};
