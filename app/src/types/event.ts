@@ -342,5 +342,8 @@ export const incrementOneWeek = (event: IEvent): IEvent => {
     openForRegistrationTime: addWeekToTimeInstance(
       event.openForRegistrationTime
     ),
+    closeRegistrationTime:
+      event.closeRegistrationTime &&
+      addWeekToTimeInstance(event.closeRegistrationTime),
   };
 };
