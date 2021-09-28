@@ -29,7 +29,7 @@ export const confirmParticipantRoute = ({
 }: {
   eventId: string;
   email: string;
-}) => `/${eventId}/confirm/${email}`;
+}) => `/events/${eventId}/confirm/${email}`;
 
 export const cancelParticipantRoute = ({
   eventId,
@@ -40,7 +40,7 @@ export const cancelParticipantRoute = ({
   email: string;
   cancellationToken?: string;
 }) =>
-  `/${eventId}/cancel/${email}${queryStringStringify({
+  `/events/${eventId}/cancel/${email}${queryStringStringify({
     [cancellationTokenKey]: cancellationToken,
   })}`;
 
