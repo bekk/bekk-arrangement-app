@@ -10,6 +10,7 @@ import {
 } from 'src/auth';
 import { Button } from 'src/components/Common/Button/Button';
 import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon/DownloadIcon';
+import { Snow } from 'src/components/Common/Snow/Snow';
 import { Page } from 'src/components/Page/Page';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
@@ -182,6 +183,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
 
   return (
     <>
+      {remoteEvent.data.shortname === 'bekk-christmas-2021' && <Snow />}
       <ViewEvent
         eventId={eventId}
         event={event}

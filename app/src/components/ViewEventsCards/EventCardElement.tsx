@@ -171,6 +171,9 @@ export const getEventColor = (
   if (eventId === 'all-events') {
     return { style: style.soloppgang, colorCode: soloppgang };
   }
+  if (eventId === 'd8d67ff5-eafb-437d-8824-50a12c588be2') {
+    return { style: style.christmas, colorCode: '#D6001C' };
+  }
   return (
     colors(style).get(
       [...colors(style).keys()][getEventHash(eventId) % colors(style).size]
