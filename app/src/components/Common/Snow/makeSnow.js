@@ -1,5 +1,18 @@
 import p5 from 'p5';
 
+function heighestHeight() {
+  var body = document.body,
+    html = document.documentElement;
+
+  return Math.max(
+    body.scrollHeight,
+    body.offsetHeight,
+    html.clientHeight,
+    html.scrollHeight,
+    html.offsetHeight
+  );
+}
+
 let sketch = function (p) {
   // Tweakable parameters
   const SNOWFLAKES_PER_LAYER = 100;
@@ -13,7 +26,7 @@ let sketch = function (p) {
   let SNOWFLAKES = [];
 
   let windowWidth = window.innerWidth;
-  let windowHeight = window.innerHeight;
+  let windowHeight = heighestHeight();
   let frameCount = 0;
 
   // Will run once when the sketch is opened
@@ -100,7 +113,7 @@ let sketch = function (p) {
 
     if (windowWidth > 1000) {
       makeTree(0, 250);
-      makeTree(0, 1000);
+      makeTree(windowWidth - 200, 900);
       makeTree(windowWidth - 200, 500);
       makeTree(windowWidth - 300, 700);
     }
@@ -126,11 +139,12 @@ let sketch = function (p) {
 
   p.windowResized = function windowResized() {
     windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
-    console.log('res', windowWidth, windowHeight);
+    windowHeight = heighestHeight();
     p.resizeCanvas(windowWidth, windowHeight);
     p.setup();
   };
+
+  new ResizeObserver(() => p.windowResized()).observe(document.body);
 };
 
 export const myp5 = (ref) => new p5(sketch, ref);
