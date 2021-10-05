@@ -204,15 +204,15 @@ const getEventState = ({
 
   if (isInThePast(event.end)) return EventState.Avsluttet;
 
-  if (event.closeRegistrationTime && event.closeRegistrationTime <= new Date())
-    return EventState.PameldingHarStengt;
-
-  if (event.openForRegistrationTime >= new Date()) return EventState.IkkeApnet;
-
   if (isNumber(waitingListSpot)) {
     if (waitingListSpot > 0) return EventState.PaVenteliste;
     else return EventState.Pameldt;
   }
+
+  if (event.closeRegistrationTime && event.closeRegistrationTime <= new Date())
+    return EventState.PameldingHarStengt;
+
+  if (event.openForRegistrationTime >= new Date()) return EventState.IkkeApnet;
 
   return registrationState;
 };

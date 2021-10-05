@@ -91,11 +91,9 @@ const UpcomingEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
   return (
     <div>
       <div className={style.grid}>
-        {sortEvents(props.events)
-          .filter(([id, event]) => !event.isHidden)
-          .map(([id, event]) => (
-            <EventCardElement key={id} eventId={id} event={event} />
-          ))}
+        {sortEvents(props.events).map(([id, event]) => (
+          <EventCardElement key={id} eventId={id} event={event} />
+        ))}
       </div>
     </div>
   );
@@ -107,7 +105,6 @@ const PastEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
       <div className={style.grid}>
         {sortEvents(props.events)
           .reverse()
-          .filter(([id, event]) => !event.isHidden)
           .map(([id, event]) => (
             <EventCardElement key={id} eventId={id} event={event} />
           ))}

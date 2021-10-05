@@ -117,7 +117,8 @@ export const useNumberOfParticipants = (eventId: string) => {
 
 const waitinglistSpotCache = cachedRemoteData<
   string,
-  number | EventState.IkkePameldt>();
+  number | EventState.IkkePameldt
+>();
 
 export const useWaitinglistSpot = (eventId: string, email?: string) => {
   return waitinglistSpotCache.useOne({
