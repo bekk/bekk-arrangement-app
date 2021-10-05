@@ -20,6 +20,7 @@ import {
   skyfritt,
   sol,
   solnedgang,
+  solnedgangKontrast,
   soloppgang,
 } from 'src/style/colors';
 import { isSameDate, stringifyDate } from 'src/types/date';
@@ -104,8 +105,10 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
     style.card,
     getEventColor(eventId, style).style,
     {
-      [style.cardActive]: eventState !== EventState.Avsluttet && eventState !== EventState.Avlyst,
-      [style.cardFaded]: eventState === EventState.Avsluttet || eventState === EventState.Avlyst,
+      [style.cardActive]:
+        eventState !== EventState.Avsluttet && eventState !== EventState.Avlyst,
+      [style.cardFaded]:
+        eventState === EventState.Avsluttet || eventState === EventState.Avlyst,
     }
   );
 
@@ -169,6 +172,9 @@ export const getEventColor = (
   if (eventId === 'all-events') {
     return { style: style.soloppgang, colorCode: soloppgang };
   }
+  if (eventId === 'd8d67ff5-eafb-437d-8824-50a12c588be2') {
+    return { style: style.solnedgangKontrast, colorCode: solnedgangKontrast };
+  }
   return (
     colors(style).get(
       [...colors(style).keys()][getEventHash(eventId) % colors(style).size]
@@ -180,7 +186,11 @@ interface EventStateProps {
   event: IEvent;
   editToken?: string;
   waitingListSpot: number | EventState.IkkePameldt | EventState.Laster;
-  registrationState: EventState.Plass | EventState.PlassPaVenteliste | EventState.Laster | EventState.Fullt;
+  registrationState:
+    | EventState.Plass
+    | EventState.PlassPaVenteliste
+    | EventState.Laster
+    | EventState.Fullt;
 }
 
 const getEventState = ({
@@ -195,7 +205,8 @@ const getEventState = ({
 
   if (isInThePast(event.end)) return EventState.Avsluttet;
 
-  if (event.closeRegistrationTime && event.closeRegistrationTime <= new Date()) return EventState.PameldingHarStengt;
+  if (event.closeRegistrationTime && event.closeRegistrationTime <= new Date())
+    return EventState.PameldingHarStengt;
 
   if (event.openForRegistrationTime >= new Date()) return EventState.IkkeApnet;
 

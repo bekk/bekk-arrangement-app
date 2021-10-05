@@ -74,6 +74,12 @@
     border-color: var(--solnedgang);
   }
 }
+.solnedgangKontrast {
+  &:hover {
+    background-color: var(--solnedgangKontrast);
+    border-color: var(--solnedgangKontrast);
+  }
+}
 .soloppgang {
   &:hover {
     background-color: var(--soloppgang);
