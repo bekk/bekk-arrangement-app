@@ -80,6 +80,12 @@
     border-color: var(--solnedgangKontrast);
   }
 }
+.christmas {
+  &:hover {
+    background-color: #d6001c;
+    border-color: #d6001c;
+  }
+}
 .soloppgang {
   &:hover {
     background-color: var(--soloppgang);
