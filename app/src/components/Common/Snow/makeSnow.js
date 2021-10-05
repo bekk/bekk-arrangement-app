@@ -24,10 +24,17 @@ let sketch = function (p) {
   const WIND_CHANGE = 0.0025;
 
   let SNOWFLAKES = [];
+  let trees = 0;
+  let treeCoordinates = [];
 
   let windowWidth = window.innerWidth;
   let windowHeight = heighestHeight();
   let frameCount = 0;
+
+  window.addEventListener('click', (e) => {
+    treeCoordinates[trees] = { x: e.pageX - 90, y: e.pageY + 20 };
+    trees++;
+  });
 
   // Will run once when the sketch is opened
   p.setup = function setup() {
@@ -48,6 +55,10 @@ let sketch = function (p) {
         });
       }
     }
+    treeCoordinates = [...Array(100)].map((_) => ({
+      x: Math.random() * windowWidth,
+      y: Math.random() * windowHeight,
+    }));
   };
 
   function makeTree(x, y) {
@@ -109,13 +120,18 @@ let sketch = function (p) {
 
   // Will run every frame (refreshes many times per second)
   p.draw = function draw() {
-    p.clear();
+    p.clear(); // Comment out for Halloween
 
     if (windowWidth > 1000) {
       makeTree(0, 250);
       makeTree(windowWidth - 200, 900);
       makeTree(windowWidth - 200, 500);
       makeTree(windowWidth - 300, 700);
+      treeCoordinates.map((tree, i) => {
+        if (i < trees) {
+          makeTree(tree.x, tree.y);
+        }
+      });
     }
 
     // Iterate through each snowflake to draw and update them
@@ -125,7 +141,8 @@ let sketch = function (p) {
       for (let i = 0; i < LAYER.length; i++) {
         const snowflake = LAYER[i];
         p.noStroke();
-        p.fill(255, 255, 255);
+        p.fill(255, 255, 255); // Switch to p.fill(255, 0, 0); for Halloween
+
         p.circle(
           snowflake.x,
           snowflake.y,
