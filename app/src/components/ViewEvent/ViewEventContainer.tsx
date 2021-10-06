@@ -181,9 +181,13 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     );
   };
 
+  const addChristmasSpirit = ['🎅', '🧑‍🎄', '🤶', 'christmas'].some((emoji) =>
+    event.title.toLowerCase().includes(emoji)
+  );
+
   return (
     <>
-      {remoteEvent.data.shortname === 'bekk-christmas-2021' && <Snow />}
+      {addChristmasSpirit && <Snow />}
       <ViewEvent
         eventId={eventId}
         event={event}
