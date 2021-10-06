@@ -86,6 +86,12 @@
     border-color: #d6001c;
   }
 }
+.halloween {
+  &:hover {
+    background-color: #ff7518;
+    border-color: #ff7518;
+  }
+}
 .soloppgang {
   &:hover {
     background-color: var(--soloppgang);

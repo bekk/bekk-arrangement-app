@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { myp5 } from 'src/components/Common/Snow/makeSnow';
+import { myp5 } from 'src/components/Common/FunEffects/Christmas/makeChristmas';
 
-export const Snow = () => {
+export const Christmas = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

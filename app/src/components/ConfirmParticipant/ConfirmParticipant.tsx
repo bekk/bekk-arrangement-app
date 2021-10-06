@@ -38,7 +38,7 @@ export const ConfirmParticipant = () => {
 
   return isWaitlisted ? (
     <>
-      <WavySubHeader eventId={eventId} />
+      <WavySubHeader eventId={eventId} eventTitle={event.title} />
       <Page>
         <h1 className={style.header}>
           Du er nummer {remoteWaitinglistSpot.data} på ventelisten!
@@ -61,7 +61,7 @@ export const ConfirmParticipant = () => {
     </>
   ) : (
     <>
-      <WavySubHeader eventId={eventId} />
+      <WavySubHeader eventId={eventId} eventTitle={event.title} />
       <Page>
         <h1 className={style.header}>Du er påmeldt!</h1>
         <div className={style.text}>

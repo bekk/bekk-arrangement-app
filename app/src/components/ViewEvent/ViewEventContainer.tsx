@@ -10,7 +10,7 @@ import {
 } from 'src/auth';
 import { Button } from 'src/components/Common/Button/Button';
 import { DownloadIcon } from 'src/components/Common/Icons/DownloadIcon/DownloadIcon';
-import { Snow } from 'src/components/Common/Snow/Snow';
+import { Christmas } from 'src/components/Common/FunEffects/Christmas/Christmas';
 import { Page } from 'src/components/Page/Page';
 import { AddParticipant } from 'src/components/ViewEvent/AddParticipant';
 import { ViewEvent } from 'src/components/ViewEvent/ViewEvent';
@@ -40,6 +40,11 @@ import { dateToITime, stringifyTime } from 'src/types/time';
 import { plural } from 'src/utils';
 import { asString, ITimeLeft } from 'src/utils/timeleft';
 import style from './ViewEventContainer.module.scss';
+import {
+  hasChristmasSpirit,
+  hasHalloweenSpirit,
+} from 'src/components/Common/FunEffects/effectUtils';
+import { Halloween } from 'src/components/Common/FunEffects/Halloween/Halloween';
 
 interface IProps {
   eventId: string;
@@ -181,13 +186,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     );
   };
 
-  const addChristmasSpirit = ['🎅', '🧑‍🎄', '🤶', 'christmas'].some((emoji) =>
-    event.title.toLowerCase().includes(emoji)
-  );
-
   return (
     <>
-      {addChristmasSpirit && <Snow />}
+      {hasChristmasSpirit(event.title) && <Christmas />}
+      {hasHalloweenSpirit(event.title) && <Halloween />}
       <ViewEvent
         eventId={eventId}
         event={event}

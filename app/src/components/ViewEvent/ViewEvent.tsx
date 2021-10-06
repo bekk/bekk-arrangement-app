@@ -57,7 +57,7 @@ export const ViewEvent = ({
 
   return (
     <section className={style.container}>
-      <WavySubHeader eventId={eventId}>
+      <WavySubHeader eventId={eventId} eventTitle={event.title}>
         <div className={style.headerContainer}>
           <h1 className={style.header}>{event.title}</h1>
           {userCanEdit && eventId !== undefined && (
