@@ -15,12 +15,12 @@ function heighestHeight() {
 
 let sketch = function (p) {
   // Tweakable parameters
-  const STREAMS_PER_LAYER = 5;
-  const MAX_SIZE = 15;
+  const STREAMS_PER_LAYER = 3;
+  const MAX_SIZE = 20;
   const GRAVITY = 0.04;
   const LAYER_COUNT = 5;
 
-  const WIND_SPEED = 0.025;
+  const WIND_SPEED = 0.02;
   const WIND_CHANGE = 0.0001;
 
   let STREAMS = [];
@@ -65,24 +65,24 @@ let sketch = function (p) {
     //Jack-O-Lantern
     //stem
     p.fill(100, 90, 0);
-    p.rect(x + 85, y - 40, 10, 20);
+    p.rect(x + 95, y - 20, 10, 20);
     //pumpkin body
     p.fill(244, 167, 66);
-    p.ellipse(x + 100, y, 70, 60);
-    p.ellipse(x + 80, y, 70, 60);
+    p.ellipse(x + 110, y + 20, 70, 60);
+    p.ellipse(x + 90, y + 20, 70, 60);
     //smile
     p.fill(0);
-    p.ellipse(x + 90, y + 10, 70, 20);
+    p.ellipse(x + 100, y + 30, 70, 20);
     p.fill(244, 167, 66);
-    p.ellipse(x + 90, y, 70, 20);
+    p.ellipse(x + 100, y + 20, 70, 20);
     //fill(100, 0, 0);
     //fangs
-    p.triangle(x + 110, y + 15, x + 120, y, x + 100, y);
-    p.triangle(x + 70, y + 15, x + 60, y, x + 80, y);
+    p.triangle(x + 120, y + 35, x + 130, y + 20, x + 110, y + 20);
+    p.triangle(x + 80, y + 35, x + 70, y + 20, x + 90, y + 20);
     //eyes
     p.fill(0);
-    p.triangle(x + 105, y - 15, x + 115, y, x + 95, y);
-    p.triangle(x + 75, y - 15, x + 65, y, x + 85, y);
+    p.triangle(x + 115, y + 5, x + 125, y + 20, x + 105, y + 20);
+    p.triangle(x + 85, y + 5, x + 75, y + 20, x + 95, y + 20);
   }
 
   // Helper function to prepare a given stream for the next frame
