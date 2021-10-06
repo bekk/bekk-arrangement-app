@@ -1,5 +1,9 @@
 import p5 from 'p5';
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 function heighestHeight() {
   var body = document.body,
     html = document.documentElement;
@@ -15,25 +19,60 @@ function heighestHeight() {
 
 let sketch = function (p) {
   // Tweakable parameters
-  const STREAMS_PER_LAYER = 3;
-  const MAX_SIZE = 20;
-  const GRAVITY = 0.04;
-  const LAYER_COUNT = 5;
+  const STREAMS_PER_LAYER = 1;
+  const STREAM_SIZE = 50;
+  const GRAVITY = 0.05;
+  const COLORS = [
+    '#FF3636',
+    '#FFA13C',
+    '#FFFD0B',
+    '#62FF4E',
+    '#58D5F6',
+    '#CB6FFF',
+    '#F45FB1',
+  ];
+  const LAYER_COUNT = COLORS.length;
 
-  const WIND_SPEED = 0.02;
-  const WIND_CHANGE = 0.0001;
+  //   [
+  //     '#FF0000',
+  //     '#FF7F00',
+  //     '#FFFF00',
+  //     '#00FF00',
+  //     '#19A7FA',
+  //     '#4B0082',
+  //     '#9400D3',
+  //     '#ee82ee',
+  //   ];
 
   let STREAMS = [];
-  let pumpkins = 0;
-  let pumpkinCoordinates = [];
+  let cats = 0;
+  let coordinates = [];
 
   let windowWidth = window.innerWidth;
   let windowHeight = heighestHeight();
   let frameCount = 0;
+  let isDrawing = false;
+  let offset = 0;
 
   window.addEventListener('click', (e) => {
-    pumpkinCoordinates[pumpkins] = { x: e.pageX - 90, y: e.pageY + 20 };
-    pumpkins++;
+    coordinates[cats] = { x: e.pageX, y: e.pageY };
+    console.log({ x: e.pageX, y: e.pageY });
+    cats++;
+  });
+
+  window.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+  });
+
+  window.addEventListener('mouseup', (e) => {
+    isDrawing = false;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDrawing) {
+      coordinates[cats] = { x: e.pageX, y: e.pageY };
+      cats++;
+    }
   });
 
   // Will run once when the sketch is opened
@@ -43,72 +82,60 @@ let sketch = function (p) {
 
     // Initialize the stream with random positions
     STREAMS = [];
+    offset = windowWidth - 350;
     for (let l = 0; l < LAYER_COUNT; l++) {
       STREAMS.push([]);
       for (let i = 0; i < STREAMS_PER_LAYER; i++) {
         STREAMS[l].push({
-          x: p.random(windowWidth),
-          y: -50, // from the top with delay
+          x: offset,
+          y: 0, // from the top
           mass: p.random(0.75, 1.25),
           l: l + 1,
           color: 'red',
         });
+        offset += STREAM_SIZE;
       }
     }
-    pumpkinCoordinates = [...Array(100)].map((_) => ({
+    coordinates = [...Array(100)].map((_) => ({
       x: Math.random() * windowWidth,
       y: Math.random() * windowHeight,
     }));
   };
 
-  function makePumpkin(x, y) {
-    //Jack-O-Lantern
-    //stem
-    p.fill(100, 90, 0);
-    p.rect(x + 95, y - 20, 10, 20);
-    //pumpkin body
-    p.fill(244, 167, 66);
-    p.ellipse(x + 110, y + 20, 70, 60);
-    p.ellipse(x + 90, y + 20, 70, 60);
-    //smile
+  function catHead(x, y) {
+    p.noStroke();
+    //p.fill(p.random(255), p.random(255), p.random(255));
+    p.fill(COLORS[getRandomInt(LAYER_COUNT - 1)]);
+    p.ellipse(x, y, 20, 20);
+    p.triangle(x - 10, y - 15, x - 10, y, x - 2, y - 10);
+    p.triangle(x + 10, y - 15, x + 10, y, x + 2, y - 10);
     p.fill(0);
-    p.ellipse(x + 100, y + 30, 70, 20);
-    p.fill(244, 167, 66);
-    p.ellipse(x + 100, y + 20, 70, 20);
-    //fill(100, 0, 0);
-    //fangs
-    p.triangle(x + 120, y + 35, x + 130, y + 20, x + 110, y + 20);
-    p.triangle(x + 80, y + 35, x + 70, y + 20, x + 90, y + 20);
-    //eyes
-    p.fill(0);
-    p.triangle(x + 115, y + 5, x + 125, y + 20, x + 105, y + 20);
-    p.triangle(x + 85, y + 5, x + 75, y + 20, x + 95, y + 20);
+    p.ellipse(x - 5, y - 2, 5, 5);
+    p.ellipse(x + 5, y - 2, 5, 5);
   }
 
   // Helper function to prepare a given stream for the next frame
   function updateStream(stream) {
-    const diameter = (stream.l * MAX_SIZE) / LAYER_COUNT;
+    const diameter = STREAM_SIZE;
     if (stream.y > p.height + diameter) stream.y = -diameter;
     else stream.y += GRAVITY * stream.l * stream.mass;
-
-    // Get the wind speed at the given layer and area of the page
-    const wind =
-      p.noise(stream.l, stream.y * WIND_CHANGE, frameCount * WIND_CHANGE) - 0.5;
-    if (stream.x > p.width + diameter) stream.x = -diameter;
-    else if (stream.x < -diameter) stream.x = p.width + diameter;
-    else stream.x += wind * WIND_SPEED * stream.l;
   }
 
   // Will run every frame (refreshes many times per second)
   p.draw = function draw() {
     if (windowWidth > 1000) {
-      makePumpkin(0, 250);
-      makePumpkin(windowWidth - 200, 900);
-      makePumpkin(windowWidth - 200, 500);
-      makePumpkin(windowWidth - 300, 700);
-      pumpkinCoordinates.map((tree, i) => {
-        if (i < pumpkins) {
-          makePumpkin(tree.x, tree.y);
+      catHead(106, 249);
+      catHead(119, 247);
+      catHead(117, 283);
+      catHead(1117, 143);
+      // catHead(600, 350);
+      // catHead(700, 350);
+      // catHead(800, 350);
+      // catHead(900, 350);
+
+      coordinates.map((tree, i) => {
+        if (i < cats) {
+          catHead(tree.x, tree.y);
         }
       });
     }
@@ -116,13 +143,14 @@ let sketch = function (p) {
     // Iterate through each stream to draw and update them
     for (let l = 0; l < STREAMS.length; l++) {
       const LAYER = STREAMS[l];
+      const color = COLORS[l];
 
       for (let i = 0; i < LAYER.length; i++) {
         const stream = LAYER[i];
         p.noStroke();
-        p.fill(255, 0, 0);
+        p.fill(color);
 
-        p.circle(stream.x, stream.y, (stream.l * MAX_SIZE) / LAYER_COUNT);
+        p.circle(stream.x, stream.y, STREAM_SIZE);
         updateStream(stream);
         frameCount++;
       }

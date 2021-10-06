@@ -43,8 +43,10 @@ import style from './ViewEventContainer.module.scss';
 import {
   hasChristmasSpirit,
   hasHalloweenSpirit,
+  hasKittens,
 } from 'src/components/Common/FunEffects/effectUtils';
 import { Halloween } from 'src/components/Common/FunEffects/Halloween/Halloween';
+import { Kittens } from 'src/components/Common/FunEffects/Kittens/Kittens';
 
 interface IProps {
   eventId: string;
@@ -190,6 +192,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     <>
       {hasChristmasSpirit(event.title) && <Christmas />}
       {hasHalloweenSpirit(event.title) && <Halloween />}
+      {hasKittens(event.title) && <Kittens />}
       <ViewEvent
         eventId={eventId}
         event={event}

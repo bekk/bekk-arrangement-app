@@ -120,7 +120,7 @@ let sketch = function (p) {
 
   // Will run every frame (refreshes many times per second)
   p.draw = function draw() {
-    p.clear(); // Comment out for Halloween
+    p.clear();
 
     if (windowWidth > 1000) {
       makeTree(0, 250);
@@ -141,7 +141,7 @@ let sketch = function (p) {
       for (let i = 0; i < LAYER.length; i++) {
         const snowflake = LAYER[i];
         p.noStroke();
-        p.fill(255, 255, 255); // Switch to p.fill(255, 0, 0); for Halloween
+        p.fill(255, 255, 255);
 
         p.circle(
           snowflake.x,
