@@ -33,17 +33,6 @@ let sketch = function (p) {
   ];
   const LAYER_COUNT = COLORS.length;
 
-  //   [
-  //     '#FF0000',
-  //     '#FF7F00',
-  //     '#FFFF00',
-  //     '#00FF00',
-  //     '#19A7FA',
-  //     '#4B0082',
-  //     '#9400D3',
-  //     '#ee82ee',
-  //   ];
-
   let STREAMS = [];
   let cats = 0;
   let coordinates = [];
@@ -124,18 +113,12 @@ let sketch = function (p) {
   // Will run every frame (refreshes many times per second)
   p.draw = function draw() {
     if (windowWidth > 1000) {
-      catHead(106, 249);
-      catHead(119, 247);
-      catHead(117, 283);
-      catHead(1117, 143);
-      // catHead(600, 350);
-      // catHead(700, 350);
-      // catHead(800, 350);
-      // catHead(900, 350);
+      catHead(106, 259);
+      catHead(119, 257);
 
-      coordinates.map((tree, i) => {
+      coordinates.map((cat, i) => {
         if (i < cats) {
-          catHead(tree.x, tree.y);
+          catHead(cat.x, cat.y);
         }
       });
     }

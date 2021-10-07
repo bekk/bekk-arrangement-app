@@ -92,6 +92,12 @@
     border-color: #ff7518;
   }
 }
+.kittens {
+  &:hover {
+    background-color: #f59fce;
+    border-color: #f59fce;
+  }
+}
 .soloppgang {
   &:hover {
     background-color: var(--soloppgang);

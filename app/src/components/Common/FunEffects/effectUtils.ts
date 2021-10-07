@@ -9,6 +9,6 @@ export const hasHalloweenSpirit = (eventTitle: string) =>
   );
 
 export const hasKittens = (eventTitle: string) =>
-  ['🐱', '😻', '🌈', '🦄', '🐈'].some((emoji) =>
+  ['🐱', '😻', '🌈', '🦄', '🐈', '🏳️‍🌈'].some((emoji) =>
     eventTitle.toLowerCase().includes(emoji)
   );

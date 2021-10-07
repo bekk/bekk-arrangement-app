@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   hasChristmasSpirit,
   hasHalloweenSpirit,
+  hasKittens,
 } from 'src/components/Common/FunEffects/effectUtils';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
@@ -181,6 +182,9 @@ export const getEventColor = (
   }
   if (hasHalloweenSpirit(eventTitle)) {
     return { style: style.halloween, colorCode: '#FF7518' };
+  }
+  if (hasKittens(eventTitle)) {
+    return { style: style.kittens, colorCode: '#f59fce' };
   }
   return (
     colors(style).get(
