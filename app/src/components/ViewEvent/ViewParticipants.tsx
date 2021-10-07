@@ -122,7 +122,7 @@ const ParticipantTableDesktop = (props: {
   return (
     <>
       <Button onClick={copyAttendees}>
-        Kopier deltagerer til utklippstavle
+        Kopier deltakere til utklippstavle
       </Button>{' '}
       {wasCopied && 'Kopiert!'}
       <table className={style.table}>
