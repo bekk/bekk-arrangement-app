@@ -2,6 +2,11 @@ import classNames from 'classnames';
 import { isNumber } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {
+  hasChristmasSpirit,
+  hasHalloweenSpirit,
+  hasKittens,
+} from 'src/components/Common/FunEffects/effectUtils';
 import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
 import {
@@ -102,7 +107,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
 
   const cardStyle = classNames(
     style.card,
-    getEventColor(eventId, style).style,
+    getEventColor(eventId, style, event.title).style,
     {
       [style.cardActive]:
         eventState !== EventState.Avsluttet && eventState !== EventState.Avlyst,
@@ -162,7 +167,8 @@ const getEventHash = (eventId: string): number =>
 
 export const getEventColor = (
   eventId: string | undefined,
-  style: any
+  style: any,
+  eventTitle: string
 ): { style: string; colorCode: string } => {
   const defaultStyle = { style: style.none, colorCode: hvit };
   if (eventId === undefined) {
@@ -171,8 +177,14 @@ export const getEventColor = (
   if (eventId === 'all-events') {
     return { style: style.soloppgang, colorCode: soloppgang };
   }
-  if (eventId === 'd8d67ff5-eafb-437d-8824-50a12c588be2') {
+  if (hasChristmasSpirit(eventTitle)) {
     return { style: style.christmas, colorCode: '#D6001C' };
+  }
+  if (hasHalloweenSpirit(eventTitle)) {
+    return { style: style.halloween, colorCode: '#FF7518' };
+  }
+  if (hasKittens(eventTitle)) {
+    return { style: style.kittens, colorCode: '#f59fce' };
   }
   return (
     colors(style).get(

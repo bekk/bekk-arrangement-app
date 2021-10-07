@@ -7,12 +7,21 @@ import { getEventColor } from 'src/components/ViewEventsCards/EventCardElement';
 interface IProps {
   children?: ReactChild[] | ReactChild;
   eventId?: string | 'all-events';
+  eventTitle?: string;
 }
 
-export const WavySubHeader = ({ children, eventId }: IProps) => {
+export const WavySubHeader = ({
+  children,
+  eventId,
+  eventTitle = '',
+}: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const { style: colorStyle, colorCode } = getEventColor(eventId, style);
+  const { style: colorStyle, colorCode } = getEventColor(
+    eventId,
+    style,
+    eventTitle
+  );
 
   return (
     <div

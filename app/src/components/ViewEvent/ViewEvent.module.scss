@@ -112,7 +112,10 @@
   display: flex;
   flex-wrap: wrap;
   margin-right: 30px;
-  div {
+  p {
+    line-height: 26px;
+    margin-top: 0;
+    margin-bottom: 0;
     margin-left: 5px;
     align-self: center;
   }
@@ -120,7 +123,7 @@
 
 .organizerName {
   font-family: $fontMedium;
-  margin-top: -5px;
+  margin-top: -5px !important;
 }
 
 .organizerEmail {
