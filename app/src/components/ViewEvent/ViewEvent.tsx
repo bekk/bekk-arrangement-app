@@ -83,11 +83,11 @@ export const ViewEvent = ({
         </div>
         <div className={style.generalInfoContainer}>
           <div className={style.organizer}>
-            <div>Arrangør</div>
-            <div className={style.organizerName}>{event.organizerName}</div>
-            <div className={style.organizerEmail}>
+            <p>Arrangør</p>
+            <p className={style.organizerName}>{event.organizerName}</p>
+            <p className={style.organizerEmail}>
               ({stringifyEmail(event.organizerEmail)})
-            </div>
+            </p>
           </div>
           <div className={style.iconTextContainer}>
             <ClockIcon color="black" className={style.clockIcon} />

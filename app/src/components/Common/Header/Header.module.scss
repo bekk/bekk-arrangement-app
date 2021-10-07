@@ -61,6 +61,25 @@
 }
 .christmas {
   background-color: #d6001c;
+
+  & h1,
+  p,
+  button {
+    color: white;
+  }
+  & path {
+    fill: white;
+  }
+  & circle {
+    stroke: white;
+  }
+  & button {
+    border-color: white;
+  }
+  & button:hover {
+    background-color: darkgreen;
+    border-color: darkgreen;
+  }
 }
 .halloween {
   background-color: #ff7518;
