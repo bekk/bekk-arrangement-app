@@ -115,11 +115,19 @@
     background-color: #ff7518;
     border-color: #ff7518;
   }
+  & button:hover {
+    background-color: red;
+    border-color: red;
+  }
 }
 .kittens {
   &:hover {
     background-color: #f59fce;
     border-color: #f59fce;
+  }
+  & button:hover {
+    background-color: #b63afc;
+    border-color: #b63afc;
   }
 }
 .soloppgang {

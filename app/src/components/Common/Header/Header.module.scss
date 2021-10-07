@@ -83,9 +83,17 @@
 }
 .halloween {
   background-color: #ff7518;
+  & button:hover {
+    background-color: red;
+    border-color: red;
+  }
 }
 .kittens {
   background-color: #f59fce;
+  & button:hover {
+    background-color: #b63afc;
+    border-color: #b63afc;
+  }
 }
 .soloppgang {
   background-color: var(--soloppgang);
