@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './ViewParticipants.module.scss';
 import { stringifyEmail } from 'src/types/email';
 import { useEvent, useParticipants } from 'src/hooks/cache';
 import { hasLoaded, isBad } from 'src/remote-data';
 import { useMediaQuery } from 'react-responsive';
 import { IParticipant } from 'src/types/participant';
+import { Button } from 'src/components/Common/Button/Button';
 
 interface IProps {
   eventId: string;
@@ -108,40 +109,56 @@ const ParticipantTableDesktop = (props: {
     ? event.data.participantQuestions.length > 0
     : true;
   const questions = (hasLoaded(event) && event.data.participantQuestions) || [];
+  const [wasCopied, setWasCopied] = useState(false);
+  const copyAttendees = async () => {
+    await navigator.clipboard.writeText(
+      props.participants.map((p) => p.name).join(', ')
+    );
+    setWasCopied(true);
+    setTimeout(() => {
+      setWasCopied(false);
+    }, 3000);
+  };
   return (
-    <table className={style.table}>
-      <thead>
-        <tr>
-          <th className={style.desktopHeaderCell}>Navn</th>
-          <th className={style.desktopHeaderCell}>E-post</th>
-          {hasComments && (
-            <th className={style.desktopHeaderCell}>Kommentar</th>
-          )}
-        </tr>
-      </thead>
-      <tbody>
-        {props.participants.map((attendee) => (
-          <tr key={attendee.name + attendee.email.email}>
-            <td className={style.desktopCell}>{attendee.name}</td>
-            <td className={style.desktopCell}>
-              {stringifyEmail(attendee.email)}
-            </td>
-            <td className={style.desktopCell}>
-              {questions.map(
-                (q, i) =>
-                  attendee.participantAnswers[i] && (
-                    <div>
-                      <div className={style.question}>{q}</div>
-                      <div className={style.answer}>
-                        {attendee.participantAnswers[i]}
-                      </div>
-                    </div>
-                  )
-              )}
-            </td>
+    <>
+      <Button onClick={copyAttendees}>
+        Kopier deltagerer til utklippstavle
+      </Button>{' '}
+      {wasCopied && 'Kopiert!'}
+      <table className={style.table}>
+        <thead>
+          <tr>
+            <th className={style.desktopHeaderCell}>Navn</th>
+            <th className={style.desktopHeaderCell}>E-post</th>
+            {hasComments && (
+              <th className={style.desktopHeaderCell}>Kommentar</th>
+            )}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {props.participants.map((attendee) => (
+            <tr key={attendee.name + attendee.email.email}>
+              <td className={style.desktopCell}>{attendee.name}</td>
+              <td className={style.desktopCell}>
+                {stringifyEmail(attendee.email)}
+              </td>
+              <td className={style.desktopCell}>
+                {questions.map(
+                  (q, i) =>
+                    attendee.participantAnswers[i] && (
+                      <div>
+                        <div className={style.question}>{q}</div>
+                        <div className={style.answer}>
+                          {attendee.participantAnswers[i]}
+                        </div>
+                      </div>
+                    )
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
