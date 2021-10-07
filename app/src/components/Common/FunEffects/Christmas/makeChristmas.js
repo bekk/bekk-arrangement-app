@@ -20,9 +20,6 @@ let sketch = function (p) {
   const GRAVITY = 0.25;
   const LAYER_COUNT = 5;
 
-  const WIND_SPEED = 0;
-  const WIND_CHANGE = 0.0025;
-
   let SNOWFLAKES = [];
   let trees = 0;
   let treeCoordinates = [];
@@ -106,16 +103,8 @@ let sketch = function (p) {
     if (snowflake.y > p.height + diameter) snowflake.y = -diameter;
     else snowflake.y += GRAVITY * snowflake.l * snowflake.mass;
 
-    // Get the wind speed at the given layer and area of the page
-    const wind =
-      p.noise(
-        snowflake.l,
-        snowflake.y * WIND_CHANGE,
-        frameCount * WIND_CHANGE
-      ) - 0.5;
     if (snowflake.x > p.width + diameter) snowflake.x = -diameter;
     else if (snowflake.x < -diameter) snowflake.x = p.width + diameter;
-    else snowflake.x += wind * WIND_SPEED * snowflake.l;
   }
 
   // Will run every frame (refreshes many times per second)

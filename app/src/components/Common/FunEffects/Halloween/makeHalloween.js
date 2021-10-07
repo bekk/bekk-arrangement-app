@@ -106,9 +106,9 @@ let sketch = function (p) {
       makePumpkin(windowWidth - 200, 900);
       makePumpkin(windowWidth - 200, 500);
       makePumpkin(windowWidth - 300, 700);
-      pumpkinCoordinates.map((tree, i) => {
+      pumpkinCoordinates.map((pk, i) => {
         if (i < pumpkins) {
-          makePumpkin(tree.x, tree.y);
+          makePumpkin(pk.x, pk.y);
         }
       });
     }
