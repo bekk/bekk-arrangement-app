@@ -21,6 +21,7 @@ import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 import style from './ViewEventContainer.module.scss';
 import classNames from 'classnames';
+import { Checkbox } from '@bekk/storybook';
 
 interface Props {
   eventId: string;
@@ -81,6 +82,25 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
     }
   });
 
+  const serializeAlternatives = (alternatives: string[]) =>
+    alternatives.join(';');
+
+  const parseAlternatives = (alternatives: string | null) =>
+    alternatives
+      ?.split(';')
+      ?.map((s) => s.trim())
+      ?.filter((s) => s !== '') ?? [];
+
+  const multipleChoiceAlternatives = (q: string) => {
+    const alternativesRegex = /\/\/\s?Alternativer:(.+)$/;
+    const [match, alternatives] = q.match(alternativesRegex) ?? [null, null];
+    return {
+      isMultipleChoiceQuestion: alternatives !== null,
+      alternatives: parseAlternatives(alternatives),
+      actualQuestion: q.slice(0, q.length - (match?.length ?? 0)).trim(),
+    };
+  };
+
   return (
     <div className={style.addParticipantContainer}>
       <div>
@@ -111,30 +131,79 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
           }
         />
       </div>
-      {event.participantQuestions.map((q, i) => (
-        <div key={q}>
-          <ValidatedTextArea
-            label={q}
-            placeholder={''}
-            value={participant.participantAnswers[i] ?? ''}
-            validation={(answer) => parseAnswers([answer])}
-            minRow={3}
-            onChange={(answer: string) =>
-              setParticipant({
-                ...participant,
-                participantAnswers: participant.participantAnswers.map(
-                  (a, oldI) => {
-                    if (i === oldI) {
-                      return answer;
+      {event.participantQuestions.map((q, i) => {
+        const { isMultipleChoiceQuestion, alternatives, actualQuestion } =
+          multipleChoiceAlternatives(q);
+        return isMultipleChoiceQuestion ? (
+          <div key={q}>
+            <div>{actualQuestion}</div>
+            {alternatives.map((alternative) => (
+              <Checkbox
+                onDarkBackground
+                label={alternative}
+                onChange={(selected) => {
+                  setParticipant({
+                    ...participant,
+                    participantAnswers: participant.participantAnswers.map(
+                      (a, oldI) => {
+                        if (i === oldI) {
+                          const currentlySelectedAlternatives =
+                            parseAlternatives(a);
+                          const newlySelectedAlternatives = alternatives.filter(
+                            (x) =>
+                              currentlySelectedAlternatives.includes(x) ||
+                              x === alternative
+                          );
+                          if (selected) {
+                            return serializeAlternatives(
+                              newlySelectedAlternatives
+                            );
+                          } else {
+                            const newlySelectedAlternatives =
+                              currentlySelectedAlternatives.filter(
+                                (x) => x !== alternative
+                              );
+                            return serializeAlternatives(
+                              newlySelectedAlternatives
+                            );
+                          }
+                        }
+                        return a;
+                      }
+                    ),
+                  });
+                }}
+                isChecked={parseAlternatives(
+                  participant.participantAnswers[i]
+                ).includes(alternative)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div key={q}>
+            <ValidatedTextArea
+              label={q}
+              placeholder={''}
+              value={participant.participantAnswers[i] ?? ''}
+              validation={(answer) => parseAnswers([answer])}
+              minRow={3}
+              onChange={(answer: string) =>
+                setParticipant({
+                  ...participant,
+                  participantAnswers: participant.participantAnswers.map(
+                    (a, oldI) => {
+                      if (i === oldI) {
+                        return answer;
+                      }
+                      return a;
                     }
-                    return a;
-                  }
-                ),
-              })
-            }
-          />
-        </div>
-      ))}
+                  ),
+                })
+              }
+            />
+          </div>
+        );
+      })}
       <Button
         onClick={participate}
         className={classNames({
