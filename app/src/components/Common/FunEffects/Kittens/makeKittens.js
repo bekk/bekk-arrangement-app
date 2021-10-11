@@ -45,7 +45,6 @@ let sketch = function (p) {
 
   window.addEventListener('click', (e) => {
     coordinates[cats] = { x: e.pageX, y: e.pageY };
-    console.log({ x: e.pageX, y: e.pageY });
     cats++;
   });
 
