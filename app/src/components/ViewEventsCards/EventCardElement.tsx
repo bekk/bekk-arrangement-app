@@ -112,13 +112,15 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
       [style.cardActive]:
         eventState !== EventState.Avsluttet && eventState !== EventState.Avlyst,
       [style.cardFaded]:
-        eventState === EventState.Avsluttet || eventState === EventState.Avlyst,
+        eventState === EventState.Avsluttet ||
+        eventState === EventState.Avlyst ||
+        event.isHidden,
     }
   );
 
   return (
     <Link className={cardStyle} to={viewRoute}>
-      <div className={style.date}>{dateTimeText}</div>
+      <div className={style.smallFont}>{dateTimeText}</div>
       <div className={titleStyle}>{event.title}</div>
       <div className={style.location}>
         <div className={style.locationIcon}>
@@ -126,6 +128,11 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
         </div>
         <div className={style.iconText}>{event.location}</div>
       </div>
+      {event.isHidden && (
+        <p className={style.hidden}>
+          Psst! Arrangementet er skjult for andre 🤫
+        </p>
+      )}
       {event.isExternal && (
         <div className={style.external}>
           <div className={style.externalIcon}>

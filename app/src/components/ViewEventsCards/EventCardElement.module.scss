@@ -177,8 +177,13 @@
   }
 }
 
-.date {
+.smallFont {
   font-size: 16px;
+}
+
+.hidden {
+  font-size: 16px;
+  color: var(--havKontrast);
 }
 
 .location {
