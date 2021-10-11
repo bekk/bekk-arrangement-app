@@ -34,6 +34,9 @@
   &:hover .externalIcon circle {
     stroke: black;
   }
+  &:hover .hidden {
+    color: var(--nattKontrast);
+  }
 }
 
 .hav {
