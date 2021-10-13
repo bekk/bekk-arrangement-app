@@ -22,6 +22,10 @@ import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/Valid
 import style from './ViewEventContainer.module.scss';
 import classNames from 'classnames';
 import { Checkbox } from '@bekk/storybook';
+import {
+  multipleChoiceAlternatives,
+  MultipleChoiceQuestion,
+} from 'src/components/ViewEvent/MultipleChoiceQuestion';
 
 interface Props {
   eventId: string;
@@ -82,25 +86,6 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
     }
   });
 
-  const serializeAlternatives = (alternatives: string[]) =>
-    alternatives.join(';');
-
-  const parseAlternatives = (alternatives: string | null) =>
-    alternatives
-      ?.split(';')
-      ?.map((s) => s.trim())
-      ?.filter((s) => s !== '') ?? [];
-
-  const multipleChoiceAlternatives = (q: string) => {
-    const alternativesRegex = /\/\/\s?Alternativer:(.+)$/;
-    const [match, alternatives] = q.match(alternativesRegex) ?? [null, null];
-    return {
-      isMultipleChoiceQuestion: alternatives !== null,
-      alternatives: parseAlternatives(alternatives),
-      actualQuestion: q.slice(0, q.length - (match?.length ?? 0)).trim(),
-    };
-  };
-
   return (
     <div className={style.addParticipantContainer}>
       <div>
@@ -135,50 +120,24 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
         const { isMultipleChoiceQuestion, alternatives, actualQuestion } =
           multipleChoiceAlternatives(q);
         return isMultipleChoiceQuestion ? (
-          <div key={q}>
-            <div>{actualQuestion}</div>
-            {alternatives.map((alternative) => (
-              <Checkbox
-                onDarkBackground
-                label={alternative}
-                onChange={(selected) => {
-                  setParticipant({
-                    ...participant,
-                    participantAnswers: participant.participantAnswers.map(
-                      (a, oldI) => {
-                        if (i === oldI) {
-                          const currentlySelectedAlternatives =
-                            parseAlternatives(a);
-                          const newlySelectedAlternatives = alternatives.filter(
-                            (x) =>
-                              currentlySelectedAlternatives.includes(x) ||
-                              x === alternative
-                          );
-                          if (selected) {
-                            return serializeAlternatives(
-                              newlySelectedAlternatives
-                            );
-                          } else {
-                            const newlySelectedAlternatives =
-                              currentlySelectedAlternatives.filter(
-                                (x) => x !== alternative
-                              );
-                            return serializeAlternatives(
-                              newlySelectedAlternatives
-                            );
-                          }
-                        }
-                        return a;
-                      }
-                    ),
-                  });
-                }}
-                isChecked={parseAlternatives(
-                  participant.participantAnswers[i]
-                ).includes(alternative)}
-              />
-            ))}
-          </div>
+          <MultipleChoiceQuestion
+            question={actualQuestion}
+            alternatives={alternatives}
+            value={participant.participantAnswers[i]}
+            onChange={(s) =>
+              setParticipant({
+                ...participant,
+                participantAnswers: participant.participantAnswers.map(
+                  (a, oldI) => {
+                    if (i === oldI) {
+                      return s;
+                    }
+                    return a;
+                  }
+                ),
+              })
+            }
+          />
         ) : (
           <div key={q}>
             <ValidatedTextArea
