@@ -21,7 +21,6 @@ import { useTimeLeft } from 'src/hooks/timeleftHooks';
 import { ValidatedTextArea } from 'src/components/Common/ValidatedTextArea/ValidatedTextArea';
 import style from './ViewEventContainer.module.scss';
 import classNames from 'classnames';
-import { Checkbox } from '@bekk/storybook';
 import {
   multipleChoiceAlternatives,
   MultipleChoiceQuestion,
