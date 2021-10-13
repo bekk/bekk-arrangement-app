@@ -26,7 +26,6 @@ let sketch = function (p) {
 
   let windowWidth = window.innerWidth;
   let windowHeight = heighestHeight();
-  let frameCount = 0;
 
   window.addEventListener('click', (e) => {
     treeCoordinates[trees] = { x: e.pageX - 90, y: e.pageY + 20 };
@@ -116,7 +115,7 @@ let sketch = function (p) {
       makeTree(windowWidth - 200, 900);
       makeTree(windowWidth - 200, 500);
       makeTree(windowWidth - 300, 700);
-      treeCoordinates.map((tree, i) => {
+      treeCoordinates.forEach((tree, i) => {
         if (i < trees) {
           makeTree(tree.x, tree.y);
         }
@@ -138,7 +137,6 @@ let sketch = function (p) {
           (snowflake.l * MAX_SIZE) / LAYER_COUNT
         );
         updateSnowflake(snowflake);
-        frameCount++;
       }
     }
   };

@@ -130,7 +130,10 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
       </div>
       {event.isHidden && (
         <p className={style.hidden}>
-          Psst! Arrangementet er skjult for andre 🤫
+          Psst! Arrangementet er skjult for andre{' '}
+          <span role="img" aria-label="hysj">
+            🤫
+          </span>
         </p>
       )}
       {event.isExternal && (

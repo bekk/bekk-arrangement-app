@@ -106,7 +106,7 @@ let sketch = function (p) {
       makePumpkin(windowWidth - 200, 900);
       makePumpkin(windowWidth - 200, 500);
       makePumpkin(windowWidth - 300, 700);
-      pumpkinCoordinates.map((pk, i) => {
+      pumpkinCoordinates.forEach((pk, i) => {
         if (i < pumpkins) {
           makePumpkin(pk.x, pk.y);
         }

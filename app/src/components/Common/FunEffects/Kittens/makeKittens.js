@@ -39,7 +39,6 @@ let sketch = function (p) {
 
   let windowWidth = window.innerWidth;
   let windowHeight = heighestHeight();
-  let frameCount = 0;
   let isDrawing = false;
   let offset = 0;
 
@@ -115,7 +114,7 @@ let sketch = function (p) {
       catHead(106, 259);
       catHead(119, 257);
 
-      coordinates.map((cat, i) => {
+      coordinates.forEach((cat, i) => {
         if (i < cats) {
           catHead(cat.x, cat.y);
         }
@@ -134,7 +133,6 @@ let sketch = function (p) {
 
         p.circle(stream.x, stream.y, STREAM_SIZE);
         updateStream(stream);
-        frameCount++;
       }
     }
   };
