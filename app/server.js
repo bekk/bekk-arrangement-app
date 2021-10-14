@@ -42,6 +42,7 @@ app.get('/config', (request, response) =>
 );
 
 app.get('*', (request, response) => {
+  console.log('headers', request.headers);
   response.sendFile(path.join(__dirname, 'build/index.html'));
 });
 
