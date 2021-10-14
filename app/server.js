@@ -43,8 +43,8 @@ app.get('/config', (request, response) =>
 
 app.get('*', (request, response) => {
   if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
-    console.log('headers from slack', request.headers);
-    response.sendFile(path.join(__dirname, 'build/unfurl.html'));
+    console.log('headers from slack 2', request.headers);
+    response.send(html());
   } else {
     response.sendFile(path.join(__dirname, 'build/index.html'));
   }
@@ -57,4 +57,19 @@ console.log(`Server started on port ${port}`);
 
 function startsWith(str, word) {
   return str.lastIndexOf(word, 0) === 0;
+}
+
+function html() {
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://skjer.bekk.no/" />
+        <meta property="og:title" content="Rural Bekker" />
+        <meta property="og:description" content="The filmen, based on a Kevin Grisham novel (John Grisham’s brother), revolves around a Southern–born lawyer named Constance Justice." />
+        <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
+      </head>
+    </html>
+  `;
 }
