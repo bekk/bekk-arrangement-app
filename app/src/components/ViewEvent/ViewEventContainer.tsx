@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useRef } from 'react';
 import { useHistory } from 'react-router';
 import { getParticipantExportResponse } from 'src/api/arrangementSvc';
 import {
@@ -85,6 +85,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
   const oneHour = oneMinute * 60;
 
   const emailAndName = useEmailAndName();
+
+  // ref til boks hvor man ikke skal spawne juletrær og ræl fordi
+  // det er annoying når man prøver å fylle ut påmeldingsskjemaet
+  const noSpawnClick = useRef<HTMLDivElement>(null);
 
   if (isBad(remoteEvent)) {
     if (!isAuthenticated() && needsToAuthenticate(remoteEvent.statusCode)) {
@@ -190,7 +194,9 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
 
   return (
     <>
-      {hasChristmasSpirit(event.title) && <Christmas />}
+      {hasChristmasSpirit(event.title) && (
+        <Christmas noSpawnClick={noSpawnClick} />
+      )}
       {hasHalloweenSpirit(event.title) && <Halloween />}
       {hasKittens(event.title) && <Kittens />}
       <ViewEvent
@@ -224,7 +230,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               </Button>
             </div>
           ) : (
-            <div className={style.registrationContainer}>
+            <div ref={noSpawnClick} className={style.registrationContainer}>
               <div className={style.påmeldt}>
                 <h2 className={style.subHeader}>Meld deg på</h2>
                 <div className={style.numberOfParticipants}>
