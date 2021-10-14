@@ -46,14 +46,11 @@ app.get('*', async (request, response) => {
   if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
     try {
       const path = encodeURIComponent(request.path);
-      const event = await fetch(`http://localhost:5000/events/${path}/unfurl`)
-        .then((x) => {
-          if (x.status > 299) {
-            throw x.status;
-          }
-          return x;
-        })
-        .then((x) => x.json());
+      const res = await fetch(`http://localhost:5000/events/${path}/unfurl`);
+      if (res.status > 299) {
+        throw res.status;
+      }
+      const event = await res.json();
 
       response.send(html(event));
     } catch (statusCode) {
