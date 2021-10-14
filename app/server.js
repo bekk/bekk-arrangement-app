@@ -28,12 +28,16 @@ app.get('/health', (request, response) => {
   response.send('healthy');
 });
 
+function getArraSvcUrl() {
+  return (
+    process.env.ARRANGEMENT_SVC_URL || 'https://api.dev.bekk.no/arrangement-svc'
+  );
+}
+
 app.get('/config', (request, response) =>
   response.send({
     bekkApiUrl: process.env.BEKK_API_URL || 'https://api.dev.bekk.no',
-    arrangementSvcUrl:
-      process.env.ARRANGEMENT_SVC_URL ||
-      'https://api.dev.bekk.no/arrangement-svc',
+    arrangementSvcUrl: getArraSvcUrl(),
     employeeSvcUrl:
       process.env.EMPLOYEE_SVC_URL || 'https://api.dev.bekk.no/employee-svc',
     audience: process.env.AUTH0_AUDIENCE || 'QHQy75S7tmnhDdBGYSnszzlhMPul0fAE',
@@ -46,7 +50,7 @@ app.get('*', async (request, response) => {
   if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
     try {
       const path = encodeURIComponent(request.path);
-      const res = await fetch(`http://localhost:5000/events/${path}/unfurl`);
+      const res = await fetch(`${getArraSvcUrl()}/events/${path}/unfurl`);
       if (res.status > 299) {
         throw res.status;
       }
