@@ -42,9 +42,19 @@ app.get('/config', (request, response) =>
 );
 
 app.get('*', (request, response) => {
-  console.log('headers', request.headers);
-  response.sendFile(path.join(__dirname, 'build/index.html'));
+  if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
+    console.log('headers from slack', request.headers);
+    response.sendFile(path.join(__dirname, 'build/unfurl.html'));
+  } else {
+    response.sendFile(path.join(__dirname, 'build/index.html'));
+  }
 });
 
 app.listen(port);
 console.log(`Server started on port ${port}`);
+
+// UNFURL
+
+function startsWith(str, word) {
+  return str.lastIndexOf(word, 0) === 0;
+}
