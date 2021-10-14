@@ -1,4 +1,5 @@
 const express = require('express');
+const fetch = require('node-fetch');
 
 const path = require('path');
 
@@ -41,10 +42,23 @@ app.get('/config', (request, response) =>
   })
 );
 
-app.get('*', (request, response) => {
+app.get('*', async (request, response) => {
   if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
-    console.log('headers from slack 2', request.headers);
-    response.send(html());
+    try {
+      const path = encodeURIComponent(request.path);
+      const event = await fetch(`http://localhost:5000/events/${path}/unfurl`)
+        .then((x) => {
+          if (x.status > 299) {
+            throw x.status;
+          }
+          return x;
+        })
+        .then((x) => x.json());
+
+      response.send(html(event));
+    } catch (statusCode) {
+      response.sendStatus(statusCode);
+    }
   } else {
     response.sendFile(path.join(__dirname, 'build/index.html'));
   }
@@ -59,16 +73,42 @@ function startsWith(str, word) {
   return str.lastIndexOf(word, 0) === 0;
 }
 
-function html() {
+function html({
+  event: {
+    title,
+    description,
+    location,
+    organizerName,
+    startDate,
+    openForRegistrationTime,
+    maxParticipants = Infinity,
+  },
+  numberOfParticipants,
+}) {
+  const availableSpots = maxParticipants - numberOfParticipants;
+  const opens = new Date(Number(openForRegistrationTime)).toString();
   return `
     <!DOCTYPE html>
     <html>
       <head>
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://skjer.bekk.no/" />
-        <meta property="og:title" content="Rural Bekker" />
-        <meta property="og:description" content="The filmen, based on a Kevin Grisham novel (John Grisham’s brother), revolves around a Southern–born lawyer named Constance Justice." />
+        <meta property="og:title" content="${title}" />
+        <meta property="og:description" content="${description}" />
         <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:domain" value="ruraljuror.com" />
+        <meta name="twitter:title" value="${title}" />
+        <meta name="twitter:description" value="${description}" />
+        <meta name="twitter:image" content="http://ruraljuror.com/heroimage.png" />
+        <meta name="twitter:url" value="http://www.ruraljuror.com/" />
+        <meta name="twitter:label1" value="Påmelding åpner" />
+        <meta name="twitter:data1" value="${opens}" />
+        <meta name="twitter:label2" value="Ledige plasser" />
+        <meta name="twitter:data2" value="${availableSpots}" />
+
       </head>
     </html>
   `;
