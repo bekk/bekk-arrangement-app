@@ -96,13 +96,19 @@ function html({
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://skjer.bekk.no/" />
         <meta property="og:title" content="${title}" />
-        <meta property="og:description" content="${description}" />
+        <meta property="og:description" content="${description.replace(
+          '\n',
+          '\\n'
+        )}" />
         <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
 
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:domain" value="ruraljuror.com" />
         <meta name="twitter:title" value="${title}" />
-        <meta name="twitter:description" value="${description}" />
+        <meta name="twitter:description" value="${description.replace(
+          '\n',
+          '\\n'
+        )}" />
         <meta name="twitter:image" content="http://ruraljuror.com/heroimage.png" />
         <meta name="twitter:url" value="http://www.ruraljuror.com/" />
         <meta name="twitter:label1" value="Påmelding åpner" />
