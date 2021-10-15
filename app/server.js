@@ -48,7 +48,7 @@ app.get('/config', (request, response) =>
 
 app.get('*', async (request, response) => {
   if (
-    true ||
+    // true ||
     startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
   ) {
     try {
