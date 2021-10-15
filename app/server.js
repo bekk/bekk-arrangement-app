@@ -48,7 +48,7 @@ app.get('/config', (request, response) =>
 
 app.get('*', async (request, response) => {
   if (
-    // true ||
+    true ||
     startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
   ) {
     try {
@@ -123,5 +123,5 @@ function sanitize(s) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/&/g, '&amp;')
-    .replace(/\n/g, '\\n');
+    .replace(/\n/g, 'U+0005Cn');
 }
