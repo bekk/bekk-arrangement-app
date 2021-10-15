@@ -47,7 +47,10 @@ app.get('/config', (request, response) =>
 );
 
 app.get('*', async (request, response) => {
-  if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
+  if (
+    // true ||
+    startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
+  ) {
     try {
       const path = encodeURIComponent(request.path);
       const res = await fetch(`${getArraSvcUrl()}/events/${path}/unfurl`);
@@ -96,19 +99,13 @@ function html({
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://skjer.bekk.no/" />
         <meta property="og:title" content="${title}" />
-        <meta property="og:description" content="${description.replace(
-          /\n/g,
-          '\r\n'
-        )}" />
+        <meta property="og:description" content="${sanitize(description)}" />
         <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
 
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:domain" value="ruraljuror.com" />
         <meta name="twitter:title" value="${title}" />
-        <meta name="twitter:description" value="${description.replace(
-          /\n/g,
-          '\r\n'
-        )}" />
+        <meta name="twitter:description" value="${sanitize(description)}" />
         <meta name="twitter:image" content="http://ruraljuror.com/heroimage.png" />
         <meta name="twitter:url" value="http://www.ruraljuror.com/" />
         <meta name="twitter:label1" value="Påmelding åpner" />
@@ -119,4 +116,12 @@ function html({
       </head>
     </html>
   `;
+}
+
+function sanitize(s) {
+  return s
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/&/g, '&amp;')
+    .replace(/\n/g, '\\n');
 }
