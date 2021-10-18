@@ -48,7 +48,7 @@ app.get('/config', (request, response) =>
 
 app.get('*', async (request, response) => {
   if (
-    true ||
+    // true ||
     startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
   ) {
     try {
@@ -59,7 +59,7 @@ app.get('*', async (request, response) => {
       }
       const event = await res.json();
 
-      console.log(event);
+      response.send(html(event));
     } catch (statusCode) {
       response.sendStatus(statusCode);
     }
