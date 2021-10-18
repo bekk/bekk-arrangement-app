@@ -116,6 +116,8 @@ function html({
       <head>
 
         <meta property="og:type" content="website" />
+        <meta property="image" content="https://techcrunch.com/wp-content/uploads/2015/09/ios-release-notes.jpg?w=711" />
+        <meta property="og:site_name" content="Skjer" />
         <meta property="og:url" content="https://skjer.bekk.no/" />
         <meta property="og:title" content="${sanitize(title)}" />
         <meta property="og:description" content="${truncateText(
