@@ -89,10 +89,6 @@ function html({
   const availableSpots = maxParticipants - numberOfParticipants;
   const opens = new Date(Number(openForRegistrationTime));
   const isAlreadyOpen = opens < new Date();
-  console.log(startDate);
-  console.log(
-    sanitize(location) + `, ${startDate.date.day.toString().padStart(2, '0')}`
-  );
   const twoDigits = (n) => {
     return n.toString().padStart(2, '0');
   };
@@ -121,7 +117,7 @@ function html({
             startDate.date.month
           )}.${twoDigits(startDate.date.year % 2000)} - ${twoDigits(
             startDate.time.hour
-          )}:${twoDigits(startDate.time.minutes)}`
+          )}:${twoDigits(startDate.time.minute)}`
         }" />
 
         ${
