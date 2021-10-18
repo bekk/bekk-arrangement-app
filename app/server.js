@@ -47,10 +47,7 @@ app.get('/config', (request, response) =>
 );
 
 app.get('*', async (request, response) => {
-  if (
-    // true ||
-    startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
-  ) {
+  if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
     try {
       const path = encodeURIComponent(request.path);
       const res = await fetch(`${getArraSvcUrl()}/events/${path}/unfurl`);
