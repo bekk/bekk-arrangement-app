@@ -47,10 +47,7 @@ app.get('/config', (request, response) =>
 );
 
 app.get('*', async (request, response) => {
-  if (
-    // true ||
-    startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
-  ) {
+  if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
     try {
       const path = encodeURIComponent(request.path);
       const res = await fetch(`${getArraSvcUrl()}/events/${path}/unfurl`);
@@ -90,7 +87,15 @@ function html({
   numberOfParticipants,
 }) {
   const availableSpots = maxParticipants - numberOfParticipants;
-  const opens = new Date(Number(openForRegistrationTime)).toString();
+  const opens = new Date(Number(openForRegistrationTime));
+  const isAlreadyOpen = opens < new Date();
+  console.log(startDate);
+  console.log(
+    sanitize(location) + `, ${startDate.date.day.toString().padStart(2, '0')}`
+  );
+  const twoDigits = (n) => {
+    return n.toString().padStart(2, '0');
+  };
   return `
     <!DOCTYPE html>
     <html>
@@ -98,20 +103,32 @@ function html({
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://skjer.bekk.no/" />
-        <meta property="og:title" content="${title}" />
+        <meta property="og:title" content="${sanitize(title)}" />
         <meta property="og:description" content="${sanitize(description)}" />
         <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
 
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:domain" value="ruraljuror.com" />
-        <meta name="twitter:title" value="${title}" />
+        <meta name="twitter:title" value="${sanitize(title)}" />
         <meta name="twitter:description" value="${sanitize(description)}" />
         <meta name="twitter:image" content="http://ruraljuror.com/heroimage.png" />
         <meta name="twitter:url" value="http://www.ruraljuror.com/" />
+        ${
+          isAlreadyOpen
+            ? `
         <meta name="twitter:label1" value="Påmelding åpner" />
-        <meta name="twitter:data1" value="${opens}" />
-        <meta name="twitter:label2" value="Ledige plasser" />
-        <meta name="twitter:data2" value="${availableSpots}" />
+        <meta name="twitter:data1" value="${opens.toISOString()}" />`
+            : ''
+        }
+        <meta name="twitter:label2" value="Finner sted" />
+        <meta name="twitter:data2" value="${
+          sanitize(location) +
+          `, ${twoDigits(startDate.date.day)}.${twoDigits(
+            startDate.date.month
+          )}.${twoDigits(startDate.date.year % 2000)} - ${twoDigits(
+            startDate.time.hour
+          )}:${twoDigits(startDate.time.minutes)}`
+        }" />
 
       </head>
     </html>
@@ -123,5 +140,6 @@ function sanitize(s) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/&/g, '&amp;')
-    .replace(/\n/g, 'U+0005Cn');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
 }
