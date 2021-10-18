@@ -115,7 +115,7 @@ function html({
           sanitize(location) +
           `, ${twoDigits(startDate.date.day)}.${twoDigits(
             startDate.date.month
-          )}.${twoDigits(startDate.date.year % 2000)} - ${twoDigits(
+          )}.${twoDigits(startDate.date.year % 2000)} ${twoDigits(
             startDate.time.hour
           )}:${twoDigits(startDate.time.minute)}`
         }" />
