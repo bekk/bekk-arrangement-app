@@ -171,17 +171,37 @@ const Description = ({ description }: { description: string }) => {
   );
 };
 
-const formatLinks = (line: string) => {
+const formatLinks = (line: string): (string | JSX.Element)[] => {
   const linkRegex = /(https?:\/\/[^\s]+)/;
-  return line.split(linkRegex).map((s) => {
-    if (linkRegex.test(s)) {
-      return (
-        <a href={s} className={style.link}>
-          {s}
-        </a>
-      );
+  return line.split(linkRegex).flatMap((link, i) => {
+    if (linkRegex.test(link)) {
+      return [
+        <a href={link} key={`${link}:${i}`} className={style.link}>
+          {link}
+        </a>,
+      ] as (string | JSX.Element)[];
     }
-    return s;
+    const boldRegex = /(\*\*.+?\*\*)/g;
+    return link.split(boldRegex).flatMap((bold, j) => {
+      if (boldRegex.test(bold)) {
+        return [
+          <span key={`${bold}:${i}:${j}`} className={style.bold}>
+            {bold.substring(2, bold.length - 2)}
+          </span>,
+        ];
+      }
+      const italicsRegex = /(\*.+?\*)/g;
+      return bold.split(italicsRegex).map((italic, k) => {
+        if (italicsRegex.test(italic)) {
+          return (
+            <span key={`${italic}:${i}:${j}:${k}`} className={style.italic}>
+              {italic.substring(1, italic.length - 1)}
+            </span>
+          );
+        }
+        return italic;
+      });
+    });
   });
 };
 
