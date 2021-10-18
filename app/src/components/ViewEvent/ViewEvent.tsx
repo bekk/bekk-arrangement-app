@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from './ViewEvent.module.scss';
 import {
   IEvent,
@@ -13,7 +13,7 @@ import { stringifyEmail } from 'src/types/email';
 import { dateAsText, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
-import { createRoute, editEventRoute, viewEventRoute } from 'src/routing';
+import { createRoute, editEventRoute } from 'src/routing';
 import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
 import { GentlemanIcon } from 'src/components/Common/Icons/GentlemanIcon';
 import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
@@ -38,19 +38,7 @@ export const ViewEvent = ({
   participantsText,
   isPreview,
 }: IProps) => {
-  const [wasCopied, setWasCopied] = useState(false);
   const hasOpenedForRegistration = event.openForRegistrationTime < new Date();
-
-  const copyLink =
-    eventId !== undefined &&
-    (async () => {
-      const url = event.shortname
-        ? urlFromShortname(event.shortname)
-        : document.location.origin + viewEventRoute(eventId);
-      await navigator.clipboard.writeText(url);
-      setWasCopied(true);
-      setTimeout(() => setWasCopied(false), 3000);
-    });
 
   const history = useHistory();
   const gotoDuplicate = useGotoCreateDuplicate(createRoute);
@@ -116,13 +104,6 @@ export const ViewEvent = ({
               <p>Eksternt arrangement</p>
             </div>
           )}
-          <div className={style.buttonGroup}>
-            {!isPreview && copyLink !== false && (
-              <Button color="Secondary" onClick={copyLink}>
-                {wasCopied ? 'Lenke kopiert!' : 'Kopier lenke'}
-              </Button>
-            )}
-          </div>
         </div>
       </WavySubHeader>
       <div className={style.contentContainer}>
