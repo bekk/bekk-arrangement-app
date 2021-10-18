@@ -105,6 +105,11 @@ function html({
     }
     return s;
   };
+  const formatDateTime = ({ date, time }) => {
+    return `${twoDigits(date.day)}.${twoDigits(date.month)}.${twoDigits(
+      date.year % 2000
+    )} ${twoDigits(time.hour)}:${twoDigits(time.minute)}`;
+  };
   return `
     <!DOCTYPE html>
     <html>
@@ -125,19 +130,21 @@ function html({
 
         <meta name="twitter:label1" value="Finner sted" />
         <meta name="twitter:data1" value="${
-          sanitize(location) +
-          `, ${twoDigits(startDate.date.day)}.${twoDigits(
-            startDate.date.month
-          )}.${twoDigits(startDate.date.year % 2000)} ${twoDigits(
-            startDate.time.hour
-          )}:${twoDigits(startDate.time.minute)}`
+          sanitize(location) + `, ${formatDateTime(startDate)}`
         }" />
 
         ${
           !isAlreadyOpen
             ? `
         <meta name="twitter:label2" value="Påmelding åpner" />
-        <meta name="twitter:data2" value="${opens.toLocaleString('nb-NO')}" />`
+        <meta name="twitter:data2" value="${formatDateTime({
+          date: {
+            day: opens.getDate(),
+            month: opens.getMonth() + 1,
+            year: opens.getFullYear(),
+          },
+          time: { hour: opens.getHours(), minute: opens.getMinutes() },
+        })}" />`
             : hasClosed
             ? `
         <meta name="twitter:label2" value="Påmelding er stengt" />
