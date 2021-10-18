@@ -94,14 +94,14 @@ function html({
   const opens = new Date(Number(openForRegistrationTime));
   const closes = new Date(Number(closeRegistrationTime));
   const isAlreadyOpen = opens < new Date();
-  const hasClosed = closes < new Date();
+  const hasClosed = closeRegistrationTime !== undefined && closes < new Date();
 
   const twoDigits = (n) => {
     return n.toString().padStart(2, '0');
   };
   const truncateText = (n, s) => {
     if (s.length > n) {
-      return `${s.substring(0, n - 3)}...`;
+      return `${s.substring(0, n - 3).trim()}...`;
     }
     return s;
   };
@@ -111,20 +111,17 @@ function html({
       <head>
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="http://skjer.bekk.no/" />
+        <meta property="og:url" content="https://skjer.bekk.no/" />
         <meta property="og:title" content="${sanitize(title)}" />
         <meta property="og:description" content="${truncateText(
-          128,
+          256,
           sanitize(description)
         )}" />
-        <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
 
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:domain" value="ruraljuror.com" />
+        <meta name="twitter:domain" value="skjer.bekk.no" />
         <meta name="twitter:title" value="${sanitize(title)}" />
         <meta name="twitter:description" value="${sanitize(description)}" />
-        <meta name="twitter:image" content="http://ruraljuror.com/heroimage.png" />
-        <meta name="twitter:url" value="http://www.ruraljuror.com/" />
+        <meta name="twitter:url" value="https://skjer.bekk.no/" />
 
         <meta name="twitter:label1" value="Finner sted" />
         <meta name="twitter:data1" value="${
