@@ -47,7 +47,10 @@ app.get('/config', (request, response) =>
 );
 
 app.get('*', async (request, response) => {
-  if (startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')) {
+  if (
+    true ||
+    startsWith(request.headers['user-agent'], 'Slackbot-LinkExpanding')
+  ) {
     try {
       const path = encodeURIComponent(request.path);
       const res = await fetch(`${getArraSvcUrl()}/events/${path}/unfurl`);
@@ -56,7 +59,7 @@ app.get('*', async (request, response) => {
       }
       const event = await res.json();
 
-      response.send(html(event));
+      console.log(event);
     } catch (statusCode) {
       response.sendStatus(statusCode);
     }
@@ -82,15 +85,25 @@ function html({
     organizerName,
     startDate,
     openForRegistrationTime,
+    closeRegistrationTime,
     maxParticipants = Infinity,
   },
   numberOfParticipants,
 }) {
   const availableSpots = maxParticipants - numberOfParticipants;
   const opens = new Date(Number(openForRegistrationTime));
+  const closes = new Date(Number(closeRegistrationTime));
   const isAlreadyOpen = opens < new Date();
+  const hasClosed = closes < new Date();
+
   const twoDigits = (n) => {
     return n.toString().padStart(2, '0');
+  };
+  const truncateText = (n, s) => {
+    if (s.length > n) {
+      return `${s.substring(0, n - 3)}...`;
+    }
+    return s;
   };
   return `
     <!DOCTYPE html>
@@ -100,7 +113,10 @@ function html({
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://skjer.bekk.no/" />
         <meta property="og:title" content="${sanitize(title)}" />
-        <meta property="og:description" content="${sanitize(description)}" />
+        <meta property="og:description" content="${truncateText(
+          128,
+          sanitize(description)
+        )}" />
         <meta property="og:image" content="http://ruraljuror.com/heroimage.png" />
 
         <meta name="twitter:card" content="summary_large_image">
@@ -125,6 +141,10 @@ function html({
             ? `
         <meta name="twitter:label2" value="Påmelding åpner" />
         <meta name="twitter:data2" value="${opens.toLocaleString('nb-NO')}" />`
+            : hasClosed
+            ? `
+        <meta name="twitter:label2" value="Påmelding er stengt" />
+        <meta name="twitter:data2" value="Påmeldinger har dessverre stengt" />`
             : `
         <meta name="twitter:label2" value="Påmelding er åpen!" />
         <meta name="twitter:data2" value="${
