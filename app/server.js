@@ -113,15 +113,9 @@ function html({
         <meta name="twitter:description" value="${sanitize(description)}" />
         <meta name="twitter:image" content="http://ruraljuror.com/heroimage.png" />
         <meta name="twitter:url" value="http://www.ruraljuror.com/" />
-        ${
-          isAlreadyOpen
-            ? `
-        <meta name="twitter:label1" value="Påmelding åpner" />
-        <meta name="twitter:data1" value="${opens.toISOString()}" />`
-            : ''
-        }
-        <meta name="twitter:label2" value="Finner sted" />
-        <meta name="twitter:data2" value="${
+
+        <meta name="twitter:label1" value="Finner sted" />
+        <meta name="twitter:data1" value="${
           sanitize(location) +
           `, ${twoDigits(startDate.date.day)}.${twoDigits(
             startDate.date.month
@@ -129,6 +123,20 @@ function html({
             startDate.time.hour
           )}:${twoDigits(startDate.time.minutes)}`
         }" />
+
+        ${
+          !isAlreadyOpen
+            ? `
+        <meta name="twitter:label2" value="Påmelding åpner" />
+        <meta name="twitter:data2" value="${opens.toLocaleString('nb-NO')}" />`
+            : `
+        <meta name="twitter:label2" value="Påmelding er åpen!" />
+        <meta name="twitter:data2" value="${
+          availableSpots === Infinity
+            ? 'Ubegrenset plasser'
+            : 'Det er begrenset plasser'
+        }" />`
+        }
 
       </head>
     </html>
