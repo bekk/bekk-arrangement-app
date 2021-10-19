@@ -147,7 +147,7 @@ const DateSection = ({ startDate, endDate }: IDateProps) => {
   }
   return (
     <p className={style.text}>
-      {dateAsText(startDate.date)}, {stringifyTime(startDate.time)} -
+      {dateAsText(startDate.date)}, {stringifyTime(startDate.time)} -{' '}
       {dateAsText(endDate.date)}, {stringifyTime(endDate.time)}
     </p>
   );
