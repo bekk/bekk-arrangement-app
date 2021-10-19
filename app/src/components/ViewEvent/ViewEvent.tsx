@@ -68,13 +68,13 @@ export const ViewEvent = ({
           <h1 className={style.header}>{event.title}</h1>
         </div>
         <div className={style.generalInfoContainer}>
-          <div className={style.organizer}>
+          {/* <div className={style.organizer}>
             <p>Arrangør</p>
             <p className={style.organizerName}>{event.organizerName}</p>
             <p className={style.organizerEmail}>
               ({stringifyEmail(event.organizerEmail)})
             </p>
-          </div>
+          </div> */}
           <div className={style.iconTextContainer}>
             <ClockIcon color="black" className={style.clockIcon} />
             <DateSection startDate={event.start} endDate={event.end} />
@@ -108,7 +108,8 @@ export const ViewEvent = ({
         <p className={style.description}>
           <Description description={event.description} />
         </p>
-        <p>
+        <p>—</p>
+        <p className={style.organizerText}>
           Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
           kontakt på {event.organizerEmail.email}!
         </p>
