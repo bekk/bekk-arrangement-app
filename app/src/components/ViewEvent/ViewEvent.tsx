@@ -45,29 +45,27 @@ export const ViewEvent = ({
 
   return (
     <section className={style.container}>
+      {userCanEdit && eventId !== undefined && (
+        <div className={style.editGroup}>
+          <Button
+            onClick={() => history.push(editEventRoute(eventId))}
+            color={'Secondary'}
+          >
+            Rediger
+          </Button>
+          <Button
+            displayAsLink
+            onLightBackground
+            onClick={() => gotoDuplicate(toEditEvent(incrementOneWeek(event)))}
+            color={'Secondary'}
+          >
+            Dupliser
+          </Button>
+        </div>
+      )}
       <WavySubHeader eventId={eventId} eventTitle={event.title}>
         <div className={style.headerContainer}>
           <h1 className={style.header}>{event.title}</h1>
-          {userCanEdit && eventId !== undefined && (
-            <>
-              <Button
-                onClick={() => history.push(editEventRoute(eventId))}
-                color={'Secondary'}
-              >
-                Rediger
-              </Button>
-              <Button
-                displayAsLink
-                onLightBackground
-                onClick={() =>
-                  gotoDuplicate(toEditEvent(incrementOneWeek(event)))
-                }
-                color={'Secondary'}
-              >
-                Dupliser
-              </Button>
-            </>
-          )}
         </div>
         <div className={style.generalInfoContainer}>
           <div className={style.organizer}>

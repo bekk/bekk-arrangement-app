@@ -176,3 +176,24 @@
 .bold {
   font-family: $fontMedium;
 }
+
+.editGroup {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-left: 85px;
+  padding-right: 85px;
+  padding-top: 100px;
+  left: 0;
+
+  button {
+    margin-left: 10px;
+  }
+
+  @media #{$desktop} {
+    justify-content: flex-end;
+    padding-top: 48px;
+    right: 0;
+  }
+}
