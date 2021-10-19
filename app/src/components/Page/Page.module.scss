@@ -5,7 +5,6 @@
   width: $pageMobileWidth;
   @media #{$desktop} {
     width: $pageDesktopWidth;
-    max-width: 2000px;
     height: fit-content;
   }
 }
