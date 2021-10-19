@@ -108,6 +108,10 @@ export const ViewEvent = ({
         <p className={style.description}>
           <Description description={event.description} />
         </p>
+        <p>
+          Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
+          kontakt på {event.organizerEmail.email}!
+        </p>
         {isPreview && (
           <div className={style.preview}>
             {event.participantQuestions.length > 0 && (
