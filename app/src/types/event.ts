@@ -32,7 +32,6 @@ import {
   parseEditTimeInstance,
   addWeekToTimeInstance,
 } from 'src/types/time-instance';
-import { addWeeks } from 'date-fns/esm/fp';
 import {
   parseDateViewModel,
   dateToIDate,
@@ -302,7 +301,7 @@ export const toEditEvent = ({
 });
 
 export const initialEditEvent = (email?: string, name?: string): IEditEvent => {
-  const eventStartDate = addWeeks(1, new Date());
+  const eventStartDate = new Date();
   const openForRegistrationTime = toEditTimeInstance(new Date());
   return {
     title: '',
