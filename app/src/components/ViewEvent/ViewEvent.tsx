@@ -111,7 +111,7 @@ export const ViewEvent = ({
         <p>—</p>
         <p className={style.organizerText}>
           Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
-          kontakt på {event.organizerEmail.email}!
+          kontakt på {stringifyEmail(event.organizerEmail)}!
         </p>
         {isPreview && (
           <div className={style.preview}>
