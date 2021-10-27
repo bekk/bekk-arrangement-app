@@ -119,11 +119,21 @@ const ParticipantTableDesktop = (props: {
       setWasCopied(false);
     }, 3000);
   };
+  const copyEmails = async () => {
+    await navigator.clipboard.writeText(
+      props.participants.map((p) => stringifyEmail(p.email)).join(', ')
+    );
+    setWasCopied(true);
+    setTimeout(() => {
+      setWasCopied(false);
+    }, 3000);
+  };
   return (
     <>
       <Button onClick={copyAttendees}>
-        Kopier deltakere til utklippstavle
+        Kopier deltakernavn til utklippstavle
       </Button>{' '}
+      <Button onClick={copyEmails}>Kopier eposter til utklippstavle</Button>{' '}
       {wasCopied && 'Kopiert!'}
       <table className={style.table}>
         <thead>
