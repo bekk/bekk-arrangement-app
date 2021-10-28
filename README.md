@@ -11,6 +11,7 @@ Prod: https://skjer.bekk.no
 ```
 npm install
 ```
+Sjekk node versjon dersom du har problemer med å installere pakker.
 
 I en terminal, fra mappen `app`:
 
