@@ -152,19 +152,21 @@ const ParticipantTableDesktop = (props: {
               <td className={style.desktopCell}>
                 {stringifyEmail(attendee.email)}
               </td>
-              <td className={style.desktopCell}>
-                {questions.map(
-                  (q, i) =>
-                    attendee.participantAnswers[i] && (
-                      <div>
-                        <div className={style.question}>{q}</div>
-                        <div className={style.answer}>
-                          {attendee.participantAnswers[i]}
+              {hasComments && (
+                <td className={style.desktopCell}>
+                  {questions.map(
+                    (q, i) =>
+                      attendee.participantAnswers[i] && (
+                        <div>
+                          <div className={style.question}>{q}</div>
+                          <div className={style.answer}>
+                            {attendee.participantAnswers[i]}
+                          </div>
                         </div>
-                      </div>
-                    )
-                )}
-              </td>
+                      )
+                  )}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
