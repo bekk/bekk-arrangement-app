@@ -87,6 +87,7 @@ export const AddParticipant = ({ eventId, event, email, name }: Props) => {
 
   return (
     <div className={style.addParticipantContainer}>
+      <h2 className={style.subHeader}>Meld deg på</h2>
       <div>
         <ValidatedTextInput
           label={'Navn'}

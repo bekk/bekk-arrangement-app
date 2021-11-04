@@ -10,7 +10,7 @@ import {
 } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
-import { dateAsText, isSameDate } from 'src/types/date';
+import { dateAsText, dateToIDate, isSameDate } from 'src/types/date';
 import { stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { createRoute, editEventRoute } from 'src/routing';
@@ -42,6 +42,14 @@ export const ViewEvent = ({
 
   const history = useHistory();
   const gotoDuplicate = useGotoCreateDuplicate(createRoute);
+
+  const isPossibleToRegister = () => {
+    const now = new Date();
+    return (
+      now < event.openForRegistrationTime ||
+      (event.closeRegistrationTime && now > event.closeRegistrationTime)
+    );
+  };
 
   return (
     <section className={style.container}>
@@ -112,6 +120,13 @@ export const ViewEvent = ({
         <p className={style.organizerText}>
           Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
           kontakt på {stringifyEmail(event.organizerEmail)}!
+        </p>
+        <p className={style.registrationDeadlineText}>
+          {event.closeRegistrationTime &&
+            !isPossibleToRegister() &&
+            `Frist for å melde seg på er ${dateAsText(
+              dateToIDate(event.closeRegistrationTime)
+            )}.`}
         </p>
         {isPreview && (
           <div className={style.preview}>

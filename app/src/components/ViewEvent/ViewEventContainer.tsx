@@ -81,6 +81,10 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
       : false
   );
 
+  const closeRegTime = hasLoaded(remoteEvent)
+    ? remoteEvent.data.closeRegistrationTime
+    : '';
+
   const oneMinute = 60000;
   const oneHour = oneMinute * 60;
 
@@ -232,7 +236,6 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
           ) : (
             <div ref={noSpawnClick} className={style.registrationContainer}>
               <div className={style.påmeldt}>
-                <h2 className={style.subHeader}>Meld deg på</h2>
                 <div className={style.numberOfParticipants}>
                   ({numberOfPossibleParticipantsText})
                 </div>
@@ -265,6 +268,13 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 ) : waitlistText ? (
                   <p>{waitlistText}</p>
                 ) : null}
+              </div>
+              <div className={style.registrationDeadlineText}>
+                {closeRegTime &&
+                  event.openForRegistrationTime > new Date() &&
+                  `Frist for å melde seg på er ${dateAsText(
+                    dateToIDate(closeRegTime)
+                  )}.`}
               </div>
             </div>
           )}
@@ -353,7 +363,9 @@ const getClosedEventText = (
   if (timeLeft.difference > 0) {
     const openDate = dateAsText(dateToIDate(event.openForRegistrationTime));
     const openTime = stringifyTime(dateToITime(event.openForRegistrationTime));
-    return `Åpner ${openDate}, kl ${openTime}, om ${asString(timeLeft)}`;
+    return `Påmeldingen åpner ${openDate}, kl ${openTime}. Det betyr at det er ${asString(
+      timeLeft
+    )} igjen!`;
   }
   if (eventIsFull && !event.hasWaitingList) {
     return 'Arrangementet er dessverre fullt';
