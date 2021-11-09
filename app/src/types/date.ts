@@ -54,11 +54,9 @@ export const toEditDate = ({ year, month, day }: IDate): string =>
 // Util functions
 
 export const dateAsText = (date: IDate): string => {
-  return format(
-    new Date(date.year, date.month - 1, date.day),
-    'cccc dd. MMMM',
-    { locale: nb }
-  );
+  return format(new Date(date.year, date.month - 1, date.day), 'cccc d. MMMM', {
+    locale: nb,
+  });
 };
 
 export const isSameDate = (date: IDate, otherDate: IDate) =>
