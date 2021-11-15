@@ -81,10 +81,6 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
       : false
   );
 
-  const closeRegTime = hasLoaded(remoteEvent)
-    ? remoteEvent.data.closeRegistrationTime
-    : undefined;
-
   const oneMinute = 60000;
   const oneHour = oneMinute * 60;
 

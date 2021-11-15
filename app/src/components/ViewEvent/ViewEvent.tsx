@@ -22,12 +22,11 @@ import { useHistory } from 'react-router';
 import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 import { useGotoCreateDuplicate } from 'src/hooks/history';
-import { bool } from 'aws-sdk/clients/signer';
 
 interface IProps {
   eventId?: string;
   event: IEvent;
-  isPossibleToRegister?: bool;
+  isPossibleToRegister?: boolean;
   participantsText: string;
   userCanEdit: boolean;
   isPreview?: true;
