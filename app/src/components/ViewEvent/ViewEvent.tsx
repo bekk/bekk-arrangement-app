@@ -11,7 +11,7 @@ import {
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
 import { dateAsText, dateToIDate, isSameDate } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
+import { dateToITime, stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { createRoute, editEventRoute } from 'src/routing';
 import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
@@ -22,10 +22,12 @@ import { useHistory } from 'react-router';
 import { userIsLoggedIn } from 'src/auth';
 import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
 import { useGotoCreateDuplicate } from 'src/hooks/history';
+import { bool } from 'aws-sdk/clients/signer';
 
 interface IProps {
   eventId?: string;
   event: IEvent;
+  isPossibleToRegister?: bool;
   participantsText: string;
   userCanEdit: boolean;
   isPreview?: true;
@@ -34,6 +36,7 @@ interface IProps {
 export const ViewEvent = ({
   eventId,
   event,
+  isPossibleToRegister,
   userCanEdit,
   participantsText,
   isPreview,
@@ -42,14 +45,6 @@ export const ViewEvent = ({
 
   const history = useHistory();
   const gotoDuplicate = useGotoCreateDuplicate(createRoute);
-
-  const isPossibleToRegister = () => {
-    const now = new Date();
-    return (
-      now < event.openForRegistrationTime ||
-      (event.closeRegistrationTime && now > event.closeRegistrationTime)
-    );
-  };
 
   return (
     <section className={style.container}>
@@ -76,13 +71,6 @@ export const ViewEvent = ({
           <h1 className={style.header}>{event.title}</h1>
         </div>
         <div className={style.generalInfoContainer}>
-          {/* <div className={style.organizer}>
-            <p>Arrangør</p>
-            <p className={style.organizerName}>{event.organizerName}</p>
-            <p className={style.organizerEmail}>
-              ({stringifyEmail(event.organizerEmail)})
-            </p>
-          </div> */}
           <div className={style.iconTextContainer}>
             <ClockIcon color="black" className={style.clockIcon} />
             <DateSection startDate={event.start} endDate={event.end} />
@@ -123,10 +111,10 @@ export const ViewEvent = ({
         </p>
         <p className={style.registrationDeadlineText}>
           {event.closeRegistrationTime &&
-            !isPossibleToRegister() &&
+            isPossibleToRegister &&
             `Frist for å melde seg på er ${dateAsText(
               dateToIDate(event.closeRegistrationTime)
-            )}.`}
+            )}, kl ${stringifyTime(dateToITime(event.closeRegistrationTime))}.`}
         </p>
         {isPreview && (
           <div className={style.preview}>

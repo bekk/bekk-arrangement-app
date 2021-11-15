@@ -196,6 +196,14 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     );
   };
 
+  const isPossibleToRegister = () => {
+    const now = new Date();
+    return (
+      now > event.openForRegistrationTime &&
+      (!event.closeRegistrationTime || now < event.closeRegistrationTime)
+    );
+  };
+
   return (
     <>
       {hasChristmasSpirit(event.title) && (
@@ -205,6 +213,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
       {hasKittens(event.title) && <Kittens />}
       <ViewEvent
         eventId={eventId}
+        isPossibleToRegister={isPossibleToRegister()}
         event={event}
         participantsText={shortParticipantsText}
         userCanEdit={editTokenFound || userIsAdmin() ? true : false}
@@ -271,10 +280,12 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 ) : null}
               </div>
               <div className={style.registrationDeadlineText}>
-                {closeRegTime &&
-                  event.openForRegistrationTime > new Date() &&
+                {event.closeRegistrationTime &&
+                  !isPossibleToRegister() &&
                   `Frist for å melde seg på er ${dateAsText(
-                    dateToIDate(closeRegTime)
+                    dateToIDate(event.closeRegistrationTime)
+                  )}, kl ${stringifyTime(
+                    dateToITime(event.closeRegistrationTime)
                   )}.`}
               </div>
             </div>
