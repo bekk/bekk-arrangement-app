@@ -10,8 +10,8 @@ import {
 } from 'src/types/event';
 import { Button } from 'src/components/Common/Button/Button';
 import { stringifyEmail } from 'src/types/email';
-import { dateAsText, isSameDate } from 'src/types/date';
-import { stringifyTime } from 'src/types/time';
+import { dateAsText, dateToIDate, isSameDate } from 'src/types/date';
+import { dateToITime, stringifyTime } from 'src/types/time';
 import { IDateTime } from 'src/types/date-time';
 import { createRoute, editEventRoute } from 'src/routing';
 import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
@@ -26,6 +26,7 @@ import { useGotoCreateDuplicate } from 'src/hooks/history';
 interface IProps {
   eventId?: string;
   event: IEvent;
+  isPossibleToRegister?: boolean;
   participantsText: string;
   userCanEdit: boolean;
   isPreview?: true;
@@ -34,6 +35,7 @@ interface IProps {
 export const ViewEvent = ({
   eventId,
   event,
+  isPossibleToRegister,
   userCanEdit,
   participantsText,
   isPreview,
@@ -68,13 +70,6 @@ export const ViewEvent = ({
           <h1 className={style.header}>{event.title}</h1>
         </div>
         <div className={style.generalInfoContainer}>
-          {/* <div className={style.organizer}>
-            <p>Arrangør</p>
-            <p className={style.organizerName}>{event.organizerName}</p>
-            <p className={style.organizerEmail}>
-              ({stringifyEmail(event.organizerEmail)})
-            </p>
-          </div> */}
           <div className={style.iconTextContainer}>
             <ClockIcon color="black" className={style.clockIcon} />
             <DateSection startDate={event.start} endDate={event.end} />
@@ -112,6 +107,13 @@ export const ViewEvent = ({
         <p className={style.organizerText}>
           Arrangementet holdes av {event.organizerName}. Har du spørsmål ta
           kontakt på {stringifyEmail(event.organizerEmail)}!
+        </p>
+        <p className={style.registrationDeadlineText}>
+          {event.closeRegistrationTime &&
+            isPossibleToRegister &&
+            `Frist for å melde seg på er ${dateAsText(
+              dateToIDate(event.closeRegistrationTime)
+            )}, kl ${stringifyTime(dateToITime(event.closeRegistrationTime))}.`}
         </p>
         {isPreview && (
           <div className={style.preview}>

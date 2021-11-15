@@ -192,6 +192,14 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
     );
   };
 
+  const isPossibleToRegister = () => {
+    const now = new Date();
+    return (
+      now > event.openForRegistrationTime &&
+      (!event.closeRegistrationTime || now < event.closeRegistrationTime)
+    );
+  };
+
   return (
     <>
       {hasChristmasSpirit(event.title) && (
@@ -201,6 +209,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
       {hasKittens(event.title) && <Kittens />}
       <ViewEvent
         eventId={eventId}
+        isPossibleToRegister={isPossibleToRegister()}
         event={event}
         participantsText={shortParticipantsText}
         userCanEdit={editTokenFound || userIsAdmin() ? true : false}
@@ -265,6 +274,15 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
                 ) : waitlistText ? (
                   <p>{waitlistText}</p>
                 ) : null}
+              </div>
+              <div className={style.registrationDeadlineText}>
+                {event.closeRegistrationTime &&
+                  !isPossibleToRegister() &&
+                  `Frist for å melde seg på er ${dateAsText(
+                    dateToIDate(event.closeRegistrationTime)
+                  )}, kl ${stringifyTime(
+                    dateToITime(event.closeRegistrationTime)
+                  )}.`}
               </div>
             </div>
           )}
@@ -353,7 +371,7 @@ const getClosedEventText = (
   if (timeLeft.difference > 0) {
     const openDate = dateAsText(dateToIDate(event.openForRegistrationTime));
     const openTime = stringifyTime(dateToITime(event.openForRegistrationTime));
-    return `Åpner ${openDate}, kl ${openTime}, om ${asString(timeLeft)}`;
+    return `Påmeldingen åpner ${openDate}, kl ${openTime}.`;
   }
   if (eventIsFull && !event.hasWaitingList) {
     return 'Arrangementet er dessverre fullt';
