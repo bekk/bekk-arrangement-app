@@ -8,19 +8,22 @@ interface IProps {
   children?: ReactChild[] | ReactChild;
   eventId?: string | 'all-events';
   eventTitle?: string;
+  customHexColor?: string;
 }
 
 export const WavySubHeader = ({
   children,
   eventId,
   eventTitle = '',
+  customHexColor,
 }: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const { style: colorStyle, colorCode } = getEventColor(
     eventId,
     style,
-    eventTitle
+    eventTitle,
+    customHexColor
   );
 
   return (
@@ -29,7 +32,10 @@ export const WavySubHeader = ({
       onMouseMove={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className={classNames(style.contentContainer, colorStyle)}>
+      <div
+        style={{ backgroundColor: colorCode }}
+        className={classNames(style.contentContainer, colorStyle)}
+      >
         {children}
       </div>
       <div className={style.sineCurve}>

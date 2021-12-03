@@ -65,7 +65,11 @@ export const ViewEvent = ({
           </Button>
         </div>
       )}
-      <WavySubHeader eventId={eventId} eventTitle={event.title}>
+      <WavySubHeader
+        eventId={eventId}
+        eventTitle={event.title}
+        customHexColor={event.customHexColor}
+      >
         <div className={style.headerContainer}>
           <h1 className={style.header}>{event.title}</h1>
         </div>

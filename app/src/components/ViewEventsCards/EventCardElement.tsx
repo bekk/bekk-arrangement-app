@@ -178,8 +178,12 @@ const getEventHash = (eventId: string): number =>
 export const getEventColor = (
   eventId: string | undefined,
   style: any,
-  eventTitle: string
+  eventTitle: string,
+  customHexColor?: string
 ): { style: string; colorCode: string } => {
+  if (customHexColor) {
+    return { style: style.custom, colorCode: `#${customHexColor}` };
+  }
   const defaultStyle = { style: style.none, colorCode: hvit };
   if (eventId === undefined) {
     return defaultStyle;
