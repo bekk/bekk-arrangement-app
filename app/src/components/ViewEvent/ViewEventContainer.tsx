@@ -298,7 +298,8 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               <ViewParticipants eventId={eventId} editToken={editTokenFound} />
             </>
           ) : (
-            userIsLoggedIn() && (
+            userIsLoggedIn() &&
+            !event.isExternal && (
               <>
                 <div className={style.attendeesTitleContainer}>
                   <h2 className={style.subHeader}>Påmeldte</h2>
