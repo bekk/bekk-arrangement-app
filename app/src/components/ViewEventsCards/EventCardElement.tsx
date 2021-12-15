@@ -179,7 +179,6 @@ export const useEventColor = (
   eventId: string | undefined,
   style: any,
   eventTitle: string,
-  // TODO: denne må også inn på forside.bekk.no
   customHexColor?: string
 ): { style: string; colorCode: string } => {
   const className = `${eventId}-hover-color`;
