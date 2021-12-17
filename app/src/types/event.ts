@@ -65,6 +65,7 @@ export interface IEventViewModel {
   isExternal: boolean;
   isHidden: boolean;
   shortname?: string;
+  customHexColor?: string;
 }
 
 export interface IEventWriteModel {
@@ -85,6 +86,7 @@ export interface IEventWriteModel {
   isExternal: boolean;
   isHidden: boolean;
   shortname?: string;
+  customHexColor?: string;
 }
 
 type UnlimitedParticipants = ['unlimited'];
@@ -117,6 +119,7 @@ export interface IEvent {
   isExternal: boolean;
   isHidden: boolean;
   shortname?: string;
+  customHexColor?: string;
 }
 
 export interface IEditEvent {
@@ -136,6 +139,7 @@ export interface IEditEvent {
   isExternal: boolean;
   isHidden: boolean;
   shortname?: string;
+  customHexColor?: string;
 }
 
 export const parseEditEvent = ({
@@ -155,6 +159,7 @@ export const parseEditEvent = ({
   isExternal,
   isHidden,
   shortname,
+  customHexColor,
 }: IEditEvent): IEvent | IError[] => {
   const event = {
     title: parseTitle(title),
@@ -175,6 +180,7 @@ export const parseEditEvent = ({
     isExternal,
     isHidden,
     shortname: parseShortname(shortname),
+    customHexColor,
   };
 
   try {
@@ -237,6 +243,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
   const isExternal = eventView.isExternal;
   const isHidden = eventView.isHidden;
   const shortname = parseShortname(eventView.shortname);
+  const customHexColor = eventView.customHexColor;
 
   const event = {
     title,
@@ -255,6 +262,7 @@ export const parseEventViewModel = (eventView: IEventViewModel): IEvent => {
     isExternal,
     isHidden,
     shortname,
+    customHexColor,
   };
 
   assertIsValid(event);
@@ -279,6 +287,7 @@ export const toEditEvent = ({
   isExternal,
   isHidden,
   shortname,
+  customHexColor,
 }: IEvent): IEditEvent => ({
   title,
   description,
@@ -298,6 +307,7 @@ export const toEditEvent = ({
   isExternal,
   isHidden,
   shortname,
+  customHexColor,
 });
 
 export const initialEditEvent = (email?: string, name?: string): IEditEvent => {

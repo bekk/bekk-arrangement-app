@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { isNumber } from 'lodash';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   hasChristmasSpirit,
@@ -107,7 +107,7 @@ export const EventCardElement = ({ eventId, event }: IProps) => {
 
   const cardStyle = classNames(
     style.card,
-    getEventColor(eventId, style, event.title).style,
+    useEventColor(eventId, style, event.title, event.customHexColor).style,
     {
       [style.cardActive]:
         eventState !== EventState.Avsluttet && eventState !== EventState.Avlyst,
@@ -175,11 +175,23 @@ const colors = (style: any) =>
 const getEventHash = (eventId: string): number =>
   [...eventId].map((char) => char.charCodeAt(0)).reduce((a, x) => a + x, 0);
 
-export const getEventColor = (
+export const useEventColor = (
   eventId: string | undefined,
   style: any,
-  eventTitle: string
+  eventTitle: string,
+  customHexColor?: string
 ): { style: string; colorCode: string } => {
+  const className = `${eventId}-hover-color`;
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = `.${className}:hover { background-color: #${customHexColor}; }`;
+    const head = (document.getElementsByTagName('head') as any)[0];
+    if (head) head.appendChild(style);
+  }, [className, customHexColor]);
+  if (customHexColor) {
+    return { style: className, colorCode: `#${customHexColor}` };
+  }
   const defaultStyle = { style: style.none, colorCode: hvit };
   if (eventId === undefined) {
     return defaultStyle;

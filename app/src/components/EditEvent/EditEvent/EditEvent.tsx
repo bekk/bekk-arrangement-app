@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   IEditEvent,
   isMaxParticipantsLimited,
@@ -53,10 +53,22 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     }
   };
 
+  const [hasCustomColor, _setHasCustomColor] = useState(
+    event.customHexColor !== undefined
+  );
+  const setHasCustomColor = (hasCustomColor: boolean) => {
+    _setHasCustomColor(hasCustomColor);
+    if (!hasCustomColor) {
+      updateEvent({ ...event, customHexColor: undefined });
+    }
+  };
+
   const hasUnlimitedSpots = !isMaxParticipantsLimited(event.maxParticipants);
 
   const validatedStarTime = parseEditDateTime(event.start);
   const validateEndTime = parseEditDateTime(event.end);
+
+  const debounce = useDebounce();
 
   return (
     <div className={style.container}>
@@ -286,7 +298,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               }
             }}
           >
-            {event.closeRegistrationTime ? buttonText.removeRegistrationEndDate : buttonText.addRegistrationEndDate}
+            {event.closeRegistrationTime
+              ? buttonText.removeRegistrationEndDate
+              : buttonText.addRegistrationEndDate}
           </Button>
         </div>
 
@@ -382,6 +396,27 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
           )}
         </div>
 
+        <div className={style.customColor}>
+          <Checkbox
+            label={'Tilpass farge'}
+            isChecked={hasCustomColor}
+            onChange={setHasCustomColor}
+          />
+          {hasCustomColor && (
+            <div className={style.flex}>
+              <div className={style.chooseColor}>Velg farge på toppbanner:</div>
+              <input
+                type="color"
+                value={`#${event.customHexColor}`}
+                onChange={(htmlEvent) => {
+                  const customHexColor = htmlEvent.target.value.slice(1);
+                  debounce(() => updateEvent({ ...event, customHexColor }));
+                }}
+              />
+            </div>
+          )}
+        </div>
+
         <div>
           {event.participantQuestions.map((q, i) => (
             <ValidatedTextArea
@@ -443,6 +478,14 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
     </div>
   );
 };
+
+function useDebounce(timeout = 300) {
+  const timer = useRef<number>();
+  return (f: () => void) => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(f, timeout);
+  };
+}
 
 type Action =
   | ['set-same-date', EditDate]

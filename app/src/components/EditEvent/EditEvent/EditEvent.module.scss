@@ -116,6 +116,14 @@
   padding-bottom: 3px;
 }
 
+.chooseColor {
+  max-width: max-content;
+  @include smallText;
+  color: var(--svart60);
+  margin-right: 0.2em;
+  padding-bottom: 3px;
+}
+
 .flex {
   display: flex;
   align-items: flex-end;
