@@ -181,7 +181,7 @@ export const useEventColor = (
   eventTitle: string,
   customHexColor?: string
 ): { style: string; colorCode: string } => {
-  const className = `${eventId}-hover-color`;
+  const className = `event-${eventId}-hover-color`;
   useEffect(() => {
     const style = document.createElement('style');
     style.type = 'text/css';
