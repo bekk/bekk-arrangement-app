@@ -4,6 +4,7 @@ import { editEventRoute, viewEventRoute } from 'src/routing';
 import { IEvent } from 'src/types/event';
 import { dateToITime, stringifyTime } from 'src/types/time';
 import { stringifyTimeInstanceWithDayName } from 'src/types/time-instance';
+import { plural } from 'src/utils';
 import style from './EventCardElement.module.scss';
 import { SmileIcon } from 'src/components/Common/Icons/SmileIcon';
 import { FrownyFaceIcon } from 'src/components/Common/Icons/FrownyFaceIcon';
@@ -96,7 +97,7 @@ export const ParticipationState = ({
         return (
           <div className={style.stateContainer}>
             <div className={style.stateText}>
-              {numberOfAvailableSpots} plasser igjen!
+              {plural(numberOfAvailableSpots, "plass", "plasser")} igjen!
             </div>
             <Button
               onClick={(htmlEvent: any) =>
