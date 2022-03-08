@@ -19,10 +19,6 @@ import {
 import { usePersistentHistoryState } from 'src/utils/browser-state';
 
 export const ViewEventsCardsContainer = () => {
-  const events = useUpcomingEvents();
-  const pastEvents = usePastEvents();
-  const allEvents = new Map([...events].concat([...pastEvents]));
-
   const [selectedOption, setSelectedOption] = usePersistentHistoryState(1);
 
   const options = [
@@ -34,13 +30,13 @@ export const ViewEventsCardsContainer = () => {
   const showEvents = (id: number) => {
     switch (id) {
       case 1:
-        return <UpcomingEvents events={events} />;
+        return <UpcomingEvents />;
 
       case 2:
-        return <PastEvents events={pastEvents} />;
+        return <PastEvents />;
 
       case 3:
-        return <MyEvents events={allEvents} />;
+        return <MyEvents />;
     }
   };
 
@@ -87,11 +83,13 @@ const sortEvents = (events: Map<string, RemoteData<IEvent>>) => {
   );
 };
 
-const UpcomingEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
+const UpcomingEvents = () => {
+  const events = useUpcomingEvents();
+
   return (
     <div>
       <div className={style.grid}>
-        {sortEvents(props.events).map(([id, event]) => (
+        {sortEvents(events).map(([id, event]) => (
           <EventCardElement key={id} eventId={id} event={event} />
         ))}
       </div>
@@ -99,11 +97,12 @@ const UpcomingEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
   );
 };
 
-const PastEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
+const PastEvents = () => {
+  const events = usePastEvents();
   return (
     <div>
       <div className={style.grid}>
-        {sortEvents(props.events)
+        {sortEvents(events)
           .reverse()
           .map(([id, event]) => (
             <EventCardElement key={id} eventId={id} event={event} />
@@ -113,10 +112,15 @@ const PastEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
   );
 };
 
-const MyEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
+const MyEvents = () => {
   const savedEditableEvents = useSavedEditableEvents();
   const savedParticipations = useSavedParticipations();
-  const filteredEvents = [...sortEvents(props.events)].filter(
+
+  const events = sortEvents(useUpcomingEvents());
+  const pastEvents = sortEvents(usePastEvents()).reverse();
+  const allEvents = events.concat(pastEvents)
+
+  const filteredEvents = allEvents.filter(
     ([id, events]) =>
       savedEditableEvents.savedEvents.map((x) => x.eventId).includes(id) ||
       savedParticipations.savedParticipations.map((x) => x.eventId).includes(id)
@@ -125,7 +129,7 @@ const MyEvents = (props: { events: Map<string, RemoteData<IEvent>> }) => {
   return (
     <div>
       <div className={style.grid}>
-        {filteredEvents.reverse().map(([id, event]) => (
+        {filteredEvents.map(([id, event]) => (
           <EventCardElement key={id} eventId={id} event={event} />
         ))}
       </div>
