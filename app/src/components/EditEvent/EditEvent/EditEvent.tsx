@@ -32,6 +32,7 @@ import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import { datesInOrder, EditDate, parseEditDate } from 'src/types/date';
 import { EditTime, parseEditTime, toEditTime } from 'src/types/time';
+import {InfoBox} from "src/components/Common/InfoBox/InfoBox";
 
 interface IProps {
   eventResult: IEditEvent;
@@ -212,6 +213,7 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
         </div>
         <div>
           <ValidatedTextArea
+            className={style.textAreaContainer}
             label={labels.description}
             placeholder={placeholders.description}
             value={event.description}
@@ -225,6 +227,13 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
               })
             }
           />
+          <InfoBox title="Formateringshjelp">
+            <ul className={style.listStyle}>
+              <li>Bullet points med bindestrek (-)</li>
+              <li>Overskrift med skigard (#)</li>
+              <li>Lenker kan limes inn direkte</li>
+            </ul>
+          </InfoBox>
         </div>
       </div>
       <div className={style.column}>
