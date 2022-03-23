@@ -13,6 +13,7 @@ interface ValidTextAreaProps {
   onLightBackground?: boolean;
   minRow?: number;
   isError?: boolean;
+  className?: string;
 }
 
 export const ValidatedTextArea = ({
@@ -24,6 +25,7 @@ export const ValidatedTextArea = ({
   onLightBackground = false,
   minRow,
   isError,
+  className = ""
 }: ValidTextAreaProps) => {
   const [showError, setShowError] = useState(isError);
   const validationResult = validation(value);
@@ -32,6 +34,7 @@ export const ValidatedTextArea = ({
   return (
     <>
       <TextArea
+        className={className}
         label={label}
         placeholder={placeholder}
         value={value}

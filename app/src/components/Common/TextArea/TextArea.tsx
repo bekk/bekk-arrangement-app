@@ -12,6 +12,7 @@ interface IProps {
   onBlur?: () => void;
   onLightBackground?: boolean;
   minRow?: number;
+  className?: string;
 }
 
 export const TextArea = ({
@@ -23,9 +24,10 @@ export const TextArea = ({
   onBlur = () => undefined,
   onLightBackground = false,
   minRow = 2,
+  className = "",
 }: IProps): JSX.Element => {
   const [hasVisited, setVisited] = useState(false);
-  const inputStyle = classNames(style.textArea, {
+  const inputStyle = classNames(style.textArea, className, {
     [style.visited]: hasVisited,
     [style.error]: hasVisited && isError,
     [style.onLightBackground]: onLightBackground,

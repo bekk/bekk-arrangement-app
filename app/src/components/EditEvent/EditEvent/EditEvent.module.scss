@@ -136,3 +136,16 @@
 .participantQuestion {
   align-self: flex-start;
 }
+
+.textAreaContainer {
+  margin-bottom: 10px;
+}
+
+.listStyle {
+  & > li {
+    color: var(--svart);
+    font-family: $fontRegular;
+    font-weight: 400;
+    font-size: 14px;
+  }
+}
