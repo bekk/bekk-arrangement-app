@@ -1,15 +1,12 @@
 import * as React from "react";
-import classNames from "classnames";
-import style from "./Chevron.module.scss"
 
 interface IProps {
   className?: string
 }
 
 export const Chevron = ({className = ""}: IProps) => {
-  const styles = classNames(style.arrow, className)
   return (
-    <div className={styles}>
+    <div className={className}>
       <svg width="15px" height="9px" viewBox="0 0 15 9" version="1.1">
         <g stroke="none" transform="translate(-257.000000, -156.000000)">
           <g
