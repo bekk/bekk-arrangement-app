@@ -1,5 +1,17 @@
 import React from 'react';
-import style from './ViewEvent.module.scss';
+import { useHistory } from 'react-router';
+import { userIsLoggedIn } from 'src/auth';
+import { Button } from 'src/components/Common/Button/Button';
+import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
+import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
+import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
+import { GentlemanIcon } from 'src/components/Common/Icons/GentlemanIcon';
+import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
+import { useGotoCreateDuplicate } from 'src/hooks/history';
+import { createRoute, editEventRoute } from 'src/routing';
+import { dateAsText, dateToIDate, isSameDate } from 'src/types/date';
+import { IDateTime } from 'src/types/date-time';
+import { stringifyEmail } from 'src/types/email';
 import {
   IEvent,
   incrementOneWeek,
@@ -8,20 +20,8 @@ import {
   toEditEvent,
   urlFromShortname,
 } from 'src/types/event';
-import { Button } from 'src/components/Common/Button/Button';
-import { stringifyEmail } from 'src/types/email';
-import { dateAsText, dateToIDate, isSameDate } from 'src/types/date';
 import { dateToITime, stringifyTime } from 'src/types/time';
-import { IDateTime } from 'src/types/date-time';
-import { createRoute, editEventRoute } from 'src/routing';
-import { ClockIcon } from 'src/components/Common/Icons/ClockIcon';
-import { GentlemanIcon } from 'src/components/Common/Icons/GentlemanIcon';
-import { LocationIcon } from 'src/components/Common/Icons/LocationIcon';
-import { ExternalIcon } from 'src/components/Common/Icons/ExternalIcon';
-import { useHistory } from 'react-router';
-import { userIsLoggedIn } from 'src/auth';
-import { WavySubHeader } from 'src/components/Common/Header/WavySubHeader';
-import { useGotoCreateDuplicate } from 'src/hooks/history';
+import style from './ViewEvent.module.scss';
 
 interface IProps {
   eventId?: string;
@@ -190,7 +190,8 @@ const formatLinks = (line: string): (string | JSX.Element)[] => {
         </a>,
       ] as (string | JSX.Element)[];
     }
-    const boldRegex = /(\*\*.+?\*\*)/g;
+    // This regex matches **something** and __something__
+    const boldRegex = /(\*\*.+?\*\*|__.+?__)/g;
     return link.split(boldRegex).flatMap((bold, j) => {
       if (boldRegex.test(bold)) {
         return [
@@ -199,7 +200,8 @@ const formatLinks = (line: string): (string | JSX.Element)[] => {
           </span>,
         ];
       }
-      const italicsRegex = /(\*.+?\*)/g;
+      // This regex matches *something* and _something_
+      const italicsRegex = /(\*.+?\*|_.+?_)/g;
       return bold.split(italicsRegex).map((italic, k) => {
         if (italicsRegex.test(italic)) {
           return (
