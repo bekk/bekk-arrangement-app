@@ -25,6 +25,11 @@ I en annen terminal, fra mappen `app`:
 npm start
 ```
 
+eller
+```
+npm run dev
+```
+
 Appen kjører da på http://localhost:3000
 
 ### 🔥Hett tips🔥
