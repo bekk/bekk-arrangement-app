@@ -7,6 +7,7 @@ ecr_endpoint           = "882089634282.dkr.ecr.eu-central-1.amazonaws.com"
 task_image             = "arrangement-app"
 task_image_tag         = "46"
 listener_path_patterns = ["/*"]
+create_dns_record      = true
 container_environment = [
   {
     "name"  = "Auth0__Issuer_Domain"
@@ -22,7 +23,7 @@ container_environment = [
   },
   {
     "name"  = "ARRANGEMENT_SVC_URL",
-    "value" = "https://skjer.bekk.dev/api"
+    "value" = "https://api.bekk.dev/arrangement-svc"
   },
   {
     "name"  = "EMPLOYEE_SVC_URL",
