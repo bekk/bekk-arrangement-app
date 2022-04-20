@@ -7,7 +7,7 @@ export const useTimeLeft = (time: Date | false) => {
   );
 
   useEffect(() => {
-    if (time) {
+    if (time && timeLeft.difference > 0) {
       setTimeLeft(calculateTimeLeft(time));
       const interval = setInterval(() => {
         setTimeLeft(calculateTimeLeft(time));
