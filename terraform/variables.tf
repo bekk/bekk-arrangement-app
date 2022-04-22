@@ -17,6 +17,12 @@ variable "sld_domain" {
   type    = string
   default = "bekk.dev"
 }
+
+variable "create_dns_record" {
+  type = bool
+  default = false
+}
+
 variable "app_name" {
   type = string
 }
