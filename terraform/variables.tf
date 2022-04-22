@@ -14,7 +14,7 @@ variable "sld_domain" {
 }
 
 variable "create_dns_record" {
-  type = bool
+  type    = bool
   default = false
 }
 
@@ -50,5 +50,5 @@ variable "task_environment" {
 }
 
 variable "task_secrets" {
-  type      = list(string)
+  type = list(string)
 }
