@@ -24,17 +24,16 @@ provider "aws" {
 
 module "aws-deploy" {
   source                 = "git@github.com:bekk/bekk-terraform-aws-deploy.git"
-  aws_region             = var.aws_region // endre som i svc her og i variables
-  base_name              = var.base_name
+  aws_region             = var.aws_region
+  base_name              = "bekk"
   environment            = var.environment
-  app_name               = var.app_name
+  app_name               = "arrangement-app"
   hostname               = var.hostname
   sld_domain             = var.sld_domain
   listener_path_patterns = var.listener_path_patterns
-  ecr_endpoint           = var.ecr_endpoint
   task_image             = var.task_image
   task_image_tag         = var.task_image_tag
-  task_environment       = var.container_environment
+  task_environment       = var.task_environment
   create_dns_record      = var.create_dns_record
   task_secrets           = var.task_secrets
 }

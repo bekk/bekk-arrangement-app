@@ -3,11 +3,6 @@ variable "aws_region" {
   default = "eu-central-1"
 }
 
-variable "base_name" {
-  type    = string
-  default = "bekk"
-}
-
 variable "environment" {
   type    = string
   default = "dev"
@@ -23,17 +18,10 @@ variable "create_dns_record" {
   default = false
 }
 
-variable "app_name" {
-  type = string
-}
-
 variable "hostname" {
   type = string
 }
 
-variable "ecr_endpoint" {
-  type = string
-}
 
 variable "task_image" {
   type = string
@@ -57,12 +45,10 @@ variable "listener_path_patterns" {
   type = list(string)
 }
 
-variable "container_environment" {
-  type = list(map(string))
+variable "task_environment" {
+  type = map(string)
 }
 
 variable "task_secrets" {
-  type      = map(string)
-  default   = {}
-  sensitive = true
+  type      = list(string)
 }
