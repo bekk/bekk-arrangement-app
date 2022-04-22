@@ -24,7 +24,7 @@ provider "aws" {
 
 module "aws-deploy" {
   source                 = "git@github.com:bekk/bekk-terraform-aws-deploy.git"
-  aws_region             = var.aws_region
+  aws_region             = var.aws_region // endre som i svc her og i variables
   base_name              = var.base_name
   environment            = var.environment
   app_name               = var.app_name

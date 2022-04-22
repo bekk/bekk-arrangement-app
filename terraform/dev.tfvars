@@ -29,3 +29,5 @@ container_environment = [
     "value" = "https://api.dev.bekk.no/employee-svc"
   },
 ]
+
+// send inn tom liste med task secrets
