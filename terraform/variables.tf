@@ -13,7 +13,6 @@ variable "preview_name" {
   default = ""
 }
 
-
 variable "sld_domain" {
   type    = string
   default = "bekk.dev"

@@ -28,6 +28,7 @@ module "aws-deploy" {
   base_name              = "bekk"
   environment            = var.environment
   app_name               = "arrangement-app"
+  preview_name           = var.preview_name
   hostname               = var.hostname
   sld_domain             = var.sld_domain
   listener_path_patterns = var.listener_path_patterns
@@ -36,5 +37,7 @@ module "aws-deploy" {
   task_environment       = var.task_environment
   create_dns_record      = var.create_dns_record
   task_secrets           = var.task_secrets
+  task_cpu               = var.task_cpu
+  task_memory            = var.task_memory
 }
 
