@@ -18,14 +18,18 @@ import {
   isMaxParticipantsLimited,
   maxParticipantsLimit,
 } from 'src/types/event';
+import {useSetTitle} from "src/hooks/setTitle";
+import {appTitle} from "src/Constants";
 
 export const PreviewEventContainer = () => {
   const { catchAndNotify } = useNotification();
   const history = useHistory();
+  useSetTitle(appTitle)
 
   const eventId = useParam(eventIdKey);
   const editToken = useEditToken(eventId);
   const event = usePreviewEvent();
+  useSetTitle(`Forhåndsvisning ${event?.title}`)
   if (!event) {
     return <div>Det finnes ingen event å forhåndsvise</div>;
   }

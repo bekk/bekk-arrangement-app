@@ -17,9 +17,12 @@ import {
   useSavedParticipations,
 } from 'src/hooks/saved-tokens';
 import { usePersistentHistoryState } from 'src/utils/browser-state';
+import {useSetTitle} from "src/hooks/setTitle";
+import {appTitle} from "src/Constants";
 
 export const ViewEventsCardsContainer = () => {
   const [selectedOption, setSelectedOption] = usePersistentHistoryState(1);
+  useSetTitle(appTitle)
 
   const options = [
     { name: 'Kommende arrangement', id: 1 },

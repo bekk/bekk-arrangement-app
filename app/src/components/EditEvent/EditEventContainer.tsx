@@ -23,6 +23,8 @@ import { useEvent } from 'src/hooks/cache';
 import { useGotoEventPreview } from 'src/hooks/history';
 import { useEditToken, useSavedEditableEvents } from 'src/hooks/saved-tokens';
 import classnames from 'classnames';
+import {useSetTitle} from "src/hooks/setTitle";
+import {appTitle} from "src/Constants";
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);
@@ -54,6 +56,7 @@ const useSaveThisEditToken = ({ eventId }: { eventId: string }) => {
 export const EditEventContainer = () => {
   const { eventId, validEvent, editEvent, setEditEvent, errors } =
     useEditEvent();
+  useSetTitle(`Rediger ${editEvent?.title}`)
 
   const { catchAndNotify } = useNotification();
   const history = useHistory();

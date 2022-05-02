@@ -22,6 +22,7 @@ import {
 } from 'src/types/event';
 import { dateToITime, stringifyTime } from 'src/types/time';
 import style from './ViewEvent.module.scss';
+import {useSetTitle} from "src/hooks/setTitle";
 
 interface IProps {
   eventId?: string;
@@ -44,6 +45,7 @@ export const ViewEvent = ({
 
   const history = useHistory();
   const gotoDuplicate = useGotoCreateDuplicate(createRoute);
+  useSetTitle(`${event.title} | Skjer`);
 
   return (
     <section className={style.container}>
