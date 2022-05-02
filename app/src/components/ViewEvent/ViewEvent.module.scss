@@ -29,6 +29,9 @@
   @media #{$desktop} {
     margin-right: 40px;
   }
+  @media #{$mobile} {
+    margin-top: 80px;
+  }
 }
 
 .registrationDeadlineText {
@@ -195,12 +198,17 @@
 
   button {
     margin-left: 10px;
+    margin-bottom: 10px;
   }
-
   @media #{$desktop} {
     justify-content: flex-end;
     padding-top: 48px;
     right: 0;
+  }
+  @media #{$mobile} {
+    padding-left: 35px;
+    flex-direction: column;
+    justify-content: flex-start;
   }
 }
 
