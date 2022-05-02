@@ -24,7 +24,6 @@ import { useGotoEventPreview } from 'src/hooks/history';
 import { useEditToken, useSavedEditableEvents } from 'src/hooks/saved-tokens';
 import classnames from 'classnames';
 import {useSetTitle} from "src/hooks/setTitle";
-import {appTitle} from "src/Constants";
 
 const useEditEvent = () => {
   const eventId = useParam(eventIdKey);

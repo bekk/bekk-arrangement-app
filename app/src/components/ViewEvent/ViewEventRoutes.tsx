@@ -5,7 +5,6 @@ import { isBad, isLoading, isNotRequested } from 'src/remote-data';
 import { eventIdKey, shortnameKey } from 'src/routing';
 import { useParam } from 'src/utils/browser-state';
 import style from './ViewEventContainer.module.scss';
-import {useSetTitle} from "src/hooks/setTitle";
 
 export const ViewEventContainerRegularRoute = () => {
   const eventId = useParam(eventIdKey);

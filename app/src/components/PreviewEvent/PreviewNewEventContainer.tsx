@@ -18,7 +18,6 @@ import {
   maxParticipantsLimit,
 } from 'src/types/event';
 import {useSetTitle} from "src/hooks/setTitle";
-import {appTitle} from "src/Constants";
 
 export const PreviewNewEventContainer = () => {
   const { catchAndNotify } = useNotification();
