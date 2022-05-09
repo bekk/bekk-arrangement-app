@@ -6,21 +6,15 @@ export const useTimeLeft = (time: Date | false) => {
     calculateTimeLeft(time || new Date())
   );
 
-  const isOpenForRegistration = timeLeft.difference <= 0
-  const registrationIsWithin12Hours = timeLeft.difference < (60 * 60000 * 12)
-
   useEffect(() => {
-    if (isOpenForRegistration)
-      return;
-
-    if (time && registrationIsWithin12Hours) {
+    if (time) {
       setTimeLeft(calculateTimeLeft(time));
       const interval = setInterval(() => {
         setTimeLeft(calculateTimeLeft(time));
       }, 500);
       return () => clearInterval(interval);
     }
-  }, [time, isOpenForRegistration, registrationIsWithin12Hours]);
+  }, [time]);
 
   return timeLeft;
 };
