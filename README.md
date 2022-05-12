@@ -10,30 +10,10 @@ Prod: https://skjer.bekk.no
 
 ```
 npm install
-```
-Sjekk node versjon dersom du har problemer med å installere pakker.
-
-I en terminal, fra mappen `app`:
-
-```
-npm run server
-```
-
-I en annen terminal, fra mappen `app`:
-
-```
 npm start
 ```
 
 Appen kjører da på http://localhost:3000
-
-### 🔥Hett tips🔥
-
-Skaff deg tmux, gå til rotmappa til prosjektet og kjør
-
-```
-./tmux.sh
-```
 
 ### Koble mot lokal backend
 

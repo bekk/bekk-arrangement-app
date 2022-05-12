@@ -12,9 +12,12 @@ import { usePersistentHistoryState } from 'src/utils/browser-state';
 import { useDuplicateEvent, useGotoEventPreview } from 'src/hooks/history';
 import { useEmailAndName } from 'src/hooks/cache';
 import { hasLoaded } from 'src/remote-data';
+import {useSetTitle} from "src/hooks/setTitle";
+import {appTitle} from "src/Constants";
 
 export const CreateEventContainer = () => {
   useAuthentication();
+  useSetTitle(appTitle)
 
   const duplicateEvent = useDuplicateEvent();
 

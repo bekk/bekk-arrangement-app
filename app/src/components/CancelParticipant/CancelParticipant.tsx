@@ -17,11 +17,14 @@ import { useQuery, useParam } from 'src/utils/browser-state';
 import { BlockLink } from 'src/components/Common/BlockLink/BlockLink';
 import { useEvent, useWaitinglistSpot } from 'src/hooks/cache';
 import { useSavedParticipations } from 'src/hooks/saved-tokens';
+import {useSetTitle} from "src/hooks/setTitle";
+import {appTitle} from "src/Constants";
 
 export const CancelParticipant = () => {
   const eventId = useParam(eventIdKey);
   const participantEmail = decodeURIComponent(useParam(emailKey));
   const cancellationToken = useQuery(cancellationTokenKey);
+  useSetTitle(appTitle)
 
   const remoteEvent = useEvent(eventId);
 
