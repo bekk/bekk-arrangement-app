@@ -47,3 +47,8 @@ variable "task_environment" {
 variable "task_secrets" {
   type = list(string)
 }
+
+variable "create_dns_record" {
+  type    = bool
+  default = false
+}

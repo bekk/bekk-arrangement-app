@@ -35,7 +35,7 @@ module "aws-deploy" {
   task_image             = var.task_image
   task_image_tag         = var.task_image_tag
   task_environment       = var.task_environment
-  create_dns_record      = true
+  create_dns_record      = var.create_dns_record
   task_secrets           = var.task_secrets
   task_cpu               = var.task_cpu
   task_memory            = var.task_memory
