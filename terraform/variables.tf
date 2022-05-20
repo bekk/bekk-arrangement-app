@@ -18,16 +18,6 @@ variable "sld_domain" {
   default = "bekk.dev"
 }
 
-variable "create_dns_record" {
-  type    = bool
-  default = false
-}
-
-variable "hostname" {
-  type = string
-}
-
-
 variable "task_image" {
   type = string
 }

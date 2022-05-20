@@ -1,0 +1,22 @@
+[
+  {
+    "name": "ARRANGEMENT_SVC_URL",
+    "value": "https://api.bekk.no/arrangement-svc"
+  },
+  {
+    "name": "EMPLOYEE_SVC_URL",
+    "value": "https://api.bekk.no/employee-svc"
+  },
+  {
+    "name": "AUTH0_ISSUER_DOMAIN",
+    "value": "bekk.eu.auth0.com"
+  },
+  {
+    "name": "AUTH0_AUDIENCE",
+    "value": "HuH7oGHSgymn4mYLzEClyE2bhQSM1iTC"
+  },
+  {
+    "name": "BEKK_API_URL",
+    "value": "https://api.bekk.no"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "name": "arrangement-app-dev"
+    }
+  ],
+  "memory": "64",
+  "family": "arrangement-app-dev",
+  "networkMode": "bridge"
+}
