@@ -104,6 +104,11 @@
   line-height: 18px;
 }
 
+.helpTextCheckBoxRed {
+  @extend .helpTextCheckBox;
+  color: red;
+}
+
 .shortName {
   margin-top: 5px;
 }
