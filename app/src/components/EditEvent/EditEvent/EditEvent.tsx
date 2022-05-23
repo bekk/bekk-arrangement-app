@@ -32,7 +32,7 @@ import { DateInput } from 'src/components/Common/DateInput/DateInput';
 import { ValidationResult } from 'src/components/Common/ValidationResult/ValidationResult';
 import { datesInOrder, EditDate, parseEditDate } from 'src/types/date';
 import { EditTime, parseEditTime, toEditTime } from 'src/types/time';
-import {InfoBox} from "src/components/Common/InfoBox/InfoBox";
+import { InfoBox } from 'src/components/Common/InfoBox/InfoBox';
 
 interface IProps {
   eventResult: IEditEvent;
@@ -373,6 +373,9 @@ export const EditEvent = ({ eventResult: event, updateEvent }: IProps) => {
             isChecked={event.isExternal}
           />
           <p className={style.helpTextCheckBox}>{helpText.externalEvent}</p>
+          <p className={style.helpTextCheckBoxRed}>
+            {helpText.externalEventRed}
+          </p>
         </div>
         <div>
           <Checkbox
@@ -637,6 +640,8 @@ const placeholders = {
 const helpText = {
   externalEvent:
     'Eksterne arrangement er tilgjengelig for personer utenfor Bekk.',
+  externalEventRed:
+    'Eksterne kan ikke se de påmeldtes e-postadresser eller navn.',
   hiddenEvent:
     'Arrangementet vil ikke dukke opp i oversikten over arrangementer eller på forsiden.',
 };
