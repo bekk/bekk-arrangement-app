@@ -315,6 +315,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               </>
             )
           )}
+          {/* Dette skal kommenteres inn igjen 15.juni
           {!userIsLoggedIn() && event.isExternal && (
             <>
               <div className={style.attendeesTitleContainer}>
@@ -322,7 +323,7 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               </div>
               <p>{participantsText}</p>
             </>
-          )}
+          )}*/}
         </section>
       </Page>
     </>
