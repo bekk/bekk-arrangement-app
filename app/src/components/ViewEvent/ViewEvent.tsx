@@ -84,7 +84,7 @@ export const ViewEvent = ({
             <LocationIcon color="black" className={style.icon} />
             <p>{event.location}</p>
           </div>
-          {!event.isExternal && (
+          {!event.isExternal && ( // Denne sjekken kan fjernes etter 15.juni
             <div className={style.iconTextContainer}>
               <GentlemanIcon color="black" className={style.icon} />
               {hasOpenedForRegistration ? (
