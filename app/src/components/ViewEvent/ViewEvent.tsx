@@ -22,7 +22,7 @@ import {
 } from 'src/types/event';
 import { dateToITime, stringifyTime } from 'src/types/time';
 import style from './ViewEvent.module.scss';
-import {useSetTitle} from "src/hooks/setTitle";
+import { useSetTitle } from 'src/hooks/setTitle';
 
 interface IProps {
   eventId?: string;
@@ -84,19 +84,21 @@ export const ViewEvent = ({
             <LocationIcon color="black" className={style.icon} />
             <p>{event.location}</p>
           </div>
-          <div className={style.iconTextContainer}>
-            <GentlemanIcon color="black" className={style.icon} />
-            {hasOpenedForRegistration ? (
-              <p>{participantsText}</p>
-            ) : (
-              <p>
-                {!isMaxParticipantsLimited(event.maxParticipants)
-                  ? ' ∞'
-                  : maxParticipantsLimit(event.maxParticipants)}{' '}
-                plasser
-              </p>
-            )}
-          </div>
+          {!event.isExternal && (
+            <div className={style.iconTextContainer}>
+              <GentlemanIcon color="black" className={style.icon} />
+              {hasOpenedForRegistration ? (
+                <p>{participantsText}</p>
+              ) : (
+                <p>
+                  {!isMaxParticipantsLimited(event.maxParticipants)
+                    ? ' ∞'
+                    : maxParticipantsLimit(event.maxParticipants)}{' '}
+                  plasser
+                </p>
+              )}
+            </div>
+          )}
           {event.isExternal && userIsLoggedIn() && (
             <div className={style.iconTextContainer}>
               <ExternalIcon color="black" className={style.externalIcon} />

@@ -315,14 +315,14 @@ export const ViewEventContainer = ({ eventId }: IProps) => {
               </>
             )
           )}
-          {!userIsLoggedIn() && event.isExternal && (
+          {/*{!userIsLoggedIn() && event.isExternal && (
             <>
               <div className={style.attendeesTitleContainer}>
                 <h2 className={style.subHeader}>Påmeldte</h2>
               </div>
               <p>{participantsText}</p>
             </>
-          )}
+          )}*/}
         </section>
       </Page>
     </>
