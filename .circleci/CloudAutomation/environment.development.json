@@ -1,7 +1,7 @@
 [
   {
     "name": "ARRANGEMENT_SVC_URL",
-    "value": "https://api.dev.bekk.no/arrangement-svc"
+    "value": "https://api.dev.bekk.no/arrangement-svc/api"
   },
   {
     "name": "EMPLOYEE_SVC_URL",
