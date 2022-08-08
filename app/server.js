@@ -1,4 +1,5 @@
 const express = require('express');
+unai99
 const fetch = require('node-fetch');
 
 const path = require('path');
@@ -30,7 +31,7 @@ app.get('/health', (request, response) => {
 
 function getArraSvcUrl() {
   return (
-    process.env.ARRANGEMENT_SVC_URL || 'https://api.dev.bekk.no/arrangement-svc'
+    process.env.ARRANGEMENT_SVC_URL || 'https://api.dev.bekk.no/arrangement-svc/api'
   );
 }
 
